@@ -1,0 +1,1534 @@
+/* ============================================================
+   Hawih — iter-3 (dark, restrained, luxurious)
+   The shfrah air without its layout. Dark canvas, small type,
+   generous whitespace, cobalt accents only where they earn it.
+   No editorial display, no rotating elements, no heritage band.
+   ============================================================ */
+
+:root {
+    --hawih-blue:        #1F1FFE;
+    --hawih-blue-hover:  #1414D6;
+    --hawih-blue-soft:   rgba(31, 31, 254, 0.12);
+    --hawih-blue-glow:   rgba(31, 31, 254, 0.45);
+
+    --hawih-ink:         #0B0B10;   /* near-black with cool cast */
+    --hawih-ink-2:       #14141C;   /* alternating section */
+    --hawih-ink-line:    rgba(255, 255, 255, 0.08);
+    --hawih-paper:       #F4F1EB;   /* warm off-white for light mode */
+    --hawih-paper-2:     #E9E4D7;
+    --hawih-paper-line:  rgba(11, 11, 16, 0.10);
+}
+
+/* Accent helpers */
+.text-brand          { color: var(--hawih-blue); }
+.bg-brand            { background-color: var(--hawih-blue); }
+.bg-brand:hover     { background-color: var(--hawih-blue-hover); }
+.border-brand       { border-color: var(--hawih-blue); }
+.hover\:text-brand:hover { color: var(--hawih-blue); }
+.hover\:bg-brand:hover   { background-color: var(--hawih-blue); }
+.hover\:border-brand:hover { border-color: var(--hawih-blue); }
+.ring-brand          { box-shadow: 0 0 0 2px var(--hawih-blue); }
+
+/* ---------- Fonts ----------
+   Inter for Latin, IBM Plex Sans Arabic for Arabic. Same weights
+   shfrah uses, different family choice so it doesn't read as a clone. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap');
+
+html, body {
+    background-color: var(--hawih-paper);
+    color: var(--hawih-ink);
+    font-feature-settings: "ss01", "cv01";
+}
+html.dark, html.dark body {
+    background-color: var(--hawih-ink);
+    color: var(--hawih-paper);
+}
+
+html[lang="ar"] body { font-family: 'IBM Plex Sans Arabic', sans-serif; }
+html[lang="en"] body { font-family: 'Inter', 'IBM Plex Sans Arabic', sans-serif; }
+
+/* Arabic ligatures: kill letter-spacing on every text element */
+html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3,
+html[lang="ar"] h4, html[lang="ar"] h5, html[lang="ar"] h6,
+html[lang="ar"] p,  html[lang="ar"] span,  html[lang="ar"] li,
+html[lang="ar"] a,  html[lang="ar"] button, html[lang="ar"] blockquote,
+html[lang="ar"] figcaption, html[lang="ar"] label,
+html[lang="ar"] input, html[lang="ar"] textarea, html[lang="ar"] select {
+    letter-spacing: 0 !important;
+    word-spacing: 0 !important;
+}
+
+/* ---------- Scrollbar ---------- */
+::-webkit-scrollbar { width: 8px; height: 8px; }
+::-webkit-scrollbar-track { background: var(--hawih-paper); }
+.dark ::-webkit-scrollbar-track { background: var(--hawih-ink); }
+::-webkit-scrollbar-thumb { background: #CFC8B5; border-radius: 4px; }
+.dark ::-webkit-scrollbar-thumb { background: #2D2D38; }
+::-webkit-scrollbar-thumb:hover { background: #A29D8B; }
+.dark ::-webkit-scrollbar-thumb:hover { background: #4D4D5A; }
+
+iconify-icon { display: inline-flex; align-items: center; justify-content: center; }
+
+/* ---------- Body scroll lock (mobile nav) ---------- */
+body.no-scroll { overflow: hidden; }
+
+/* ---------- Site nav ----------
+   Heavier weight + readable color. This was the user's #1
+   complaint two rounds ago. */
+.site-nav {
+    transition: padding 0.3s ease, background-color 0.3s ease,
+                backdrop-filter 0.3s ease, border-color 0.3s ease, color 0.3s ease;
+
+    /* Always-on translucent backdrop so the nav reads on any bg behind it
+       (including the coloured hero band on project pages). */
+    background-color: rgba(244, 241, 235, 0.72);
+    backdrop-filter: saturate(140%) blur(18px);
+    -webkit-backdrop-filter: saturate(140%) blur(18px);
+    border-bottom: 1px solid rgba(11, 11, 16, 0.05);
+
+    /* Use page text colour so links inherit ink/paper based on theme,
+       not whatever colour is bleeding from the section underneath. */
+    color: var(--hawih-ink);
+}
+.dark .site-nav {
+    background-color: rgba(11, 11, 16, 0.65);
+    border-bottom-color: rgba(244, 241, 235, 0.06);
+    color: var(--hawih-paper);
+}
+.site-nav a, .site-nav button {
+    font-weight: 500;
+    color: inherit;
+}
+/* The primary CTA inside the nav keeps its white text on cobalt — the
+   broader `.site-nav a { color: inherit }` would otherwise pull it
+   into ink/paper. */
+.site-nav a.btn-primary,
+.site-nav button.btn-primary { color: #fff; }
+
+.site-nav.nav-scrolled {
+    padding-top: 0.85rem;
+    padding-bottom: 0.85rem;
+    background-color: rgba(244, 241, 235, 0.92);
+    border-bottom-color: var(--hawih-paper-line);
+}
+.dark .site-nav.nav-scrolled {
+    background-color: rgba(11, 11, 16, 0.88);
+    border-bottom-color: var(--hawih-ink-line);
+}
+
+.nav-link {
+    position: relative;
+    padding-bottom: 2px;
+}
+.nav-link::after {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    bottom: 0;
+    width: 0;
+    height: 1px;
+    background: currentColor;
+    transition: width 0.35s cubic-bezier(.2,.8,.2,1);
+}
+.nav-link:hover { color: var(--hawih-blue); }
+.nav-link:hover::after { width: 100%; background: var(--hawih-blue); }
+
+/* ---------- Eyebrow ----------
+   A small uppercase tag, no caret. Used once or twice per section. */
+.eyebrow {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: rgba(11, 11, 16, 0.55);
+    font-feature-settings: "tnum";
+}
+.dark .eyebrow { color: rgba(244, 241, 235, 0.55); }
+html[lang="ar"] .eyebrow { letter-spacing: 0 !important; }
+
+/* ---------- Buttons ---------- */
+.btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    background-color: var(--hawih-blue);
+    color: #fff;
+    padding: 0.8rem 1.55rem;
+    border-radius: 999px;
+    font-weight: 500;
+    transition: background-color 0.25s ease, transform 0.25s ease;
+}
+.btn-primary:hover { background-color: var(--hawih-blue-hover); }
+.btn-primary:active { transform: translateY(1px); }
+
+.btn-ghost {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    color: inherit;
+    padding: 0.8rem 1.55rem;
+    border-radius: 999px;
+    border: 1px solid var(--hawih-paper-line);
+    font-weight: 500;
+    transition: border-color 0.25s ease, color 0.25s ease;
+}
+.dark .btn-ghost { border-color: var(--hawih-ink-line); }
+.btn-ghost:hover { border-color: var(--hawih-blue); color: var(--hawih-blue); }
+
+/* ---------- Hero — bordered caustic card (iter-7) ----------
+   Outer section is transparent so the page background shows around
+   the card. The card is the dark surface holding the WebGL canvas
+   and the content overlay. */
+.hero-section { position: relative; }
+.hero-mono {
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+}
+
+/* ---------- Brand thread ----------
+   A thin cobalt vertical line with fading ends. Reusable across
+   sections as a signature ornament. Use --thread-offset to shift
+   horizontally (defaults to a sensible inset). */
+.brand-thread {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    pointer-events: none;
+    background: linear-gradient(180deg,
+        transparent 0%,
+        rgba(31, 31, 254, 0.0) 8%,
+        rgba(31, 31, 254, 0.85) 35%,
+        rgba(31, 31, 254, 0.85) 65%,
+        rgba(31, 31, 254, 0.0) 92%,
+        transparent 100%);
+    opacity: 0.7;
+}
+.brand-thread--right { inset-inline-end: 7%; }
+.brand-thread--left  { inset-inline-start: 7%; }
+.brand-thread--center { inset-inline-start: 50%; transform: translateX(-50%); }
+.dark .brand-thread { opacity: 0.85; }
+
+/* Horizontal variants. */
+.brand-thread--horiz {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 1px;
+    top: auto;
+    bottom: auto;
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(31, 31, 254, 0.0) 8%,
+        rgba(31, 31, 254, 0.70) 50%,
+        rgba(31, 31, 254, 0.0) 92%,
+        transparent 100%);
+    opacity: 0.85;
+}
+/* Stronger center variant — for use over dark sections where it
+   needs to read as a deliberate separator. */
+.brand-thread--horiz-strong {
+    background: linear-gradient(90deg,
+        transparent 0%,
+        rgba(244, 241, 235, 0.0) 5%,
+        rgba(244, 241, 235, 0.50) 50%,
+        rgba(244, 241, 235, 0.0) 95%,
+        transparent 100%);
+}
+
+/* ---------- Net grid ----------
+   A faint fading grid backdrop. Applied as a backdrop on any
+   section by adding .net-grid. Cell size 64px, very low contrast,
+   fades out toward edges via a radial mask. */
+.net-grid {
+    position: relative;
+    isolation: isolate;
+}
+.net-grid::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    background-image:
+        linear-gradient(0deg,  transparent calc(100% - 1px), rgba(11, 11, 16, 0.07) 100%),
+        linear-gradient(90deg, transparent calc(100% - 1px), rgba(11, 11, 16, 0.07) 100%);
+    background-size: 64px 64px;
+    -webkit-mask-image: radial-gradient(ellipse 70% 80% at center, #000 25%, transparent 75%);
+            mask-image: radial-gradient(ellipse 70% 80% at center, #000 25%, transparent 75%);
+}
+.dark .net-grid::before {
+    background-image:
+        linear-gradient(0deg,  transparent calc(100% - 1px), rgba(244, 241, 235, 0.06) 100%),
+        linear-gradient(90deg, transparent calc(100% - 1px), rgba(244, 241, 235, 0.06) 100%);
+}
+.net-grid > *:not(.brand-thread) { position: relative; z-index: 1; }
+
+/* Tighter variant for hero / inside dark cards */
+.net-grid--fine::before {
+    background-size: 40px 40px;
+    -webkit-mask-image: radial-gradient(ellipse 60% 75% at center, #000 15%, transparent 75%);
+            mask-image: radial-gradient(ellipse 60% 75% at center, #000 15%, transparent 75%);
+}
+.net-grid--dark::before {
+    background-image:
+        linear-gradient(0deg,  transparent calc(100% - 1px), rgba(244, 241, 235, 0.08) 100%),
+        linear-gradient(90deg, transparent calc(100% - 1px), rgba(244, 241, 235, 0.08) 100%);
+}
+
+.hero-card {
+    position: relative;
+    width: 100%;
+    min-height: 620px;
+    height: 78vh;
+    max-height: 880px;
+    border-radius: 2rem;
+    overflow: hidden;
+    /* Dark base bleeds through the 0.9-opacity canvas like shfrah's hero. */
+    background-color: #0A0D17;
+    color: var(--hawih-paper);
+    isolation: isolate;
+    box-shadow: 0 30px 60px -20px rgba(8, 8, 25, 0.4);
+}
+.hero-card__canvas {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    overflow: hidden;
+    /* Matches shfrah: canvas slightly transparent so the dark base
+       deepens the overall image and the colour stays restrained. */
+    opacity: 0.9;
+}
+
+/* Scrim — exactly shfrah's gradient (from-black/80 via-black/30
+   to-black/10). The warm-cool contrast in the shader provides
+   visible motion through this scrim. */
+.hero-card__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    background: linear-gradient(0deg,
+        rgba(0, 0, 0, 0.80) 0%,
+        rgba(0, 0, 0, 0.30) 50%,
+        rgba(0, 0, 0, 0.10) 100%);
+}
+
+.hero-card__content {
+    position: relative;
+    z-index: 2;
+    width: 100%;
+    height: 100%;
+    padding: 2rem 1.75rem;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2rem;
+}
+@media (min-width: 768px)  { .hero-card__content { padding: 3rem 3rem; } }
+@media (min-width: 1024px) { .hero-card__content { padding: 3.5rem 4rem; } }
+
+.hero-card__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+}
+/* Bottom block holds the headline, lead/CTAs and meta strip.
+   Anchored to the bottom by justify-between on the parent flex,
+   so the middle of the card stays empty for the canvas motion. */
+.hero-card__bottom {
+    display: flex;
+    flex-direction: column;
+}
+.hero-card__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding-top: 1.25rem;
+    border-top: 1px solid rgba(244, 241, 235, 0.14);
+    font-size: 0.75rem;
+    color: rgba(244, 241, 235, 0.6);
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+}
+
+/* Force the eyebrows inside the dark card to a readable cream regardless of theme */
+.hero-card .eyebrow { color: rgba(244, 241, 235, 0.7) !important; }
+/* And the ghost button stays cream-edged */
+.hero-card .btn-ghost { color: var(--hawih-paper); border-color: rgba(244, 241, 235, 0.28); }
+.hero-card .btn-ghost:hover { color: var(--hawih-blue); border-color: var(--hawih-blue); }
+
+/* The colored blob — supplies a multi-color light source beneath the
+   glass. Cobalt + deep blue dominate (brand), with a magenta warm
+   highlight and an amber tail so the refraction reads multi-hue
+   like the reference image. */
+.fractal-blob {
+    position: absolute;
+    inset: -10%;
+    z-index: 0;
+    pointer-events: none;
+    filter: blur(60px) saturate(1.15);
+    background:
+        radial-gradient(ellipse 38% 60% at 18% 50%, rgba(60, 170, 220, 0.85) 0%, transparent 60%),
+        radial-gradient(ellipse 28% 70% at 35% 35%, rgba(180, 35, 110, 0.95) 0%, transparent 65%),
+        radial-gradient(ellipse 32% 60% at 56% 60%, rgba(228, 60, 70, 0.85) 0%, transparent 60%),
+        radial-gradient(ellipse 38% 70% at 72% 55%, rgba(245, 140, 60, 0.85) 0%, transparent 60%),
+        radial-gradient(ellipse 32% 55% at 88% 50%, rgba(110, 175, 215, 0.7) 0%, transparent 60%),
+        linear-gradient(180deg, #03040D 0%, #02030A 100%);
+    animation: blob-drift 22s ease-in-out infinite;
+    will-change: transform;
+}
+@keyframes blob-drift {
+    0%, 100% { transform: translate3d(-2%, 1%, 0) scale(1.04); }
+    50%      { transform: translate3d(3%, -1%, 0) scale(1.07); }
+}
+
+/* The slats — strictly vertical, narrow step, very little blur so
+   they stay defined like venetian blinds in front of the colored
+   light source. Two layers stacked for depth. */
+.fractal-stripes {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    --step: 24px;
+    background: repeating-linear-gradient(
+        90deg,
+        rgba(0, 0, 0, 0.55) 0,
+        rgba(0, 0, 0, 0.05) calc(var(--step) * 0.45),
+        rgba(255, 255, 255, 0.18) calc(var(--step) * 0.55),
+        rgba(0, 0, 0, 0.55) var(--step)
+    );
+    mix-blend-mode: multiply;
+    opacity: 0.95;
+}
+.fractal-stripes::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    --step: 24px;
+    background: repeating-linear-gradient(
+        90deg,
+        transparent 0,
+        rgba(255, 255, 255, 0.06) calc(var(--step) * 0.5),
+        transparent var(--step)
+    );
+    mix-blend-mode: screen;
+    pointer-events: none;
+}
+.fractal-stripes::after {
+    /* Subtle film grain to keep the look photographic, not digital */
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 22% 70%, rgba(255, 255, 255, 0.04), transparent 35%),
+        radial-gradient(circle at 78% 30%, rgba(0, 0, 0, 0.25), transparent 40%);
+    pointer-events: none;
+    mix-blend-mode: overlay;
+}
+
+/* Make sure hero content sits above the glass layers */
+.hero-content { position: relative; z-index: 3; }
+
+@media (prefers-reduced-motion: reduce) {
+    .fractal-blob, .fractal-stripes { animation: none; }
+}
+
+/* Force dark hero text colors regardless of theme — the glass background
+   is always dark, so text and accents must read against it. */
+.hero-section .eyebrow { color: rgba(244, 241, 235, 0.7); }
+.hero-section .btn-ghost { color: var(--hawih-paper); border-color: rgba(244, 241, 235, 0.25); }
+.hero-section .btn-ghost:hover { color: var(--hawih-blue); border-color: var(--hawih-blue); }
+
+/* ---------- Brand band ----------
+   A full-cobalt stripe used for stats / final CTA. Punctuation moments
+   that lean fully into the brand color regardless of theme. */
+.brand-band {
+    background-color: var(--hawih-blue);
+    color: #fff;
+    position: relative;
+    overflow: hidden;
+}
+.brand-band::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(ellipse 40% 60% at 15% 50%, rgba(255, 255, 255, 0.12) 0%, transparent 60%),
+        radial-gradient(ellipse 50% 80% at 90% 20%, rgba(0, 0, 0, 0.18) 0%, transparent 60%);
+    pointer-events: none;
+}
+.brand-band > * { position: relative; z-index: 1; }
+.brand-band .eyebrow { color: rgba(255, 255, 255, 0.7); }
+.brand-band .stat-block { border-top-color: rgba(255, 255, 255, 0.25); }
+.brand-band .text-brand,
+.brand-band .stat-block .text-brand { color: #fff; }
+.brand-band .btn-primary {
+    background-color: #fff;
+    color: var(--hawih-blue);
+}
+.brand-band .btn-primary:hover { background-color: rgba(255, 255, 255, 0.9); }
+.brand-band .btn-ghost {
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.30);
+}
+.brand-band .btn-ghost:hover {
+    color: #fff;
+    border-color: #fff;
+}
+
+/* ---------- Ink band ----------
+   A full-ink stripe used for the manifesto / final CTA in light mode. */
+.ink-band {
+    background-color: var(--hawih-ink);
+    color: var(--hawih-paper);
+}
+.ink-band .eyebrow { color: rgba(244, 241, 235, 0.6); }
+.ink-band .btn-ghost { color: var(--hawih-paper); border-color: rgba(244, 241, 235, 0.25); }
+.ink-band .btn-ghost:hover { color: var(--hawih-blue); border-color: var(--hawih-blue); }
+
+/* ---------- Marquee ----------
+   Thin strip, slow drift. */
+.marquee {
+    direction: ltr;
+    display: flex;
+    overflow: hidden;
+    user-select: none;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+            mask-image: linear-gradient(to right, transparent, #000 8%, #000 92%, transparent);
+}
+.marquee__track {
+    display: flex;
+    flex-shrink: 0;
+    gap: 2.5rem;
+    padding-inline-end: 2.5rem;
+    animation: marquee-scroll 55s linear infinite;
+    will-change: transform;
+}
+.marquee--reverse .marquee__track {
+    animation-direction: reverse;
+    animation-duration: 70s;
+}
+.marquee__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 1.25rem;
+    white-space: nowrap;
+}
+.marquee__item .dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--hawih-blue);
+    flex-shrink: 0;
+}
+@keyframes marquee-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-100%); }
+}
+
+/* ---------- Reveal on scroll ---------- */
+.reveal {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+    will-change: opacity, transform;
+}
+.reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* ---------- Service cards (iter-5 redesign) ----------
+   Replaces the vertical tab+panel pattern. A 4-column grid of
+   numbered service tiles; hover reveals a longer description and a
+   cobalt left-edge highlight. Each card pulses subtly on idle. */
+.service-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1px;
+    background: var(--hawih-paper-line);
+    border: 1px solid var(--hawih-paper-line);
+}
+.dark .service-grid {
+    background: var(--hawih-ink-line);
+    border-color: var(--hawih-ink-line);
+}
+@media (min-width: 640px) { .service-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .service-grid { grid-template-columns: repeat(4, 1fr); } }
+
+.service-tile {
+    position: relative;
+    padding: 2rem 1.75rem 2.25rem;
+    background: var(--hawih-paper);
+    transition: background-color 0.35s ease;
+    overflow: hidden;
+    min-height: 280px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+.dark .service-tile { background: var(--hawih-ink); }
+.service-tile::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    top: 0;
+    bottom: 0;
+    width: 2px;
+    background: var(--hawih-blue);
+    transform: scaleY(0);
+    transform-origin: top;
+    transition: transform 0.45s cubic-bezier(.2,.8,.2,1);
+}
+.service-tile:hover { background: rgba(31, 31, 254, 0.04); }
+.dark .service-tile:hover { background: rgba(31, 31, 254, 0.09); }
+.service-tile:hover::before { transform: scaleY(1); }
+.service-tile__num {
+    font-size: 0.75rem;
+    font-feature-settings: "tnum";
+    letter-spacing: 0.15em;
+    color: var(--hawih-blue);
+    opacity: 0.75;
+    margin-bottom: 1.25rem;
+    font-weight: 500;
+}
+.service-tile__title {
+    font-size: 1.35rem;
+    font-weight: 500;
+    line-height: 1.3;
+    margin-bottom: 0.75rem;
+    transition: color 0.35s ease;
+}
+.service-tile:hover .service-tile__title { color: var(--hawih-blue); }
+.service-tile__desc {
+    font-size: 0.95rem;
+    line-height: 1.65;
+    color: rgba(11, 11, 16, 0.65);
+    margin-top: auto;
+}
+.dark .service-tile__desc { color: rgba(244, 241, 235, 0.65); }
+.service-tile__arrow {
+    position: absolute;
+    inset-block-start: 2rem;
+    inset-inline-end: 1.75rem;
+    opacity: 0;
+    transform: translateX(-8px);
+    transition: opacity 0.35s ease, transform 0.45s cubic-bezier(.2,.8,.2,1);
+    color: var(--hawih-blue);
+}
+html[dir="rtl"] .service-tile__arrow { transform: translateX(8px); }
+.service-tile:hover .service-tile__arrow {
+    opacity: 1;
+    transform: translateX(0);
+}
+
+/* ---------- Services tabs (legacy, kept for inner pages) ---------- */
+.services-tab {
+    position: relative;
+    cursor: pointer;
+    display: flex;
+    align-items: baseline;
+    gap: 0.85rem;
+    transition: color 0.3s ease, padding-inline-start 0.3s ease;
+    padding-block: 1rem;
+    padding-inline: 1.25rem;
+    text-align: start;
+    width: 100%;
+    color: inherit;
+    opacity: 0.55;
+    font-size: 1.05rem;
+    font-weight: 500;
+}
+.services-tab:hover { opacity: 1; }
+.services-tab .services-tab__num {
+    font-size: 0.72rem;
+    font-feature-settings: "tnum";
+    opacity: 0.6;
+    min-width: 1.5rem;
+}
+.services-tab[aria-selected="true"] {
+    opacity: 1;
+    color: var(--hawih-blue);
+    padding-inline-start: 1.75rem;
+}
+.services-tab[aria-selected="true"] .services-tab__num { opacity: 0.9; color: var(--hawih-blue); }
+.services-tab[aria-selected="true"]::before {
+    content: "";
+    position: absolute;
+    inset-inline-start: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 60%;
+    background: var(--hawih-blue);
+    border-radius: 3px;
+}
+.services-panel { transition: opacity 0.35s ease, transform 0.35s ease; }
+.services-panel[hidden] { display: none; }
+
+/* Services container: dark even in light mode for that brand presence */
+.services-shell {
+    background: var(--hawih-ink);
+    color: var(--hawih-paper);
+    border-radius: 8px;
+    padding: 2.5rem 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+@media (min-width: 1024px) {
+    .services-shell { padding: 3.5rem; }
+}
+.services-shell::before {
+    content: "";
+    position: absolute;
+    inset: -50% -20% auto auto;
+    width: 70%;
+    height: 100%;
+    background: radial-gradient(ellipse at top right, rgba(31, 31, 254, 0.22) 0%, transparent 60%);
+    pointer-events: none;
+}
+.services-shell .services-tab { color: var(--hawih-paper); }
+.services-shell .services-tab[aria-selected="true"] { color: var(--hawih-blue); }
+.services-shell .border-s { border-color: rgba(244, 241, 235, 0.1); }
+
+/* ---------- Case study card ---------- */
+.case-card {
+    transition: transform 0.5s cubic-bezier(.2,.8,.2,1);
+}
+.case-card:hover { transform: translateY(-4px); }
+.case-card__art {
+    aspect-ratio: 4 / 5;
+    overflow: hidden;
+    border-radius: 6px;
+    position: relative;
+    background: var(--hawih-ink-2);
+}
+.dark .case-card__art { background: #1a1a24; }
+.case-card__cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(.2,.8,.2,1);
+}
+.case-card:hover .case-card__cover { transform: scale(1.04); }
+
+/* ---------- Client marquee (iter-7) ----------
+   Replaces the static grid. Each logo sits on its own neutral
+   chip — pre-padded, uniform background so white-bg PNGs and
+   transparent-bg PNGs both look intentional. */
+.client-marquee {
+    direction: ltr;
+    display: flex;
+    overflow: hidden;
+    user-select: none;
+    padding-block: 1rem;
+    -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+            mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
+}
+.client-marquee__track {
+    display: flex;
+    flex-shrink: 0;
+    gap: 4.5rem;
+    padding-inline-end: 4.5rem;
+    align-items: center;
+    animation: client-marquee-scroll 45s linear infinite;
+    will-change: transform;
+}
+.client-marquee:hover .client-marquee__track { animation-play-state: paused; }
+.client-marquee__item {
+    flex-shrink: 0;
+    height: 7rem;
+    width: 14rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    /* Neutral surface that matches the paper bg but is light enough
+       that white-bg logos blend into it instead of looking patched on. */
+    background: #FAFAF6;
+    border: 1px solid var(--hawih-paper-line);
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+    transition: transform 0.35s cubic-bezier(.2,.8,.2,1),
+                border-color 0.35s ease, background-color 0.35s ease;
+}
+.client-marquee__item:hover {
+    transform: translateY(-3px);
+    border-color: rgba(31, 31, 254, 0.35);
+    background: #fff;
+}
+.client-marquee__item img {
+    max-height: 100%;
+    max-width: 100%;
+    width: auto;
+    object-fit: contain;
+    filter: grayscale(1);
+    opacity: 0.75;
+    transition: filter 0.4s ease, opacity 0.4s ease;
+}
+.client-marquee__item:hover img {
+    filter: grayscale(0);
+    opacity: 1;
+}
+.dark .client-marquee__item {
+    background: rgba(244, 241, 235, 0.04);
+    border-color: var(--hawih-ink-line);
+}
+.dark .client-marquee__item:hover {
+    background: rgba(244, 241, 235, 0.08);
+    border-color: rgba(31, 31, 254, 0.45);
+}
+/* Dark mode: invert + lighten to drop the originally-white bg */
+.dark .client-marquee__item img {
+    mix-blend-mode: lighten;
+    filter: grayscale(1) invert(1) brightness(0.95);
+    opacity: 0.85;
+}
+.dark .client-marquee__item:hover img {
+    filter: grayscale(0) invert(1) brightness(0.95);
+    opacity: 1;
+}
+@keyframes client-marquee-scroll {
+    from { transform: translateX(0); }
+    to   { transform: translateX(-50%); }
+}
+
+/* ---------- Founder CTA (iter-5 redesign) ----------
+   Asymmetric split: heading + CTAs on one side, founder portrait
+   with signature treatment on the other. */
+.founder-card {
+    position: relative;
+    aspect-ratio: 4 / 5;
+    border-radius: 8px;
+    overflow: hidden;
+    background: linear-gradient(135deg, #1F1FFE 0%, #0A0A4A 100%);
+}
+.founder-card img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    mix-blend-mode: luminosity;
+    opacity: 0.92;
+    filter: contrast(1.05);
+}
+.founder-card::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(180deg, transparent 50%, rgba(31, 31, 254, 0.45) 100%);
+    mix-blend-mode: multiply;
+    pointer-events: none;
+}
+.founder-meta {
+    position: absolute;
+    inset-inline-start: 1.25rem;
+    inset-block-end: 1.25rem;
+    color: #fff;
+    z-index: 2;
+}
+.founder-meta__name { font-size: 1.1rem; font-weight: 500; }
+.founder-meta__role { font-size: 0.8rem; opacity: 0.7; margin-top: 0.25rem; }
+
+/* ---------- Client wall (legacy) ---------- */
+.client-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    border-top: 1px solid var(--hawih-paper-line);
+    border-inline-start: 1px solid var(--hawih-paper-line);
+}
+.dark .client-grid {
+    border-top-color: var(--hawih-ink-line);
+    border-inline-start-color: var(--hawih-ink-line);
+}
+@media (min-width: 640px)  { .client-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1024px) { .client-grid { grid-template-columns: repeat(6, 1fr); } }
+
+.client-cell {
+    aspect-ratio: 5 / 3;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid var(--hawih-paper-line);
+    border-inline-end: 1px solid var(--hawih-paper-line);
+    padding: 2rem 1.5rem;
+    transition: background-color 0.35s ease;
+    position: relative;
+}
+.dark .client-cell {
+    border-bottom-color: var(--hawih-ink-line);
+    border-inline-end-color: var(--hawih-ink-line);
+}
+.client-cell:hover { background-color: rgba(31, 31, 254, 0.05); }
+.dark .client-cell:hover { background-color: rgba(31, 31, 254, 0.10); }
+.client-cell img {
+    max-width: 70%;
+    max-height: 60%;
+    object-fit: contain;
+    filter: grayscale(1);
+    opacity: 0.55;
+    transition: filter 0.4s ease, opacity 0.4s ease;
+}
+.client-cell:hover img {
+    filter: grayscale(0);
+    opacity: 1;
+}
+.dark .client-cell img {
+    filter: grayscale(1) brightness(1.6) invert(0.92);
+    opacity: 0.6;
+}
+.dark .client-cell:hover img {
+    filter: grayscale(0) brightness(1.05) invert(0);
+    opacity: 1;
+}
+
+/* ---------- Why-Hawih quadrant ---------- */
+.reason-block {
+    position: relative;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--hawih-paper-line);
+}
+.dark .reason-block { border-top-color: var(--hawih-ink-line); }
+.reason-block__index {
+    font-size: 0.75rem;
+    font-feature-settings: "tnum";
+    color: var(--hawih-blue);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+}
+
+/* ---------- Stats ---------- */
+.stat-block {
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--hawih-paper-line);
+}
+.dark .stat-block { border-top-color: var(--hawih-ink-line); }
+.stat-block .counter {
+    font-feature-settings: "tnum";
+    font-variant-numeric: tabular-nums;
+    font-weight: 400;
+}
+
+/* ---------- Testimonials ---------- */
+.t-card {
+    padding: 2rem;
+    border: 1px solid var(--hawih-paper-line);
+    border-radius: 6px;
+    background: rgba(11, 11, 16, 0.02);
+    transition: background-color 0.3s ease, border-color 0.3s ease;
+}
+.dark .t-card {
+    border-color: var(--hawih-ink-line);
+    background: rgba(255, 255, 255, 0.02);
+}
+.t-card:hover { border-color: var(--hawih-blue); }
+
+/* ---------- Portfolio project page (editorial layout) ----------
+   Typographic hero on cream — no boxed card — followed by a
+   full-bleed feature image, editorial brief, brand-color band,
+   gallery, and the next-project link.
+   Each page sets --project-color via inline style. */
+
+/* Typographic hero — cream paper, no card */
+.project-page-hero {
+    position: relative;
+    padding-top: 9rem;
+    padding-bottom: 4rem;
+    padding-inline: 1.5rem;
+}
+@media (min-width: 768px)  { .project-page-hero { padding-top: 10rem; padding-bottom: 5rem; padding-inline: 2.5rem; } }
+@media (min-width: 1024px) { .project-page-hero { padding-inline: 4rem; } }
+.project-page-hero__breadcrumb {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 3rem;
+    font-size: 0.72rem;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    font-feature-settings: "tnum";
+    opacity: 0.65;
+}
+html[lang="ar"] .project-page-hero__breadcrumb { letter-spacing: 0 !important; }
+.project-page-hero__title {
+    font-size: clamp(3.5rem, 9vw, 8rem);
+    line-height: 0.96;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    max-width: 14ch;
+}
+html[lang="ar"] .project-page-hero__title { letter-spacing: 0 !important; }
+.project-page-hero__tagline {
+    color: var(--project-color, var(--hawih-blue));
+}
+.project-page-hero__meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 1.5rem;
+    margin-top: 2.5rem;
+}
+.project-page-hero__sector {
+    font-size: 0.85rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--project-color, var(--hawih-blue));
+    font-feature-settings: "tnum";
+    font-weight: 500;
+}
+html[lang="ar"] .project-page-hero__sector { letter-spacing: 0 !important; }
+.project-page-hero__lead {
+    font-size: 1.05rem;
+    line-height: 1.7;
+    max-width: 30rem;
+    color: rgba(11, 11, 16, 0.7);
+}
+.dark .project-page-hero__lead { color: rgba(244, 241, 235, 0.7); }
+
+/* Full-bleed feature image — the brand showcase, dramatic */
+.project-feature {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: var(--project-color, var(--hawih-ink));
+}
+@media (max-width: 640px) { .project-feature { aspect-ratio: 4 / 3; } }
+.project-feature img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Brief section — editorial two-column */
+.project-brief {
+    padding-block: 6rem;
+    padding-inline: 1.5rem;
+}
+@media (min-width: 768px)  { .project-brief { padding-block: 8rem; padding-inline: 2.5rem; } }
+@media (min-width: 1024px) { .project-brief { padding-inline: 4rem; } }
+.project-brief__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 3rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+@media (min-width: 900px) {
+    .project-brief__grid {
+        grid-template-columns: 3fr 2fr;
+        gap: 5rem;
+    }
+}
+.project-brief__heading {
+    font-size: clamp(1.75rem, 3.4vw, 2.6rem);
+    line-height: 1.2;
+    font-weight: 500;
+    margin-bottom: 1.5rem;
+}
+.project-brief__body {
+    font-size: 1.05rem;
+    line-height: 1.85;
+    color: rgba(11, 11, 16, 0.72);
+    max-width: 36rem;
+}
+.dark .project-brief__body { color: rgba(244, 241, 235, 0.72); }
+.project-brief__deliverables { list-style: none; padding: 0; margin: 0; }
+.project-brief__deliverables li {
+    display: flex;
+    align-items: baseline;
+    gap: 0.85rem;
+    padding-block: 0.85rem;
+    border-top: 1px solid var(--hawih-paper-line);
+    font-size: 0.95rem;
+}
+.project-brief__deliverables li:first-child { border-top: none; }
+.dark .project-brief__deliverables li { border-top-color: var(--hawih-ink-line); }
+.project-brief__deliverables li::before {
+    content: counter(d, decimal-leading-zero);
+    counter-increment: d;
+    font-size: 0.72rem;
+    color: var(--project-color, var(--hawih-blue));
+    font-feature-settings: "tnum";
+    font-weight: 600;
+    min-width: 1.5rem;
+}
+.project-brief__deliverables { counter-reset: d; }
+
+/* Brand-color band — full bleed, animated orbs, project tagline as huge type.
+   This is the brand-colour moment of the page, between brief and gallery. */
+.project-band {
+    position: relative;
+    overflow: hidden;
+    background: var(--project-color, var(--hawih-ink));
+    color: #fff;
+    padding: 6rem 1.5rem;
+    text-align: center;
+}
+@media (min-width: 768px) { .project-band { padding: 8rem 2.5rem; } }
+.project-band::before,
+.project-band::after {
+    content: "";
+    position: absolute;
+    width: 70%;
+    height: 110%;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.5;
+    pointer-events: none;
+    mix-blend-mode: screen;
+}
+.project-band::before {
+    top: -30%;
+    inset-inline-start: -15%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.55) 0%, transparent 60%);
+    animation: hero-orb-a 18s ease-in-out infinite;
+}
+.project-band::after {
+    bottom: -40%;
+    inset-inline-end: -20%;
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.35) 0%, transparent 60%);
+    animation: hero-orb-b 22s ease-in-out infinite;
+}
+@keyframes hero-orb-a {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50%      { transform: translate(8%, 6%) scale(1.12); }
+}
+@keyframes hero-orb-b {
+    0%, 100% { transform: translate(0, 0) scale(1.05); }
+    50%      { transform: translate(-10%, -4%) scale(0.95); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .project-band::before, .project-band::after { animation: none; }
+}
+.project-band__content {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+}
+.project-band__eyebrow {
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    opacity: 0.7;
+    margin-bottom: 1.5rem;
+    font-feature-settings: "tnum";
+}
+html[lang="ar"] .project-band__eyebrow { letter-spacing: 0 !important; }
+.project-band__quote {
+    font-size: clamp(2rem, 5vw, 4rem);
+    line-height: 1.15;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+}
+html[lang="ar"] .project-band__quote { letter-spacing: 0 !important; }
+
+/* Gallery — edge-to-edge, no gaps, continuous with the feature image.
+   Each image lives in its own band; on desktop they pair up 2-up so the
+   eye reads them as one composition, not isolated cards. */
+.project-gallery {
+    padding: 0;
+    margin: 0;
+}
+.project-gallery__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 0;
+    max-width: none;
+    margin: 0;
+}
+@media (min-width: 768px) {
+    .project-gallery__grid { grid-template-columns: repeat(2, 1fr); }
+    /* If there's only one image after the feature, span both columns
+       so it reads as a second feature, not a half-width card. */
+    .project-gallery__grid img:only-child { grid-column: 1 / -1; }
+}
+.project-gallery__grid img {
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    display: block;
+    border-radius: 0;
+    box-shadow: none;
+    background: var(--project-color, var(--hawih-ink2));
+}
+
+/* Project hero shell (legacy, kept for backward compat) */
+.project-hero {
+    position: relative;
+    width: 100%;
+}
+.project-hero-card {
+    position: relative;
+    width: 100%;
+    min-height: 60vh;
+    border-radius: 2rem;
+    overflow: hidden;
+    background: var(--project-color, var(--hawih-ink));
+    color: var(--project-fg, #fff);
+    isolation: isolate;
+    box-shadow: 0 30px 60px -20px rgba(8, 8, 25, 0.4);
+    padding: 3rem 1.75rem;
+}
+@media (min-width: 768px)  { .project-hero-card { padding: 4rem 3rem; } }
+@media (min-width: 1024px) { .project-hero-card { padding: 5rem 4rem; min-height: 64vh; } }
+/* "Live" backdrop — two large blurred orbs drifting on opposite paths,
+   tinted from the project's brand colour. Adds movement without
+   stealing attention from the headline. */
+.project-hero-card::before,
+.project-hero-card::after {
+    content: "";
+    position: absolute;
+    width: 70%;
+    height: 110%;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.55;
+    pointer-events: none;
+    mix-blend-mode: screen;
+}
+.project-hero-card::before {
+    top: -30%;
+    inset-inline-start: -15%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.55) 0%, transparent 60%);
+    animation: hero-orb-a 18s ease-in-out infinite;
+}
+.project-hero-card::after {
+    bottom: -40%;
+    inset-inline-end: -20%;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.35) 0%, transparent 60%);
+    animation: hero-orb-b 22s ease-in-out infinite;
+    mix-blend-mode: overlay;
+}
+@keyframes hero-orb-a {
+    0%, 100% { transform: translate(0, 0) scale(1); }
+    50%      { transform: translate(8%, 6%) scale(1.12); }
+}
+@keyframes hero-orb-b {
+    0%, 100% { transform: translate(0, 0) scale(1.05); }
+    50%      { transform: translate(-10%, -4%) scale(0.95); }
+}
+@media (prefers-reduced-motion: reduce) {
+    .project-hero-card::before, .project-hero-card::after { animation: none; }
+}
+
+/* Film grain overlay — needs a child element since pseudo-elements
+   are already used by the orbs. Added as .project-hero-grain. */
+.project-hero-grain {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+    opacity: 0.10;
+    mix-blend-mode: overlay;
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='1.6' numOctaves='2' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
+}
+
+.project-hero-card > *:not(.project-hero-grain) { position: relative; z-index: 1; }
+
+.project-meta {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem 2rem;
+    padding-block: 2.5rem;
+    border-top: 1px solid var(--hawih-paper-line);
+    border-bottom: 1px solid var(--hawih-paper-line);
+}
+@media (min-width: 640px) { .project-meta { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px){ .project-meta { grid-template-columns: repeat(4, 1fr); } }
+.dark .project-meta { border-color: var(--hawih-ink-line); }
+.project-meta__label {
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--hawih-ink-soft, rgba(11,11,16,0.55));
+    margin-bottom: 0.5rem;
+    font-feature-settings: "tnum";
+}
+.dark .project-meta__label { color: rgba(244,241,235,0.55); }
+html[lang="ar"] .project-meta__label { letter-spacing: 0 !important; }
+.project-meta__value {
+    font-size: 1.05rem;
+    font-weight: 500;
+}
+
+.project-showcase {
+    width: 100%;
+    display: block;
+    background: var(--hawih-paper2);
+}
+.dark .project-showcase { background: var(--hawih-ink-2); }
+
+.project-bigmark {
+    font-size: clamp(4rem, 14vw, 14rem);
+    line-height: 0.9;
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    color: var(--project-color, var(--hawih-blue));
+}
+html[lang="ar"] .project-bigmark { letter-spacing: 0 !important; }
+
+/* ---------- Portfolio grid filters + richer cards ---------- */
+.work-filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    align-items: center;
+}
+.work-filter {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1.1rem;
+    border-radius: 999px;
+    border: 1px solid var(--hawih-paper-line);
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: inherit;
+    background: transparent;
+    cursor: pointer;
+    transition: background-color 0.25s ease, color 0.25s ease, border-color 0.25s ease;
+    white-space: nowrap;
+}
+.dark .work-filter { border-color: var(--hawih-ink-line); }
+.work-filter:hover {
+    border-color: var(--hawih-blue);
+    color: var(--hawih-blue);
+}
+.work-filter[aria-pressed="true"] {
+    background: var(--hawih-blue);
+    color: #fff;
+    border-color: var(--hawih-blue);
+}
+.work-filter__count {
+    margin-inline-start: 0.4rem;
+    font-size: 0.72rem;
+    opacity: 0.65;
+    font-feature-settings: "tnum";
+}
+
+/* Denser portfolio grid */
+.work-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 1.25rem 1rem;
+}
+@media (min-width: 640px) { .work-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 900px) { .work-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 1200px){ .work-grid { grid-template-columns: repeat(4, 1fr); } }
+@media (min-width: 1600px){ .work-grid { grid-template-columns: repeat(5, 1fr); } }
+
+/* Richer tile — overlay reveals project name + meta on hover */
+.work-tile {
+    position: relative;
+    display: block;
+    border-radius: 14px;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    background: var(--tile-color, var(--hawih-ink));
+    transition: transform 0.4s cubic-bezier(.2,.8,.2,1);
+}
+.work-tile:hover { transform: translateY(-4px); }
+.work-tile__cover {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.7s cubic-bezier(.2,.8,.2,1), filter 0.5s ease;
+    filter: saturate(1.02);
+}
+.work-tile:hover .work-tile__cover { transform: scale(1.04); }
+.work-tile__overlay {
+    position: absolute;
+    inset: 0;
+    background:
+        linear-gradient(180deg, transparent 0%, transparent 55%, rgba(0,0,0,0.78) 100%);
+    pointer-events: none;
+    opacity: 0.95;
+    transition: opacity 0.35s ease;
+}
+.work-tile:hover .work-tile__overlay { opacity: 1; }
+.work-tile__info {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    padding: 1rem 1.1rem 1.1rem;
+    color: #fff;
+    z-index: 2;
+}
+.work-tile__title {
+    font-size: 1.05rem;
+    font-weight: 500;
+    line-height: 1.2;
+    margin-bottom: 0.25rem;
+}
+.work-tile__meta {
+    font-size: 0.72rem;
+    opacity: 0.78;
+    font-feature-settings: "tnum";
+    letter-spacing: 0.04em;
+}
+html[lang="ar"] .work-tile__meta { letter-spacing: 0 !important; }
+
+/* Category chip on the top corner */
+.work-tile__chip {
+    position: absolute;
+    inset-inline-start: 0.75rem;
+    inset-block-start: 0.75rem;
+    z-index: 2;
+    padding: 0.25rem 0.65rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.85);
+    color: var(--hawih-ink);
+    font-size: 0.68rem;
+    font-weight: 500;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(-4px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+    backdrop-filter: blur(4px);
+}
+html[lang="ar"] .work-tile__chip { letter-spacing: 0 !important; }
+.work-tile:hover .work-tile__chip {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Filter-state — applied via JS */
+.work-tile[hidden] { display: none !important; }
+
+.project-next {
+    background: var(--hawih-ink);
+    color: var(--hawih-paper);
+    padding-block: 4rem;
+    text-align: center;
+    transition: background-color 0.4s ease;
+}
+.project-next:hover { background-color: #050714; }
+.project-next a {
+    display: block;
+    color: inherit;
+    text-decoration: none;
+}
+.project-next__label {
+    font-size: 0.72rem;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(244, 241, 235, 0.5);
+    margin-bottom: 0.75rem;
+}
+.project-next__title {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 500;
+    line-height: 1.1;
+}
+
+/* ---------- 404 glitch (kept for the 404 page) ---------- */
+.glitch-digit {
+    display: inline-block;
+    animation: glitch-shift 2.4s infinite ease-in-out;
+}
+.glitch-digit:nth-child(2) { animation-delay: 0.2s; }
+.glitch-digit:nth-child(3) { animation-delay: 0.4s; }
+@keyframes glitch-shift {
+    0%, 100% { transform: translate(0, 0); }
+    20%      { transform: translate(-2px, 1px); }
+    40%      { transform: translate(2px, -1px); }
+    60%      { transform: translate(-1px, -2px); }
+    80%      { transform: translate(1px, 2px); }
+}
+
+/* ---------- Floating WhatsApp button (injected sitewide by hawih.js) ---------- */
+.hawih-whatsapp {
+    position: fixed;
+    bottom: 1.5rem;
+    inset-inline-end: 1.5rem;     /* bottom-right LTR, bottom-left RTL */
+    z-index: 50;
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: #25D366;          /* WhatsApp brand green */
+    color: #fff;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    box-shadow: 0 8px 24px rgba(37, 211, 102, 0.40),
+                0 4px 12px rgba(0, 0, 0, 0.15);
+    transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+.hawih-whatsapp::before {
+    content: "";
+    position: absolute;
+    inset: -4px;
+    border-radius: 50%;
+    background: #25D366;
+    opacity: 0.30;
+    z-index: -1;
+    animation: hawih-whatsapp-pulse 2.4s ease-out infinite;
+}
+.hawih-whatsapp:hover {
+    transform: scale(1.08) translateY(-2px);
+    box-shadow: 0 12px 32px rgba(37, 211, 102, 0.50),
+                0 6px 16px rgba(0, 0, 0, 0.20);
+    color: #fff;
+}
+.hawih-whatsapp:focus-visible {
+    outline: 2px solid #fff;
+    outline-offset: 3px;
+}
+@keyframes hawih-whatsapp-pulse {
+    0%, 100% { transform: scale(1);     opacity: 0.30; }
+    50%      { transform: scale(1.25);  opacity: 0;    }
+}
+@media (max-width: 480px) {
+    .hawih-whatsapp { width: 50px; height: 50px; bottom: 1rem; inset-inline-end: 1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+    .hawih-whatsapp::before { animation: none; }
+}
+
+/* ---------- Form error highlight (used by form-recovery in hawih.js) ---------- */
+.field--error,
+.field__input.field--error,
+.field__textarea.field--error,
+.field__select.field--error {
+    border-color: #DC2626 !important;
+    background: rgba(220, 38, 38, 0.05);
+}
+.field--error:focus,
+.field__input.field--error:focus,
+.field__textarea.field--error:focus,
+.field__select.field--error:focus {
+    border-color: #DC2626 !important;
+    background: rgba(220, 38, 38, 0.08);
+    outline: none;
+}
+.form-success {
+    border: 1px solid rgba(31, 31, 254, 0.25);
+    background: rgba(31, 31, 254, 0.06);
+    color: var(--hawih-ink);
+    padding: 0.9rem 1.1rem;
+    border-radius: 10px;
+    font-size: 0.9rem;
+}
+.dark .form-success { color: var(--hawih-paper); background: rgba(31, 31, 254, 0.14); }
+
+/* ---------- Reduced motion ---------- */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+    }
+    .marquee__track { animation: none; }
+    .reveal { opacity: 1; transform: none; }
+}

@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>أعمالنا · Work — هوية</title>
+    <meta name="description" content="هوية بصرية وشعار لـأعمالنا من وكالة هوية.">
+    <script>
+      (function () {
+        try {
+          var lang = localStorage.getItem('lang');
+          if (lang === 'en') { document.documentElement.lang = 'en'; document.documentElement.dir = 'ltr'; }
+        } catch (e) {}
+      })();
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { darkMode: 'class', theme: { extend: {
+        colors: { ink: '#0B0B10', ink2: '#14141C', paper: '#F4F1EB', paper2: '#E9E4D7', brand: '#1F1FFE' },
+        fontFamily: { sans: ['Inter', 'IBM Plex Sans Arabic', 'sans-serif'], ar: ['IBM Plex Sans Arabic', 'sans-serif'] },
+      }}};
+    </script>
+    <link rel="stylesheet" href="/assets/css/hawih.css">
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+</head>
+<body class="bg-paper text-ink dark:bg-ink dark:text-paper antialiased selection:bg-brand selection:text-white">
+
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:start-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-brand focus:text-white focus:rounded"><span class="lang-string" data-ar="تخطّي إلى المحتوى" data-en="Skip to content">تخطّي إلى المحتوى</span></a>
+
+    <header class="site-nav fixed top-0 inset-x-0 z-40 px-6 md:px-10 py-5">
+        <nav class="max-w-[1440px] mx-auto flex items-center justify-between">
+            <a href="/" class="flex items-center gap-3" aria-label="Hawih">
+                <img src="/assets/img/logo/hawih-logo-light.png" alt="Hawih" class="h-8 w-auto block dark:hidden">
+                <img src="/assets/img/logo/hawih-logo-white.png" alt="Hawih" class="h-8 w-auto hidden dark:block">
+            </a>
+            <ul class="hidden lg:flex items-center gap-9 text-sm">
+                <li><a href="/" class="nav-link"><span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span></a></li>
+                <li><a href="/work.html" class="nav-link"><span class="lang-string" data-ar="أعمالنا" data-en="Work">أعمالنا</span></a></li>
+                <li><a href="/services.html" class="nav-link"><span class="lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span></a></li>
+                <li><a href="/about.html" class="nav-link"><span class="lang-string" data-ar="من نحن" data-en="About">من نحن</span></a></li>
+                <li><a href="/contact.html" class="nav-link"><span class="lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span></a></li>
+            </ul>
+            <div class="flex items-center gap-3">
+                <button class="langToggle hidden sm:inline-flex items-center px-3 py-1.5 text-sm border border-ink/15 dark:border-paper/15 rounded-full hover:border-brand hover:text-brand transition" aria-label="Toggle language">
+                    <span class="lang-string" data-ar="EN" data-en="عربي">EN</span>
+                </button>
+                <a href="/contact.html" class="hidden md:inline-flex btn-primary text-sm"><span class="lang-string" data-ar="ابدأ مشروعك" data-en="Start a project">ابدأ مشروعك</span></a>
+                <button class="mobileNavToggle lg:hidden p-2" aria-label="Open menu"><iconify-icon icon="solar:hamburger-menu-linear" width="22"></iconify-icon></button>
+            </div>
+        </nav>
+    </header>
+    <div class="mobileNav hidden fixed inset-0 z-50 bg-paper dark:bg-ink p-6 overflow-y-auto">
+        <div class="flex items-center justify-between mb-12">
+            <img src="/assets/img/logo/hawih-logo-light.png" alt="Hawih" class="h-8 w-auto block dark:hidden">
+            <img src="/assets/img/logo/hawih-logo-white.png" alt="Hawih" class="h-8 w-auto hidden dark:block">
+            <button class="mobileNavClose p-2" aria-label="Close menu"><iconify-icon icon="solar:close-circle-linear" width="28"></iconify-icon></button>
+        </div>
+        <ul class="flex flex-col gap-5 text-2xl font-medium">
+            <li><a href="/"><span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span></a></li>
+            <li><a href="/work.html"><span class="lang-string" data-ar="أعمالنا" data-en="Work">أعمالنا</span></a></li>
+            <li><a href="/services.html"><span class="lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span></a></li>
+            <li><a href="/about.html"><span class="lang-string" data-ar="من نحن" data-en="About">من نحن</span></a></li>
+            <li><a href="/contact.html"><span class="lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span></a></li>
+        </ul>
+    </div>
+
+    <main id="main">
+        <!-- Page hero -->
+        <section class="pt-36 md:pt-44 pb-10 md:pb-12 px-6 md:px-10">
+            <div class="max-w-[1440px] mx-auto">
+                <div class="flex items-end justify-between gap-6 flex-wrap reveal">
+                    <div>
+                        <div class="eyebrow mb-4"><span class="lang-string" data-ar="أعمالنا" data-en="Selected work">أعمالنا</span></div>
+                        <h1 class="text-4xl md:text-5xl lg:text-6xl font-medium leading-tight max-w-3xl">
+                            <span class="lang-string" data-ar="٢٤ مشروعاً — هويات بصرية وعلامات تجارية صاغها فريقنا." data-en="24 projects — visual identities and brands shaped by our team.">٢٤ مشروعاً — هويات بصرية وعلامات تجارية صاغها فريقنا.</span>
+                        </h1>
+                    </div>
+                    <div class="text-sm opacity-65 hero-mono"><span class="lang-string" data-ar="٢٠٢١ — ٢٠٢٤" data-en="2021 — 2024">٢٠٢١ — ٢٠٢٤</span></div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Filters -->
+        <section class="px-6 md:px-10 mb-8">
+            <div class="max-w-[1440px] mx-auto">
+                <div class="work-filters reveal">
+                    <button class="work-filter" data-filter="all" aria-pressed="true">
+                        <span class="lang-string" data-ar="الكل" data-en="All">الكل</span>
+                        <span class="work-filter__count">24</span>
+                    </button>
+                    <button class="work-filter" data-filter="identity" aria-pressed="false">
+                        <span class="lang-string" data-ar="هوية بصرية" data-en="Identity">هوية بصرية</span>
+                        <span class="work-filter__count">7</span>
+                    </button>
+                    <button class="work-filter" data-filter="hospitality" aria-pressed="false">
+                        <span class="lang-string" data-ar="ضيافة ومطاعم" data-en="Hospitality">ضيافة ومطاعم</span>
+                        <span class="work-filter__count">4</span>
+                    </button>
+                    <button class="work-filter" data-filter="real-estate" aria-pressed="false">
+                        <span class="lang-string" data-ar="عقاري" data-en="Real estate">عقاري</span>
+                        <span class="work-filter__count">2</span>
+                    </button>
+                    <button class="work-filter" data-filter="retail" aria-pressed="false">
+                        <span class="lang-string" data-ar="تجزئة" data-en="Retail">تجزئة</span>
+                        <span class="work-filter__count">2</span>
+                    </button>
+                    <button class="work-filter" data-filter="tech" aria-pressed="false">
+                        <span class="lang-string" data-ar="تطبيقات وتقنية" data-en="Apps & Tech">تطبيقات وتقنية</span>
+                        <span class="work-filter__count">4</span>
+                    </button>
+                    <button class="work-filter" data-filter="social" aria-pressed="false">
+                        <span class="lang-string" data-ar="محتوى اجتماعي" data-en="Social content">محتوى اجتماعي</span>
+                        <span class="work-filter__count">5</span>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Project grid — 4-col dense on desktop, with hover overlays -->
+        <section class="py-6 md:py-10 px-6 md:px-10 relative">
+            <span class="brand-thread brand-thread--left" aria-hidden="true"></span>
+            <div class="max-w-[1440px] mx-auto relative">
+                <div class="work-grid">
+                <a href="/work-toma.html" class="work-tile reveal" data-category="hospitality" style="--tile-color: #1A2B5C;">
+                    <img src="/assets/img/work/toma/01.jpeg" alt="Toma" class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="ضيافة ومطاعم" data-en="Hospitality">ضيافة ومطاعم</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="توما" data-en="Toma">توما</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="مطعم · ضيافة · ٢٠٢٣" data-en="F&B · Hospitality · 2023">مطعم · ضيافة · ٢٠٢٣</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="/work-al-gharbi.html" class="work-tile reveal" data-category="identity" style="--tile-color: #7C2D12;">
+                    <img src="/assets/img/work/al-gharbi/01.jpeg" alt="Al-Gharbi Spices" class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="هوية بصرية" data-en="Identity">هوية بصرية</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="بهارات الغربي" data-en="Al-Gharbi Spices">بهارات الغربي</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="تعبئة · بهارات · ٢٠٢٢" data-en="Packaging · Spices · 2022">تعبئة · بهارات · ٢٠٢٢</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="/work-verdant.html" class="work-tile reveal" data-category="identity" style="--tile-color: #1E4B3A;">
+                    <img src="/assets/img/work/verdant/01.jpeg" alt="Verdant" class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="هوية بصرية" data-en="Identity">هوية بصرية</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="فيردانت" data-en="Verdant">فيردانت</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="صحة · أعشاب · ٢٠٢٣" data-en="Wellness · 2023">صحة · أعشاب · ٢٠٢٣</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="/work-unico.html" class="work-tile reveal" data-category="real-estate" style="--tile-color: #2C2C2A;">
+                    <img src="/assets/img/work/unico/01.jpeg" alt="Unico Square" class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="عقاري" data-en="Real estate">عقاري</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="أونيكو سكوير" data-en="Unico Square">أونيكو سكوير</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="عقاري · ميدان · ٢٠٢١" data-en="Real estate · 2021">عقاري · ميدان · ٢٠٢١</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="/work-al-sadu.html" class="work-tile reveal" data-category="identity" style="--tile-color: #9B1B1B;">
+                    <img src="/assets/img/work/al-sadu/01.jpeg" alt="Al-Sadu" class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="هوية بصرية" data-en="Identity">هوية بصرية</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="السدو" data-en="Al-Sadu">السدو</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="حرفي · تراث · ٢٠٢٢" data-en="Heritage craft · 2022">حرفي · تراث · ٢٠٢٢</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="/work-riwaq.html" class="work-tile reveal" data-category="hospitality" style="--tile-color: #3F3F46;">
+                    <img src="/assets/img/work/riwaq/01.jpeg" alt="Riwaq" class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="ضيافة ومطاعم" data-en="Hospitality">ضيافة ومطاعم</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="رواق" data-en="Riwaq">رواق</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="عمارة · ضيافة · ٢٠٢٣" data-en="Architecture · Hospitality · 2023">عمارة · ضيافة · ٢٠٢٣</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="/work-blink.html" class="work-tile reveal" data-category="retail" style="--tile-color: #F4F1EB;">
+                    <img src="/assets/img/work/blink/01.jpeg" alt="Blink" class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="تجزئة" data-en="Retail">تجزئة</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="بلينك" data-en="Blink">بلينك</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="ريتيل · بوتيك · ٢٠٢٢" data-en="Retail · Boutique · 2022">ريتيل · بوتيك · ٢٠٢٢</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="/work-12p.html" class="work-tile reveal" data-category="identity" style="--tile-color: #1F1FFE;">
+                    <img src="/assets/img/work/12p/01.jpeg" alt="12P" class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="هوية بصرية" data-en="Identity">هوية بصرية</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="بي ١٢" data-en="12P">بي ١٢</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="رياضي · أداء · ٢٠٢٣" data-en="Sports · Performance · 2023">رياضي · أداء · ٢٠٢٣</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="/work-jazl.html" class="work-tile reveal" data-category="identity" style="--tile-color: #0B0B10;">
+                    <img src="/assets/img/work/jazl/01.jpeg" alt="Jazl" class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="هوية بصرية" data-en="Identity">هوية بصرية</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="جزل" data-en="Jazl">جزل</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="كتابة · داخلي · ٢٠٢٤" data-en="Copywriting · In-house · 2024">كتابة · داخلي · ٢٠٢٤</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="/work-tajseem.html" class="work-tile reveal" data-category="tech" style="--tile-color: #0E2E4A;">
+                    <img src="/assets/img/work/tajseem/01.jpeg" alt="Tajseem" class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="تطبيقات وتقنية" data-en="Apps & Tech">تطبيقات وتقنية</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="تجسيم" data-en="Tajseem">تجسيم</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="ثلاثي الأبعاد · ٢٠٢٢" data-en="3D · Modeling · 2022">ثلاثي الأبعاد · ٢٠٢٢</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="/work-almoel.html" class="work-tile reveal" data-category="hospitality" style="--tile-color: #2E5F4E;">
+                    <img src="/assets/img/work/almoel/01.jpeg" alt="Almo'el" class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="ضيافة ومطاعم" data-en="Hospitality">ضيافة ومطاعم</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="الموئل" data-en="Almo'el">الموئل</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="ضيافة · ملاذ · ٢٠٢١" data-en="Retreat · Hospitality · 2021">ضيافة · ملاذ · ٢٠٢١</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="/work-nab.html" class="work-tile reveal" data-category="identity" style="--tile-color: #2069C7;">
+                    <img src="/assets/img/work/nab/01.jpeg" alt="Nab Marketing" class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="هوية بصرية" data-en="Identity">هوية بصرية</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="ناب للتسويق" data-en="Nab Marketing">ناب للتسويق</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="تسويق رقمي · ٢٠٢٣" data-en="Digital marketing · 2023">تسويق رقمي · ٢٠٢٣</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="/work-talga.html" class="work-tile reveal" data-category="tech" style="--tile-color: #5E2BAA;">
+                    <img src="/assets/img/work/talga/01.jpeg" alt="Talga" class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="تطبيقات وتقنية" data-en="Apps & Tech">تطبيقات وتقنية</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="تلقَه" data-en="Talga">تلقَه</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="تطبيق · تجارة · ٢٠٢٣" data-en="App · Commerce · 2023">تطبيق · تجارة · ٢٠٢٣</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="/work-caviole.html" class="work-tile reveal" data-category="hospitality" style="--tile-color: #4A2522;">
+                    <img src="/assets/img/work/caviole/01.jpeg" alt="Caviole" class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="ضيافة ومطاعم" data-en="Hospitality">ضيافة ومطاعم</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="كافيول" data-en="Caviole">كافيول</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="ضيافة · مطعم · ٢٠٢٤" data-en="F&B · Restaurant · 2024">ضيافة · مطعم · ٢٠٢٤</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="/work-athr.html" class="work-tile reveal" data-category="real-estate" style="--tile-color: #1F1FFE;">
+                    <img src="/assets/img/work/athr/01.jpeg" alt="Athr Almakan" class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="عقاري" data-en="Real estate">عقاري</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="أثر المكان" data-en="Athr Almakan">أثر المكان</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="استثمار عقاري · ٢٠٢٢" data-en="Real estate · 2022">استثمار عقاري · ٢٠٢٢</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="/work-oversight.html" class="work-tile reveal" data-category="tech" style="--tile-color: #0D2A3F;">
+                    <img src="/assets/img/work/oversight/01.jpeg" alt="Oversight" class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="تطبيقات وتقنية" data-en="Apps & Tech">تطبيقات وتقنية</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="أوفر سايت" data-en="Oversight">أوفر سايت</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="تقنية · رقابة · ٢٠٢٣" data-en="Tech · Oversight · 2023">تقنية · رقابة · ٢٠٢٣</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="/work-almasar.html" class="work-tile reveal" data-category="identity" style="--tile-color: #5C3A1A;">
+                    <img src="/assets/img/work/almasar/01.jpeg" alt="Almasar A." class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="هوية بصرية" data-en="Identity">هوية بصرية</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="المسار المميز" data-en="Almasar A.">المسار المميز</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="تعليم · مسار · ٢٠٢١" data-en="Education · 2021">تعليم · مسار · ٢٠٢١</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="/work-leader.html" class="work-tile reveal" data-category="tech" style="--tile-color: #1A4D8F;">
+                    <img src="/assets/img/work/leader/01.jpeg" alt="Leader" class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="تطبيقات وتقنية" data-en="Apps & Tech">تطبيقات وتقنية</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="ليدار" data-en="Leader">ليدار</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="تقنية · مستشعرات · ٢٠٢٣" data-en="Tech · LiDAR · 2023">تقنية · مستشعرات · ٢٠٢٣</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="/work-aronati.html" class="work-tile reveal" data-category="retail" style="--tile-color: #6E3914;">
+                    <img src="/assets/img/work/aronati/01.jpeg" alt="Aronati" class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="تجزئة" data-en="Retail">تجزئة</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="أروناتي" data-en="Aronati">أروناتي</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="تجزئة · أزياء · ٢٠٢٢" data-en="Retail · Fashion · 2022">تجزئة · أزياء · ٢٠٢٢</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="/work-bnoon.html" class="work-tile reveal" data-category="social" style="--tile-color: #D9A55E;">
+                    <img src="/assets/img/work/bnoon/01.jpeg" alt="Bnoon" class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="محتوى اجتماعي" data-en="Social content">محتوى اجتماعي</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="بنون" data-en="Bnoon">بنون</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="محتوى اجتماعي · ٢٠٢٣" data-en="Social media · 2023">محتوى اجتماعي · ٢٠٢٣</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="/work-direct.html" class="work-tile reveal" data-category="social" style="--tile-color: #1F4DFF;">
+                    <img src="/assets/img/work/direct/01.jpeg" alt="Direct App" class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="محتوى اجتماعي" data-en="Social content">محتوى اجتماعي</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="تطبيق دايركت" data-en="Direct App">تطبيق دايركت</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="محتوى · تطبيق · ٢٠٢٣" data-en="Social · App · 2023">محتوى · تطبيق · ٢٠٢٣</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="/work-dlvri.html" class="work-tile reveal" data-category="social" style="--tile-color: #FF6B2B;">
+                    <img src="/assets/img/work/dlvri/01.jpeg" alt="Dlvri App" class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="محتوى اجتماعي" data-en="Social content">محتوى اجتماعي</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="تطبيق دلڤري" data-en="Dlvri App">تطبيق دلڤري</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="محتوى · توصيل · ٢٠٢٣" data-en="Social · Delivery · 2023">محتوى · توصيل · ٢٠٢٣</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="/work-karmello.html" class="work-tile reveal" data-category="social" style="--tile-color: #2A1614;">
+                    <img src="/assets/img/work/karmello/01.jpeg" alt="Karmello" class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="محتوى اجتماعي" data-en="Social content">محتوى اجتماعي</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="كارميلو" data-en="Karmello">كارميلو</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="محتوى · شوكولاتة · ٢٠٢٤" data-en="Social · Chocolate · 2024">محتوى · شوكولاتة · ٢٠٢٤</span>
+                        </div>
+                    </div>
+                </a>
+                <a href="/work-casho.html" class="work-tile reveal" data-category="social" style="--tile-color: #F3B45F;">
+                    <img src="/assets/img/work/casho/01.jpeg" alt="Casho" class="work-tile__cover" loading="lazy">
+                    <span class="work-tile__chip"><span class="lang-string" data-ar="محتوى اجتماعي" data-en="Social content">محتوى اجتماعي</span></span>
+                    <div class="work-tile__overlay"></div>
+                    <div class="work-tile__info">
+                        <div class="work-tile__title"><span class="lang-string" data-ar="كاشو" data-en="Casho">كاشو</span></div>
+                        <div class="work-tile__meta">
+                            <span class="lang-string" data-ar="محتوى · مشتريات · ٢٠٢٣" data-en="Social · Retail · 2023">محتوى · مشتريات · ٢٠٢٣</span>
+                        </div>
+                    </div>
+                </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="brand-band py-24 md:py-32 px-6 md:px-10 mt-16 relative overflow-hidden">
+            <div aria-hidden="true" style="position:absolute; inset:auto -10% -40% auto; width:60%; height:120%; background: radial-gradient(ellipse at center, rgba(31,31,254,0.22) 0%, transparent 60%); pointer-events:none;"></div>
+            <div class="relative max-w-[1100px] mx-auto text-center">
+                <div class="eyebrow mb-6 reveal inline-flex"><span class="lang-string" data-ar="مشروعك القادم" data-en="Your next project">مشروعك القادم</span></div>
+                <h2 class="text-3xl md:text-5xl font-medium leading-tight mb-8 reveal">
+                    <span class="lang-string" data-ar="هل تبحث عن هوية تليق بعلامتك؟" data-en="Looking for an identity worthy of your brand?">هل تبحث عن هوية تليق بعلامتك؟</span>
+                </h2>
+                <a href="/contact.html" class="btn-primary reveal">
+                    <span class="lang-string" data-ar="ابدأ مشروعك" data-en="Start a project">ابدأ مشروعك</span>
+                    <iconify-icon icon="solar:arrow-left-linear" width="16" class="ltr:rotate-180"></iconify-icon>
+                </a>
+            </div>
+        </section>
+    </main>
+
+    <footer class="pt-16 md:pt-20 pb-10 border-t border-ink/10 dark:border-paper/10">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-10">
+            <div class="grid grid-cols-2 md:grid-cols-12 gap-10 md:gap-6">
+                <div class="col-span-2 md:col-span-4">
+                    <img src="/assets/img/logo/hawih-logo-light.png" alt="Hawih" class="h-10 w-auto block dark:hidden mb-4">
+                    <img src="/assets/img/logo/hawih-logo-white.png" alt="Hawih" class="h-10 w-auto hidden dark:block mb-4">
+                    <p class="text-sm opacity-65 max-w-xs leading-relaxed"><span class="lang-string" data-ar="وكالة هوية للتصميم — استوديو سعودي للهوية والمحتوى والإنتاج الرقمي. من الرياض، منذ ٢٠٠٧." data-en="Hawih — a Saudi studio for identity, content, and digital production. From Riyadh, since 2007.">وكالة هوية للتصميم — استوديو سعودي للهوية والمحتوى والإنتاج الرقمي. من الرياض، منذ ٢٠٠٧.</span></p>
+                </div>
+                <div class="col-span-1 md:col-span-2">
+                    <div class="eyebrow mb-4"><span class="lang-string" data-ar="الموقع" data-en="Sitemap">الموقع</span></div>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/" class="hover:text-brand transition"><span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span></a></li>
+                        <li><a href="/work.html" class="hover:text-brand transition"><span class="lang-string" data-ar="أعمالنا" data-en="Work">أعمالنا</span></a></li>
+                        <li><a href="/services.html" class="hover:text-brand transition"><span class="lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span></a></li>
+                        <li><a href="/about.html" class="hover:text-brand transition"><span class="lang-string" data-ar="من نحن" data-en="About">من نحن</span></a></li>
+                        <li><a href="/contact.html" class="hover:text-brand transition"><span class="lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span></a></li>
+                    </ul>
+                </div>
+                <div class="col-span-1 md:col-span-3">
+                    <div class="eyebrow mb-4"><span class="lang-string" data-ar="تواصل" data-en="Contact">تواصل</span></div>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="tel:+966502185471" class="hover:text-brand transition" dir="ltr">+966 50 218 5471</a></li>
+                        <li><button data-copy="admin@hawih.com.sa" data-copied-text="✓ Copied" class="hover:text-brand transition cursor-pointer">admin@hawih.com.sa</button></li>
+                        <li class="opacity-65"><span class="lang-string" data-ar="٤١٧٨ خالد بن بندر بن عبدالعزيز، العارض، الرياض ١٣٣٣٧" data-en="4178 Khalid bin Bandar, Al-Aared, Riyadh 13337">٤١٧٨ خالد بن بندر بن عبدالعزيز، العارض، الرياض ١٣٣٣٧</span></li>
+                    </ul>
+                </div>
+                <div class="col-span-2 md:col-span-3">
+                    <div class="eyebrow mb-4"><span class="lang-string" data-ar="تابعنا" data-en="Follow">تابعنا</span></div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <a href="https://twitter.com/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="Twitter"><iconify-icon icon="ri:twitter-x-line" width="22"></iconify-icon></a>
+                        <a href="https://instagram.com/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="Instagram"><iconify-icon icon="ri:instagram-line" width="22"></iconify-icon></a>
+                        <a href="https://linkedin.com/company/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="LinkedIn"><iconify-icon icon="ri:linkedin-line" width="22"></iconify-icon></a>
+                        <a href="https://behance.net/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="Behance"><iconify-icon icon="ri:behance-line" width="22"></iconify-icon></a>
+                    </div>
+                    <img src="/assets/img/moc-cert.png" alt="Ministry of Commerce" class="h-12 w-auto opacity-80 dark:invert">
+                </div>
+            </div>
+            <div class="mt-16 pt-8 border-t border-ink/10 dark:border-paper/10 flex flex-wrap items-center justify-between gap-4 text-xs opacity-65 hero-mono">
+                <div>© 2007–2026 Hawih · هوية</div>
+                <div><span class="lang-string" data-ar="السجل التجاري ١٠١٠٧٩٤٢٣٧" data-en="CR 1010794237">السجل التجاري ١٠١٠٧٩٤٢٣٧</span></div>
+                <div><span class="lang-string" data-ar="صُنِع في الرياض" data-en="Made in Riyadh">صُنِع في الرياض</span></div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/js/hawih.js"></script>
+    <script>
+      (function () {
+        var filters = document.querySelectorAll('.work-filter');
+        var tiles = document.querySelectorAll('.work-tile');
+        filters.forEach(function (btn) {
+          btn.addEventListener('click', function () {
+            var f = btn.getAttribute('data-filter');
+            filters.forEach(function (b) { b.setAttribute('aria-pressed', b === btn ? 'true' : 'false'); });
+            tiles.forEach(function (t) {
+              t.hidden = !(f === 'all' || t.getAttribute('data-category') === f);
+            });
+          });
+        });
+      })();
+    </script>
+</body>
+</html>

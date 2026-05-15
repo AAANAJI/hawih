@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>خدماتنا · Services — هوية</title>
+    <meta name="description" content="ثمانية تخصّصات تحت سقف هوية — هوية بصرية، استراتيجية علامة، تصميم تجربة، تسويق بصري، وأكثر.">
+
+    <script>
+      (function () {
+        try {
+          var lang = localStorage.getItem('lang');
+          if (lang === 'en') { document.documentElement.lang = 'en'; document.documentElement.dir = 'ltr'; }
+        } catch (e) {}
+      })();
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { darkMode: 'class', theme: { extend: {
+        colors: { ink: '#0B0B10', ink2: '#14141C', paper: '#F4F1EB', paper2: '#E9E4D7', brand: '#1F1FFE' },
+        fontFamily: { sans: ['Inter', 'IBM Plex Sans Arabic', 'sans-serif'], ar: ['IBM Plex Sans Arabic', 'sans-serif'] },
+      }}};
+    </script>
+
+    <link rel="stylesheet" href="/assets/css/hawih.css">
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+</head>
+
+<body class="bg-paper text-ink dark:bg-ink dark:text-paper antialiased selection:bg-brand selection:text-white">
+
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:start-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-brand focus:text-white focus:rounded"><span class="lang-string" data-ar="تخطّي إلى المحتوى" data-en="Skip to content">تخطّي إلى المحتوى</span></a>
+
+    <!-- Shared header -->
+    <header class="site-nav fixed top-0 inset-x-0 z-40 px-6 md:px-10 py-5">
+        <nav class="max-w-[1440px] mx-auto flex items-center justify-between">
+            <a href="/" class="flex items-center gap-3" aria-label="Hawih">
+                <img src="/assets/img/logo/hawih-logo-light.png" alt="Hawih" class="h-8 w-auto block dark:hidden">
+                <img src="/assets/img/logo/hawih-logo-white.png" alt="Hawih" class="h-8 w-auto hidden dark:block">
+            </a>
+            <ul class="hidden lg:flex items-center gap-9 text-sm">
+                <li><a href="/" class="nav-link"><span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span></a></li>
+                <li><a href="/work.html" class="nav-link"><span class="lang-string" data-ar="أعمالنا" data-en="Work">أعمالنا</span></a></li>
+                <li><a href="/services.html" class="nav-link"><span class="lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span></a></li>
+                <li><a href="/about.html" class="nav-link"><span class="lang-string" data-ar="من نحن" data-en="About">من نحن</span></a></li>
+                <li><a href="/contact.html" class="nav-link"><span class="lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span></a></li>
+            </ul>
+            <div class="flex items-center gap-3">
+                <button class="langToggle hidden sm:inline-flex items-center px-3 py-1.5 text-sm border border-ink/15 dark:border-paper/15 rounded-full hover:border-brand hover:text-brand transition" aria-label="Toggle language">
+                    <span class="lang-string" data-ar="EN" data-en="عربي">EN</span>
+                </button>
+                <a href="/contact.html" class="hidden md:inline-flex btn-primary text-sm"><span class="lang-string" data-ar="ابدأ مشروعك" data-en="Start a project">ابدأ مشروعك</span></a>
+                <button class="mobileNavToggle lg:hidden p-2" aria-label="Open menu"><iconify-icon icon="solar:hamburger-menu-linear" width="22"></iconify-icon></button>
+            </div>
+        </nav>
+    </header>
+    <div class="mobileNav hidden fixed inset-0 z-50 bg-paper dark:bg-ink p-6 overflow-y-auto">
+        <div class="flex items-center justify-between mb-12">
+            <img src="/assets/img/logo/hawih-logo-light.png" alt="Hawih" class="h-8 w-auto block dark:hidden">
+            <img src="/assets/img/logo/hawih-logo-white.png" alt="Hawih" class="h-8 w-auto hidden dark:block">
+            <button class="mobileNavClose p-2" aria-label="Close menu"><iconify-icon icon="solar:close-circle-linear" width="28"></iconify-icon></button>
+        </div>
+        <ul class="flex flex-col gap-5 text-2xl font-medium">
+            <li><a href="/"><span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span></a></li>
+            <li><a href="/work.html"><span class="lang-string" data-ar="أعمالنا" data-en="Work">أعمالنا</span></a></li>
+            <li><a href="/services.html"><span class="lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span></a></li>
+            <li><a href="/about.html"><span class="lang-string" data-ar="من نحن" data-en="About">من نحن</span></a></li>
+            <li><a href="/contact.html"><span class="lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span></a></li>
+        </ul>
+    </div>
+
+    <main id="main">
+
+        <!-- ==========================================================
+             HERO — Typographic, cream paper
+             ========================================================== -->
+        <section class="project-page-hero reveal">
+            <div class="max-w-[1440px] mx-auto">
+                <div class="project-page-hero__breadcrumb">
+                    <a href="/" class="hover:text-brand inline-flex items-center gap-2 transition">
+                        <iconify-icon icon="solar:arrow-left-linear" width="14" class="ltr:rotate-180"></iconify-icon>
+                        <span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span>
+                    </a>
+                    <span style="opacity:.5">·</span>
+                    <span class="lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span>
+                </div>
+                <div class="project-page-hero__sector"><span class="lang-string" data-ar="مجالات عملنا" data-en="What we do">مجالات عملنا</span></div>
+                <h1 class="project-page-hero__title mt-4">
+                    <span class="lang-string" data-ar="استوديو واحد." data-en="One studio.">استوديو واحد.</span><br>
+                    <span class="project-page-hero__tagline lang-string" data-ar="ثمانية تخصّصات." data-en="Eight disciplines.">ثمانية تخصّصات.</span>
+                </h1>
+                <div class="project-page-hero__meta">
+                    <p class="project-page-hero__lead">
+                        <span class="lang-string" data-ar="من الهوية البصرية إلى الإنتاج الرقمي، نعمل كاستوديو متكامل تحت سقف واحد — بفريق سعودي يتنفّس نفس الحرفة." data-en="From visual identity to digital production, we operate as one integrated studio — a Saudi team breathing one craft.">من الهوية البصرية إلى الإنتاج الرقمي، نعمل كاستوديو متكامل تحت سقف واحد — بفريق سعودي يتنفّس نفس الحرفة.</span>
+                    </p>
+                    <div class="text-xs hero-mono uppercase tracking-widest" style="opacity:.6;">
+                        <span class="lang-string" data-ar="هوية · منذ ٢٠٠٧" data-en="Hawih · since 2007">هوية · منذ ٢٠٠٧</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================
+             EIGHT DISCIPLINES — Numbered editorial list
+             ========================================================== -->
+        <section class="py-20 md:py-28 px-6 md:px-10 relative">
+            <span class="brand-thread brand-thread--left" aria-hidden="true"></span>
+            <div class="max-w-[1440px] mx-auto relative">
+                <div class="service-grid reveal">
+                    <a href="/contact.html" class="service-tile">
+                        <div class="service-tile__arrow"><iconify-icon icon="solar:arrow-left-linear" width="22" class="ltr:rotate-180"></iconify-icon></div>
+                        <div>
+                            <div class="service-tile__num">٠١ / Brand</div>
+                            <div class="service-tile__title"><span class="lang-string" data-ar="العلامات التجارية" data-en="Brand strategy">العلامات التجارية</span></div>
+                        </div>
+                        <p class="service-tile__desc"><span class="lang-string" data-ar="من البحث والتسمية إلى التموضع — إطار يقود كل قرار بصري بعد ذلك." data-en="From research and naming to positioning — a framework that drives every visual decision.">من البحث والتسمية إلى التموضع — إطار يقود كل قرار بصري بعد ذلك.</span></p>
+                    </a>
+                    <a href="/contact.html" class="service-tile">
+                        <div class="service-tile__arrow"><iconify-icon icon="solar:arrow-left-linear" width="22" class="ltr:rotate-180"></iconify-icon></div>
+                        <div>
+                            <div class="service-tile__num">٠٢ / Identity</div>
+                            <div class="service-tile__title"><span class="lang-string" data-ar="الهويات البصرية" data-en="Visual identity">الهويات البصرية</span></div>
+                        </div>
+                        <p class="service-tile__desc"><span class="lang-string" data-ar="شعار، طباعة، ألوان، عناصر، وأدلة تطبيق متكاملة على المطبوع والرقمي." data-en="Logo, typography, palette, library, and applied guidelines across print and digital.">شعار، طباعة، ألوان، عناصر، وأدلة تطبيق متكاملة على المطبوع والرقمي.</span></p>
+                    </a>
+                    <a href="/contact.html" class="service-tile">
+                        <div class="service-tile__arrow"><iconify-icon icon="solar:arrow-left-linear" width="22" class="ltr:rotate-180"></iconify-icon></div>
+                        <div>
+                            <div class="service-tile__num">٠٣ / UI</div>
+                            <div class="service-tile__title"><span class="lang-string" data-ar="واجهات المستخدم" data-en="UI design">واجهات المستخدم</span></div>
+                        </div>
+                        <p class="service-tile__desc"><span class="lang-string" data-ar="واجهات للويب والتطبيقات، مبنية على نظام تصميم قابل للتوسعة." data-en="Web and app interfaces, built on a scalable design system.">واجهات للويب والتطبيقات، مبنية على نظام تصميم قابل للتوسعة.</span></p>
+                    </a>
+                    <a href="/contact.html" class="service-tile">
+                        <div class="service-tile__arrow"><iconify-icon icon="solar:arrow-left-linear" width="22" class="ltr:rotate-180"></iconify-icon></div>
+                        <div>
+                            <div class="service-tile__num">٠٤ / UX</div>
+                            <div class="service-tile__title"><span class="lang-string" data-ar="تجربة المستخدم" data-en="UX design">تجربة المستخدم</span></div>
+                        </div>
+                        <p class="service-tile__desc"><span class="lang-string" data-ar="بحوث، خرائط رحلة، نماذج أولية، واختبارات — تثبت قبل أن نُصمّم." data-en="Research, journey maps, prototypes, tests — proof before pixels.">بحوث، خرائط رحلة، نماذج أولية، واختبارات — تثبت قبل أن نُصمّم.</span></p>
+                    </a>
+                    <a href="/contact.html" class="service-tile">
+                        <div class="service-tile__arrow"><iconify-icon icon="solar:arrow-left-linear" width="22" class="ltr:rotate-180"></iconify-icon></div>
+                        <div>
+                            <div class="service-tile__num">٠٥ / Marketing</div>
+                            <div class="service-tile__title"><span class="lang-string" data-ar="التسويق البصري" data-en="Visual marketing">التسويق البصري</span></div>
+                        </div>
+                        <p class="service-tile__desc"><span class="lang-string" data-ar="نظام بصري متماسك للحملات — من المحتوى الرقمي إلى الإعلان الخارجي." data-en="A coherent visual system for campaigns — digital to OOH.">نظام بصري متماسك للحملات — من المحتوى الرقمي إلى الإعلان الخارجي.</span></p>
+                    </a>
+                    <a href="/contact.html" class="service-tile">
+                        <div class="service-tile__arrow"><iconify-icon icon="solar:arrow-left-linear" width="22" class="ltr:rotate-180"></iconify-icon></div>
+                        <div>
+                            <div class="service-tile__num">٠٦ / Consulting</div>
+                            <div class="service-tile__title"><span class="lang-string" data-ar="استشارات فنية" data-en="Creative consulting">استشارات فنية</span></div>
+                        </div>
+                        <p class="service-tile__desc"><span class="lang-string" data-ar="نقرأ هويتك، نُحلّل أين أنتم، ونرسم خارطة لما هو ممكن." data-en="We read your identity, analyse where you stand, and map what's possible.">نقرأ هويتك، نُحلّل أين أنتم، ونرسم خارطة لما هو ممكن.</span></p>
+                    </a>
+                    <a href="/contact.html" class="service-tile">
+                        <div class="service-tile__arrow"><iconify-icon icon="solar:arrow-left-linear" width="22" class="ltr:rotate-180"></iconify-icon></div>
+                        <div>
+                            <div class="service-tile__num">٠٧ / Events</div>
+                            <div class="service-tile__title"><span class="lang-string" data-ar="الفعاليات والمناسبات" data-en="Events">الفعاليات والمناسبات</span></div>
+                        </div>
+                        <p class="service-tile__desc"><span class="lang-string" data-ar="مخرجات بصرية متكاملة — من الإخراج الفني إلى التنفيذ الميداني." data-en="End-to-end visual production — from art direction to on-ground execution.">مخرجات بصرية متكاملة — من الإخراج الفني إلى التنفيذ الميداني.</span></p>
+                    </a>
+                    <a href="/contact.html" class="service-tile">
+                        <div class="service-tile__arrow"><iconify-icon icon="solar:arrow-left-linear" width="22" class="ltr:rotate-180"></iconify-icon></div>
+                        <div>
+                            <div class="service-tile__num">٠٨ / Refresh</div>
+                            <div class="service-tile__title"><span class="lang-string" data-ar="إحياء العلامات التجارية" data-en="Brand revival">إحياء العلامات التجارية</span></div>
+                        </div>
+                        <p class="service-tile__desc"><span class="lang-string" data-ar="ترميم العلامات القائمة لتتحدّث بلغة اليوم دون أن تفقد ما يُميّزها." data-en="Refreshing existing brands to speak today's language without losing their soul.">ترميم العلامات القائمة لتتحدّث بلغة اليوم دون أن تفقد ما يُميّزها.</span></p>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================
+             SUB-PRODUCTS — Wasil, Jazl, Hawih Professional
+             ========================================================== -->
+        <section class="py-24 md:py-32 px-6 md:px-10 bg-paper2/40 dark:bg-ink2/60 relative">
+            <span class="brand-thread brand-thread--right" aria-hidden="true"></span>
+            <div class="max-w-[1440px] mx-auto relative">
+                <div class="grid grid-cols-12 gap-6 mb-12 reveal">
+                    <div class="col-span-12 lg:col-span-5">
+                        <div class="eyebrow mb-4"><span class="lang-string" data-ar="منتجاتنا الداخلية" data-en="Our sub-brands">منتجاتنا الداخلية</span></div>
+                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-medium leading-tight">
+                            <span class="lang-string" data-ar="ثلاث خدمات بأسماء خاصّة." data-en="Three services with their own names.">ثلاث خدمات بأسماء خاصّة.</span>
+                        </h2>
+                    </div>
+                    <p class="col-span-12 lg:col-span-6 lg:col-start-7 text-base md:text-lg leading-relaxed opacity-75">
+                        <span class="lang-string" data-ar="بعض الخدمات تستحقّ هويتها المستقلّة. هذه هي الثلاث التي بنيناها بأسماء خاصّة، أسعار شفّافة، ودليل تطبيق منشور." data-en="Some services deserve their own identity. These three earned a name, a transparent price list, and their own brand book.">بعض الخدمات تستحقّ هويتها المستقلّة. هذه هي الثلاث التي بنيناها بأسماء خاصّة، أسعار شفّافة، ودليل تطبيق منشور.</span>
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-5 md:gap-6">
+                    <a href="/contact.html" class="t-card reveal block">
+                        <div class="text-brand text-xs hero-mono uppercase tracking-widest mb-3">Wasil</div>
+                        <h3 class="text-xl md:text-2xl font-medium mb-3"><span class="lang-string" data-ar="واصِل — إدارة منصّات التواصل" data-en="Wasil — social media">واصِل — إدارة منصّات التواصل</span></h3>
+                        <p class="text-sm opacity-70 leading-relaxed mb-6"><span class="lang-string" data-ar="استراتيجية، تقويم محتوى، تصاميم، وجدولة شهرية لمنصّات علامتك." data-en="Strategy, content calendar, designs, and monthly stewardship for your brand's platforms.">استراتيجية، تقويم محتوى، تصاميم، وجدولة شهرية لمنصّات علامتك.</span></p>
+                        <div class="text-sm hero-mono opacity-55"><span class="lang-string" data-ar="باقات شهرية" data-en="Monthly retainer">باقات شهرية</span></div>
+                    </a>
+                    <a href="/contact.html" class="t-card reveal block" style="transition-delay:.06s">
+                        <div class="text-brand text-xs hero-mono uppercase tracking-widest mb-3">Jazl</div>
+                        <h3 class="text-xl md:text-2xl font-medium mb-3"><span class="lang-string" data-ar="جَزل — كتابة محتوى" data-en="Jazl — copywriting">جَزل — كتابة محتوى</span></h3>
+                        <p class="text-sm opacity-70 leading-relaxed mb-6"><span class="lang-string" data-ar="نسج كلامي بصبغة عربية فصحى، يُخاطب جمهورك بالنبرة الصحيحة." data-en="Copy crafted in classical Arabic that meets your audience in the right register.">نسج كلامي بصبغة عربية فصحى، يُخاطب جمهورك بالنبرة الصحيحة.</span></p>
+                        <div class="text-sm hero-mono opacity-55"><span class="lang-string" data-ar="من ٣٩٠ ر.س للصفحة" data-en="From SAR 390 / page">من ٣٩٠ ر.س للصفحة</span></div>
+                    </a>
+                    <a href="/contact.html" class="t-card reveal block" style="transition-delay:.12s">
+                        <div class="text-brand text-xs hero-mono uppercase tracking-widest mb-3">Hawih Pro</div>
+                        <h3 class="text-xl md:text-2xl font-medium mb-3"><span class="lang-string" data-ar="هوية بروفيشينال — الهوية الشخصية" data-en="Hawih Professional — personal branding">هوية بروفيشينال — الهوية الشخصية</span></h3>
+                        <p class="text-sm opacity-70 leading-relaxed mb-6"><span class="lang-string" data-ar="باقات هوية للأفراد — مؤسّسين، تنفيذيين، خبراء، صانعي محتوى." data-en="Branding packages for founders, executives, experts, and creators.">باقات هوية للأفراد — مؤسّسين، تنفيذيين، خبراء، صانعي محتوى.</span></p>
+                        <div class="text-sm hero-mono opacity-55"><span class="lang-string" data-ar="من ٩٩٩ ر.س" data-en="From SAR 999">من ٩٩٩ ر.س</span></div>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================
+             PROCESS — How we work, four phases
+             ========================================================== -->
+        <section class="py-24 md:py-32 px-6 md:px-10 relative">
+            <span class="brand-thread brand-thread--left" aria-hidden="true"></span>
+            <div class="max-w-[1440px] mx-auto relative">
+                <div class="grid grid-cols-12 gap-6 mb-14 md:mb-16">
+                    <div class="col-span-12 lg:col-span-5 reveal">
+                        <div class="eyebrow mb-4"><span class="lang-string" data-ar="منهجيتنا" data-en="Our process">منهجيتنا</span></div>
+                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-medium leading-tight">
+                            <span class="lang-string" data-ar="أربع مراحل، ولا مفاجآت." data-en="Four phases, no surprises.">أربع مراحل، ولا مفاجآت.</span>
+                        </h2>
+                    </div>
+                    <p class="col-span-12 lg:col-span-6 lg:col-start-7 text-base md:text-lg leading-relaxed opacity-75 reveal" style="transition-delay:.05s">
+                        <span class="lang-string" data-ar="كل مشروع يمشي على نفس الخطوط الأربعة. الجدول معروف من اليوم الأول، والمراجعات مجدوَلة، والتسليمات بصيغة واضحة." data-en="Every project walks the same four steps. The timeline is set on day one, reviews are scheduled, and deliverables are spelled out in writing.">كل مشروع يمشي على نفس الخطوط الأربعة. الجدول معروف من اليوم الأول، والمراجعات مجدوَلة، والتسليمات بصيغة واضحة.</span>
+                    </p>
+                </div>
+
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
+                    <div class="reason-block reveal">
+                        <div class="reason-block__index hero-mono">٠١ — Discover</div>
+                        <h3 class="text-xl font-medium mb-3"><span class="lang-string" data-ar="الاكتشاف" data-en="Discovery">الاكتشاف</span></h3>
+                        <p class="text-sm opacity-70 leading-relaxed"><span class="lang-string" data-ar="ورشة معك ومع فريقك. نسأل، نَستمع، ونصيغ المشكلة قبل الحلّ." data-en="A workshop with you and your team. We ask, listen, and frame the problem before any answer.">ورشة معك ومع فريقك. نسأل، نَستمع، ونصيغ المشكلة قبل الحلّ.</span></p>
+                    </div>
+                    <div class="reason-block reveal" style="transition-delay:.05s">
+                        <div class="reason-block__index hero-mono">٠٢ — Define</div>
+                        <h3 class="text-xl font-medium mb-3"><span class="lang-string" data-ar="التموضع" data-en="Positioning">التموضع</span></h3>
+                        <p class="text-sm opacity-70 leading-relaxed"><span class="lang-string" data-ar="إطار الاستراتيجية والاتجاه البصري قبل أن نَفتح صفحة في فوتوشوب." data-en="The strategy + visual direction frame, before we open a Photoshop file.">إطار الاستراتيجية والاتجاه البصري قبل أن نَفتح صفحة في فوتوشوب.</span></p>
+                    </div>
+                    <div class="reason-block reveal" style="transition-delay:.1s">
+                        <div class="reason-block__index hero-mono">٠٣ — Design</div>
+                        <h3 class="text-xl font-medium mb-3"><span class="lang-string" data-ar="التصميم" data-en="Design">التصميم</span></h3>
+                        <p class="text-sm opacity-70 leading-relaxed"><span class="lang-string" data-ar="ثلاث مراجعات، ملاحظات مكتوبة، وفريق يردّ خلال يومَين." data-en="Three review rounds, written notes, and a team that replies within two days.">ثلاث مراجعات، ملاحظات مكتوبة، وفريق يردّ خلال يومَين.</span></p>
+                    </div>
+                    <div class="reason-block reveal" style="transition-delay:.15s">
+                        <div class="reason-block__index hero-mono">٠٤ — Deliver</div>
+                        <h3 class="text-xl font-medium mb-3"><span class="lang-string" data-ar="التسليم" data-en="Delivery">التسليم</span></h3>
+                        <p class="text-sm opacity-70 leading-relaxed"><span class="lang-string" data-ar="ملفّات مفتوحة، دليل تطبيق PDF، ومتابعة لشهرَين بعد التسليم." data-en="Source files, PDF guideline, plus two months of post-handover support.">ملفّات مفتوحة، دليل تطبيق PDF، ومتابعة لشهرَين بعد التسليم.</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================
+             FINAL CTA — Ink band
+             ========================================================== -->
+        <section class="brand-band py-24 md:py-32 px-6 md:px-10 relative overflow-hidden">
+            <div aria-hidden="true" style="position:absolute; inset:auto -10% -40% auto; width:60%; height:120%; background: radial-gradient(ellipse at center, rgba(31,31,254,0.22) 0%, transparent 60%); pointer-events:none;"></div>
+            <div class="relative max-w-[1100px] mx-auto text-center">
+                <div class="eyebrow mb-6 reveal inline-flex"><span class="lang-string" data-ar="مشروعك القادم" data-en="Your next project">مشروعك القادم</span></div>
+                <h2 class="text-3xl md:text-5xl lg:text-6xl font-medium leading-tight mb-10 reveal" style="transition-delay:.05s">
+                    <span class="lang-string" data-ar="عندك فكرة." data-en="You have an idea.">عندك فكرة.</span><br>
+                    <span class="text-brand lang-string" data-ar="عندنا حِرفة." data-en="We have the craft.">عندنا حِرفة.</span>
+                </h2>
+                <div class="flex flex-wrap justify-center gap-3 reveal" style="transition-delay:.1s">
+                    <a href="/contact.html" class="btn-primary">
+                        <span class="lang-string" data-ar="ابدأ مشروعك" data-en="Start a project">ابدأ مشروعك</span>
+                        <iconify-icon icon="solar:arrow-left-linear" width="16" class="ltr:rotate-180"></iconify-icon>
+                    </a>
+                    <a href="/work.html" class="btn-ghost text-sm">
+                        <span class="lang-string" data-ar="استكشف أعمالنا" data-en="See the work">استكشف أعمالنا</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="pt-16 md:pt-20 pb-10 border-t border-ink/10 dark:border-paper/10">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-10">
+            <div class="grid grid-cols-2 md:grid-cols-12 gap-10 md:gap-6">
+                <div class="col-span-2 md:col-span-4">
+                    <img src="/assets/img/logo/hawih-logo-light.png" alt="Hawih" class="h-10 w-auto block dark:hidden mb-4">
+                    <img src="/assets/img/logo/hawih-logo-white.png" alt="Hawih" class="h-10 w-auto hidden dark:block mb-4">
+                    <p class="text-sm opacity-65 max-w-xs leading-relaxed"><span class="lang-string" data-ar="وكالة هوية للتصميم — استوديو سعودي للهوية والمحتوى والإنتاج الرقمي. من الرياض، منذ ٢٠٠٧." data-en="Hawih — a Saudi studio for identity, content, and digital production. From Riyadh, since 2007.">وكالة هوية للتصميم — استوديو سعودي للهوية والمحتوى والإنتاج الرقمي. من الرياض، منذ ٢٠٠٧.</span></p>
+                </div>
+                <div class="col-span-1 md:col-span-2">
+                    <div class="eyebrow mb-4"><span class="lang-string" data-ar="الموقع" data-en="Sitemap">الموقع</span></div>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/" class="hover:text-brand transition"><span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span></a></li>
+                        <li><a href="/work.html" class="hover:text-brand transition"><span class="lang-string" data-ar="أعمالنا" data-en="Work">أعمالنا</span></a></li>
+                        <li><a href="/services.html" class="hover:text-brand transition"><span class="lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span></a></li>
+                        <li><a href="/about.html" class="hover:text-brand transition"><span class="lang-string" data-ar="من نحن" data-en="About">من نحن</span></a></li>
+                        <li><a href="/contact.html" class="hover:text-brand transition"><span class="lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span></a></li>
+                    </ul>
+                </div>
+                <div class="col-span-1 md:col-span-3">
+                    <div class="eyebrow mb-4"><span class="lang-string" data-ar="تواصل" data-en="Contact">تواصل</span></div>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="tel:+966502185471" class="hover:text-brand transition" dir="ltr">+966 50 218 5471</a></li>
+                        <li><button data-copy="admin@hawih.com.sa" data-copied-text="✓ Copied" class="hover:text-brand transition cursor-pointer">admin@hawih.com.sa</button></li>
+                        <li class="opacity-65"><span class="lang-string" data-ar="٤١٧٨ خالد بن بندر بن عبدالعزيز، العارض، الرياض ١٣٣٣٧" data-en="4178 Khalid bin Bandar, Al-Aared, Riyadh 13337">٤١٧٨ خالد بن بندر بن عبدالعزيز، العارض، الرياض ١٣٣٣٧</span></li>
+                    </ul>
+                </div>
+                <div class="col-span-2 md:col-span-3">
+                    <div class="eyebrow mb-4"><span class="lang-string" data-ar="تابعنا" data-en="Follow">تابعنا</span></div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <a href="https://twitter.com/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="Twitter"><iconify-icon icon="ri:twitter-x-line" width="22"></iconify-icon></a>
+                        <a href="https://instagram.com/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="Instagram"><iconify-icon icon="ri:instagram-line" width="22"></iconify-icon></a>
+                        <a href="https://linkedin.com/company/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="LinkedIn"><iconify-icon icon="ri:linkedin-line" width="22"></iconify-icon></a>
+                        <a href="https://behance.net/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="Behance"><iconify-icon icon="ri:behance-line" width="22"></iconify-icon></a>
+                    </div>
+                    <img src="/assets/img/moc-cert.png" alt="Ministry of Commerce" class="h-12 w-auto opacity-80 dark:invert">
+                </div>
+            </div>
+            <div class="mt-16 pt-8 border-t border-ink/10 dark:border-paper/10 flex flex-wrap items-center justify-between gap-4 text-xs opacity-65 hero-mono">
+                <div>© 2007–2026 Hawih · هوية</div>
+                <div><span class="lang-string" data-ar="السجل التجاري ١٠١٠٧٩٤٢٣٧" data-en="CR 1010794237">السجل التجاري ١٠١٠٧٩٤٢٣٧</span></div>
+                <div><span class="lang-string" data-ar="صُنِع في الرياض" data-en="Made in Riyadh">صُنِع في الرياض</span></div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/js/hawih.js"></script>
+</body>
+</html>

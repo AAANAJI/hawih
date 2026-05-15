@@ -1,0 +1,27 @@
+## OS / editor cruft
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+*.swp
+*~
+
+## Local backups + deploy artifacts
+*.bak
+*.bak-*
+index-v*.html
+
+## Claude / dev tooling
+.claude/
+launch.json
+.vscode/
+
+## Server runtime artifacts (created on production, not part of source)
+/var/log/hawih-leads/
+*.log
+api/lead.php.bak
+
+## Build / temp
+node_modules/
+.tmp/
+tmp/

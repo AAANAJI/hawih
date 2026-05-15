@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>من نحن · About — هوية</title>
+    <meta name="description" content="هوية — وكالة سعودية للهوية البصرية والتصميم. من الرياض، منذ ٢٠٠٧.">
+
+    <script>
+      (function () {
+        try {
+          var lang = localStorage.getItem('lang');
+          if (lang === 'en') { document.documentElement.lang = 'en'; document.documentElement.dir = 'ltr'; }
+        } catch (e) {}
+      })();
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { darkMode: 'class', theme: { extend: {
+        colors: { ink: '#0B0B10', ink2: '#14141C', paper: '#F4F1EB', paper2: '#E9E4D7', brand: '#1F1FFE' },
+        fontFamily: { sans: ['Inter', 'IBM Plex Sans Arabic', 'sans-serif'], ar: ['IBM Plex Sans Arabic', 'sans-serif'] },
+      }}};
+    </script>
+
+    <link rel="stylesheet" href="/assets/css/hawih.css">
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+</head>
+
+<body class="bg-paper text-ink dark:bg-ink dark:text-paper antialiased selection:bg-brand selection:text-white">
+
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:start-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-brand focus:text-white focus:rounded"><span class="lang-string" data-ar="تخطّي إلى المحتوى" data-en="Skip to content">تخطّي إلى المحتوى</span></a>
+
+    <header class="site-nav fixed top-0 inset-x-0 z-40 px-6 md:px-10 py-5">
+        <nav class="max-w-[1440px] mx-auto flex items-center justify-between">
+            <a href="/" class="flex items-center gap-3" aria-label="Hawih">
+                <img src="/assets/img/logo/hawih-logo-light.png" alt="Hawih" class="h-8 w-auto block dark:hidden">
+                <img src="/assets/img/logo/hawih-logo-white.png" alt="Hawih" class="h-8 w-auto hidden dark:block">
+            </a>
+            <ul class="hidden lg:flex items-center gap-9 text-sm">
+                <li><a href="/" class="nav-link"><span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span></a></li>
+                <li><a href="/work.html" class="nav-link"><span class="lang-string" data-ar="أعمالنا" data-en="Work">أعمالنا</span></a></li>
+                <li><a href="/services.html" class="nav-link"><span class="lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span></a></li>
+                <li><a href="/about.html" class="nav-link"><span class="lang-string" data-ar="من نحن" data-en="About">من نحن</span></a></li>
+                <li><a href="/contact.html" class="nav-link"><span class="lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span></a></li>
+            </ul>
+            <div class="flex items-center gap-3">
+                <button class="langToggle hidden sm:inline-flex items-center px-3 py-1.5 text-sm border border-ink/15 dark:border-paper/15 rounded-full hover:border-brand hover:text-brand transition" aria-label="Toggle language">
+                    <span class="lang-string" data-ar="EN" data-en="عربي">EN</span>
+                </button>
+                <a href="/contact.html" class="hidden md:inline-flex btn-primary text-sm"><span class="lang-string" data-ar="ابدأ مشروعك" data-en="Start a project">ابدأ مشروعك</span></a>
+                <button class="mobileNavToggle lg:hidden p-2" aria-label="Open menu"><iconify-icon icon="solar:hamburger-menu-linear" width="22"></iconify-icon></button>
+            </div>
+        </nav>
+    </header>
+    <div class="mobileNav hidden fixed inset-0 z-50 bg-paper dark:bg-ink p-6 overflow-y-auto">
+        <div class="flex items-center justify-between mb-12">
+            <img src="/assets/img/logo/hawih-logo-light.png" alt="Hawih" class="h-8 w-auto block dark:hidden">
+            <img src="/assets/img/logo/hawih-logo-white.png" alt="Hawih" class="h-8 w-auto hidden dark:block">
+            <button class="mobileNavClose p-2" aria-label="Close menu"><iconify-icon icon="solar:close-circle-linear" width="28"></iconify-icon></button>
+        </div>
+        <ul class="flex flex-col gap-5 text-2xl font-medium">
+            <li><a href="/"><span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span></a></li>
+            <li><a href="/work.html"><span class="lang-string" data-ar="أعمالنا" data-en="Work">أعمالنا</span></a></li>
+            <li><a href="/services.html"><span class="lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span></a></li>
+            <li><a href="/about.html"><span class="lang-string" data-ar="من نحن" data-en="About">من نحن</span></a></li>
+            <li><a href="/contact.html"><span class="lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span></a></li>
+        </ul>
+    </div>
+
+    <main id="main">
+
+        <section class="project-page-hero reveal">
+            <div class="max-w-[1440px] mx-auto">
+                <div class="project-page-hero__breadcrumb">
+                    <a href="/" class="hover:text-brand inline-flex items-center gap-2 transition">
+                        <iconify-icon icon="solar:arrow-left-linear" width="14" class="ltr:rotate-180"></iconify-icon>
+                        <span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span>
+                    </a>
+                    <span style="opacity:.5">·</span>
+                    <span class="lang-string" data-ar="من نحن" data-en="About">من نحن</span>
+                </div>
+                <div class="project-page-hero__sector"><span class="lang-string" data-ar="عن هوية · منذ ٢٠٠٧" data-en="About Hawih · since 2007">عن هوية · منذ ٢٠٠٧</span></div>
+                <h1 class="project-page-hero__title mt-4">
+                    <span class="lang-string" data-ar="نَصنع لأهل بلدنا." data-en="We craft for our own people.">نَصنع لأهل بلدنا.</span><br>
+                    <span class="project-page-hero__tagline lang-string" data-ar="بحرفة سعودية." data-en="With Saudi craft.">بحرفة سعودية.</span>
+                </h1>
+                <div class="project-page-hero__meta">
+                    <p class="project-page-hero__lead">
+                        <span class="lang-string" data-ar="هوية وكالة سعودية للتصميم تأسّست في الرياض. نؤمن أن البساطة جمال — وأنّ العلامة التجارية تُعبّر عن جوهرها قبل شعارها." data-en="Hawih is a Saudi design agency founded in Riyadh. We believe beauty comes through simplicity — and a brand expresses its essence before its logo.">هوية وكالة سعودية للتصميم تأسّست في الرياض. نؤمن أن البساطة جمال — وأنّ العلامة التجارية تُعبّر عن جوهرها قبل شعارها.</span>
+                    </p>
+                    <div class="text-xs hero-mono uppercase tracking-widest" style="opacity:.6;">
+                        <span class="lang-string" data-ar="CR ١٠١٠٧٩٤٢٣٧" data-en="CR 1010794237">CR ١٠١٠٧٩٤٢٣٧</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Founder's letter -->
+        <section class="py-24 md:py-32 px-6 md:px-10 bg-paper2/40 dark:bg-ink2/60 relative">
+            <span class="brand-thread brand-thread--right" aria-hidden="true"></span>
+            <div class="max-w-[1100px] mx-auto relative">
+                <div class="grid grid-cols-12 gap-6 md:gap-10 items-start">
+                    <div class="col-span-12 md:col-span-3 reveal">
+                        <div class="text-brand text-[7rem] md:text-[9rem] leading-none font-medium">ع.ن</div>
+                        <div class="mt-4 eyebrow"><span class="lang-string" data-ar="رسالة المؤسّس" data-en="Founder's letter">رسالة المؤسّس</span></div>
+                    </div>
+                    <div class="col-span-12 md:col-span-9 reveal" style="transition-delay:.08s">
+                        <div class="text-lg md:text-xl leading-[1.8] opacity-80 space-y-5">
+                            <p><span class="lang-string" data-ar="بدأت هوية بسؤال بسيط: كيف تبدو علامة سعودية تشبه أهلها؟ ليست مستوردة، ولا متكلّفة — بل تنبض من أرضها وتُحادث جمهورها بصدق." data-en="Hawih began with a simple question: what does a Saudi brand that looks like its own people actually feel like? Not imported, not pretentious — pulsing from its own soil.">بدأت هوية بسؤال بسيط: كيف تبدو علامة سعودية تشبه أهلها؟ ليست مستوردة، ولا متكلّفة — بل تنبض من أرضها وتُحادث جمهورها بصدق.</span></p>
+                            <p><span class="lang-string" data-ar="منذ ٢٠٠٧، أمضينا أكثر من أربعين ألف ساعة في خدمة هذا السؤال. أحياناً كنا نُصمّم شعاراً، وأحياناً كنا نكتب جملة. في كلّ مرّة كنا نسأل أنفسنا: هل تليق هذه باسم العميل، وباسم البلد؟" data-en="Since 2007, we've spent more than forty thousand hours pursuing that question. Sometimes we were designing a logo, sometimes writing a sentence. Every time, we asked: does this honour the client's name — and the country's?">منذ ٢٠٠٧، أمضينا أكثر من أربعين ألف ساعة في خدمة هذا السؤال. أحياناً كنا نُصمّم شعاراً، وأحياناً كنا نكتب جملة. في كلّ مرّة كنا نسأل أنفسنا: هل تليق هذه باسم العميل، وباسم البلد؟</span></p>
+                            <p><span class="lang-string" data-ar="هوية ليست استوديو فحسب — هي عهدٌ مع كل من وثق بنا، أن نُسلّمه عملاً يستحق أن يحمل اسمه." data-en="Hawih is not just a studio — it's a covenant with everyone who's trusted us, to deliver work worthy of carrying their name.">هوية ليست استوديو فحسب — هي عهدٌ مع كل من وثق بنا، أن نُسلّمه عملاً يستحق أن يحمل اسمه.</span></p>
+                        </div>
+                        <div class="mt-10 pt-8 border-t border-ink/10 dark:border-paper/10">
+                            <div class="text-2xl font-medium">— عبدالعزيز آل ناجي</div>
+                            <div class="mt-1 text-sm opacity-60"><span class="lang-string" data-ar="المؤسّس والمدير الإبداعي" data-en="Founder &amp; Creative Director">المؤسّس والمدير الإبداعي</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Stats brand band -->
+        <section class="brand-band py-20 md:py-28 px-6 md:px-10">
+            <div class="max-w-[1440px] mx-auto">
+                <div class="flex flex-wrap items-end justify-between gap-6 mb-12 reveal">
+                    <div>
+                        <div class="eyebrow mb-3"><span class="lang-string" data-ar="أرقامنا تتحدّث عنّا" data-en="Numbers that speak">أرقامنا تتحدّث عنّا</span></div>
+                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-medium leading-tight max-w-2xl">
+                            <span class="lang-string" data-ar="ثقة الأرقام — ١٧ عاماً من البناء." data-en="Numbers that earn trust — 17 years of building.">ثقة الأرقام — ١٧ عاماً من البناء.</span>
+                        </h2>
+                    </div>
+                </div>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
+                    <div class="stat-block reveal">
+                        <div class="flex items-baseline gap-1">
+                            <span class="counter text-5xl md:text-6xl font-medium" data-target="334">0</span>
+                            <span class="text-3xl opacity-80">+</span>
+                        </div>
+                        <div class="mt-2 text-sm" style="color: rgba(255,255,255,0.75);"><span class="lang-string" data-ar="مشروع ناجح" data-en="Projects delivered">مشروع ناجح</span></div>
+                    </div>
+                    <div class="stat-block reveal" style="transition-delay:.05s">
+                        <div class="flex items-baseline gap-1">
+                            <span class="counter text-5xl md:text-6xl font-medium" data-target="202">0</span>
+                            <span class="text-3xl opacity-80">+</span>
+                        </div>
+                        <div class="mt-2 text-sm" style="color: rgba(255,255,255,0.75);"><span class="lang-string" data-ar="شريك نجاح" data-en="Partners">شريك نجاح</span></div>
+                    </div>
+                    <div class="stat-block reveal" style="transition-delay:.1s">
+                        <div class="flex items-baseline gap-1">
+                            <span class="counter text-5xl md:text-6xl font-medium" data-target="473">0</span>
+                            <span class="text-3xl opacity-80">+</span>
+                        </div>
+                        <div class="mt-2 text-sm" style="color: rgba(255,255,255,0.75);"><span class="lang-string" data-ar="عميل سعيد" data-en="Happy clients">عميل سعيد</span></div>
+                    </div>
+                    <div class="stat-block reveal" style="transition-delay:.15s">
+                        <div class="flex items-baseline gap-1">
+                            <span class="counter text-5xl md:text-6xl font-medium" data-target="40" data-suffix="K">0</span>
+                            <span class="text-3xl opacity-80">+</span>
+                        </div>
+                        <div class="mt-2 text-sm" style="color: rgba(255,255,255,0.75);"><span class="lang-string" data-ar="ساعة تصميم" data-en="Design hours">ساعة تصميم</span></div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Why Hawih -->
+        <section class="py-24 md:py-32 px-6 md:px-10 relative">
+            <span class="brand-thread brand-thread--left" aria-hidden="true"></span>
+            <div class="max-w-[1440px] mx-auto relative">
+                <div class="grid grid-cols-12 gap-6 mb-14 md:mb-20">
+                    <div class="col-span-12 lg:col-span-5 reveal">
+                        <div class="eyebrow mb-4"><span class="lang-string" data-ar="لماذا هوية" data-en="Why Hawih">لماذا هوية</span></div>
+                        <h2 class="text-3xl md:text-4xl lg:text-5xl font-medium leading-tight">
+                            <span class="lang-string" data-ar="لسنا الوحيدين — لكن لدينا الفريق والخبرة الأفضل." data-en="We're not the only ones — we just have the right team and craft.">لسنا الوحيدين — لكن لدينا الفريق والخبرة الأفضل.</span>
+                        </h2>
+                    </div>
+                    <p class="col-span-12 lg:col-span-6 lg:col-start-7 text-base md:text-lg leading-relaxed opacity-75 reveal" style="transition-delay:.05s">
+                        <span class="lang-string" data-ar="هناك عدد من العوامل التي تساهم في نجاح المشاريع المرتبطة بالتصميم وبناء الهويات التجارية والبصرية. هذه أربعة منها — والتي نَعِدك بها." data-en="Several factors determine whether a brand and identity project actually lands. These are the four we commit to.">هناك عدد من العوامل التي تساهم في نجاح المشاريع المرتبطة بالتصميم وبناء الهويات التجارية والبصرية. هذه أربعة منها — والتي نَعِدك بها.</span>
+                    </p>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
+                    <div class="reason-block reveal">
+                        <div class="reason-block__index hero-mono">٠١</div>
+                        <h3 class="text-xl font-medium mb-3"><span class="lang-string" data-ar="فريق إبداعي" data-en="A creative team">فريق إبداعي</span></h3>
+                        <p class="text-sm opacity-70 leading-relaxed"><span class="lang-string" data-ar="شغوف، خلّاق، مبدع، متميز، طموح، ذكي — كل ذلك وأكثر." data-en="Passionate, creative, distinguished, ambitious, sharp — that and more.">شغوف، خلّاق، مبدع، متميز، طموح، ذكي — كل ذلك وأكثر.</span></p>
+                    </div>
+                    <div class="reason-block reveal" style="transition-delay:.05s">
+                        <div class="reason-block__index hero-mono">٠٢</div>
+                        <h3 class="text-xl font-medium mb-3"><span class="lang-string" data-ar="الالتزام بالوقت" data-en="On time, always">الالتزام بالوقت</span></h3>
+                        <p class="text-sm opacity-70 leading-relaxed"><span class="lang-string" data-ar="لا يهم العمل المثالي إذا فات موعد التسليم. معادلتنا: الجودة الأفضل في الوقت المحدّد." data-en="The perfect work doesn't matter if it misses the deadline. Our equation: top quality, on time.">لا يهم العمل المثالي إذا فات موعد التسليم. معادلتنا: الجودة الأفضل في الوقت المحدّد.</span></p>
+                    </div>
+                    <div class="reason-block reveal" style="transition-delay:.1s">
+                        <div class="reason-block__index hero-mono">٠٣</div>
+                        <h3 class="text-xl font-medium mb-3"><span class="lang-string" data-ar="هوية أصيلة" data-en="An authentic identity">هوية أصيلة</span></h3>
+                        <p class="text-sm opacity-70 leading-relaxed"><span class="lang-string" data-ar="فريق سعودي ١٠٠٪ يعمل على تجربة عصرية من صلب تراثنا، تُلامس العميل." data-en="A 100% Saudi team building a contemporary experience drawn from our own heritage.">فريق سعودي ١٠٠٪ يعمل على تجربة عصرية من صلب تراثنا، تُلامس العميل.</span></p>
+                    </div>
+                    <div class="reason-block reveal" style="transition-delay:.15s">
+                        <div class="reason-block__index hero-mono">٠٤</div>
+                        <h3 class="text-xl font-medium mb-3"><span class="lang-string" data-ar="أحدث التقنيات" data-en="The latest tools">أحدث التقنيات</span></h3>
+                        <p class="text-sm opacity-70 leading-relaxed"><span class="lang-string" data-ar="نضمن لك عملاً يتلاءم مع كل استخداماتك — واجهات رقمية، مطبوعات، وأكثر." data-en="We make sure the work fits every place it'll live — digital interfaces, print, and beyond.">نضمن لك عملاً يتلاءم مع كل استخداماتك — واجهات رقمية، مطبوعات، وأكثر.</span></p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Timeline -->
+        <section class="py-24 md:py-32 px-6 md:px-10 bg-paper2/40 dark:bg-ink2/60 relative">
+            <div class="max-w-[1100px] mx-auto relative">
+                <div class="eyebrow mb-4 reveal"><span class="lang-string" data-ar="على مرّ السنوات" data-en="Over the years">على مرّ السنوات</span></div>
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-medium leading-tight mb-14 reveal" style="transition-delay:.05s">
+                    <span class="lang-string" data-ar="سبعة عشر عاماً من البناء." data-en="Seventeen years of building.">سبعة عشر عاماً من البناء.</span>
+                </h2>
+                <ul class="space-y-0">
+                    <li class="grid grid-cols-12 gap-4 py-6 border-t border-ink/10 dark:border-paper/10 reveal">
+                        <div class="col-span-3 md:col-span-2 hero-mono text-brand text-sm">٢٠٠٧</div>
+                        <div class="col-span-9 md:col-span-10">
+                            <h3 class="font-medium mb-1"><span class="lang-string" data-ar="تأسيس هوية في الرياض" data-en="Hawih founded in Riyadh">تأسيس هوية في الرياض</span></h3>
+                            <p class="text-sm opacity-65"><span class="lang-string" data-ar="بدأت الرحلة بمشروع واحد، وفكرة أن البلد يستحقّ هوية تشبهه." data-en="The journey began with a single project, and an idea that the country deserves a brand that looks like it.">بدأت الرحلة بمشروع واحد، وفكرة أن البلد يستحقّ هوية تشبهه.</span></p>
+                        </div>
+                    </li>
+                    <li class="grid grid-cols-12 gap-4 py-6 border-t border-ink/10 dark:border-paper/10 reveal" style="transition-delay:.05s">
+                        <div class="col-span-3 md:col-span-2 hero-mono text-brand text-sm">٢٠١٢</div>
+                        <div class="col-span-9 md:col-span-10">
+                            <h3 class="font-medium mb-1"><span class="lang-string" data-ar="مئة مشروع، وكسر حاجز الخليج" data-en="100 projects, the first GCC milestones">مئة مشروع، وكسر حاجز الخليج</span></h3>
+                            <p class="text-sm opacity-65"><span class="lang-string" data-ar="عملاء من السعودية والكويت والإمارات. الفريق يكبر، والذوق يَنضج." data-en="Clients from Saudi, Kuwait, and the UAE. The team grew, the taste matured.">عملاء من السعودية والكويت والإمارات. الفريق يكبر، والذوق يَنضج.</span></p>
+                        </div>
+                    </li>
+                    <li class="grid grid-cols-12 gap-4 py-6 border-t border-ink/10 dark:border-paper/10 reveal" style="transition-delay:.1s">
+                        <div class="col-span-3 md:col-span-2 hero-mono text-brand text-sm">٢٠١٨</div>
+                        <div class="col-span-9 md:col-span-10">
+                            <h3 class="font-medium mb-1"><span class="lang-string" data-ar="افتتاح خدمة «واصِل»" data-en="Wasil launches">افتتاح خدمة «واصِل»</span></h3>
+                            <p class="text-sm opacity-65"><span class="lang-string" data-ar="بدأنا بإدارة منصّات التواصل لعدد من علاماتنا — كخدمة شهرية مستقلّة." data-en="We began managing social platforms for select clients as a separate monthly service.">بدأنا بإدارة منصّات التواصل لعدد من علاماتنا — كخدمة شهرية مستقلّة.</span></p>
+                        </div>
+                    </li>
+                    <li class="grid grid-cols-12 gap-4 py-6 border-t border-ink/10 dark:border-paper/10 reveal" style="transition-delay:.15s">
+                        <div class="col-span-3 md:col-span-2 hero-mono text-brand text-sm">٢٠٢٢</div>
+                        <div class="col-span-9 md:col-span-10">
+                            <h3 class="font-medium mb-1"><span class="lang-string" data-ar="عقدٌ ونصف + هوية المحترفين" data-en="A decade-and-a-half + Hawih Pro launches">عقدٌ ونصف + هوية المحترفين</span></h3>
+                            <p class="text-sm opacity-65"><span class="lang-string" data-ar="باقات هوية للأفراد — قائدٌ، خبيرٌ، صانعُ محتوى. الفخامة بأسعار قابلة للوصول." data-en="Branding packages for individuals — founders, experts, creators. Premium, but accessible.">باقات هوية للأفراد — قائدٌ، خبيرٌ، صانعُ محتوى. الفخامة بأسعار قابلة للوصول.</span></p>
+                        </div>
+                    </li>
+                    <li class="grid grid-cols-12 gap-4 py-6 border-t border-b border-ink/10 dark:border-paper/10 reveal" style="transition-delay:.2s">
+                        <div class="col-span-3 md:col-span-2 hero-mono text-brand text-sm">٢٠٢٤</div>
+                        <div class="col-span-9 md:col-span-10">
+                            <h3 class="font-medium mb-1"><span class="lang-string" data-ar="٣٣٤ مشروع، ٢٠٢ شريك، ٤٧٣ عميل" data-en="334 projects, 202 partners, 473 clients">٣٣٤ مشروع، ٢٠٢ شريك، ٤٧٣ عميل</span></h3>
+                            <p class="text-sm opacity-65"><span class="lang-string" data-ar="وأكثر من ٤٠ ألف ساعة تصميم — وكلّ ذلك لم يَجعلنا نَستعجل خطوة." data-en="And over 40,000 design hours — none of which made us rush a step.">وأكثر من ٤٠ ألف ساعة تصميم — وكلّ ذلك لم يَجعلنا نَستعجل خطوة.</span></p>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </section>
+
+        <!-- Heritage statement -->
+        <section class="py-24 md:py-32 px-6 md:px-10 relative">
+            <span class="brand-thread brand-thread--right" aria-hidden="true"></span>
+            <div class="max-w-[1100px] mx-auto relative">
+                <div class="eyebrow mb-6 reveal"><span class="lang-string" data-ar="قيمنا" data-en="Our values">قيمنا</span></div>
+                <h2 class="text-3xl md:text-4xl lg:text-5xl font-medium leading-tight mb-10 reveal" style="transition-delay:.05s">
+                    <span class="lang-string" data-ar="نَفخر بإرثنا — لأنّه مصدرنا الأعمق للإلهام." data-en="We take pride in our heritage — it's our deepest source of inspiration.">نَفخر بإرثنا — لأنّه مصدرنا الأعمق للإلهام.</span>
+                </h2>
+                <p class="text-base md:text-lg leading-relaxed opacity-75 max-w-2xl reveal" style="transition-delay:.1s">
+                    <span class="lang-string" data-ar="كوننا فريقاً سعودياً نُقدّر النكهة العربية وما تَحمله من جمال لا حدود له. تراثنا الثقافي بحرٌ نَغترف منه إبداعياً — ووجوهه المتعدّدة تَزيده فتنة. نَطمح، من خلال عملنا، أن يصبح المتلقّي أكثر وعياً لعناصر التصميم المستمدّة من الإرث الذي ننتمي إليه." data-en="As a Saudi-led team, we appreciate the Arabian flair and the boundless beauty it holds. Our cultural heritage is a creative wellspring, and its many faces only add to its allure. Through our work, we aspire to make audiences more aware of the design elements drawn from our heritage.">كوننا فريقاً سعودياً نُقدّر النكهة العربية وما تَحمله من جمال لا حدود له. تراثنا الثقافي بحرٌ نَغترف منه إبداعياً — ووجوهه المتعدّدة تَزيده فتنة. نَطمح، من خلال عملنا، أن يصبح المتلقّي أكثر وعياً لعناصر التصميم المستمدّة من الإرث الذي ننتمي إليه.</span>
+                </p>
+            </div>
+        </section>
+
+        <!-- Final CTA -->
+        <section class="brand-band py-24 md:py-32 px-6 md:px-10 relative overflow-hidden">
+            <div aria-hidden="true" style="position:absolute; inset:auto -10% -40% auto; width:60%; height:120%; background: radial-gradient(ellipse at center, rgba(31,31,254,0.22) 0%, transparent 60%); pointer-events:none;"></div>
+            <div class="relative max-w-[1100px] mx-auto text-center">
+                <div class="eyebrow mb-6 reveal inline-flex"><span class="lang-string" data-ar="هل لديك مشروع؟" data-en="Got a project?">هل لديك مشروع؟</span></div>
+                <h2 class="text-3xl md:text-5xl lg:text-6xl font-medium leading-tight mb-10 reveal" style="transition-delay:.05s">
+                    <span class="lang-string" data-ar="من الجميل دائماً" data-en="It's always good">من الجميل دائماً</span><br>
+                    <span class="text-brand lang-string" data-ar="التحدّث عن الأفكار المُبتكرة." data-en="to talk about original ideas.">التحدّث عن الأفكار المُبتكرة.</span>
+                </h2>
+                <div class="flex flex-wrap justify-center gap-3 reveal" style="transition-delay:.1s">
+                    <a href="/contact.html" class="btn-primary">
+                        <span class="lang-string" data-ar="ابدأ مشروعك" data-en="Start a project">ابدأ مشروعك</span>
+                        <iconify-icon icon="solar:arrow-left-linear" width="16" class="ltr:rotate-180"></iconify-icon>
+                    </a>
+                    <a href="/work.html" class="btn-ghost text-sm">
+                        <span class="lang-string" data-ar="استكشف أعمالنا" data-en="See the work">استكشف أعمالنا</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="pt-16 md:pt-20 pb-10 border-t border-ink/10 dark:border-paper/10">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-10">
+            <div class="grid grid-cols-2 md:grid-cols-12 gap-10 md:gap-6">
+                <div class="col-span-2 md:col-span-4">
+                    <img src="/assets/img/logo/hawih-logo-light.png" alt="Hawih" class="h-10 w-auto block dark:hidden mb-4">
+                    <img src="/assets/img/logo/hawih-logo-white.png" alt="Hawih" class="h-10 w-auto hidden dark:block mb-4">
+                    <p class="text-sm opacity-65 max-w-xs leading-relaxed"><span class="lang-string" data-ar="وكالة هوية للتصميم — استوديو سعودي للهوية والمحتوى والإنتاج الرقمي. من الرياض، منذ ٢٠٠٧." data-en="Hawih — a Saudi studio for identity, content, and digital production. From Riyadh, since 2007.">وكالة هوية للتصميم — استوديو سعودي للهوية والمحتوى والإنتاج الرقمي. من الرياض، منذ ٢٠٠٧.</span></p>
+                </div>
+                <div class="col-span-1 md:col-span-2">
+                    <div class="eyebrow mb-4"><span class="lang-string" data-ar="الموقع" data-en="Sitemap">الموقع</span></div>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/" class="hover:text-brand transition"><span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span></a></li>
+                        <li><a href="/work.html" class="hover:text-brand transition"><span class="lang-string" data-ar="أعمالنا" data-en="Work">أعمالنا</span></a></li>
+                        <li><a href="/services.html" class="hover:text-brand transition"><span class="lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span></a></li>
+                        <li><a href="/about.html" class="hover:text-brand transition"><span class="lang-string" data-ar="من نحن" data-en="About">من نحن</span></a></li>
+                        <li><a href="/contact.html" class="hover:text-brand transition"><span class="lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span></a></li>
+                    </ul>
+                </div>
+                <div class="col-span-1 md:col-span-3">
+                    <div class="eyebrow mb-4"><span class="lang-string" data-ar="تواصل" data-en="Contact">تواصل</span></div>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="tel:+966502185471" class="hover:text-brand transition" dir="ltr">+966 50 218 5471</a></li>
+                        <li><button data-copy="admin@hawih.com.sa" data-copied-text="✓ Copied" class="hover:text-brand transition cursor-pointer">admin@hawih.com.sa</button></li>
+                        <li class="opacity-65"><span class="lang-string" data-ar="٤١٧٨ خالد بن بندر بن عبدالعزيز، العارض، الرياض ١٣٣٣٧" data-en="4178 Khalid bin Bandar, Al-Aared, Riyadh 13337">٤١٧٨ خالد بن بندر بن عبدالعزيز، العارض، الرياض ١٣٣٣٧</span></li>
+                    </ul>
+                </div>
+                <div class="col-span-2 md:col-span-3">
+                    <div class="eyebrow mb-4"><span class="lang-string" data-ar="تابعنا" data-en="Follow">تابعنا</span></div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <a href="https://twitter.com/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="Twitter"><iconify-icon icon="ri:twitter-x-line" width="22"></iconify-icon></a>
+                        <a href="https://instagram.com/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="Instagram"><iconify-icon icon="ri:instagram-line" width="22"></iconify-icon></a>
+                        <a href="https://linkedin.com/company/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="LinkedIn"><iconify-icon icon="ri:linkedin-line" width="22"></iconify-icon></a>
+                        <a href="https://behance.net/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="Behance"><iconify-icon icon="ri:behance-line" width="22"></iconify-icon></a>
+                    </div>
+                    <img src="/assets/img/moc-cert.png" alt="Ministry of Commerce" class="h-12 w-auto opacity-80 dark:invert">
+                </div>
+            </div>
+            <div class="mt-16 pt-8 border-t border-ink/10 dark:border-paper/10 flex flex-wrap items-center justify-between gap-4 text-xs opacity-65 hero-mono">
+                <div>© 2007–2026 Hawih · هوية</div>
+                <div><span class="lang-string" data-ar="السجل التجاري ١٠١٠٧٩٤٢٣٧" data-en="CR 1010794237">السجل التجاري ١٠١٠٧٩٤٢٣٧</span></div>
+                <div><span class="lang-string" data-ar="صُنِع في الرياض" data-en="Made in Riyadh">صُنِع في الرياض</span></div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/js/hawih.js"></script>
+</body>
+</html>

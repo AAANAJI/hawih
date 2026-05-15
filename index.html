@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>هوية — وكالة للتصميم</title>
+    <meta name="description" content="وكالة هوية — استوديو سعودي للتصميم، الهويات البصرية، والتسويق الإبداعي. من الرياض، منذ ٢٠٠٧.">
+
+    <!-- FOUC guard: pick theme + lang before paint -->
+    <script>
+      (function () {
+        try {
+          var lang = localStorage.getItem('lang');
+          if (lang === 'en') {
+            document.documentElement.lang = 'en';
+            document.documentElement.dir = 'ltr';
+          }
+        } catch (e) {}
+      })();
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = {
+        darkMode: 'class',
+        theme: {
+          extend: {
+            colors: {
+              ink:     '#0B0B10',
+              ink2:    '#14141C',
+              paper:   '#F4F1EB',
+              paper2:  '#E9E4D7',
+              brand:   '#1F1FFE',
+            },
+            fontFamily: {
+              sans: ['Inter', 'IBM Plex Sans Arabic', 'sans-serif'],
+              ar:   ['IBM Plex Sans Arabic', 'sans-serif'],
+            },
+          },
+        },
+      };
+    </script>
+
+    <link rel="stylesheet" href="/assets/css/hawih.css">
+
+    <!-- Iconify -->
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+
+    <!-- Three.js for the WebGL fractal-glass hero -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+
+<body class="bg-paper text-ink dark:bg-ink dark:text-paper antialiased selection:bg-brand selection:text-white">
+
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:start-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-brand focus:text-white focus:rounded">
+        <span class="lang-string" data-ar="تخطّي إلى المحتوى" data-en="Skip to content">تخطّي إلى المحتوى</span>
+    </a>
+
+    <!-- ============================================================
+         NAV
+         ============================================================ -->
+    <header class="site-nav fixed top-0 inset-x-0 z-40 px-6 md:px-10 py-5">
+        <nav class="max-w-[1440px] mx-auto flex items-center justify-between">
+            <a href="/" class="flex items-center gap-3" aria-label="Hawih">
+                <img src="/assets/img/logo/hawih-logo-light.png" alt="Hawih" class="h-8 w-auto block dark:hidden">
+                <img src="/assets/img/logo/hawih-logo-white.png" alt="Hawih" class="h-8 w-auto hidden dark:block">
+            </a>
+
+            <ul class="hidden lg:flex items-center gap-9 text-sm">
+                <li><a href="/" class="nav-link">
+                    <span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span>
+                </a></li>
+                <li><a href="/work.html" class="nav-link">
+                    <span class="lang-string" data-ar="أعمالنا" data-en="Work">أعمالنا</span>
+                </a></li>
+                <li><a href="/services.html" class="nav-link">
+                    <span class="lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span>
+                </a></li>
+                <li><a href="/about.html" class="nav-link">
+                    <span class="lang-string" data-ar="من نحن" data-en="About">من نحن</span>
+                </a></li>
+                <li><a href="/contact.html" class="nav-link">
+                    <span class="lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span>
+                </a></li>
+            </ul>
+
+            <div class="flex items-center gap-3">
+                    <iconify-icon class="themeIcon" icon="solar:moon-linear" width="20"></iconify-icon>
+                </button>
+                <button class="langToggle hidden sm:inline-flex items-center px-3 py-1.5 text-sm border border-ink/15 dark:border-paper/15 rounded-full hover:border-brand hover:text-brand transition" aria-label="Toggle language">
+                    <span class="lang-string" data-ar="EN" data-en="عربي">EN</span>
+                </button>
+                <a href="/contact.html" class="hidden md:inline-flex btn-primary text-sm">
+                    <span class="lang-string" data-ar="ابدأ مشروعك" data-en="Start a project">ابدأ مشروعك</span>
+                </a>
+                <button class="mobileNavToggle lg:hidden p-2" aria-label="Open menu">
+                    <iconify-icon icon="solar:hamburger-menu-linear" width="22"></iconify-icon>
+                </button>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ============================================================
+         MOBILE NAV
+         ============================================================ -->
+    <div class="mobileNav hidden fixed inset-0 z-50 bg-paper dark:bg-ink p-6 overflow-y-auto">
+        <div class="flex items-center justify-between mb-12">
+            <img src="/assets/img/logo/hawih-logo-light.png" alt="Hawih" class="h-8 w-auto block dark:hidden">
+            <img src="/assets/img/logo/hawih-logo-white.png" alt="Hawih" class="h-8 w-auto hidden dark:block">
+            <button class="mobileNavClose p-2" aria-label="Close menu">
+                <iconify-icon icon="solar:close-circle-linear" width="28"></iconify-icon>
+            </button>
+        </div>
+        <ul class="flex flex-col gap-5 text-2xl font-medium">
+            <li><a href="/"><span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span></a></li>
+            <li><a href="/work.html"><span class="lang-string" data-ar="أعمالنا" data-en="Work">أعمالنا</span></a></li>
+            <li><a href="/services.html"><span class="lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span></a></li>
+            <li><a href="/about.html"><span class="lang-string" data-ar="من نحن" data-en="About">من نحن</span></a></li>
+            <li><a href="/contact.html"><span class="lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span></a></li>
+        </ul>
+        <div class="mt-10 flex items-center gap-3">
+            <button class="langToggle px-4 py-2 border border-ink/15 dark:border-paper/15 rounded-full">
+                <span class="lang-string" data-ar="English" data-en="عربي">English</span>
+            </button>
+            <a href="/contact.html" class="btn-primary">
+                <span class="lang-string" data-ar="ابدأ مشروعك" data-en="Start a project">ابدأ مشروعك</span>
+            </a>
+        </div>
+    </div>
+
+    <main id="main">
+
+    <!-- ============================================================
+         HERO — Verbatim shfrah hero structure (iter-14)
+         Card classes, layers, layout copied 1:1 from shfrah.com.
+         Only the text strings and links are adapted to Hawih.
+         ============================================================ -->
+    <section class="hero-section relative w-full max-w-7xl mx-auto px-4 mt-28 md:mt-32 mb-16">
+        <div class="relative w-full h-[78vh] min-h-[620px] rounded-[2rem] overflow-hidden bg-[#0A0D10] shadow-2xl">
+            <div id="webgl-container" class="absolute inset-0 w-full h-full z-0 opacity-90"></div>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-black/10 z-0"></div>
+
+            <div class="relative z-10 w-full h-full flex flex-col justify-between px-6 py-10 md:p-14 lg:p-20 text-white">
+                <!-- Eyebrow -->
+                <div class="flex items-center gap-2">
+                    <span class="w-2 h-2 rounded-full bg-orange-500 shadow-[0_0_12px_rgba(249,115,22,0.9)]"></span>
+                    <span class="text-sm uppercase tracking-widest text-white/70 font-light lang-string" data-ar="استوديو هوية · الرياض" data-en="Hawih Studio · Riyadh">استوديو هوية · الرياض</span>
+                </div>
+
+                <!-- Headline -->
+                <div class="flex flex-col lg:flex-row justify-between items-start lg:items-end gap-10">
+                    <div class="flex-1 max-w-4xl">
+                        <h1 class="text-5xl md:text-7xl lg:text-8xl leading-[1.05] font-light text-white flex flex-wrap items-baseline gap-x-5 gap-y-2" id="hero-title">
+                            <span class="overflow-hidden inline-block pb-2"><span class="reveal-word inline-block lang-string" data-ar="هوية." data-en="Identity.">هوية.</span></span>
+                            <span class="overflow-hidden inline-block pb-2"><span class="reveal-word inline-block lang-string" data-ar="حِرفة." data-en="Craft.">حِرفة.</span></span>
+                            <span class="overflow-hidden inline-block pb-2"><span class="reveal-word inline-block lang-string" data-ar="فخر." data-en="Pride.">فخر.</span></span>
+                        </h1>
+                    </div>
+                    <div class="max-w-md flex flex-col gap-8">
+                        <p class="text-lg md:text-xl text-white/60 leading-relaxed font-light lang-string" data-ar="نَصنع هويات بصرية أصيلة بِحِرفة سعودية — لعلامات تستحق أن تُروى، وأثرٍ يبقى." data-en="We craft authentic visual identities with Saudi mastery — for brands worth telling, and impact that lasts.">نَصنع هويات بصرية أصيلة بِحِرفة سعودية — لعلامات تستحق أن تُروى، وأثرٍ يبقى.</p>
+                        <div class="flex gap-3 flex-wrap">
+                            <a href="/work.html" class="inline-flex items-center justify-center gap-2 bg-white text-black px-6 py-3 rounded-md text-base font-light hover:bg-neutral-200 transition-colors group">
+                                <span class="lang-string" data-ar="اكتشف أعمالنا" data-en="See our work">اكتشف أعمالنا</span>
+                                <iconify-icon icon="solar:arrow-right-linear" class="w-5 h-5 rtl:rotate-180 group-hover:rtl:-translate-x-1 group-hover:ltr:translate-x-1 transition-transform"></iconify-icon>
+                            </a>
+                            <a href="/contact.html" class="inline-flex items-center justify-center gap-2 border border-white/30 text-white px-6 py-3 rounded-md text-base font-light hover:bg-white/10 transition-colors">
+                                <span class="lang-string" data-ar="تواصل معنا" data-en="Let's talk">تواصل معنا</span>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         VALUES MARQUEE
+         ============================================================ -->
+    <section aria-label="Studio values" class="border-y border-ink/10 dark:border-paper/10 py-5">
+        <div class="marquee text-lg md:text-xl font-medium">
+            <div class="marquee__track">
+                <span class="marquee__item">أفكار خلّاقة <span class="dot"></span> Creative ideas</span>
+                <span class="marquee__item">استشارات فنية موثوقة <span class="dot"></span> Trusted consulting</span>
+                <span class="marquee__item">شراكات استراتيجية مثمرة <span class="dot"></span> Strategic partnerships</span>
+                <span class="marquee__item">صُنِع في الرياض <span class="dot"></span> Made in Riyadh</span>
+                <span class="marquee__item">أفكار خلّاقة <span class="dot"></span> Creative ideas</span>
+                <span class="marquee__item">استشارات فنية موثوقة <span class="dot"></span> Trusted consulting</span>
+                <span class="marquee__item">شراكات استراتيجية مثمرة <span class="dot"></span> Strategic partnerships</span>
+                <span class="marquee__item">صُنِع في الرياض <span class="dot"></span> Made in Riyadh</span>
+            </div>
+            <div class="marquee__track" aria-hidden="true">
+                <span class="marquee__item">أفكار خلّاقة <span class="dot"></span> Creative ideas</span>
+                <span class="marquee__item">استشارات فنية موثوقة <span class="dot"></span> Trusted consulting</span>
+                <span class="marquee__item">شراكات استراتيجية مثمرة <span class="dot"></span> Strategic partnerships</span>
+                <span class="marquee__item">صُنِع في الرياض <span class="dot"></span> Made in Riyadh</span>
+                <span class="marquee__item">أفكار خلّاقة <span class="dot"></span> Creative ideas</span>
+                <span class="marquee__item">استشارات فنية موثوقة <span class="dot"></span> Trusted consulting</span>
+                <span class="marquee__item">شراكات استراتيجية مثمرة <span class="dot"></span> Strategic partnerships</span>
+                <span class="marquee__item">صُنِع في الرياض <span class="dot"></span> Made in Riyadh</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         MANIFESTO — One paragraph, room around it
+         With net-grid backdrop + a center brand thread.
+         ============================================================ -->
+    <section class="py-24 md:py-32 bg-paper2/40 dark:bg-ink2/60 net-grid relative">
+        <div class="max-w-[1100px] mx-auto px-6 md:px-10 relative">
+            <div class="eyebrow mb-8 reveal"><span class="lang-string" data-ar="بيان الاستوديو" data-en="Studio note">بيان الاستوديو</span></div>
+            <p class="text-2xl md:text-3xl leading-[1.55] md:leading-[1.5] font-light reveal" style="transition-delay:.05s">
+                <span class="lang-string" data-ar="نسعى من خلال أعمالنا أن نجعل المتلقي أكثر وعياً لعناصر التصميم المستمدة من روح المشروع الذي ينتمي إليه. كوننا سعوديين، نفهم عملاءنا، ونمنحهم تماماً ما يبحثون عنه." data-en="We design so the viewer becomes more aware of the elements drawn from the project's own soul. Being Saudi means we understand our clients — and give them exactly what they're looking for.">نسعى من خلال أعمالنا أن نجعل المتلقي أكثر وعياً لعناصر التصميم المستمدة من روح المشروع الذي ينتمي إليه. كوننا سعوديين، نفهم عملاءنا، ونمنحهم تماماً ما يبحثون عنه.</span>
+            </p>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SELECTED WORK
+         ============================================================ -->
+    <section class="py-24 md:py-32 relative">
+        <span class="brand-thread brand-thread--right" aria-hidden="true"></span>
+        <div class="max-w-[1440px] mx-auto px-6 md:px-10 relative">
+            <div class="flex flex-wrap items-end justify-between gap-6 mb-14 md:mb-20 reveal">
+                <div>
+                    <div class="eyebrow mb-4"><span class="lang-string" data-ar="مختارات من الأعمال" data-en="Selected work">مختارات من الأعمال</span></div>
+                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-medium max-w-3xl leading-tight">
+                        <span class="lang-string" data-ar="مشاريع نفخر بها — من الهوية إلى المنتج." data-en="Work we're proud of — from identity to product.">مشاريع نفخر بها — من الهوية إلى المنتج.</span>
+                    </h2>
+                </div>
+                <a href="/work.html" class="btn-ghost text-sm">
+                    <span class="lang-string" data-ar="جميع الأعمال" data-en="All work">جميع الأعمال</span>
+                    <iconify-icon icon="solar:arrow-left-linear" width="16" class="ltr:rotate-180"></iconify-icon>
+                </a>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
+                <a href="/work-toma.html" class="case-card reveal">
+                    <div class="case-card__art" style="background: #1A2B5C;">
+                        <img src="/assets/img/work/toma/01.jpeg" alt="Toma" class="case-card__cover">
+                    </div>
+                    <div class="mt-3 flex items-baseline justify-between gap-4">
+                        <h3 class="text-base font-medium"><span class="lang-string" data-ar="توما — مطعم" data-en="Toma — restaurant">توما — مطعم</span></h3>
+                        <span class="text-xs opacity-55 hero-mono">F&amp;B · 2023</span>
+                    </div>
+                </a>
+                <a href="/work-jazl.html" class="case-card reveal" style="transition-delay:.05s">
+                    <div class="case-card__art" style="background: #0B0B10;">
+                        <img src="/assets/img/work/jazl/01.jpeg" alt="Jazl" class="case-card__cover">
+                    </div>
+                    <div class="mt-3 flex items-baseline justify-between gap-4">
+                        <h3 class="text-base font-medium"><span class="lang-string" data-ar="جَزل — خدمة كتابة" data-en="Jazl — copywriting">جَزل — خدمة كتابة</span></h3>
+                        <span class="text-xs opacity-55 hero-mono">Brand · 2024</span>
+                    </div>
+                </a>
+                <a href="/work-nab.html" class="case-card reveal" style="transition-delay:.1s">
+                    <div class="case-card__art" style="background: #2069C7;">
+                        <img src="/assets/img/work/nab/01.jpeg" alt="Nab" class="case-card__cover">
+                    </div>
+                    <div class="mt-3 flex items-baseline justify-between gap-4">
+                        <h3 class="text-base font-medium"><span class="lang-string" data-ar="ناب للتسويق — هوية" data-en="Nab Marketing — identity">ناب للتسويق — هوية</span></h3>
+                        <span class="text-xs opacity-55 hero-mono">Brand · 2023</span>
+                    </div>
+                </a>
+                <a href="/work-athr.html" class="case-card reveal">
+                    <div class="case-card__art" style="background: #1F1FFE;">
+                        <img src="/assets/img/work/athr/01.jpeg" alt="Athr" class="case-card__cover">
+                    </div>
+                    <div class="mt-3 flex items-baseline justify-between gap-4">
+                        <h3 class="text-base font-medium"><span class="lang-string" data-ar="أثر المكان — هوية" data-en="Athar Al-Makan — identity">أثر المكان — هوية</span></h3>
+                        <span class="text-xs opacity-55 hero-mono">Real Estate · 2022</span>
+                    </div>
+                </a>
+                <a href="/work-12p.html" class="case-card reveal" style="transition-delay:.05s">
+                    <div class="case-card__art" style="background: #1F1FFE;">
+                        <img src="/assets/img/work/12p/01.jpeg" alt="P12" class="case-card__cover">
+                    </div>
+                    <div class="mt-3 flex items-baseline justify-between gap-4">
+                        <h3 class="text-base font-medium"><span class="lang-string" data-ar="P12 — هوية رياضية" data-en="P12 — sports identity">P12 — هوية رياضية</span></h3>
+                        <span class="text-xs opacity-55 hero-mono">Sports · 2023</span>
+                    </div>
+                </a>
+                <a href="/work-blink.html" class="case-card reveal" style="transition-delay:.1s">
+                    <div class="case-card__art" style="background: #F4F1EB;">
+                        <img src="/assets/img/work/blink/01.jpeg" alt="Blink" class="case-card__cover">
+                    </div>
+                    <div class="mt-3 flex items-baseline justify-between gap-4">
+                        <h3 class="text-base font-medium"><span class="lang-string" data-ar="بلينك — هوية" data-en="Blink — identity">بلينك — هوية</span></h3>
+                        <span class="text-xs opacity-55 hero-mono">Retail · 2022</span>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         SERVICES — Card grid (iter-5 complete redesign)
+         A 4×2 grid of numbered service tiles. Hover lights up a
+         cobalt edge and reveals an arrow.
+         ============================================================ -->
+    <section class="py-24 md:py-32 net-grid relative">
+        <span class="brand-thread brand-thread--left" aria-hidden="true"></span>
+        <div class="max-w-[1440px] mx-auto px-6 md:px-10 relative">
+            <div class="flex flex-wrap items-end justify-between gap-6 mb-12 md:mb-16 reveal">
+                <div>
+                    <div class="eyebrow mb-4"><span class="lang-string" data-ar="مجالات عملنا" data-en="Disciplines">مجالات عملنا</span></div>
+                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-medium max-w-3xl leading-tight">
+                        <span class="lang-string" data-ar="استوديو واحد، ثمانية تخصصات." data-en="One studio, eight disciplines.">استوديو واحد، ثمانية تخصصات.</span>
+                    </h2>
+                </div>
+                <a href="/services.html" class="btn-ghost text-sm">
+                    <span class="lang-string" data-ar="جميع الخدمات" data-en="All services">جميع الخدمات</span>
+                    <iconify-icon icon="solar:arrow-left-linear" width="16" class="ltr:rotate-180"></iconify-icon>
+                </a>
+            </div>
+
+            <div class="service-grid reveal">
+                <a href="/services.html" class="service-tile">
+                    <div class="service-tile__arrow"><iconify-icon icon="solar:arrow-left-linear" width="22" class="ltr:rotate-180"></iconify-icon></div>
+                    <div>
+                        <div class="service-tile__num">٠١ / Brand</div>
+                        <div class="service-tile__title"><span class="lang-string" data-ar="العلامات التجارية" data-en="Brand strategy">العلامات التجارية</span></div>
+                    </div>
+                    <p class="service-tile__desc"><span class="lang-string" data-ar="من البحث والتسمية إلى التموضع — إطار يقود كل قرار بصري بعد ذلك." data-en="From research and naming to positioning — a framework that drives every visual decision.">من البحث والتسمية إلى التموضع — إطار يقود كل قرار بصري بعد ذلك.</span></p>
+                </a>
+                <a href="/services.html" class="service-tile">
+                    <div class="service-tile__arrow"><iconify-icon icon="solar:arrow-left-linear" width="22" class="ltr:rotate-180"></iconify-icon></div>
+                    <div>
+                        <div class="service-tile__num">٠٢ / Identity</div>
+                        <div class="service-tile__title"><span class="lang-string" data-ar="الهويات البصرية" data-en="Visual identity">الهويات البصرية</span></div>
+                    </div>
+                    <p class="service-tile__desc"><span class="lang-string" data-ar="شعار، طباعة، ألوان، عناصر، وأدلة تطبيق متكاملة على المطبوع والرقمي." data-en="Logo, typography, palette, library, and applied guidelines across print and digital.">شعار، طباعة، ألوان، عناصر، وأدلة تطبيق متكاملة على المطبوع والرقمي.</span></p>
+                </a>
+                <a href="/services.html" class="service-tile">
+                    <div class="service-tile__arrow"><iconify-icon icon="solar:arrow-left-linear" width="22" class="ltr:rotate-180"></iconify-icon></div>
+                    <div>
+                        <div class="service-tile__num">٠٣ / UI</div>
+                        <div class="service-tile__title"><span class="lang-string" data-ar="واجهات المستخدم" data-en="UI design">واجهات المستخدم</span></div>
+                    </div>
+                    <p class="service-tile__desc"><span class="lang-string" data-ar="واجهات للويب والتطبيقات، مبنية على نظام تصميم قابل للتوسعة." data-en="Web and app interfaces, built on a scalable design system.">واجهات للويب والتطبيقات، مبنية على نظام تصميم قابل للتوسعة.</span></p>
+                </a>
+                <a href="/services.html" class="service-tile">
+                    <div class="service-tile__arrow"><iconify-icon icon="solar:arrow-left-linear" width="22" class="ltr:rotate-180"></iconify-icon></div>
+                    <div>
+                        <div class="service-tile__num">٠٤ / UX</div>
+                        <div class="service-tile__title"><span class="lang-string" data-ar="تجربة المستخدم" data-en="UX design">تجربة المستخدم</span></div>
+                    </div>
+                    <p class="service-tile__desc"><span class="lang-string" data-ar="بحوث، خرائط رحلة، نماذج أولية، واختبارات — تثبت قبل أن نُصمّم." data-en="Research, journey maps, prototypes, tests — proof before pixels.">بحوث، خرائط رحلة، نماذج أولية، واختبارات — تثبت قبل أن نُصمّم.</span></p>
+                </a>
+                <a href="/services.html" class="service-tile">
+                    <div class="service-tile__arrow"><iconify-icon icon="solar:arrow-left-linear" width="22" class="ltr:rotate-180"></iconify-icon></div>
+                    <div>
+                        <div class="service-tile__num">٠٥ / Marketing</div>
+                        <div class="service-tile__title"><span class="lang-string" data-ar="التسويق البصري" data-en="Visual marketing">التسويق البصري</span></div>
+                    </div>
+                    <p class="service-tile__desc"><span class="lang-string" data-ar="نظام بصري متماسك للحملات — من المحتوى الرقمي إلى الإعلان الخارجي." data-en="A coherent visual system for campaigns — digital to OOH.">نظام بصري متماسك للحملات — من المحتوى الرقمي إلى الإعلان الخارجي.</span></p>
+                </a>
+                <a href="/services.html" class="service-tile">
+                    <div class="service-tile__arrow"><iconify-icon icon="solar:arrow-left-linear" width="22" class="ltr:rotate-180"></iconify-icon></div>
+                    <div>
+                        <div class="service-tile__num">٠٦ / Consulting</div>
+                        <div class="service-tile__title"><span class="lang-string" data-ar="استشارات فنية" data-en="Creative consulting">استشارات فنية</span></div>
+                    </div>
+                    <p class="service-tile__desc"><span class="lang-string" data-ar="نقرأ هويتك، نُحلّل أين أنتم، ونرسم خارطة لما هو ممكن." data-en="We read your identity, analyse where you stand, and map what's possible.">نقرأ هويتك، نُحلّل أين أنتم، ونرسم خارطة لما هو ممكن.</span></p>
+                </a>
+                <a href="/services.html" class="service-tile">
+                    <div class="service-tile__arrow"><iconify-icon icon="solar:arrow-left-linear" width="22" class="ltr:rotate-180"></iconify-icon></div>
+                    <div>
+                        <div class="service-tile__num">٠٧ / Events</div>
+                        <div class="service-tile__title"><span class="lang-string" data-ar="الفعاليات والمناسبات" data-en="Events">الفعاليات والمناسبات</span></div>
+                    </div>
+                    <p class="service-tile__desc"><span class="lang-string" data-ar="مخرجات بصرية متكاملة — من الإخراج الفني إلى التنفيذ الميداني." data-en="End-to-end visual production — from art direction to on-ground execution.">مخرجات بصرية متكاملة — من الإخراج الفني إلى التنفيذ الميداني.</span></p>
+                </a>
+                <a href="/services.html" class="service-tile">
+                    <div class="service-tile__arrow"><iconify-icon icon="solar:arrow-left-linear" width="22" class="ltr:rotate-180"></iconify-icon></div>
+                    <div>
+                        <div class="service-tile__num">٠٨ / Refresh</div>
+                        <div class="service-tile__title"><span class="lang-string" data-ar="إحياء العلامات التجارية" data-en="Brand revival">إحياء العلامات التجارية</span></div>
+                    </div>
+                    <p class="service-tile__desc"><span class="lang-string" data-ar="ترميم العلامات القائمة لتتحدّث بلغة اليوم دون أن تفقد ما يُميّزها." data-en="Refreshing existing brands to speak today's language without losing their soul.">ترميم العلامات القائمة لتتحدّث بلغة اليوم دون أن تفقد ما يُميّزها.</span></p>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         CLIENT WALL — Marquee redesign (iter-5)
+         A slow horizontal scroll of large monochrome logos that
+         pause + bloom into colour on hover.
+         ============================================================ -->
+    <section class="py-24 md:py-32 bg-paper2/40 dark:bg-ink2/60 overflow-hidden relative">
+        <span class="brand-thread brand-thread--left" aria-hidden="true"></span>
+        <div class="max-w-[1440px] mx-auto px-6 md:px-10 mb-12 md:mb-14 relative">
+            <div class="flex flex-wrap items-end justify-between gap-6 reveal">
+                <div>
+                    <div class="eyebrow mb-4"><span class="lang-string" data-ar="شُركاء النجاح" data-en="Trusted by">شُركاء النجاح</span></div>
+                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-medium max-w-3xl leading-tight">
+                        <span class="lang-string" data-ar="جهات من القطاع العام والخاص — اختارت هوية." data-en="Public and private partners — who chose Hawih.">جهات من القطاع العام والخاص — اختارت هوية.</span>
+                    </h2>
+                </div>
+                <div class="flex items-center gap-3 text-sm opacity-60">
+                    <span class="hero-mono">+٢٠٢</span>
+                    <span class="lang-string" data-ar="شريك نجاح" data-en="partners">شريك نجاح</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="client-marquee reveal" style="transition-delay:.05s">
+            <div class="client-marquee__track">
+                <div class="client-marquee__item"><img src="/assets/img/work/client-ksu.webp" alt="King Saud University"></div>
+                <div class="client-marquee__item"><img src="/assets/img/work/client-makaseb.png" alt="Makaseb"></div>
+                <div class="client-marquee__item"><img src="/assets/img/work/client-karmello.png" alt="Karmello Chocolatier"></div>
+                <div class="client-marquee__item"><img src="/assets/img/work/client-camel-club.png" alt="Camel Club"></div>
+                <div class="client-marquee__item"><img src="/assets/img/work/client-awan.png" alt="Awan Square"></div>
+                <div class="client-marquee__item"><img src="/assets/img/work/client-hoshan.png" alt="Hoshan Group"></div>
+                <!-- Duplicate set for seamless loop -->
+                <div class="client-marquee__item" aria-hidden="true"><img src="/assets/img/work/client-ksu.webp" alt=""></div>
+                <div class="client-marquee__item" aria-hidden="true"><img src="/assets/img/work/client-makaseb.png" alt=""></div>
+                <div class="client-marquee__item" aria-hidden="true"><img src="/assets/img/work/client-karmello.png" alt=""></div>
+                <div class="client-marquee__item" aria-hidden="true"><img src="/assets/img/work/client-camel-club.png" alt=""></div>
+                <div class="client-marquee__item" aria-hidden="true"><img src="/assets/img/work/client-awan.png" alt=""></div>
+                <div class="client-marquee__item" aria-hidden="true"><img src="/assets/img/work/client-hoshan.png" alt=""></div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         WHY HAWIH — 4 reasons
+         ============================================================ -->
+    <section class="py-24 md:py-32 bg-paper2/40 dark:bg-ink2/60 relative">
+        <span class="brand-thread brand-thread--right" aria-hidden="true"></span>
+        <div class="max-w-[1440px] mx-auto px-6 md:px-10 relative">
+            <div class="grid grid-cols-12 gap-6 mb-14 md:mb-20">
+                <div class="col-span-12 lg:col-span-5 reveal">
+                    <div class="eyebrow mb-4"><span class="lang-string" data-ar="لماذا هوية" data-en="Why Hawih">لماذا هوية</span></div>
+                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-medium leading-tight">
+                        <span class="lang-string" data-ar="لسنا الوحيدين — لكن لدينا الفريق والخبرة الأفضل." data-en="We're not the only ones — we just have the right team and craft.">لسنا الوحيدين — لكن لدينا الفريق والخبرة الأفضل.</span>
+                    </h2>
+                </div>
+                <p class="col-span-12 lg:col-span-6 lg:col-start-7 text-base md:text-lg text-ink/70 dark:text-paper/70 leading-relaxed reveal" style="transition-delay:.05s">
+                    <span class="lang-string" data-ar="هناك عدد من العوامل التي تساهم في نجاح المشاريع المرتبطة بالتصميم وبناء الهويات التجارية والبصرية. هذه أربعة منها — والتي نعدك بها." data-en="Several factors determine whether a brand and identity project actually lands. These are the four we commit to.">هناك عدد من العوامل التي تساهم في نجاح المشاريع المرتبطة بالتصميم وبناء الهويات التجارية والبصرية. هذه أربعة منها — والتي نعدك بها.</span>
+                </p>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
+                <div class="reason-block reveal">
+                    <div class="reason-block__index hero-mono">01</div>
+                    <h3 class="text-xl font-medium mb-3"><span class="lang-string" data-ar="فريق إبداعي" data-en="A creative team">فريق إبداعي</span></h3>
+                    <p class="text-sm text-ink/65 dark:text-paper/65 leading-relaxed"><span class="lang-string" data-ar="شغوف، خلّاق، مبدع، متميز، طموح، ذكي — كل ذلك وأكثر." data-en="Passionate, creative, distinguished, ambitious, sharp — that and more.">شغوف، خلّاق، مبدع، متميز، طموح، ذكي — كل ذلك وأكثر.</span></p>
+                </div>
+                <div class="reason-block reveal" style="transition-delay:.05s">
+                    <div class="reason-block__index hero-mono">02</div>
+                    <h3 class="text-xl font-medium mb-3"><span class="lang-string" data-ar="الالتزام بالوقت" data-en="On time, always">الالتزام بالوقت</span></h3>
+                    <p class="text-sm text-ink/65 dark:text-paper/65 leading-relaxed"><span class="lang-string" data-ar="لا يهم العمل المثالي إذا فات موعد التسليم. معادلتنا: الجودة الأفضل في الوقت المحدد." data-en="The perfect work doesn't matter if it misses the deadline. Our equation: top quality, on time.">لا يهم العمل المثالي إذا فات موعد التسليم. معادلتنا: الجودة الأفضل في الوقت المحدد.</span></p>
+                </div>
+                <div class="reason-block reveal" style="transition-delay:.1s">
+                    <div class="reason-block__index hero-mono">03</div>
+                    <h3 class="text-xl font-medium mb-3"><span class="lang-string" data-ar="هوية أصيلة" data-en="An authentic identity">هوية أصيلة</span></h3>
+                    <p class="text-sm text-ink/65 dark:text-paper/65 leading-relaxed"><span class="lang-string" data-ar="فريق سعودي ١٠٠٪ يعمل على تجربة عصرية من صلب تراثنا، تُلامس العميل." data-en="A 100% Saudi team building a contemporary experience drawn from our own heritage.">فريق سعودي ١٠٠٪ يعمل على تجربة عصرية من صلب تراثنا، تُلامس العميل.</span></p>
+                </div>
+                <div class="reason-block reveal" style="transition-delay:.15s">
+                    <div class="reason-block__index hero-mono">04</div>
+                    <h3 class="text-xl font-medium mb-3"><span class="lang-string" data-ar="أحدث التقنيات" data-en="The latest tools">أحدث التقنيات</span></h3>
+                    <p class="text-sm text-ink/65 dark:text-paper/65 leading-relaxed"><span class="lang-string" data-ar="نضمن لك عملاً يتلاءم مع كل استخداماتك — واجهات رقمية، مطبوعات، وأكثر." data-en="We make sure the work fits every place it'll live — digital interfaces, print, and beyond.">نضمن لك عملاً يتلاءم مع كل استخداماتك — واجهات رقمية، مطبوعات، وأكثر.</span></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ============================================================
+         STATS — Full cobalt band (brand-band punctuation moment)
+         ============================================================ -->
+    <section class="brand-band net-grid net-grid--dark py-20 md:py-28">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-10">
+            <div class="flex flex-wrap items-end justify-between gap-6 mb-12 reveal">
+                <div>
+                    <div class="eyebrow mb-3"><span class="lang-string" data-ar="أرقامنا تتحدّث عنّا" data-en="Numbers that speak">أرقامنا تتحدّث عنّا</span></div>
+                    <h2 class="text-3xl md:text-4xl lg:text-5xl font-medium leading-tight max-w-2xl">
+                        <span class="lang-string" data-ar="ثقة الأرقام — ١٧ عاماً من البناء." data-en="Numbers that earn trust — 17 years of building.">ثقة الأرقام — ١٧ عاماً من البناء.</span>
+                    </h2>
+                </div>
+                <a href="/about.html" class="btn-ghost text-sm">
+                    <span class="lang-string" data-ar="اعرفنا أكثر" data-en="More about us">اعرفنا أكثر</span>
+                    <iconify-icon icon="solar:arrow-left-linear" width="14" class="ltr:rotate-180"></iconify-icon>
+                </a>
+            </div>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 md:gap-10">
+                <div class="stat-block reveal">
+                    <div class="flex items-baseline gap-1">
+                        <span class="counter text-5xl md:text-6xl font-medium" data-target="334" data-suffix="">0</span>
+                        <span class="text-3xl opacity-80">+</span>
+                    </div>
+                    <div class="mt-2 text-sm" style="color: rgba(255,255,255,0.75);"><span class="lang-string" data-ar="مشروع ناجح" data-en="Projects delivered">مشروع ناجح</span></div>
+                </div>
+                <div class="stat-block reveal" style="transition-delay:.05s">
+                    <div class="flex items-baseline gap-1">
+                        <span class="counter text-5xl md:text-6xl font-medium" data-target="202" data-suffix="">0</span>
+                        <span class="text-3xl opacity-80">+</span>
+                    </div>
+                    <div class="mt-2 text-sm" style="color: rgba(255,255,255,0.75);"><span class="lang-string" data-ar="شريك نجاح" data-en="Partners">شريك نجاح</span></div>
+                </div>
+                <div class="stat-block reveal" style="transition-delay:.1s">
+                    <div class="flex items-baseline gap-1">
+                        <span class="counter text-5xl md:text-6xl font-medium" data-target="473" data-suffix="">0</span>
+                        <span class="text-3xl opacity-80">+</span>
+                    </div>
+                    <div class="mt-2 text-sm" style="color: rgba(255,255,255,0.75);"><span class="lang-string" data-ar="عميل سعيد" data-en="Happy clients">عميل سعيد</span></div>
+                </div>
+                <div class="stat-block reveal" style="transition-delay:.15s">
+                    <div class="flex items-baseline gap-1">
+                        <span class="counter text-5xl md:text-6xl font-medium" data-target="40" data-suffix="K">0</span>
+                        <span class="text-3xl opacity-80">+</span>
+                    </div>
+                    <div class="mt-2 text-sm" style="color: rgba(255,255,255,0.75);"><span class="lang-string" data-ar="ساعة تصميم" data-en="Design hours">ساعة تصميم</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- ============================================================
+         FINAL CTA — Centered, contact rail below (iter-7)
+         Ink band with cobalt corner glows. No founder photo.
+         ============================================================ -->
+    <section class="brand-band py-24 md:py-36 relative overflow-hidden">
+        <div aria-hidden="true" style="position:absolute; inset:auto -10% -40% auto; width:60%; height:120%; background: radial-gradient(ellipse at center, rgba(31,31,254,0.22) 0%, transparent 60%); pointer-events:none;"></div>
+        <div aria-hidden="true" style="position:absolute; inset:-40% auto auto -10%; width:50%; height:120%; background: radial-gradient(ellipse at center, rgba(31,31,254,0.14) 0%, transparent 60%); pointer-events:none;"></div>
+
+        <div class="relative max-w-[1100px] mx-auto px-6 md:px-10">
+            <div class="text-center">
+                <div class="eyebrow mb-6 reveal inline-flex"><span class="lang-string" data-ar="هل لديك مشروع؟" data-en="Got a project?">هل لديك مشروع؟</span></div>
+                <h2 class="text-3xl sm:text-4xl md:text-5xl lg:text-[3.75rem] font-medium leading-[1.1] mb-8 reveal" style="transition-delay:.05s">
+                    <span class="lang-string" data-ar="من الجميل دائماً" data-en="It's always good">من الجميل دائماً</span><br>
+                    <span class="text-brand lang-string" data-ar="التحدّث عن الأفكار المُبتكرة." data-en="to talk about original ideas.">التحدّث عن الأفكار المُبتكرة.</span>
+                </h2>
+                <p class="text-base md:text-lg leading-relaxed max-w-xl mx-auto mb-10 reveal" style="color: rgba(244, 241, 235, 0.7); transition-delay:.08s">
+                    <span class="lang-string" data-ar="نستقبل طلبات جديدة عبر البريد أو الهاتف — وكتابة سطرَين عن مشروعك تكفي لبدء المحادثة." data-en="We take briefs by email or phone — two lines about your project are enough to start the conversation.">نستقبل طلبات جديدة عبر البريد أو الهاتف — وكتابة سطرَين عن مشروعك تكفي لبدء المحادثة.</span>
+                </p>
+                <div class="flex flex-wrap items-center justify-center gap-3 reveal" style="transition-delay:.12s">
+                    <a href="/contact.html" class="btn-primary">
+                        <span class="lang-string" data-ar="ابدأ مشروعك" data-en="Start a project">ابدأ مشروعك</span>
+                        <iconify-icon icon="solar:arrow-left-linear" width="16" class="ltr:rotate-180"></iconify-icon>
+                    </a>
+                    <button data-copy="admin@hawih.com.sa" data-copied-text="✓ Copied" class="btn-ghost text-sm cursor-pointer">
+                        <iconify-icon icon="solar:letter-linear" width="16"></iconify-icon>
+                        <span>admin@hawih.com.sa</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Cobalt horizontal thread separates CTA from contact rail -->
+            <span class="brand-thread brand-thread--horiz brand-thread--horiz-strong mt-16 md:mt-20 reveal" style="transition-delay:.18s" aria-hidden="true"></span>
+
+            <!-- Contact rail below CTA -->
+            <div class="pt-10 grid grid-cols-1 sm:grid-cols-3 gap-8 sm:gap-6 reveal" style="transition-delay:.22s">
+                <div class="text-center sm:text-start">
+                    <div class="text-xs hero-mono mb-2" style="color: rgba(244, 241, 235, 0.5);"><span class="lang-string" data-ar="اتصل" data-en="Phone">اتصل</span></div>
+                    <a href="tel:+966502185471" class="text-base hover:text-brand transition" dir="ltr">+966 50 218 5471</a>
+                </div>
+                <div class="text-center">
+                    <div class="text-xs hero-mono mb-2" style="color: rgba(244, 241, 235, 0.5);"><span class="lang-string" data-ar="زورنا" data-en="Visit">زورنا</span></div>
+                    <div class="text-base" style="color: rgba(244, 241, 235, 0.85);">
+                        <span class="lang-string" data-ar="العارض، الرياض" data-en="Al-Aared, Riyadh">العارض، الرياض</span>
+                    </div>
+                </div>
+                <div class="text-center sm:text-end">
+                    <div class="text-xs hero-mono mb-2" style="color: rgba(244, 241, 235, 0.5);"><span class="lang-string" data-ar="ساعات العمل" data-en="Hours">ساعات العمل</span></div>
+                    <div class="text-base" style="color: rgba(244, 241, 235, 0.85);">
+                        <span class="lang-string" data-ar="أحد – خميس · ٩ص – ٦م" data-en="Sun – Thu · 9 – 18">أحد – خميس · ٩ص – ٦م</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    </main>
+
+    <!-- ============================================================
+         FOOTER
+         ============================================================ -->
+    <footer class="pt-16 md:pt-20 pb-10 border-t border-ink/10 dark:border-paper/10">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-10">
+            <div class="grid grid-cols-2 md:grid-cols-12 gap-10 md:gap-6">
+                <div class="col-span-2 md:col-span-4">
+                    <img src="/assets/img/logo/hawih-logo-light.png" alt="Hawih" class="h-10 w-auto block dark:hidden mb-4">
+                    <img src="/assets/img/logo/hawih-logo-white.png" alt="Hawih" class="h-10 w-auto hidden dark:block mb-4">
+                    <p class="text-sm opacity-65 max-w-xs leading-relaxed">
+                        <span class="lang-string" data-ar="وكالة هوية للتصميم — استوديو سعودي للهوية والمحتوى والإنتاج الرقمي. من الرياض، منذ ٢٠٠٧." data-en="Hawih — a Saudi studio for identity, content, and digital production. From Riyadh, since 2007.">وكالة هوية للتصميم — استوديو سعودي للهوية والمحتوى والإنتاج الرقمي. من الرياض، منذ ٢٠٠٧.</span>
+                    </p>
+                </div>
+                <div class="col-span-1 md:col-span-2">
+                    <div class="eyebrow mb-4"><span class="lang-string" data-ar="الموقع" data-en="Sitemap">الموقع</span></div>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/" class="hover:text-brand transition"><span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span></a></li>
+                        <li><a href="/work.html" class="hover:text-brand transition"><span class="lang-string" data-ar="أعمالنا" data-en="Work">أعمالنا</span></a></li>
+                        <li><a href="/services.html" class="hover:text-brand transition"><span class="lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span></a></li>
+                        <li><a href="/about.html" class="hover:text-brand transition"><span class="lang-string" data-ar="من نحن" data-en="About">من نحن</span></a></li>
+                        <li><a href="/contact.html" class="hover:text-brand transition"><span class="lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span></a></li>
+                    </ul>
+                </div>
+                <div class="col-span-1 md:col-span-3">
+                    <div class="eyebrow mb-4"><span class="lang-string" data-ar="تواصل" data-en="Contact">تواصل</span></div>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="tel:+966502185471" class="hover:text-brand transition" dir="ltr">+966 50 218 5471</a></li>
+                        <li><button data-copy="admin@hawih.com.sa" data-copied-text="✓ Copied" class="hover:text-brand transition cursor-pointer">admin@hawih.com.sa</button></li>
+                        <li class="opacity-65"><span class="lang-string" data-ar="٤١٧٨ خالد بن بندر بن عبدالعزيز، العارض، الرياض ١٣٣٣٧" data-en="4178 Khalid bin Bandar, Al-Aared, Riyadh 13337">٤١٧٨ خالد بن بندر بن عبدالعزيز، العارض، الرياض ١٣٣٣٧</span></li>
+                    </ul>
+                </div>
+                <div class="col-span-2 md:col-span-3">
+                    <div class="eyebrow mb-4"><span class="lang-string" data-ar="تابعنا" data-en="Follow">تابعنا</span></div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <a href="https://twitter.com/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="Twitter"><iconify-icon icon="ri:twitter-x-line" width="22"></iconify-icon></a>
+                        <a href="https://instagram.com/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="Instagram"><iconify-icon icon="ri:instagram-line" width="22"></iconify-icon></a>
+                        <a href="https://linkedin.com/company/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="LinkedIn"><iconify-icon icon="ri:linkedin-line" width="22"></iconify-icon></a>
+                        <a href="https://behance.net/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="Behance"><iconify-icon icon="ri:behance-line" width="22"></iconify-icon></a>
+                    </div>
+                    <img src="/assets/img/moc-cert.png" alt="Ministry of Commerce" class="h-12 w-auto opacity-80 dark:invert">
+                </div>
+            </div>
+
+            <div class="mt-16 pt-8 border-t border-ink/10 dark:border-paper/10 flex flex-wrap items-center justify-between gap-4 text-xs opacity-65 hero-mono">
+                <div>© 2007–2026 Hawih · هوية</div>
+                <div><span class="lang-string" data-ar="السجل التجاري ١٠١٠٧٩٤٢٣٧" data-en="CR 1010794237">السجل التجاري ١٠١٠٧٩٤٢٣٧</span></div>
+                <div><span class="lang-string" data-ar="صُنِع في الرياض" data-en="Made in Riyadh">صُنِع في الرياض</span></div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/js/hawih.js"></script>
+    <script src="/assets/js/services-tabs.js"></script>
+    <script src="/assets/js/webgl-hero.js"></script>
+</body>
+</html>

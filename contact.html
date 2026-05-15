@@ -1,0 +1,374 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تواصل معنا · Contact — هوية</title>
+    <meta name="description" content="تواصل مع هوية — استوديو سعودي للتصميم. اتّصل بنا، راسلنا، أو زرنا في الرياض.">
+
+    <script>
+      (function () {
+        try {
+          var lang = localStorage.getItem('lang');
+          if (lang === 'en') { document.documentElement.lang = 'en'; document.documentElement.dir = 'ltr'; }
+        } catch (e) {}
+      })();
+    </script>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+      tailwind.config = { darkMode: 'class', theme: { extend: {
+        colors: { ink: '#0B0B10', ink2: '#14141C', paper: '#F4F1EB', paper2: '#E9E4D7', brand: '#1F1FFE' },
+        fontFamily: { sans: ['Inter', 'IBM Plex Sans Arabic', 'sans-serif'], ar: ['IBM Plex Sans Arabic', 'sans-serif'] },
+      }}};
+    </script>
+
+    <link rel="stylesheet" href="/assets/css/hawih.css">
+    <style>
+      /* Contact form */
+      .field { display: flex; flex-direction: column; gap: 0.5rem; }
+      .field__label { font-size: 0.72rem; letter-spacing: 0.16em; text-transform: uppercase; opacity: 0.6; font-weight: 500; }
+      html[lang="ar"] .field__label { letter-spacing: 0 !important; }
+      .field__input, .field__textarea, .field__select {
+        background: transparent;
+        border: 1px solid var(--hawih-paper-line);
+        border-radius: 10px;
+        padding: 0.9rem 1.1rem;
+        font: inherit;
+        color: inherit;
+        outline: none;
+        transition: border-color 0.25s ease, background-color 0.25s ease;
+      }
+      .dark .field__input, .dark .field__textarea, .dark .field__select { border-color: var(--hawih-ink-line); }
+      .field__textarea { min-height: 9rem; resize: vertical; }
+      .field__input:focus, .field__textarea:focus, .field__select:focus {
+        border-color: var(--hawih-blue);
+        background: rgba(31, 31, 254, 0.04);
+      }
+    </style>
+    <script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+</head>
+
+<body class="bg-paper text-ink dark:bg-ink dark:text-paper antialiased selection:bg-brand selection:text-white">
+
+    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:start-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-brand focus:text-white focus:rounded"><span class="lang-string" data-ar="تخطّي إلى المحتوى" data-en="Skip to content">تخطّي إلى المحتوى</span></a>
+
+    <header class="site-nav fixed top-0 inset-x-0 z-40 px-6 md:px-10 py-5">
+        <nav class="max-w-[1440px] mx-auto flex items-center justify-between">
+            <a href="/" class="flex items-center gap-3" aria-label="Hawih">
+                <img src="/assets/img/logo/hawih-logo-light.png" alt="Hawih" class="h-8 w-auto block dark:hidden">
+                <img src="/assets/img/logo/hawih-logo-white.png" alt="Hawih" class="h-8 w-auto hidden dark:block">
+            </a>
+            <ul class="hidden lg:flex items-center gap-9 text-sm">
+                <li><a href="/" class="nav-link"><span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span></a></li>
+                <li><a href="/work.html" class="nav-link"><span class="lang-string" data-ar="أعمالنا" data-en="Work">أعمالنا</span></a></li>
+                <li><a href="/services.html" class="nav-link"><span class="lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span></a></li>
+                <li><a href="/about.html" class="nav-link"><span class="lang-string" data-ar="من نحن" data-en="About">من نحن</span></a></li>
+                <li><a href="/contact.html" class="nav-link"><span class="lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span></a></li>
+            </ul>
+            <div class="flex items-center gap-3">
+                <button class="langToggle hidden sm:inline-flex items-center px-3 py-1.5 text-sm border border-ink/15 dark:border-paper/15 rounded-full hover:border-brand hover:text-brand transition" aria-label="Toggle language">
+                    <span class="lang-string" data-ar="EN" data-en="عربي">EN</span>
+                </button>
+                <a href="/contact.html" class="hidden md:inline-flex btn-primary text-sm"><span class="lang-string" data-ar="ابدأ مشروعك" data-en="Start a project">ابدأ مشروعك</span></a>
+                <button class="mobileNavToggle lg:hidden p-2" aria-label="Open menu"><iconify-icon icon="solar:hamburger-menu-linear" width="22"></iconify-icon></button>
+            </div>
+        </nav>
+    </header>
+    <div class="mobileNav hidden fixed inset-0 z-50 bg-paper dark:bg-ink p-6 overflow-y-auto">
+        <div class="flex items-center justify-between mb-12">
+            <img src="/assets/img/logo/hawih-logo-light.png" alt="Hawih" class="h-8 w-auto block dark:hidden">
+            <img src="/assets/img/logo/hawih-logo-white.png" alt="Hawih" class="h-8 w-auto hidden dark:block">
+            <button class="mobileNavClose p-2" aria-label="Close menu"><iconify-icon icon="solar:close-circle-linear" width="28"></iconify-icon></button>
+        </div>
+        <ul class="flex flex-col gap-5 text-2xl font-medium">
+            <li><a href="/"><span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span></a></li>
+            <li><a href="/work.html"><span class="lang-string" data-ar="أعمالنا" data-en="Work">أعمالنا</span></a></li>
+            <li><a href="/services.html"><span class="lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span></a></li>
+            <li><a href="/about.html"><span class="lang-string" data-ar="من نحن" data-en="About">من نحن</span></a></li>
+            <li><a href="/contact.html"><span class="lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span></a></li>
+        </ul>
+    </div>
+
+    <main id="main">
+
+        <!-- Typographic hero -->
+        <section class="project-page-hero reveal">
+            <div class="max-w-[1440px] mx-auto">
+                <div class="project-page-hero__breadcrumb">
+                    <a href="/" class="hover:text-brand inline-flex items-center gap-2 transition">
+                        <iconify-icon icon="solar:arrow-left-linear" width="14" class="ltr:rotate-180"></iconify-icon>
+                        <span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span>
+                    </a>
+                    <span style="opacity:.5">·</span>
+                    <span class="lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span>
+                </div>
+                <div class="project-page-hero__sector"><span class="lang-string" data-ar="هاتف · بريد · زيارة" data-en="Phone · Email · Visit">هاتف · بريد · زيارة</span></div>
+                <h1 class="project-page-hero__title mt-4">
+                    <span class="lang-string" data-ar="عندك فكرة." data-en="You have an idea.">عندك فكرة.</span><br>
+                    <span class="project-page-hero__tagline lang-string" data-ar="عندنا حِرفة." data-en="We have the craft.">عندنا حِرفة.</span>
+                </h1>
+                <div class="project-page-hero__meta">
+                    <p class="project-page-hero__lead">
+                        <span class="lang-string" data-ar="سطران عن مشروعك يكفيان لبدء المحادثة. نَردّ خلال يوم عمل واحد، ونَقترح اجتماعاً قصيراً إذا كان المشروع جاهزاً." data-en="Two lines about your project are enough to start. We reply within one business day, and suggest a short call if the project is ready.">سطران عن مشروعك يكفيان لبدء المحادثة. نَردّ خلال يوم عمل واحد، ونَقترح اجتماعاً قصيراً إذا كان المشروع جاهزاً.</span>
+                    </p>
+                    <div class="text-xs hero-mono uppercase tracking-widest" style="opacity:.6;">
+                        <span class="lang-string" data-ar="ساعات العمل · أحد – خميس · ٩ص – ٦م" data-en="Hours · Sun – Thu · 9 – 18">ساعات العمل · أحد – خميس · ٩ص – ٦م</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================
+             FORM + CONTACT RAIL (two columns)
+             ========================================================== -->
+        <section class="py-16 md:py-24 px-6 md:px-10 bg-paper2/40 dark:bg-ink2/60 relative">
+            <span class="brand-thread brand-thread--left" aria-hidden="true"></span>
+            <div class="max-w-[1440px] mx-auto relative">
+                <div class="grid grid-cols-12 gap-10 md:gap-16">
+
+                    <!-- Form: 7 cols — POSTs to /api/lead.php (Rise CRM intake) -->
+                    <form id="leadForm" action="/api/lead.php" method="POST"
+                          class="col-span-12 lg:col-span-7 reveal" novalidate>
+
+                        <!-- Hidden attribution + telemetry -->
+                        <input type="hidden" name="source" value="/contact.html">
+                        <input type="hidden" name="lang"   id="lang_input" value="ar">
+
+                        <!-- Honeypot: hidden from humans, bots fill it -->
+                        <div aria-hidden="true" style="position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden;">
+                            <label>If you are human leave this empty
+                                <input type="text" name="company_website" tabindex="-1" autocomplete="off">
+                            </label>
+                        </div>
+
+                        <div class="eyebrow mb-4"><span class="lang-string" data-ar="أخبرنا عن مشروعك" data-en="Tell us about your project">أخبرنا عن مشروعك</span></div>
+                        <h2 class="text-2xl md:text-3xl font-medium leading-tight mb-10">
+                            <span class="lang-string" data-ar="استمارة قصيرة — تكفي لبدء الحديث." data-en="A short form — enough to start.">استمارة قصيرة — تكفي لبدء الحديث.</span>
+                        </h2>
+
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+                            <div class="field">
+                                <label class="field__label" for="f-name"><span class="lang-string" data-ar="الاسم" data-en="Name">الاسم</span></label>
+                                <input type="text" id="f-name" name="name" required maxlength="120" class="field__input" placeholder="اسمك" autocomplete="name">
+                            </div>
+                            <div class="field">
+                                <label class="field__label" for="f-company"><span class="lang-string" data-ar="الجهة / الشركة" data-en="Organisation">الجهة / الشركة</span></label>
+                                <input type="text" id="f-company" name="company" maxlength="200" class="field__input" placeholder="—" autocomplete="organization">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+                            <div class="field">
+                                <label class="field__label" for="f-email"><span class="lang-string" data-ar="البريد الإلكتروني" data-en="Email">البريد الإلكتروني</span></label>
+                                <input type="email" id="f-email" name="email" required maxlength="200" class="field__input" placeholder="you@brand.com" dir="ltr" autocomplete="email">
+                            </div>
+                            <div class="field">
+                                <label class="field__label" for="f-phone"><span class="lang-string" data-ar="رقم الجوال" data-en="Phone">رقم الجوال</span></label>
+                                <input type="tel" id="f-phone" name="phone" maxlength="40" class="field__input" placeholder="+966 ..." dir="ltr" autocomplete="tel">
+                            </div>
+                        </div>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 mb-5">
+                            <div class="field">
+                                <label class="field__label" for="f-type"><span class="lang-string" data-ar="نوع المشروع" data-en="Project type">نوع المشروع</span></label>
+                                <select id="f-type" name="project_type" class="field__select">
+                                    <option value="brand-identity" class="lang-string" data-ar="هوية بصرية كاملة" data-en="Full visual identity">هوية بصرية كاملة</option>
+                                    <option value="brand-refresh"  class="lang-string" data-ar="إحياء علامة قائمة" data-en="Brand refresh">إحياء علامة قائمة</option>
+                                    <option value="social-wasil"   class="lang-string" data-ar="إدارة سوشيال — واصِل" data-en="Social management — Wasil">إدارة سوشيال — واصِل</option>
+                                    <option value="hawih-pro"      class="lang-string" data-ar="هوية شخصية — هوية برو" data-en="Personal branding — Hawih Pro">هوية شخصية — هوية برو</option>
+                                    <option value="ui-ux"          class="lang-string" data-ar="UI / UX" data-en="UI / UX">UI / UX</option>
+                                    <option value="other"          class="lang-string" data-ar="آخر" data-en="Other">آخر</option>
+                                </select>
+                            </div>
+                            <div class="field">
+                                <label class="field__label" for="f-budget"><span class="lang-string" data-ar="الميزانية التقديرية" data-en="Indicative budget">الميزانية التقديرية</span></label>
+                                <select id="f-budget" name="budget" class="field__select">
+                                    <option value="" class="lang-string" data-ar="—" data-en="—">—</option>
+                                    <option value="1-5K SAR"    class="lang-string" data-ar="١ – ٥ آلاف ر.س" data-en="SAR 1k – 5k">١ – ٥ آلاف ر.س</option>
+                                    <option value="5-25K SAR"   class="lang-string" data-ar="٥ – ٢٥ ألف ر.س" data-en="SAR 5k – 25k">٥ – ٢٥ ألف ر.س</option>
+                                    <option value="25-100K SAR" class="lang-string" data-ar="٢٥ – ١٠٠ ألف ر.س" data-en="SAR 25k – 100k">٢٥ – ١٠٠ ألف ر.س</option>
+                                    <option value="100K+ SAR"   class="lang-string" data-ar="١٠٠ ألف ر.س +" data-en="SAR 100k+">١٠٠ ألف ر.س +</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="field mb-8">
+                            <label class="field__label" for="f-msg"><span class="lang-string" data-ar="حدّثنا عن المشروع" data-en="Tell us about the project">حدّثنا عن المشروع</span></label>
+                            <textarea id="f-msg" name="brief" required maxlength="4000" class="field__textarea" placeholder="سطران أو أكثر..."></textarea>
+                        </div>
+                        <div class="flex flex-wrap items-center gap-3">
+                            <button type="submit" class="btn-primary" id="leadSubmitBtn">
+                                <span class="lang-string" data-ar="أرسل الرسالة" data-en="Send message">أرسل الرسالة</span>
+                                <iconify-icon icon="solar:arrow-left-linear" width="16" class="ltr:rotate-180"></iconify-icon>
+                            </button>
+                            <div class="text-xs opacity-55 hero-mono">
+                                <span class="lang-string" data-ar="نَردّ خلال يوم عمل واحد" data-en="We reply within 1 business day">نَردّ خلال يوم عمل واحد</span>
+                            </div>
+                        </div>
+                    </form>
+                    <script>
+                      /* Disable submit button after first click to prevent double-submit */
+                      (function () {
+                        var f = document.getElementById('leadForm');
+                        if (!f) return;
+                        f.addEventListener('submit', function () {
+                          var b = document.getElementById('leadSubmitBtn');
+                          if (b) {
+                            b.disabled = true;
+                            b.style.opacity = '0.6';
+                            b.style.pointerEvents = 'none';
+                          }
+                        });
+                      })();
+                    </script>
+
+                    <!-- Contact rail: 5 cols -->
+                    <aside class="col-span-12 lg:col-span-4 lg:col-start-9 reveal" style="transition-delay:.06s">
+                        <div class="eyebrow mb-4"><span class="lang-string" data-ar="طرق التواصل" data-en="Other ways to reach us">طرق التواصل</span></div>
+
+                        <a href="tel:+966502185471" class="block group mb-8">
+                            <div class="text-xs hero-mono opacity-55 mb-1"><span class="lang-string" data-ar="اتّصل" data-en="Phone">اتّصل</span></div>
+                            <div class="text-xl md:text-2xl font-medium group-hover:text-brand transition" dir="ltr">+966 50 218 5471</div>
+                        </a>
+
+                        <button data-copy="admin@hawih.com.sa" data-copied-text="✓ Copied" class="block text-start mb-8 group cursor-pointer">
+                            <div class="text-xs hero-mono opacity-55 mb-1"><span class="lang-string" data-ar="بريد" data-en="Email">بريد</span></div>
+                            <div class="text-xl md:text-2xl font-medium group-hover:text-brand transition">admin@hawih.com.sa</div>
+                        </button>
+
+                        <div class="mb-8">
+                            <div class="text-xs hero-mono opacity-55 mb-1"><span class="lang-string" data-ar="زورنا" data-en="Visit">زورنا</span></div>
+                            <div class="text-base md:text-lg leading-relaxed">
+                                <span class="lang-string" data-ar="٤١٧٨ خالد بن بندر بن عبدالعزيز،" data-en="4178 Khalid bin Bandar,">٤١٧٨ خالد بن بندر بن عبدالعزيز،</span><br>
+                                <span class="lang-string" data-ar="العارض، الرياض ١٣٣٣٧" data-en="Al-Aared, Riyadh 13337">العارض، الرياض ١٣٣٣٧</span>
+                            </div>
+                        </div>
+
+                        <div class="mb-8">
+                            <div class="text-xs hero-mono opacity-55 mb-1"><span class="lang-string" data-ar="ساعات العمل" data-en="Hours">ساعات العمل</span></div>
+                            <div class="text-base md:text-lg">
+                                <span class="lang-string" data-ar="أحد – خميس · ٩ص – ٦م" data-en="Sun – Thu · 9 – 18">أحد – خميس · ٩ص – ٦م</span>
+                            </div>
+                        </div>
+
+                        <div>
+                            <div class="text-xs hero-mono opacity-55 mb-3"><span class="lang-string" data-ar="تابعنا" data-en="Follow">تابعنا</span></div>
+                            <div class="flex items-center gap-5">
+                                <a href="https://twitter.com/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="Twitter"><iconify-icon icon="ri:twitter-x-line" width="22"></iconify-icon></a>
+                                <a href="https://instagram.com/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="Instagram"><iconify-icon icon="ri:instagram-line" width="22"></iconify-icon></a>
+                                <a href="https://linkedin.com/company/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="LinkedIn"><iconify-icon icon="ri:linkedin-line" width="22"></iconify-icon></a>
+                                <a href="https://behance.net/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="Behance"><iconify-icon icon="ri:behance-line" width="22"></iconify-icon></a>
+                            </div>
+                        </div>
+                    </aside>
+
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================
+             FAQ — short list of common questions
+             ========================================================== -->
+        <section class="py-24 md:py-32 px-6 md:px-10 relative">
+            <span class="brand-thread brand-thread--right" aria-hidden="true"></span>
+            <div class="max-w-[1100px] mx-auto relative">
+                <div class="grid grid-cols-12 gap-6 mb-12 reveal">
+                    <div class="col-span-12 lg:col-span-4">
+                        <div class="eyebrow mb-4"><span class="lang-string" data-ar="أسئلة شائعة" data-en="Frequent questions">أسئلة شائعة</span></div>
+                        <h2 class="text-3xl md:text-4xl font-medium leading-tight">
+                            <span class="lang-string" data-ar="قبل أن تَكتب لنا." data-en="Before you write us.">قبل أن تَكتب لنا.</span>
+                        </h2>
+                    </div>
+                    <div class="col-span-12 lg:col-span-7 lg:col-start-6">
+                        <details class="border-b border-ink/10 dark:border-paper/10 py-5 group" style="border-top:1px solid var(--hawih-paper-line);">
+                            <summary class="font-medium cursor-pointer flex items-center justify-between"><span class="lang-string" data-ar="كم يستغرق مشروع الهوية الكامل؟" data-en="How long does a full identity project take?">كم يستغرق مشروع الهوية الكامل؟</span><iconify-icon icon="solar:add-circle-linear" width="22" class="group-open:rotate-45 transition"></iconify-icon></summary>
+                            <p class="mt-3 text-sm opacity-70 leading-relaxed"><span class="lang-string" data-ar="بين ٤ و٨ أسابيع بحسب نطاق العمل وعدد المراجعات. نُحدّد الجدول في اليوم الأول." data-en="Between 4–8 weeks depending on scope and rounds of review. The timeline is set on day one.">بين ٤ و٨ أسابيع بحسب نطاق العمل وعدد المراجعات. نُحدّد الجدول في اليوم الأول.</span></p>
+                        </details>
+                        <details class="border-b border-ink/10 dark:border-paper/10 py-5 group">
+                            <summary class="font-medium cursor-pointer flex items-center justify-between"><span class="lang-string" data-ar="هل تَعملون مع علامات خارج السعودية؟" data-en="Do you work with brands outside Saudi?">هل تَعملون مع علامات خارج السعودية؟</span><iconify-icon icon="solar:add-circle-linear" width="22" class="group-open:rotate-45 transition"></iconify-icon></summary>
+                            <p class="mt-3 text-sm opacity-70 leading-relaxed"><span class="lang-string" data-ar="نعم. لدينا عملاء في الكويت والإمارات وقطر. الاجتماعات عن بُعد متاحة، والتسليمات رقمية." data-en="Yes. We have clients in Kuwait, UAE, and Qatar. Remote meetings are standard, and all deliverables are digital.">نعم. لدينا عملاء في الكويت والإمارات وقطر. الاجتماعات عن بُعد متاحة، والتسليمات رقمية.</span></p>
+                        </details>
+                        <details class="border-b border-ink/10 dark:border-paper/10 py-5 group">
+                            <summary class="font-medium cursor-pointer flex items-center justify-between"><span class="lang-string" data-ar="هل تَقدّمون عقد مراجعات بعد التسليم؟" data-en="Do you offer support after handover?">هل تَقدّمون عقد مراجعات بعد التسليم؟</span><iconify-icon icon="solar:add-circle-linear" width="22" class="group-open:rotate-45 transition"></iconify-icon></summary>
+                            <p class="mt-3 text-sm opacity-70 leading-relaxed"><span class="lang-string" data-ar="نعم — شهران من المتابعة المجانية بعد التسليم، مع باقات مدفوعة للمتابعة الشهرية." data-en="Yes — two months of free post-handover support, with paid monthly retainers available afterward.">نعم — شهران من المتابعة المجانية بعد التسليم، مع باقات مدفوعة للمتابعة الشهرية.</span></p>
+                        </details>
+                        <details class="border-b border-ink/10 dark:border-paper/10 py-5 group">
+                            <summary class="font-medium cursor-pointer flex items-center justify-between"><span class="lang-string" data-ar="من يتولّى مشروعي داخل الفريق؟" data-en="Who handles my project on your team?">من يتولّى مشروعي داخل الفريق؟</span><iconify-icon icon="solar:add-circle-linear" width="22" class="group-open:rotate-45 transition"></iconify-icon></summary>
+                            <p class="mt-3 text-sm opacity-70 leading-relaxed"><span class="lang-string" data-ar="كل مشروع يَملك مدير مشروع، مصمّم رئيسي، ومراجعة من المدير الإبداعي. لا وسطاء." data-en="Every project has a project manager, a lead designer, and a creative director's review. No middlemen.">كل مشروع يَملك مدير مشروع، مصمّم رئيسي، ومراجعة من المدير الإبداعي. لا وسطاء.</span></p>
+                        </details>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ==========================================================
+             FINAL CTA — Ink band
+             ========================================================== -->
+        <section class="brand-band py-24 md:py-32 px-6 md:px-10 relative overflow-hidden">
+            <div aria-hidden="true" style="position:absolute; inset:auto -10% -40% auto; width:60%; height:120%; background: radial-gradient(ellipse at center, rgba(31,31,254,0.22) 0%, transparent 60%); pointer-events:none;"></div>
+            <div class="relative max-w-[1100px] mx-auto text-center">
+                <div class="eyebrow mb-6 reveal inline-flex"><span class="lang-string" data-ar="مازلت تَفكّر؟" data-en="Still thinking?">مازلت تَفكّر؟</span></div>
+                <h2 class="text-3xl md:text-5xl lg:text-6xl font-medium leading-tight mb-10 reveal" style="transition-delay:.05s">
+                    <span class="lang-string" data-ar="استكشف أعمالنا أوّلاً —" data-en="Explore our work first —">استكشف أعمالنا أوّلاً —</span><br>
+                    <span class="text-brand lang-string" data-ar="ثم اكتب لنا." data-en="then write to us.">ثم اكتب لنا.</span>
+                </h2>
+                <div class="flex flex-wrap justify-center gap-3 reveal" style="transition-delay:.1s">
+                    <a href="/work.html" class="btn-primary">
+                        <span class="lang-string" data-ar="استكشف الأعمال" data-en="See the work">استكشف الأعمال</span>
+                        <iconify-icon icon="solar:arrow-left-linear" width="16" class="ltr:rotate-180"></iconify-icon>
+                    </a>
+                    <a href="/services.html" class="btn-ghost text-sm">
+                        <span class="lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer class="pt-16 md:pt-20 pb-10 border-t border-ink/10 dark:border-paper/10">
+        <div class="max-w-[1440px] mx-auto px-6 md:px-10">
+            <div class="grid grid-cols-2 md:grid-cols-12 gap-10 md:gap-6">
+                <div class="col-span-2 md:col-span-4">
+                    <img src="/assets/img/logo/hawih-logo-light.png" alt="Hawih" class="h-10 w-auto block dark:hidden mb-4">
+                    <img src="/assets/img/logo/hawih-logo-white.png" alt="Hawih" class="h-10 w-auto hidden dark:block mb-4">
+                    <p class="text-sm opacity-65 max-w-xs leading-relaxed"><span class="lang-string" data-ar="وكالة هوية للتصميم — استوديو سعودي للهوية والمحتوى والإنتاج الرقمي. من الرياض، منذ ٢٠٠٧." data-en="Hawih — a Saudi studio for identity, content, and digital production. From Riyadh, since 2007.">وكالة هوية للتصميم — استوديو سعودي للهوية والمحتوى والإنتاج الرقمي. من الرياض، منذ ٢٠٠٧.</span></p>
+                </div>
+                <div class="col-span-1 md:col-span-2">
+                    <div class="eyebrow mb-4"><span class="lang-string" data-ar="الموقع" data-en="Sitemap">الموقع</span></div>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="/" class="hover:text-brand transition"><span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span></a></li>
+                        <li><a href="/work.html" class="hover:text-brand transition"><span class="lang-string" data-ar="أعمالنا" data-en="Work">أعمالنا</span></a></li>
+                        <li><a href="/services.html" class="hover:text-brand transition"><span class="lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span></a></li>
+                        <li><a href="/about.html" class="hover:text-brand transition"><span class="lang-string" data-ar="من نحن" data-en="About">من نحن</span></a></li>
+                        <li><a href="/contact.html" class="hover:text-brand transition"><span class="lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span></a></li>
+                    </ul>
+                </div>
+                <div class="col-span-1 md:col-span-3">
+                    <div class="eyebrow mb-4"><span class="lang-string" data-ar="تواصل" data-en="Contact">تواصل</span></div>
+                    <ul class="space-y-2 text-sm">
+                        <li><a href="tel:+966502185471" class="hover:text-brand transition" dir="ltr">+966 50 218 5471</a></li>
+                        <li><button data-copy="admin@hawih.com.sa" data-copied-text="✓ Copied" class="hover:text-brand transition cursor-pointer">admin@hawih.com.sa</button></li>
+                        <li class="opacity-65"><span class="lang-string" data-ar="٤١٧٨ خالد بن بندر بن عبدالعزيز، العارض، الرياض ١٣٣٣٧" data-en="4178 Khalid bin Bandar, Al-Aared, Riyadh 13337">٤١٧٨ خالد بن بندر بن عبدالعزيز، العارض، الرياض ١٣٣٣٧</span></li>
+                    </ul>
+                </div>
+                <div class="col-span-2 md:col-span-3">
+                    <div class="eyebrow mb-4"><span class="lang-string" data-ar="تابعنا" data-en="Follow">تابعنا</span></div>
+                    <div class="flex items-center gap-4 mb-6">
+                        <a href="https://twitter.com/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="Twitter"><iconify-icon icon="ri:twitter-x-line" width="22"></iconify-icon></a>
+                        <a href="https://instagram.com/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="Instagram"><iconify-icon icon="ri:instagram-line" width="22"></iconify-icon></a>
+                        <a href="https://linkedin.com/company/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="LinkedIn"><iconify-icon icon="ri:linkedin-line" width="22"></iconify-icon></a>
+                        <a href="https://behance.net/hawihcom" target="_blank" rel="noopener" class="hover:text-brand transition" aria-label="Behance"><iconify-icon icon="ri:behance-line" width="22"></iconify-icon></a>
+                    </div>
+                    <img src="/assets/img/moc-cert.png" alt="Ministry of Commerce" class="h-12 w-auto opacity-80 dark:invert">
+                </div>
+            </div>
+            <div class="mt-16 pt-8 border-t border-ink/10 dark:border-paper/10 flex flex-wrap items-center justify-between gap-4 text-xs opacity-65 hero-mono">
+                <div>© 2007–2026 Hawih · هوية</div>
+                <div><span class="lang-string" data-ar="السجل التجاري ١٠١٠٧٩٤٢٣٧" data-en="CR 1010794237">السجل التجاري ١٠١٠٧٩٤٢٣٧</span></div>
+                <div><span class="lang-string" data-ar="صُنِع في الرياض" data-en="Made in Riyadh">صُنِع في الرياض</span></div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="/assets/js/hawih.js"></script>
+</body>
+</html>

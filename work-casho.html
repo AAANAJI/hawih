@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>كاشو · Casho — هوية</title>
+<meta content="هوية بصرية وشعار لـكاشو من وكالة هوية." name="description"/>
+<script>
+      (function () {
+        try {
+          var lang = localStorage.getItem('lang');
+          if (lang === 'en') { document.documentElement.lang = 'en'; document.documentElement.dir = 'ltr'; }
+        } catch (e) {}
+      })();
+    </script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script>
+      tailwind.config = { darkMode: 'class', theme: { extend: {
+        colors: { ink: '#0B0B10', ink2: '#14141C', paper: '#F4F1EB', paper2: '#E9E4D7', brand: '#1F1FFE' },
+        fontFamily: { sans: ['Inter', 'IBM Plex Sans Arabic', 'sans-serif'], ar: ['IBM Plex Sans Arabic', 'sans-serif'] },
+      }}};
+    </script>
+<link href="/assets/css/hawih.css" rel="stylesheet"/>
+<script src="https://code.iconify.design/iconify-icon/2.1.0/iconify-icon.min.js"></script>
+</head>
+<body class="bg-paper text-ink dark:bg-ink dark:text-paper antialiased selection:bg-brand selection:text-white">
+<a class="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:start-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-brand focus:text-white focus:rounded" href="#main"><span class="lang-string" data-ar="تخطّي إلى المحتوى" data-en="Skip to content">تخطّي إلى المحتوى</span></a>
+<header class="site-nav fixed top-0 inset-x-0 z-40 px-6 md:px-10 py-5">
+<nav class="max-w-[1440px] mx-auto flex items-center justify-between">
+<a aria-label="Hawih" class="flex items-center gap-3" href="/">
+<img alt="Hawih" class="h-8 w-auto block dark:hidden" src="/assets/img/logo/hawih-logo-light.png"/>
+<img alt="Hawih" class="h-8 w-auto hidden dark:block" src="/assets/img/logo/hawih-logo-white.png"/>
+</a>
+<ul class="hidden lg:flex items-center gap-9 text-sm">
+<li><a class="nav-link" href="/"><span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span></a></li>
+<li><a class="nav-link" href="/work.html"><span class="lang-string" data-ar="أعمالنا" data-en="Work">أعمالنا</span></a></li>
+<li><a class="nav-link" href="/services.html"><span class="lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span></a></li>
+<li><a class="nav-link" href="/about.html"><span class="lang-string" data-ar="من نحن" data-en="About">من نحن</span></a></li>
+<li><a class="nav-link" href="/contact.html"><span class="lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span></a></li>
+</ul>
+<div class="flex items-center gap-3">
+<button aria-label="Toggle language" class="langToggle hidden sm:inline-flex items-center px-3 py-1.5 text-sm border border-ink/15 dark:border-paper/15 rounded-full hover:border-brand hover:text-brand transition">
+<span class="lang-string" data-ar="EN" data-en="عربي">EN</span>
+</button>
+<a class="hidden md:inline-flex btn-primary text-sm" href="/contact.html"><span class="lang-string" data-ar="ابدأ مشروعك" data-en="Start a project">ابدأ مشروعك</span></a>
+<button aria-label="Open menu" class="mobileNavToggle lg:hidden p-2"><iconify-icon icon="solar:hamburger-menu-linear" width="22"></iconify-icon></button>
+</div>
+</nav>
+</header>
+<div class="mobileNav hidden fixed inset-0 z-50 bg-paper dark:bg-ink p-6 overflow-y-auto">
+<div class="flex items-center justify-between mb-12">
+<img alt="Hawih" class="h-8 w-auto block dark:hidden" src="/assets/img/logo/hawih-logo-light.png"/>
+<img alt="Hawih" class="h-8 w-auto hidden dark:block" src="/assets/img/logo/hawih-logo-white.png"/>
+<button aria-label="Close menu" class="mobileNavClose p-2"><iconify-icon icon="solar:close-circle-linear" width="28"></iconify-icon></button>
+</div>
+<ul class="flex flex-col gap-5 text-2xl font-medium">
+<li><a href="/"><span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span></a></li>
+<li><a href="/work.html"><span class="lang-string" data-ar="أعمالنا" data-en="Work">أعمالنا</span></a></li>
+<li><a href="/services.html"><span class="lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span></a></li>
+<li><a href="/about.html"><span class="lang-string" data-ar="من نحن" data-en="About">من نحن</span></a></li>
+<li><a href="/contact.html"><span class="lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span></a></li>
+</ul>
+</div>
+<main id="main" style="--project-color:#F3B45F;">
+<!-- Typographic hero — cream paper, no boxed card. -->
+<section class="project-page-hero reveal">
+<div class="max-w-[1440px] mx-auto">
+<div class="project-page-hero__breadcrumb">
+<a class="hover:text-brand inline-flex items-center gap-2 transition" href="/work.html">
+<iconify-icon class="ltr:rotate-180" icon="solar:arrow-left-linear" width="14"></iconify-icon>
+<span class="lang-string" data-ar="جميع الأعمال" data-en="All work">جميع الأعمال</span>
+</a>
+<span style="opacity:.5">·</span>
+<span class="lang-string" data-ar="مشروع ٢٤ من ٢٤" data-en="Project 24 of 24">مشروع ٢٤ من ٢٤</span>
+</div>
+<div class="project-page-hero__sector">
+<span class="lang-string" data-ar="محتوى · مشتريات · ٢٠٢٣" data-en="Social · Retail · 2023">محتوى · مشتريات · ٢٠٢٣</span>
+</div>
+<h1 class="project-page-hero__title mt-4">
+<span class="lang-string" data-ar="كاشو." data-en="Casho.">كاشو.</span><br/>
+<span class="project-page-hero__tagline lang-string" data-ar="دجاج مَقليّ، يُقَدَّم بصوتٍ عالٍ." data-en="Fried chicken, served loud.">دجاج مَقليّ، يُقَدَّم بصوتٍ عالٍ.</span>
+</h1>
+<div class="project-page-hero__meta">
+<p class="project-page-hero__lead">
+<span class="lang-string" data-ar="اشتمل العمل على كتابة محتوى وتصميم وجدولة منشورات التواصل الاجتماعي." data-en="The work included writing, designing, and scheduling social media posts.">اشتمل العمل على كتابة محتوى وتصميم وجدولة منشورات التواصل الاجتماعي.</span>
+</p>
+<div class="text-xs hero-mono uppercase tracking-widest" style="opacity:.6;">
+<span class="lang-string" data-ar="هوية · ٢٠٢٣" data-en="Hawih · 2023">هوية · ٢٠٢٣</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Full-bleed feature image -->
+<section class="project-feature reveal">
+<img alt="Casho brand showcase" src="/assets/img/work/casho/01.jpeg"/>
+</section>
+<!-- Bespoke brief — approach + deliverables -->
+<section class="project-brief">
+<div class="project-brief__grid">
+<div class="reveal">
+<div class="eyebrow mb-4"><span class="lang-string" data-ar="منهجيتنا" data-en="The approach">منهجيتنا</span></div>
+<h2 class="project-brief__heading">
+<span class="lang-string" data-ar="الأصفر كدعوة مفتوحة." data-en="Yellow as an open invitation.">الأصفر كدعوة مفتوحة.</span>
+</h2>
+<p class="project-brief__body">
+<span class="lang-string" data-ar='كاشو دجاج مقلي وساندويتشات بأسلوب الفاست-فود العصري — مُشرق، وَدود، مَصنوع كي يُحمَل. بَنَيْنا الشعار النصّي فوق فخذ دجاج بأصفر زبدي مرسوم بضربةٍ واحدة مُتدحرجة: وجبة وَتميمة في آنٍ معاً، تُقرأ بمقاس ستكر هاتف. أحمر إشارة المرور، أصفر ذَهَبي، أسود لوح طباشير لنصوص القائمة. الصوت عالٍ ومُريح: "اللي جاي عشانه، بسرعة".' data-en='Casho is fried chicken and sandwiches done the modern fast-food way — bright, friendly, made to be carried. We built the wordmark over a buttery-yellow drumstick illustrated as a single rolling stroke: meal and mascot in one, legible at the size of a phone-screen sticker. Stop-sign red, golden yellow, chalkboard black for the menu copy. The voice is loud and easy: "what you came for, fast."'>كاشو دجاج مقلي وساندويتشات بأسلوب الفاست-فود العصري — مُشرق، وَدود، مَصنوع كي يُحمَل. بَنَيْنا الشعار النصّي فوق فخذ دجاج بأصفر زبدي مرسوم بضربةٍ واحدة مُتدحرجة: وجبة وَتميمة في آنٍ معاً، تُقرأ بمقاس ستكر هاتف. أحمر إشارة المرور، أصفر ذَهَبي، أسود لوح طباشير لنصوص القائمة. الصوت عالٍ ومُريح: "اللي جاي عشانه، بسرعة".</span>
+</p>
+</div>
+<div class="reveal" style="transition-delay:.08s">
+<div class="eyebrow mb-4"><span class="lang-string" data-ar="المخرجات" data-en="Deliverables">المخرجات</span></div>
+<ul class="project-brief__deliverables"><li><span class="lang-string" data-ar="شعار + تميمة فخذ الدجاج" data-en="Logo + drumstick mascot">شعار + تميمة فخذ الدجاج</span></li>
+                        <li><span class="lang-string" data-ar="نظام تغليف (علبة، لفّة، كأس مشروب، مخروط بطاطس)" data-en="Packaging system (box, wrap, drink cup, fries cone)">نظام تغليف (علبة، لفّة، كأس مشروب، مخروط بطاطس)</span></li>
+                        <li><span class="lang-string" data-ar="لوحة القائمة + لافتات الكاونتر" data-en="Menu board + counter signage">لوحة القائمة + لافتات الكاونتر</span></li>
+                        <li><span class="lang-string" data-ar="زيّ الفريق + كيس التوصيل" data-en="Crew uniform + delivery bag">زيّ الفريق + كيس التوصيل</span></li>
+                        <li><span class="lang-string" data-ar="أيقونة التطبيق + قوالب إطلاق سوشيال" data-en="App icon + social-launch templates">أيقونة التطبيق + قوالب إطلاق سوشيال</span></li>
+                        </ul>
+</div>
+</div>
+</section>
+<!-- Next project -->
+<section class="project-next">
+<a href="/work-toma.html">
+<div class="project-next__label"><span class="lang-string" data-ar="المشروع التالي" data-en="Next project">المشروع التالي</span></div>
+<div class="project-next__title">
+<span class="lang-string" data-ar="توما" data-en="Toma">توما</span>
+<iconify-icon class="ltr:rotate-180 ms-3" icon="solar:arrow-left-linear" width="32"></iconify-icon>
+</div>
+</a>
+</section>
+</main>
+<footer class="pt-16 md:pt-20 pb-10 border-t border-ink/10 dark:border-paper/10">
+<div class="max-w-[1440px] mx-auto px-6 md:px-10">
+<div class="grid grid-cols-2 md:grid-cols-12 gap-10 md:gap-6">
+<div class="col-span-2 md:col-span-4">
+<img alt="Hawih" class="h-10 w-auto block dark:hidden mb-4" src="/assets/img/logo/hawih-logo-light.png"/>
+<img alt="Hawih" class="h-10 w-auto hidden dark:block mb-4" src="/assets/img/logo/hawih-logo-white.png"/>
+<p class="text-sm opacity-65 max-w-xs leading-relaxed"><span class="lang-string" data-ar="وكالة هوية للتصميم — استوديو سعودي للهوية والمحتوى والإنتاج الرقمي. من الرياض، منذ ٢٠٠٧." data-en="Hawih — a Saudi studio for identity, content, and digital production. From Riyadh, since 2007.">وكالة هوية للتصميم — استوديو سعودي للهوية والمحتوى والإنتاج الرقمي. من الرياض، منذ ٢٠٠٧.</span></p>
+</div>
+<div class="col-span-1 md:col-span-2">
+<div class="eyebrow mb-4"><span class="lang-string" data-ar="الموقع" data-en="Sitemap">الموقع</span></div>
+<ul class="space-y-2 text-sm">
+<li><a class="hover:text-brand transition" href="/"><span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span></a></li>
+<li><a class="hover:text-brand transition" href="/work.html"><span class="lang-string" data-ar="أعمالنا" data-en="Work">أعمالنا</span></a></li>
+<li><a class="hover:text-brand transition" href="/services.html"><span class="lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span></a></li>
+<li><a class="hover:text-brand transition" href="/about.html"><span class="lang-string" data-ar="من نحن" data-en="About">من نحن</span></a></li>
+<li><a class="hover:text-brand transition" href="/contact.html"><span class="lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span></a></li>
+</ul>
+</div>
+<div class="col-span-1 md:col-span-3">
+<div class="eyebrow mb-4"><span class="lang-string" data-ar="تواصل" data-en="Contact">تواصل</span></div>
+<ul class="space-y-2 text-sm">
+<li><a class="hover:text-brand transition" dir="ltr" href="tel:+966502185471">+966 50 218 5471</a></li>
+<li><button class="hover:text-brand transition cursor-pointer" data-copied-text="✓ Copied" data-copy="admin@hawih.com.sa">admin@hawih.com.sa</button></li>
+<li class="opacity-65"><span class="lang-string" data-ar="٤١٧٨ خالد بن بندر بن عبدالعزيز، العارض، الرياض ١٣٣٣٧" data-en="4178 Khalid bin Bandar, Al-Aared, Riyadh 13337">٤١٧٨ خالد بن بندر بن عبدالعزيز، العارض، الرياض ١٣٣٣٧</span></li>
+</ul>
+</div>
+<div class="col-span-2 md:col-span-3">
+<div class="eyebrow mb-4"><span class="lang-string" data-ar="تابعنا" data-en="Follow">تابعنا</span></div>
+<div class="flex items-center gap-4 mb-6">
+<a aria-label="Twitter" class="hover:text-brand transition" href="https://twitter.com/hawihcom" rel="noopener" target="_blank"><iconify-icon icon="ri:twitter-x-line" width="22"></iconify-icon></a>
+<a aria-label="Instagram" class="hover:text-brand transition" href="https://instagram.com/hawihcom" rel="noopener" target="_blank"><iconify-icon icon="ri:instagram-line" width="22"></iconify-icon></a>
+<a aria-label="LinkedIn" class="hover:text-brand transition" href="https://linkedin.com/company/hawihcom" rel="noopener" target="_blank"><iconify-icon icon="ri:linkedin-line" width="22"></iconify-icon></a>
+<a aria-label="Behance" class="hover:text-brand transition" href="https://behance.net/hawihcom" rel="noopener" target="_blank"><iconify-icon icon="ri:behance-line" width="22"></iconify-icon></a>
+</div>
+<img alt="Ministry of Commerce" class="h-12 w-auto opacity-80 dark:invert" src="/assets/img/moc-cert.png"/>
+</div>
+</div>
+<div class="mt-16 pt-8 border-t border-ink/10 dark:border-paper/10 flex flex-wrap items-center justify-between gap-4 text-xs opacity-65 hero-mono">
+<div>© 2007–2026 Hawih · هوية</div>
+<div><span class="lang-string" data-ar="السجل التجاري ١٠١٠٧٩٤٢٣٧" data-en="CR 1010794237">السجل التجاري ١٠١٠٧٩٤٢٣٧</span></div>
+<div><span class="lang-string" data-ar="صُنِع في الرياض" data-en="Made in Riyadh">صُنِع في الرياض</span></div>
+</div>
+</div>
+</footer>
+<script src="/assets/js/hawih.js"></script>
+</body>
+</html>
