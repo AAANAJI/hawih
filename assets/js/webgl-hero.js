@@ -3,7 +3,7 @@
    Same technique as shfrah's hero (3-octave snoise → palette
    mix → horizontal scanline streaks → vignette → mouse parallax)
    but recoloured into Hawih's cobalt-dominant theme. Deep ink
-   base, cobalt mids, cream highlights — no warm amber.
+   base, cobalt mids, cobalt highlights — brand cobalt only, no warm tones.
    ============================================================ */
 
 (function () {
@@ -74,22 +74,20 @@
       float n2 = snoise(noisePos + vec2(5.2, 1.3)) * 0.5 + 0.5;
       float n3 = snoise(noisePos * 2.0 + vec2(3.1, 2.4)) * 0.5 + 0.5;
 
-      // Shfrah's EXACT palette — no modifications.
-      // Warm amber contrast against cool teal is what makes the
-      // dynamic horizontal streaks visible. Hawih's cobalt brand
-      // lives in the rest of the site; the hero is its own moment.
-      vec3 colorDeep   = vec3(0.03, 0.05, 0.09);
-      vec3 colorTeal   = vec3(0.00, 0.42, 0.52);
-      vec3 colorIndigo = vec3(0.22, 0.20, 0.55);
-      vec3 colorAmber  = vec3(0.95, 0.42, 0.08);
+      // Cobalt-only palette — no warm tones. Every stop stays on the
+      // blue axis so the hero reads as brand-cobalt #0001fc.
+      vec3 colorDeep   = vec3(0.020, 0.030, 0.140);  // deep cobalt-tinted ink
+      vec3 colorMid    = vec3(0.030, 0.080, 0.560);  // mid cobalt
+      vec3 colorBrand  = vec3(0.000, 0.004, 0.988);  // pure brand cobalt
+      vec3 colorBright = vec3(0.220, 0.330, 0.980);  // lighter cobalt highlight
 
-      vec3 finalColor = mix(colorDeep, colorTeal, n);
-      finalColor = mix(finalColor, colorIndigo, n2 * (1.0 - st.y * 0.6));
-      finalColor = mix(finalColor, colorAmber, pow(n3, 3.0) * st.x * 0.8);
+      vec3 finalColor = mix(colorDeep, colorMid, n);
+      finalColor = mix(finalColor, colorBrand, n2 * (1.0 - st.y * 0.55));
+      finalColor = mix(finalColor, colorBright, pow(n3, 3.0) * st.x * 0.65);
 
-      // Horizontal scanline streaks — exact shfrah tint and amplitude.
-      float streak = snoise(vec2(st.y * 48.0, u_time * 0.45)) * 0.08;
-      finalColor += streak * vec3(1.0, 0.6, 0.2);
+      // Cool scanline tint — brand cobalt component only (no warm).
+      float streak = snoise(vec2(st.y * 48.0, u_time * 0.45)) * 0.06;
+      finalColor += streak * vec3(0.12, 0.22, 0.95);
 
       // Vignette
       vec2 q = st - 0.5;

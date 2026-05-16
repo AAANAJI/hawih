@@ -1,8 +1,8 @@
 /* ============================================================
    Hawih — shared runtime
-   Language toggle, mobile nav, scroll reveals, counters,
-   sticky nav, copy-to-clipboard, UTM capture, form recovery,
-   floating WhatsApp button.
+   Theme toggle (with system-preference fallback), language toggle,
+   mobile nav, scroll reveals, counters, sticky nav, copy-to-clipboard,
+   UTM capture, form recovery, floating WhatsApp button.
    ============================================================ */
 
 (function () {
@@ -10,10 +10,40 @@
 
   const root = document.documentElement;
 
-  /* Strip any stale .dark class that may linger from a previous
-     visit (we removed the theme toggle — site is light-mode only). */
-  root.classList.remove('dark');
-  try { localStorage.removeItem('theme'); } catch (e) {}
+  /* ---------- Theme ----------
+     Bootstrap script in <head> already added .dark before paint
+     based on localStorage + prefers-color-scheme. Here we wire up
+     the toggle button + a listener for system-pref changes. */
+
+  function applyTheme(mode, persist) {
+    if (mode === 'dark') root.classList.add('dark');
+    else root.classList.remove('dark');
+    if (persist) {
+      try { localStorage.setItem('theme', mode); } catch (e) {}
+    }
+    document.querySelectorAll('.themeIcon').forEach(function (icon) {
+      icon.setAttribute('icon', mode === 'dark' ? 'solar:sun-linear' : 'solar:moon-linear');
+    });
+  }
+
+  // Expose so inline onclick="toggleTheme()" works
+  window.toggleTheme = function () {
+    var next = root.classList.contains('dark') ? 'light' : 'dark';
+    applyTheme(next, true);
+  };
+
+  // Initialize the moon/sun icon to match current state
+  applyTheme(root.classList.contains('dark') ? 'dark' : 'light', false);
+
+  // Follow system preference changes — only if user hasn't picked manually
+  try {
+    var mq = window.matchMedia('(prefers-color-scheme: dark)');
+    var onChange = function (e) {
+      if (!localStorage.getItem('theme')) applyTheme(e.matches ? 'dark' : 'light', false);
+    };
+    if (mq.addEventListener) mq.addEventListener('change', onChange);
+    else if (mq.addListener) mq.addListener(onChange);
+  } catch (e) {}
 
   /* ---------- Language ---------- */
   let currentLang = root.lang === 'en' ? 'en' : 'ar';
@@ -71,7 +101,102 @@
 
   mobileToggle && mobileToggle.addEventListener('click', openMobileNav);
   mobileClose  && mobileClose.addEventListener('click', closeMobileNav);
-  mobileNav    && mobileNav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeMobileNav));
+  mobileNav    && mobileNav.querySelectorAll('a[href]').forEach(a => a.addEventListener('click', closeMobileNav));
+
+  /* ---------- Mobile sub-menu accordions ----------
+     A `.m-nav-link` button paired with a `.m-submenu` sibling. Tapping the
+     button toggles the open class on both, so the sub-menu unfurls. */
+  document.querySelectorAll('.mobileNav .m-nav-link[data-toggle="submenu"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const submenu = btn.nextElementSibling;
+      if (!submenu || !submenu.classList.contains('m-submenu')) return;
+      const isOpen = btn.classList.toggle('is-open');
+      submenu.classList.toggle('is-open', isOpen);
+      btn.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+    });
+  });
+
+  /* ---------- Desktop dropdown menus ----------
+     Hover-open is handled in CSS via `:hover`. Here we add click/keyboard
+     support so taps on touch laptops + keyboard focus also reveal the panel.
+     Closes when the mouse leaves the whole item or when the user clicks
+     outside. */
+  const dropdownItems = document.querySelectorAll('.nav-item--has-dropdown');
+  dropdownItems.forEach(item => {
+    const trigger = item.querySelector('.nav-link');
+    if (!trigger) return;
+
+    // The trigger is an <a>; we want clicks to open the panel on touch /
+    // keyboard, but middle/cmd-click should still navigate. We let bare
+    // left-clicks open the dropdown only when the page is wider than a
+    // mobile width — otherwise the link follows as expected.
+    trigger.addEventListener('click', (e) => {
+      if (e.metaKey || e.ctrlKey || e.shiftKey || e.button !== 0) return;
+      if (window.innerWidth < 1024) return; // mobile handles via accordion
+      const open = !item.classList.contains('is-open');
+      // Close other open dropdowns first
+      dropdownItems.forEach(other => {
+        if (other !== item) {
+          other.classList.remove('is-open');
+          const t = other.querySelector('.nav-link');
+          if (t) t.setAttribute('aria-expanded', 'false');
+        }
+      });
+      // First click opens the dropdown without navigating. A subsequent
+      // click on the same already-open trigger lets the link follow.
+      if (open) {
+        e.preventDefault();
+        item.classList.add('is-open');
+        trigger.setAttribute('aria-expanded', 'true');
+      }
+    });
+
+    // Hover synchronisation: mark the item as open so the CSS visibility
+    // sticks even after the cursor briefly leaves the trigger.
+    item.addEventListener('mouseenter', () => {
+      item.classList.add('is-open');
+      trigger.setAttribute('aria-expanded', 'true');
+    });
+    item.addEventListener('mouseleave', () => {
+      item.classList.remove('is-open');
+      trigger.setAttribute('aria-expanded', 'false');
+    });
+
+    // Escape closes
+    item.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        item.classList.remove('is-open');
+        trigger.setAttribute('aria-expanded', 'false');
+        trigger.focus();
+      }
+    });
+  });
+
+  // Outside click closes all dropdowns
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.nav-item--has-dropdown')) {
+      dropdownItems.forEach(item => {
+        item.classList.remove('is-open');
+        const t = item.querySelector('.nav-link');
+        if (t) t.setAttribute('aria-expanded', 'false');
+      });
+    }
+  });
+
+  /* ---------- Active link marker ----------
+     Highlight the current page's top-level nav link. Matches both the
+     desktop pill nav and the mobile accordion. */
+  const path = window.location.pathname.replace(/index\.html$/, '') || '/';
+  document.querySelectorAll('.nav-link[data-match]').forEach(a => {
+    const matchers = a.getAttribute('data-match').split(',').map(s => s.trim());
+    if (matchers.some(m => {
+      if (m === '/' && (path === '/' || path === '')) return true;
+      if (m !== '/' && path.startsWith(m)) return true;
+      return false;
+    })) {
+      a.classList.add('is-active');
+    }
+  });
 
   /* ---------- Sticky nav shrink ---------- */
   const siteNav = document.querySelector('.site-nav');
