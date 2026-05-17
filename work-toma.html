@@ -1227,7 +1227,7 @@
                 <div class="col-12 col-xl-2 mxd-grid-item no-margin">
                   <div class="mxd-block__name name-project-link loading__fade">
                     <a class="btn btn-anim btn-line-small btn-muted slide-right-up" href="/work.html">
-                      <span class="btn-caption"><span class="lang-string" data-ar="جميع الأعمال" data-en="All work">All work</span></span>
+                      <span class="btn-caption lang-string" data-ar="جميع الأعمال" data-en="All work">All work</span>
                       <i class="ph ph-arrow-up-right"></i>
                     </a>
                   </div>
@@ -1296,7 +1296,7 @@
       <div class="mxd-section">
         <div class="mxd-container">
           <div class="mxd-divider loading__fade">
-            <div class="mxd-divider__image parallax-img" style="background-image:url(/assets/img/work/toma/01.jpeg)"></div>
+            <img class="mxd-divider__img" src="/assets/img/work/toma/01.jpeg" alt="توما — الهوية البصرية">
           </div>
         </div>
       </div>
@@ -1332,12 +1332,12 @@
                 <div class="row gx-0">
                   <div class="col-12 mxd-project-cards__item mxd-grid-item anim-uni-scale-in-right">
                     <div class="mxd-project-cards__inner radius-m">
-                      <img src="/assets/img/work/toma/02.jpeg" alt="توما — الهوية البصرية">
+                      <img src="/assets/img/work/toma/02.jpeg" alt="توما — تطبيقات العلامة">
                     </div>
                   </div>
                   <div class="col-12 mxd-project-cards__item mxd-grid-item anim-uni-scale-in-left">
                     <div class="mxd-project-cards__inner radius-m">
-                      <img src="/assets/img/work/toma/03.jpeg" alt="توما — تطبيقات العلامة">
+                      <img src="/assets/img/work/toma/03.jpeg" alt="توما — خامات مطبوعة">
                     </div>
                   </div>
                 </div>
@@ -1373,7 +1373,7 @@
 
           <div class="mxd-project__block mxd-grid-item no-margin">
             <div class="mxd-divider">
-              <div class="mxd-divider__image parallax-img" style="background-image:url(/assets/img/work/toma/04.jpeg)"></div>
+              <img class="mxd-divider__img" src="/assets/img/work/toma/04.jpeg" alt="توما — تفاصيل المائدة">
             </div>
           </div>
 
@@ -1404,7 +1404,7 @@
                   <div class="col-6 mxd-project__navitem left mxd-grid-item no-margin anim-uni-in-up">
                     <a class="btn btn-anim btn-line-small btn-muted anim-no-delay slide-left" href="/work.html">
                       <i class="ph ph-arrow-left"></i>
-                      <span class="btn-caption"><span class="lang-string" data-ar="كل الأعمال" data-en="All work">All work</span></span>
+                      <span class="btn-caption lang-string" data-ar="كل الأعمال" data-en="All work">All work</span>
                     </a>
                     <a class="mxd-project__link anim-uni-in-up" href="/work.html">
                       <span><span class="lang-string" data-ar="العودة إلى الأعمال" data-en="Back to work">Back to work</span></span>
@@ -1412,7 +1412,7 @@
                   </div>
                   <div class="col-6 mxd-project__navitem right mxd-grid-item no-margin anim-uni-in-up">
                     <a class="btn btn-anim btn-line-small btn-muted anim-no-delay slide-right" href="/work-al-gharbi.html">
-                      <span class="btn-caption"><span class="lang-string" data-ar="المشروع التالي" data-en="Next project">Next project</span></span>
+                      <span class="btn-caption lang-string" data-ar="المشروع التالي" data-en="Next project">Next project</span>
                       <i class="ph ph-arrow-right"></i>
                     </a>
                     <a class="mxd-project__link anim-uni-in-up" href="/work-al-gharbi.html">
@@ -1771,11 +1771,13 @@
     <!-- Hawih shared JS — theme toggle, copy-to-clipboard, WhatsApp button, scroll reveals, etc. -->
     <script src="/assets/js/hawih.js"></script>
 
-    <!-- TOMA project page: media + list sizing (template root 62.5% => 1rem=10px) -->
+    <!-- TOMA project page: title size + media (template root 62.5% => 1rem=10px;
+         shell loads Tailwind, whose preflight resets h1 — restore the title) -->
     <style>
+      .inner-page-content .inner-headline__title{font-family:var(--_font-accent);font-weight:var(--fw-medium);font-size:clamp(5.4rem,8.6vw,10rem);line-height:1.05;letter-spacing:-.06rem;color:var(--t-bright)}
+      .mxd-divider>.mxd-divider__img{display:block;width:100%;height:100%;object-fit:cover}
       .mxd-project-cards__inner.radius-m{height:100%;overflow:hidden}
       .mxd-project-cards__inner.radius-m img{width:100%;height:100%;object-fit:cover;display:block}
-      .mxd-divider__image[style*="background-image"]{background-size:cover;background-position:center}
       .toma-deliverables{margin:2.6rem 0 0;padding:0;list-style:none}
       .toma-deliverables li{padding:1.8rem 0;border-top:1px solid var(--st-medium);font:normal var(--fw-regular) 2rem/1.4 var(--_font-accent);color:var(--t-bright)}
       .toma-deliverables li:last-child{border-bottom:1px solid var(--st-medium)}
