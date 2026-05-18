@@ -52,6 +52,7 @@ $PT_MAP = [
     'hawih-pro'      => 'Personal Branding — Hawih Pro',
     'ui-ux'          => 'UI / UX',
     'brand'          => 'Brand Strategy',
+    'programming'    => 'Programming & Development',
     'marketing'      => 'Marketing Visuals',
     'consulting'     => 'Creative Consulting',
     'events'         => 'Events & Activations',
