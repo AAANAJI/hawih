@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" dir="ltr">
+<html lang="ar" dir="rtl">
 
   <head>
-    <!--uc-theme-init--><script>(function(){try{var e=document.documentElement;e.setAttribute("data-theme","light");e.setAttribute("color-scheme","light");e.classList.add("light-mode");e.classList.remove("dark");e.style.colorScheme="light";}catch(_){}})();</script>
+    <!--uc-theme-init--><script>(function(){try{var e=document.documentElement;e.setAttribute("data-theme","light");e.setAttribute("color-scheme","light");e.classList.add("light-mode");e.classList.remove("dark");e.style.colorScheme="light";localStorage.setItem("template.theme","light");}catch(_){}})();</script>
     <meta charset="UTF-8">
 
     <!-- Page Title -->
@@ -1083,7 +1083,7 @@
       @media (min-width:1200px){.hawih-whatsapp{left:6rem!important;bottom:4rem!important}}
       @media (max-width:480px){.hawih-whatsapp{left:3rem!important;bottom:3rem!important;width:50px;height:50px}}
       /* Header: show immediately — no fade-in delay / theme flash */
-      .mxd-header,.mxd-header__logo,.mxd-header__controls{opacity:1!important}
+      .mxd-header,.mxd-header__logo,.mxd-header__controls,.mxd-nav__wrap,.mxd-nav__contain,.mxd-nav__hamburger,.hamburger__base,.hamburger__line{opacity:1!important}
     </style>
   </head>
 
@@ -1822,6 +1822,7 @@
       .prj-deliverables li{padding:1.8rem 0;border-top:1px solid var(--st-medium);font:normal var(--fw-regular) 2rem/1.4 var(--_font-accent);color:var(--t-bright)}
       .prj-deliverables li:last-child{border-bottom:1px solid var(--st-medium)}
     </style>
+    <!--uc-lang-default--><script>(function(){try{var l=localStorage.getItem("lang");if(l!=="en"){document.querySelectorAll(".lang-string").forEach(function(n){var t=n.getAttribute("data-ar");if(t!=null)n.textContent=t;});document.querySelectorAll(".lang-input").forEach(function(n){var p=n.getAttribute("data-placeholder-ar");if(p!=null)n.placeholder=p;});}}catch(_){}})();</script>
   </body>
 
 </html>
