@@ -1028,10 +1028,56 @@
     <style id="uc-mobile-fixes">
       .uc-menu-controls{display:flex;flex-direction:column;gap:1rem;align-items:flex-start;margin-top:1.6rem}
       .uc-menu-controls .btn{width:auto}
+      /* Menu Contact + language buttons: accent-filled so they read on the
+         menu backdrop in BOTH dark and light theme (was invisible dark-on-dark). */
+      .mxd-menu__wrapper .uc-menu-controls .btn,
+      .mxd-menu__wrapper .uc-menu-controls .btn:hover,
+      .mxd-menu__wrapper .uc-menu-controls .btn:focus{
+        background:var(--accent,#1F1FFE)!important;border:1px solid var(--accent,#1F1FFE)!important}
+      .mxd-menu__wrapper .uc-menu-controls .btn,
+      .mxd-menu__wrapper .uc-menu-controls .btn .btn-caption,
+      .mxd-menu__wrapper .uc-menu-controls .btn span,
+      .mxd-menu__wrapper .uc-menu-controls .btn .lang-string,
+      .mxd-menu__wrapper .uc-menu-controls .btn i{color:#fff!important}
+      .mxd-menu__wrapper .uc-menu-controls .btn:hover{filter:brightness(1.1)}
       @media (max-width:991px){
         .mxd-header__controls [data-lang-toggle],
         .mxd-header__controls a.btn-mobile-icon{display:none!important}
       }
+      /* Light theme: the off-canvas menu turns light, but Fix 5 forced the
+         caption/footer text to white -> invisible. Force ink in light mode. */
+      [data-theme="light"] .mxd-menu__wrapper .menu-promo__caption,
+      [data-theme="light"] .mxd-menu__wrapper .menu-promo__caption span,
+      [data-theme="light"] .mxd-menu__wrapper .menu-promo__caption .lang-string,
+      [data-theme="light"] .mxd-menu__wrapper .mxd-menu__caption,
+      [data-theme="light"] .mxd-menu__wrapper .mxd-menu__caption span,
+      [data-theme="light"] .mxd-menu__wrapper .mxd-menu__data,
+      [data-theme="light"] .mxd-menu__wrapper .mxd-menu__data p,
+      [data-theme="light"] .mxd-menu__wrapper .mxd-menu__data p span,
+      [data-theme="light"] .mxd-menu__wrapper .mxd-menu__data p .lang-string,
+      [data-theme="light"] .mxd-menu__wrapper .mxd-menu__data a,
+      [data-theme="light"] .mxd-menu__wrapper .mxd-menu__data a span,
+      [data-theme="light"] .mxd-menu__wrapper .mxd-menu__data i,
+      body.light-mode .mxd-menu__wrapper .menu-promo__caption,
+      body.light-mode .mxd-menu__wrapper .menu-promo__caption span,
+      body.light-mode .mxd-menu__wrapper .menu-promo__caption .lang-string,
+      body.light-mode .mxd-menu__wrapper .mxd-menu__data,
+      body.light-mode .mxd-menu__wrapper .mxd-menu__data p,
+      body.light-mode .mxd-menu__wrapper .mxd-menu__data p span,
+      body.light-mode .mxd-menu__wrapper .mxd-menu__data a,
+      body.light-mode .mxd-menu__wrapper .mxd-menu__data i,
+      html.light-mode .mxd-menu__wrapper .menu-promo__caption,
+      html.light-mode .mxd-menu__wrapper .menu-promo__caption span,
+      html.light-mode .mxd-menu__wrapper .menu-promo__caption .lang-string,
+      html.light-mode .mxd-menu__wrapper .mxd-menu__data,
+      html.light-mode .mxd-menu__wrapper .mxd-menu__data a,
+      html.light-mode .mxd-menu__wrapper .mxd-menu__data i,
+      :root[color-scheme="light"] .mxd-menu__wrapper .menu-promo__caption,
+      :root[color-scheme="light"] .mxd-menu__wrapper .menu-promo__caption span,
+      :root[color-scheme="light"] .mxd-menu__wrapper .menu-promo__caption .lang-string,
+      :root[color-scheme="light"] .mxd-menu__wrapper .mxd-menu__data,
+      :root[color-scheme="light"] .mxd-menu__wrapper .mxd-menu__data a,
+      :root[color-scheme="light"] .mxd-menu__wrapper .mxd-menu__data i{color:#161616!important}
     </style>
   </head>
 
