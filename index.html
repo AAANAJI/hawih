@@ -1124,6 +1124,11 @@
       :root[color-scheme="dark"] .mxd-logo__dark{display:block!important}
       :root[color-scheme="dark"] .mxd-logo__light{display:none!important}
       .loader__count{direction:ltr;unicode-bidi:isolate}
+      /* Fixed frosted-glass header (Apple-style) */
+      .mxd-header{position:fixed!important;left:0!important;right:0!important;top:0!important;width:100%!important;padding:1.7rem 3rem!important;background:rgba(244,241,235,.62)!important;-webkit-backdrop-filter:blur(16px) saturate(1.6);backdrop-filter:blur(16px) saturate(1.6);border-bottom:1px solid rgba(20,20,20,.08);box-shadow:0 6px 24px rgba(0,0,0,.05);transition:background .3s ease,box-shadow .3s ease}
+      .mxd-header.is-hidden{opacity:1!important;transform:none!important;pointer-events:auto!important}
+      :root[color-scheme="dark"] .mxd-header{background:rgba(18,18,20,.55)!important;border-bottom-color:rgba(255,255,255,.10)}
+      @media (max-width:991px){.mxd-header{padding:1.2rem 1.5rem!important}}
       :root[color-scheme="dark"] .mxd-logo__dark img{display:block!important}
     </style>
   </head>
@@ -1474,7 +1479,7 @@
                         <p class="mxd-counter__descr t-140 t-bright"><span class="lang-string" data-ar="شريك" data-en="Partners">شريك</span><br><span class="lang-string" data-ar="نجاح" data-en="&amp; clients">نجاح</span></p>
                       </div>
                       <div class="mxd-stats-cards__image mxd-stats-cards-image-2">
-                        <img src="/uc-assets/img/illustrations/800x800_card-image-02.webp" alt="Illustration">
+                        <img src="/uc-assets/img/services/1000x1000_ser-02.webp" alt="Illustration">
                       </div>
                     </div>
                   </div>
