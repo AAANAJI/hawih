@@ -1,0 +1,100 @@
+name: Deploy Hawih site
+
+# Auto-deploys the static Hawih site to the production server on every
+# push to main / the working branch (and on manual run). Runs on a
+# GitHub-hosted runner, which CAN reach the server over SSH (port 22).
+#
+# It deploys ONLY the site into HAWIH_DOCROOT. The Rise CRM lives in its
+# own vhost/docroot and is never referenced here; a safety gate aborts
+# if the target looks like the CRM.
+#
+# Required repo secrets (Settings -> Secrets and variables -> Actions):
+#   SSH_HOST        e.g. 108.61.89.48
+#   SSH_USER        e.g. root   (a dedicated deploy user is safer)
+#   SSH_PASSWORD    server password  (prefer SSH_KEY instead — see README of this file)
+#   HAWIH_DOCROOT   absolute path of the Hawih site docroot, e.g. /var/www/hawih
+#   SSH_PORT        optional, defaults to 22
+
+on:
+  push:
+    branches: [ main, "claude/hawih-optimal-design-ozqG9" ]
+    paths-ignore: [ "reference/**", "**.md", ".github/**" ]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-hawih
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Gate on secrets
+        id: gate
+        env:
+          HOST: ${{ secrets.SSH_HOST }}
+        run: |
+          if [ -z "$HOST" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Deploy secrets not set yet — skipping. Add SSH_HOST, SSH_USER, SSH_PASSWORD, HAWIH_DOCROOT (Settings → Secrets and variables → Actions), then re-run this workflow."
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Install tools
+        if: steps.gate.outputs.configured == 'true'
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq sshpass rsync
+
+      - name: Build clean deploy tree
+        if: steps.gate.outputs.configured == 'true'
+        run: |
+          mkdir -p .deploy
+          rsync -a --delete \
+            --exclude='.git' --exclude='.github' --exclude='.deploy' \
+            --exclude='reference/' --exclude='*.md' \
+            --exclude='CRM_INTEGRATION_PLAYBOOK*' --exclude='DEPLOY*' \
+            ./ ./.deploy/
+          echo "Files to deploy:"; find .deploy -type f | wc -l
+
+      - name: Safety gate + backup (remote)
+        if: steps.gate.outputs.configured == 'true'
+        env:
+          SSHPASS: ${{ secrets.SSH_PASSWORD }}
+          HOST: ${{ secrets.SSH_HOST }}
+          USER: ${{ secrets.SSH_USER }}
+          PORT: ${{ secrets.SSH_PORT }}
+          DOCROOT: ${{ secrets.HAWIH_DOCROOT }}
+        run: |
+          PORT="${PORT:-22}"
+          SSH="sshpass -e ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=25 -p $PORT $USER@$HOST"
+          # The Hawih site has index.html and NO CodeIgniter app dir.
+          # Rise CRM has application/ + index.php — refuse to write there.
+          if ! $SSH "test -d '$DOCROOT' && test -f '$DOCROOT/index.html' && ! test -d '$DOCROOT/application' && ! test -f '$DOCROOT/system/core/CodeIgniter.php'"; then
+            echo "::error::HAWIH_DOCROOT failed the safety check (no index.html, or it looks like the CRM). Aborting — nothing changed."
+            exit 1
+          fi
+          $SSH "tar czf /root/hawih-backup-\$(date +%F-%H%M%S).tgz -C '$DOCROOT' . 2>/dev/null && ls -1t /root/hawih-backup-*.tgz | head -1"
+
+      - name: Deploy site (rsync — CRM untouched)
+        if: steps.gate.outputs.configured == 'true'
+        env:
+          SSHPASS: ${{ secrets.SSH_PASSWORD }}
+          HOST: ${{ secrets.SSH_HOST }}
+          USER: ${{ secrets.SSH_USER }}
+          PORT: ${{ secrets.SSH_PORT }}
+          DOCROOT: ${{ secrets.HAWIH_DOCROOT }}
+        run: |
+          PORT="${PORT:-22}"
+          rsync -az --delete \
+            --exclude='.well-known/' --exclude='uploads/' --exclude='.user.ini' \
+            -e "sshpass -e ssh -o StrictHostKeyChecking=accept-new -p $PORT" \
+            ./.deploy/ "$USER@$HOST:$DOCROOT/"
+
+      - name: Verify
+        if: steps.gate.outputs.configured == 'true'
+        run: |
+          code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 https://hawih.com.sa/ || true)
+          echo "https://hawih.com.sa/ -> $code"
+          [ "$code" = "200" ] || echo "::warning::Home returned $code (check the site)."
