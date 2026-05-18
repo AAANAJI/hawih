@@ -51,6 +51,11 @@ $PT_MAP = [
     'social-wasil'   => 'Social — Wasil',
     'hawih-pro'      => 'Personal Branding — Hawih Pro',
     'ui-ux'          => 'UI / UX',
+    'brand'          => 'Brand Strategy',
+    'marketing'      => 'Marketing Visuals',
+    'consulting'     => 'Creative Consulting',
+    'events'         => 'Events & Activations',
+    'content-jazl'   => 'Content — Jazl',
     'project'        => 'Project — Other',
     'other'          => 'Other',
 

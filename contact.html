@@ -1250,19 +1250,25 @@
             <div class="col-12 col-md-6 mxd-grid-item anim-uni-in-up"><label class="uc-field-label" for="f-email"><span class="lang-string" data-ar="البريد الإلكتروني" data-en="Email">Email</span></label><input type="email" id="f-email" name="email" required maxlength="200" dir="ltr" autocomplete="email" placeholder="you@brand.com"></div>
             <div class="col-12 col-md-6 mxd-grid-item anim-uni-in-up"><label class="uc-field-label" for="f-phone"><span class="lang-string" data-ar="رقم الجوّال" data-en="Phone">Phone</span></label><input type="tel" id="f-phone" name="phone" maxlength="40" dir="ltr" autocomplete="tel" placeholder="+966 ..."></div>
             <div class="col-12 col-md-6 mxd-grid-item anim-uni-in-up"><label class="uc-field-label" for="f-type"><span class="lang-string" data-ar="نوع المشروع" data-en="Project type">Project type</span></label><select id="f-type" name="project_type">
-              <option value="brand-identity" class="lang-string" data-ar="علامة تجارية متكاملة" data-en="Full brand identity">Full brand identity</option>
-              <option value="brand-refresh" class="lang-string" data-ar="تحديث علامة قائمة" data-en="Brand refresh">Brand refresh</option>
-              <option value="ui-ux" class="lang-string" data-ar="تجربة وواجهة المستخدم" data-en="UI / UX">UI / UX</option>
-              <option value="social-wasil" class="lang-string" data-ar="إدارة سوشيال — واصِل" data-en="Social management — Wasil">Social management — Wasil</option>
-              <option value="hawih-pro" class="lang-string" data-ar="علامة شخصية — هوية برو" data-en="Personal brand — Hawih Pro">Personal brand — Hawih Pro</option>
-              <option value="other" class="lang-string" data-ar="غير ذلك" data-en="Other">Other</option>
+              <option value="" selected class="lang-string" data-ar="اختر نوع المشروع" data-en="Select a project type">Select a project type</option>
+              <option value="brand" class="lang-string" data-ar="العلامة التجارية — الاستراتيجية والتموضع" data-en="Brand — strategy &amp; positioning">Brand — strategy &amp; positioning</option>
+              <option value="brand-identity" class="lang-string" data-ar="الهوية البصرية الكاملة" data-en="Full visual identity">Full visual identity</option>
+              <option value="brand-refresh" class="lang-string" data-ar="إحياء/تحديث علامة قائمة" data-en="Brand refresh">Brand refresh</option>
+              <option value="ui-ux" class="lang-string" data-ar="تجربة وواجهة المستخدم (UI/UX)" data-en="UI / UX design">UI / UX design</option>
+              <option value="marketing" class="lang-string" data-ar="التسويق البصري والحملات" data-en="Marketing visuals &amp; campaigns">Marketing visuals &amp; campaigns</option>
+              <option value="consulting" class="lang-string" data-ar="استشارة فنّية / إبداعية" data-en="Creative consulting">Creative consulting</option>
+              <option value="events" class="lang-string" data-ar="هوية فعالية أو مناسبة" data-en="Event &amp; activation identity">Event &amp; activation identity</option>
+              <option value="social-wasil" class="lang-string" data-ar="إدارة منصّات التواصل — واصِل" data-en="Social media — Wasil">Social media — Wasil</option>
+              <option value="content-jazl" class="lang-string" data-ar="كتابة المحتوى — جَزل" data-en="Content writing — Jazl">Content writing — Jazl</option>
+              <option value="hawih-pro" class="lang-string" data-ar="الهوية الشخصية — هوية برو" data-en="Personal brand — Hawih Pro">Personal brand — Hawih Pro</option>
+              <option value="other" class="lang-string" data-ar="غير ذلك / لست متأكّداً" data-en="Something else / not sure">Something else / not sure</option>
             </select></div>
             <div class="col-12 col-md-6 mxd-grid-item anim-uni-in-up"><label class="uc-field-label" for="f-budget"><span class="lang-string" data-ar="حجم المشروع" data-en="Project size">Project size</span></label><select id="f-budget" name="budget">
-              <option value="" class="lang-string" data-ar="أُفضّل عدم الذكر" data-en="Prefer not to say">Prefer not to say</option>
-              <option value="1-5K SAR" class="lang-string" data-ar="صغير — تسليمٌ واحد" data-en="Small — a single deliverable">Small — a single deliverable</option>
-              <option value="5-25K SAR" class="lang-string" data-ar="متوسّط — ارتباطٌ مُركَّز" data-en="Mid — a focused engagement">Mid — a focused engagement</option>
-              <option value="25-100K SAR" class="lang-string" data-ar="كبير — مشروعٌ متعدّد المراحل" data-en="Large — a multi-phase project">Large — a multi-phase project</option>
-              <option value="100K+ SAR" class="lang-string" data-ar="استراتيجي — شراكةٌ طويلة المدى" data-en="Strategic — a long-term partnership">Strategic — a long-term partnership</option>
+              <option value="" selected class="lang-string" data-ar="أُفضّل عدم التحديد الآن" data-en="Prefer not to say">Prefer not to say</option>
+              <option value="1-5K SAR" class="lang-string" data-ar="أقل من ٥٬٠٠٠ ر.س" data-en="Under SAR 5,000">Under SAR 5,000</option>
+              <option value="5-25K SAR" class="lang-string" data-ar="٥٬٠٠٠ – ٢٥٬٠٠٠ ر.س" data-en="SAR 5,000 – 25,000">SAR 5,000 – 25,000</option>
+              <option value="25-100K SAR" class="lang-string" data-ar="٢٥٬٠٠٠ – ١٠٠٬٠٠٠ ر.س" data-en="SAR 25,000 – 100,000">SAR 25,000 – 100,000</option>
+              <option value="100K+ SAR" class="lang-string" data-ar="أكثر من ١٠٠٬٠٠٠ ر.س" data-en="Over SAR 100,000">Over SAR 100,000</option>
             </select></div>
             <div class="col-12 mxd-grid-item anim-uni-in-up"><label class="uc-field-label" for="f-msg"><span class="lang-string" data-ar="حدّثنا عن المشروع" data-en="Tell us about your project">Tell us about your project</span></label><textarea id="f-msg" name="brief" required maxlength="4000" placeholder="—"></textarea></div>
             <div class="col-12 mxd-grid-item anim-uni-in-up uc-form-submit">
