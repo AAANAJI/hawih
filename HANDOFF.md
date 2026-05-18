@@ -1,6 +1,6 @@
 # Hawih — Project Handoff & Deploy Guide
 
-**Branch:** `claude/hawih-optimal-design-ozqG9`  ·  **HEAD:** `c21e67d`
+**Branch:** `claude/hawih-optimal-design-ozqG9`  ·  **HEAD:** `e5fcaa8`
 **Repo:** `https://github.com/aaanaji/hawih`
 **Status:** All site work is committed & pushed. **Not yet deployed to production.**
 
@@ -71,6 +71,14 @@ Site rebuilt on the reference template ("optimal design"), bilingual (AR/EN via
 - **Floating WhatsApp button** — was an empty green circle (used `<iconify-icon>` but
   Iconify was never loaded); replaced with an inline SVG in `assets/js/hawih.js`
   (sitewide). Link: `https://wa.me/966502185471` + prefilled Arabic greeting.
+- **Mobile fixes (sitewide, 31 pages)** — RTL font: the inline
+  `[dir="rtl"] *` rule forced `Segoe UI/Tahoma/Arial` over IBM Plex Sans
+  Arabic; now prefers `IBM Plex Sans Arabic`, plus a real `<link
+  preconnect>` + Google Fonts stylesheet in `<head>` (was only the nested
+  `@import` in `hawih.css`). Header/menu: decorative menu video replaced
+  with a Contact + language‑toggle block inside the popup menu; on
+  `≤991px` the header's lang toggle + contact button are hidden (now in
+  the menu); header keeps logo + theme switch + hamburger.
 - **Deploy tooling** — `.github/workflows/deploy.yml` + `deploy.sh` (see §5).
 
 Full commit list: `git log --oneline` on the branch (40+ commits, `9e3559f` →
@@ -164,7 +172,7 @@ The first run's "Show Hawih vhost root" step prints the real nginx roots — con
 
 ## 7. Quick reference
 
-- Branch: `claude/hawih-optimal-design-ozqG9` · HEAD `c21e67d`
+- Branch: `claude/hawih-optimal-design-ozqG9` · HEAD `e5fcaa8`
 - Deploy now (Mac): `cd /Users/Anaji/Documents/Hawih && git pull && SSHPASS='…' ./deploy.sh`
 - Deploy artifacts: `deploy.sh`, `.github/workflows/deploy.yml`
 - Never write to the CRM (`crm.hawih.com.sa`, separate vhost; gated off).
