@@ -1129,7 +1129,9 @@
       .mxd-header.uc-scrolled{background:rgba(244,241,235,.62)!important;-webkit-backdrop-filter:blur(16px) saturate(1.6)!important;backdrop-filter:blur(16px) saturate(1.6)!important;border-bottom-color:rgba(20,20,20,.08)!important;box-shadow:0 6px 24px rgba(0,0,0,.05)!important}
       .mxd-header.is-hidden{opacity:1!important;transform:none!important;pointer-events:auto!important}
       :root[color-scheme="dark"] .mxd-header.uc-scrolled{background:rgba(18,18,20,.55)!important;border-bottom-color:rgba(255,255,255,.10)!important}
-      .mxd-nav__wrap{z-index:130!important;top:0!important;bottom:auto!important}
+      .mxd-nav__wrap{z-index:130!important;top:0!important;bottom:auto!important;pointer-events:none!important}
+      .mxd-nav__contain{pointer-events:none!important}
+      .mxd-nav__hamburger,.mxd-nav__contain>*{pointer-events:auto!important}
       .mxd-nav__contain{margin-top:0!important;min-height:0!important;padding-top:1.7rem!important;padding-bottom:1.7rem!important;align-items:center!important}
       @media (max-width:991px){.mxd-nav__contain{padding-top:1.2rem!important;padding-bottom:1.2rem!important}}
       @media (max-width:991px){.mxd-header{padding:1.2rem 1.5rem 1.2rem 7.5rem!important}}
