@@ -1,12 +1,24 @@
 # Hawih — Project Handoff & Deploy Guide
 
-**Branch:** `claude/hawih-optimal-design-ozqG9`  ·  **HEAD:** `e5fcaa8`
+**Branch:** `claude/hawih-optimal-design-ozqG9`  ·  **HEAD:** `b672adf`
 **Repo:** `https://github.com/aaanaji/hawih`
 **Status:** All site work is committed & pushed. **Not yet deployed to production.**
 
 This file is internal — it is excluded from deployment (`*.md` is not synced to the server).
 
 ---
+
+## 0. ⚠️ DEPLOY IS THE BLOCKER (read first)
+
+All header / language / logo / footer fixes from the recent rounds are
+committed on this branch (HEAD `b672adf`) and verified (0 HTML errors,
+all pages 200). The LIVE site at https://hawih.com.sa is running an
+OLDER build — confirmed from the page's computed CSS, which still lacks
+`.mxd-nav__wrap{pointer-events:none}`, `.mxd-header.uc-scrolled`, and the
+header scroll script. Symptoms still seen live (nothing clickable but the
+burger, mode switch hidden, burger overlap, English default, glass always
+on) are ALL already fixed in this branch. **Nothing more needs coding —
+the branch must be deployed.** Deploy per §5, then hard-refresh.
 
 ## 1. Start here (new chat)
 
@@ -172,7 +184,7 @@ The first run's "Show Hawih vhost root" step prints the real nginx roots — con
 
 ## 7. Quick reference
 
-- Branch: `claude/hawih-optimal-design-ozqG9` · HEAD `e5fcaa8`
+- Branch: `claude/hawih-optimal-design-ozqG9` · HEAD `b672adf`
 - Deploy now (Mac): `cd /Users/Anaji/Documents/Hawih && git pull && SSHPASS='…' ./deploy.sh`
 - Deploy artifacts: `deploy.sh`, `.github/workflows/deploy.yml`
 - Never write to the CRM (`crm.hawih.com.sa`, separate vhost; gated off).
