@@ -1312,16 +1312,16 @@
       .ta-asset .mxd-hero-01 .title-item-transparent {
         visibility: visible;
         opacity: 0; /* invisible but takes space */
-        /* Wider than the 265px marquee pill so there's breathing room
-           between the visible word and the pill that sits over the ghost */
-        min-width: 320px;
+        /* Wider than the 265px marquee pill so the pill sits inside a
+           bigger ghost slot with clear breathing room around it */
+        min-width: 480px;
       }
 
       /* Push title row 1 down a touch and widen the gap so "Design" and
          the marquee pill don't sit visually right next to each other. */
       .ta-asset .mxd-hero-01 .hero-01-title__row:first-child {
         margin-top: 2.5rem;
-        gap: 6rem;
+        gap: 12rem;
       }
 
       /* Tag outlines inside dark cards need light border + light text */
