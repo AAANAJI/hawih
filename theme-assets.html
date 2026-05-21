@@ -1156,15 +1156,10 @@
         font-size-adjust: ex-height 0.58;
       }
 
-      /* Same Tailwind-reset story for paragraphs and small text — Tailwind
-         doesn't reset these as aggressively, but the Eric-Meyer reset in
-         main.min.css sets `font: inherit` on them. Restore a sensible
-         body size so descriptive copy doesn't collapse to 16px. */
-      .ta-asset p, .ta-asset li, .ta-asset a, .ta-asset span,
-      .ta-asset label {
-        font-size: var(--_size, 1.8rem);
-        line-height: 1.6;
-      }
+      /* (No blanket p/li/span/a/label rule. That regressed marquee__text
+         and t-small/t-large sizing — those template classes set their own
+         font-size which we must let win. Default body text already sits
+         at var(--_size, 1.8rem) via the body rule in main.min.css.) */
 
       /* Phosphor icons still get their own font */
       body i.ph, body i.ph-bold, body i.ph-fill, body i.ph-duotone,
