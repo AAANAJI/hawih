@@ -2446,6 +2446,17 @@
           .uc-voice-clients .mxd-testimonials-card__company img {
             max-width: 14rem; height: auto; object-fit: contain;
           }
+          /* With the avatar + author footer removed, the card no longer
+             needs the template's hard-coded 600–700px height (which was
+             there to leave room for the photo and author block). Let it
+             size to content with a comfortable minimum so cards still
+             feel substantial. */
+          .uc-voice-clients .mxd-testimonials-card {
+            height: auto;
+            min-height: 28rem;
+            justify-content: flex-start;
+            gap: 3rem;
+          }
         </style>
         <div class="mxd-container no-padding-container">
           <div class="mxd-block">
@@ -2484,9 +2495,6 @@
                           <div class="mxd-testimonials-card bg-base-tint radius-m">
                             <div class="mxd-testimonials-card__content">
                               <div class="mxd-testimonials-card__media">
-                                <div class="mxd-testimonials-card__photo">
-                                  <img src="/uc-assets/img/avatars/300x300_ava-04.webp" alt="Author photo">
-                                </div>
                                 <div class="mxd-testimonials-card__company">
                                   <span class="company-name"><span class="lang-string" data-ar="أثر المكان" data-en="Athar Al Makan">أثر المكان</span></span>
                                 </div>
@@ -2499,10 +2507,6 @@
                                 </a>
                               </div>
                             </div>
-                            <div class="mxd-testimonials-card__author">
-                              <h5 class="mxd-testimonials-card__name"><span class="lang-string" data-ar="عبدالله السديري" data-en="Abdullah Al-Sudairi">عبدالله السديري</span></h5>
-                              <p class="mxd-testimonials-card__position t-small"><span class="lang-string" data-ar="شريك مؤسّس · أثر المكان" data-en="Co-founder · Athar Al Makan">شريك مؤسّس · أثر المكان</span></p>
-                            </div>
                           </div>
                         </div>
                         <!-- NAB Marketing -->
@@ -2510,9 +2514,6 @@
                           <div class="mxd-testimonials-card bg-base-tint radius-m">
                             <div class="mxd-testimonials-card__content">
                               <div class="mxd-testimonials-card__media">
-                                <div class="mxd-testimonials-card__photo">
-                                  <img src="/uc-assets/img/avatars/300x300_ava-03.webp" alt="Author photo">
-                                </div>
                                 <div class="mxd-testimonials-card__company">
                                   <span class="company-name"><span class="lang-string" data-ar="NAB Marketing" data-en="NAB Marketing">NAB Marketing</span></span>
                                 </div>
@@ -2525,10 +2526,6 @@
                                 </a>
                               </div>
                             </div>
-                            <div class="mxd-testimonials-card__author">
-                              <h5 class="mxd-testimonials-card__name"><span class="lang-string" data-ar="محمد الزهراني" data-en="Mohammed Al-Zahrani">محمد الزهراني</span></h5>
-                              <p class="mxd-testimonials-card__position t-small"><span class="lang-string" data-ar="المدير الإبداعي · NAB Marketing" data-en="Creative Director · NAB Marketing">المدير الإبداعي · NAB Marketing</span></p>
-                            </div>
                           </div>
                         </div>
                         <!-- Karmello -->
@@ -2536,9 +2533,6 @@
                           <div class="mxd-testimonials-card bg-base-tint radius-m">
                             <div class="mxd-testimonials-card__content">
                               <div class="mxd-testimonials-card__media">
-                                <div class="mxd-testimonials-card__photo">
-                                  <img src="/uc-assets/img/avatars/300x300_ava-05.webp" alt="Author photo">
-                                </div>
                                 <div class="mxd-testimonials-card__company">
                                   <img src="/assets/img/clients/karmello.png" alt="Karmello logo">
                                 </div>
@@ -2550,10 +2544,6 @@
                                   <i class="ph ph-arrow-up-right"></i>
                                 </a>
                               </div>
-                            </div>
-                            <div class="mxd-testimonials-card__author">
-                              <h5 class="mxd-testimonials-card__name"><span class="lang-string" data-ar="لمى العتيبي" data-en="Lama Al-Otaibi">لمى العتيبي</span></h5>
-                              <p class="mxd-testimonials-card__position t-small"><span class="lang-string" data-ar="مديرة العلامة التجارية · كارميلو" data-en="Brand Manager · Karmello">مديرة العلامة التجارية · كارميلو</span></p>
                             </div>
                           </div>
                         </div>
