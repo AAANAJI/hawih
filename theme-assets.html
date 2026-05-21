@@ -1102,28 +1102,33 @@
       :root[color-scheme="dark"] .mxd-logo__dark img{display:block!important}
     </style>
   
-    <!-- Force IBM Plex Sans Arabic across the catalog (highest specificity) -->
-    <style id="ta-font-override">
-      /* Override every text-bearing element on the catalog page to use
-         IBM Plex Sans Arabic. This wins over the template's per-element
-         font declarations because we load it last. */
-      html[lang="ar"] body, html[lang="ar"] body *,
-      html[lang="en"] body, html[lang="en"] body *,
-      body, body * {
-        font-family: 'IBM Plex Sans Arabic', 'Inter', 'Segoe UI', 'Tahoma', 'Arial', sans-serif !important;
-      }
-      /* Allow phosphor icons + code/monospace to render with their own font */
-      body i.ph, body i.ph-bold, body i.ph-fill, body i.ph-duotone,
-      body i[class*="ph-"], body code, body kbd, body samp,
-      body .ta-source {
-        font-family: inherit !important;
-      }
+    <style id="ta-overrides">
+      /* The site shell (copied from use-cases.html) already forces
+         IBM Plex Sans Arabic on every element via the [dir="rtl"] *
+         rule. We deliberately DO NOT re-declare font-family on body or
+         body * with !important — that was locking the cascade and the
+         visual heading size felt smaller because per-element template
+         hooks couldn't apply. Catalog inherits the template's natural
+         typography. */
+
+      /* Phosphor icons still get their own font */
       body i.ph, body i.ph-bold, body i.ph-fill, body i.ph-duotone,
       body i[class*="ph-"] {
         font-family: 'Phosphor' !important;
       }
-      body code, body kbd, body samp, body .ta-source {
+      /* Monospace for the code/source labels on the catalog chrome */
+      body .ta-source {
         font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace !important;
+      }
+
+      /* ---- Fix .image-values-1 / .image-values-2 (Culture & Values
+              section) which the template CSS hard-codes to a team/ image
+              path that doesn't ship with this site. Redirect to an
+              avatar that actually exists so we don't 404. */
+      .image-values-1, .image-values-2 {
+        background-image: url(/uc-assets/img/avatars/1400x1400_ava-01.webp) !important;
+        background-size: cover !important;
+        background-position: center !important;
       }
 
       /* ---- Arabic letter-joining safety net ----
@@ -8689,22 +8694,22 @@
     </script>
     <!-- counters -->
     <script>
-      const statsCounter1 = new countUp.CountUp("stats-counter-1", 24, optionsPlus);
-      const statsCounter2 = new countUp.CountUp("stats-counter-2", 19, optionsPlus);
-      const statsCounter3 = new countUp.CountUp("stats-counter-3", 50, optionsPlus);
-      const statsCounter4 = new countUp.CountUp("stats-counter-4", 7, optionsPlus);
-      const statsCounter5 = new countUp.CountUp("stats-counter-5", 24, optionsPlus);
-      const statsCounter6 = new countUp.CountUp("stats-counter-6", 19, optionsPlus);
-      const statsCounter7 = new countUp.CountUp("stats-counter-7", 50, optionsPlus);
-      const statsCounter8 = new countUp.CountUp("stats-counter-8", 7, optionsPlus);
-      statsCounter1.start();
-      statsCounter2.start();
-      statsCounter3.start();
-      statsCounter4.start();
-      statsCounter5.start();
-      statsCounter6.start();
-      statsCounter7.start();
-      statsCounter8.start();
+      // Defensive: only init counters whose target element actually exists
+      [
+        {id:'stats-counter-1', val:24},
+        {id:'stats-counter-2', val:19},
+        {id:'stats-counter-3', val:50},
+        {id:'stats-counter-4', val:7},
+        {id:'stats-counter-5', val:24},
+        {id:'stats-counter-6', val:19},
+        {id:'stats-counter-7', val:50},
+        {id:'stats-counter-8', val:7},
+      ].forEach(function(c){
+        if (document.getElementById(c.id)) {
+          var cu = new countUp.CountUp(c.id, c.val, optionsPlus);
+          cu.start();
+        }
+      });
     </script>
 
     <!-- Menu navigation fix -->
