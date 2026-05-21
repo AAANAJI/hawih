@@ -1289,12 +1289,30 @@
         unicode-bidi: plaintext;
       }
 
-      /* Marquee pill in hero-01 sits at top:0 right:7rem. Push the
-         title-wrap content down a bit so the title doesn't overlap the
-         pill, and stack the title above the marquee on z. */
-      .ta-asset .mxd-hero-01__title-wrap { padding-top: 12rem; }
+      /* Hero-01 marquee pill is designed to render INLINE with the title
+         row — it visually sits at the same y-level as title row 1
+         (the marquee is the animated stand-in for the .title-item-
+         transparent pill that's part of row 1). We previously added
+         padding-top to push the title down, which broke that alignment.
+         Now: keep the template's natural positioning, and align the
+         marquee vertically with the FIRST title row so it visually
+         reads as part of the title composition. */
       .ta-asset .mxd-hero-01 .hero-01-title { position: relative; z-index: 5; }
-      .ta-asset .mxd-hero-01__marquee { z-index: 2; }
+      .ta-asset .mxd-hero-01__marquee {
+        /* Pull the marquee pill DOWN from top:0 so it lines up with the
+           visual center of title row 1 (which sits at the top of title-
+           wrap with the row's font-size+line-height). At 14rem font-size
+           and line-height:1.1, row 1 is about 15.4rem tall; the marquee
+           pill is 8.8rem tall, so center on (15.4-8.8)/2 ≈ 3.3rem from
+           top of the row. */
+        top: 3.3rem !important;
+        z-index: 4 !important;
+      }
+      @media (max-width: 991px) {
+        .ta-asset .mxd-hero-01__marquee {
+          top: 7.6rem !important;
+        }
+      }
 
       /* Tag outlines inside dark cards need light border + light text */
       .ta-asset .bg-base-opp .tag.tag-outline,
