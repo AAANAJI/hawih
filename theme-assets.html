@@ -1111,14 +1111,41 @@
          hooks couldn't apply. Catalog inherits the template's natural
          typography. */
 
-      /* ---- font-size-adjust to normalize Arabic x-height ----
-         IBM Plex Sans Arabic has a smaller x-height than the template's
-         intended Latin font (Funnel Display). At the same px font-size
-         Arabic glyphs render visually shorter, making headings feel
-         small. font-size-adjust tells the browser to scale the rendered
-         font so the x-height is a fixed ratio of the font-size,
-         normalising visual height across fonts. Catalog only — does not
-         affect live pages. */
+      /* ---- Restore the template's intended h1-h6 sizes ----
+         The use-cases.html shell loads Tailwind CDN. Tailwind's preflight
+         resets h1-h6 to { font-size: inherit; font-weight: inherit }, which
+         overrides the template's main.min.css base header rules. Reference
+         pages don't load Tailwind, so they render headings at the template
+         sizes (h1 6rem / h2 4.4rem / h3 3.6rem / h4 3rem / h5 2.6rem /
+         h6 2.2rem). We need to put those back inside catalog sections.
+
+         Plus the Eric Meyer reset in main.min.css sets `font: inherit` on
+         every h1-h6, which also needs the same restoration treatment. */
+      .ta-asset h1 { font: normal 600 6rem/1.1 var(--_font-accent, "Funnel Display", sans-serif) !important; letter-spacing: -.06rem !important; color: var(--t-bright) !important; }
+      .ta-asset h2 { font: normal 600 4.4rem/1.1 var(--_font-accent, "Funnel Display", sans-serif) !important; letter-spacing: -.06rem !important; color: var(--t-bright) !important; }
+      .ta-asset h3 { font: normal 600 3.6rem/1.2 var(--_font-accent, "Funnel Display", sans-serif) !important; color: var(--t-bright) !important; }
+      .ta-asset h4 { font: normal 600 3rem/1.2 var(--_font-accent, "Funnel Display", sans-serif) !important; color: var(--t-bright) !important; }
+      .ta-asset h5 { font: normal 600 2.6rem/1.2 var(--_font-accent, "Funnel Display", sans-serif) !important; color: var(--t-bright) !important; }
+      .ta-asset h6 { font: normal 600 2.2rem/1.2 var(--_font-accent, "Funnel Display", sans-serif) !important; color: var(--t-bright) !important; }
+
+      /* Specific template size variants (h2-large is bigger, hero titles
+         have their own clamp) take precedence by virtue of compound
+         selector specificity. */
+      .ta-asset h2.h2-small { font-size: 5rem !important; }
+      .ta-asset h2.h2-large { font-size: 9rem !important; }
+      .ta-asset h1.h1-small { font-size: 5rem !important; }
+      .ta-asset .inner-headline__title { font-size: clamp(4rem, 6vw, 8rem) !important; line-height: 1.05 !important; }
+      .ta-asset .hero-01-title { font-size: clamp(4rem, 6vw, 12rem) !important; line-height: 1.1 !important; }
+      .ta-asset .hero-08-headline__title h1 { font-size: clamp(3rem, 7vw, 10rem) !important; line-height: 1.05 !important; }
+
+      /* Larger viewports widen the template defaults further */
+      @media (min-width: 768px) {
+        .ta-asset h2.h2-small { font-size: 7rem !important; }
+        .ta-asset h2.h2-large { font-size: 12rem !important; }
+      }
+
+      /* IBM Plex Sans Arabic has a smaller x-height than Funnel Display;
+         font-size-adjust normalises visual glyph height across fonts. */
       body { font-size-adjust: 0.55; font-size-adjust: ex-height 0.55; }
       .ta-asset h1, .ta-asset h2, .ta-asset h3,
       .ta-asset h4, .ta-asset h5, .ta-asset h6,
@@ -1127,6 +1154,16 @@
       .ta-asset .mxd-section-title__title {
         font-size-adjust: 0.58;
         font-size-adjust: ex-height 0.58;
+      }
+
+      /* Same Tailwind-reset story for paragraphs and small text — Tailwind
+         doesn't reset these as aggressively, but the Eric-Meyer reset in
+         main.min.css sets `font: inherit` on them. Restore a sensible
+         body size so descriptive copy doesn't collapse to 16px. */
+      .ta-asset p, .ta-asset li, .ta-asset a, .ta-asset span,
+      .ta-asset label {
+        font-size: var(--_size, 1.8rem);
+        line-height: 1.6;
       }
 
       /* Phosphor icons still get their own font */
