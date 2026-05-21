@@ -1126,43 +1126,47 @@
         font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace !important;
       }
 
-      /* ---- Catalog rendering safety net ----
-         Every section is presented in its final, fully-revealed state. The
-         strip pass in build_theme_assets.py removes the template's
-         reveal-type / loading__fade / anim-* / parallax-* / hover-reveal /
-         slide-* classes, but a few sections compose those classes onto
-         elements we can't strip (e.g., into JS at runtime). The rules below
-         force every descendant of .ta-asset to be visible and at rest. */
-      .ta-asset, .ta-asset * {
+      /* ---- Targeted reveal-state neutralisation ----
+         The strip pass removes scroll-reveal classes (reveal-*, anim-uni-*,
+         anim-zoom-*, animate-card-*, parallax-img*, loading__*). The rules
+         here are a safety-net in case any survive nested in template
+         markup we can't reach with class stripping. Crucially, these
+         rules DO NOT touch hover-reveal, marquee, slide-*, or btn-anim —
+         those drive working interactions and need their initial state. */
+      .ta-asset .reveal-type, .ta-asset .reveal-text,
+      .ta-asset [class*="anim-uni-"], .ta-asset [class*="anim-zoom-"],
+      .ta-asset [class*="animate-card-"],
+      .ta-asset .loading-wrap, .ta-asset .loading__fade,
+      .ta-asset .loading__item,
+      .ta-asset .parallax-img, .ta-asset .parallax-img-small,
+      .ta-asset .parallax-img-medium {
         opacity: 1 !important;
         visibility: visible !important;
         transform: none !important;
         clip-path: none !important;
         -webkit-clip-path: none !important;
-        filter: none !important;
       }
+
       /* ---- Arabic letter-joining safety net ----
-         letter-spacing breaks Arabic ligatures. Force normal spacing on
-         every text-bearing element inside catalog sections. */
-      .ta-asset, .ta-asset * {
+         letter-spacing breaks Arabic ligatures. Apply normal spacing to
+         text-bearing elements inside catalog sections, but DO NOT use
+         a universal selector — that would override per-element JS-set
+         styles on marquees, sliders, etc. */
+      .ta-asset h1, .ta-asset h2, .ta-asset h3, .ta-asset h4,
+      .ta-asset h5, .ta-asset h6, .ta-asset p, .ta-asset li,
+      .ta-asset a, .ta-asset button, .ta-asset label,
+      .ta-asset .btn-caption, .ta-asset .btn-caption *,
+      .ta-asset .tag, .ta-asset .tag *,
+      .ta-asset .mxd-point-subtitle, .ta-asset .mxd-point-subtitle *,
+      .ta-asset .marquee__text, .ta-asset .marquee__text *,
+      .ta-asset .lang-string {
         letter-spacing: normal !important;
         word-spacing: normal !important;
       }
       .ta-asset .btn-caption, .ta-asset .btn-caption *,
       .ta-asset .tag, .ta-asset .tag *,
       .ta-asset .mxd-point-subtitle, .ta-asset .mxd-point-subtitle * {
-        letter-spacing: normal !important;
         text-transform: none !important;
-      }
-      /* Re-enable text-transform on EN-only elements where it doesn't
-         affect Arabic (since EN is uppercase in many design systems) —
-         we keep it neutral for safety. */
-
-      /* ---- Avoid huge empty sections from preloader/loading containers ---- */
-      .ta-asset .loading-wrap,
-      .ta-asset .loading__fade,
-      .ta-asset .loading__item {
-        opacity: 1 !important;
       }
 
       /* ---- "opposite" color classes assume a dark parent bg. When the
@@ -1589,7 +1593,7 @@
 <div class="container-fluid p-0">
 <div class="row g-0">
 <div class="col-12 col-xl-6 mxd-grid-item no-margin">
-<a class="btn btn-default btn-accent" href="index-main.html">
+<a class="btn btn-anim btn-default btn-accent slide-right-up" href="index-main.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -1685,7 +1689,7 @@
 <div class="mxd-block__manifest">
 <p class="mxd-manifest mxd-manifest-l"><span class="lang-string" data-ar="فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي." data-en="A medium-length sample paragraph illustrating how content sits inside this element in a clean, professional tone.">فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي.</span></p>
 <div class="mxd-manifest__controls">
-<a class="btn btn-default btn-outline" href="about-me.html">
+<a class="btn btn-anim btn-default btn-outline slide-right-up" href="about-me.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -1780,7 +1784,7 @@
 </div>
 <div class="col-12 col-xl-3 mxd-grid-item no-margin">
 <div class="mxd-section-title__hrcontrols">
-<a class="btn btn-default btn-outline" href="contact.html">
+<a class="btn btn-anim btn-default btn-outline slide-right-up" href="contact.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -1955,7 +1959,7 @@
 <div class="col-12 col-xl-3 mxd-grid-item no-margin"></div>
 <div class="col-12 col-xl-3 mxd-grid-item no-margin">
 <div class="mxd-section-title__hrcontrols pre-title">
-<a class="btn btn-default btn-outline" href="blog-standard.html">
+<a class="btn btn-anim btn-default btn-outline slide-right-up" href="blog-standard.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -1968,12 +1972,12 @@
 <!-- Block - Section Title End -->
 <!-- Block - Approach and Philosophy List Start -->
 <div class="mxd-block">
-<div class="mxd-awards-list">
+<div class="mxd-awards-list hover-reveal">
 <!-- item -->
-<a class="mxd-awards-list__item" href="https://medium.com/" target="_blank">
+<a class="mxd-awards-list__item hover-reveal__item" href="https://medium.com/" target="_blank">
 <div class="mxd-awards-list__border"></div>
-<div class="overflow-visible">
-<img alt="Project Preview" src="/uc-assets/img/works/preview/600x600_prv-01.webp"/>
+<div class="hover-reveal__content overflow-visible hover-reveal-260x260">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/works/preview/600x600_prv-01.webp"/>
 </div>
 <div class="mxd-awards-list__inner">
 <div class="container-fluid px-0">
@@ -2009,10 +2013,10 @@
 <div class="mxd-awards-list__border"></div>
 </a>
 <!-- item -->
-<a class="mxd-awards-list__item" href="https://www.awwwards.com/" target="_blank">
+<a class="mxd-awards-list__item hover-reveal__item" href="https://www.awwwards.com/" target="_blank">
 <div class="mxd-awards-list__border"></div>
-<div class="overflow-visible">
-<img alt="Project Preview" src="/uc-assets/img/works/preview/600x600_prv-02.webp"/>
+<div class="hover-reveal__content overflow-visible hover-reveal-260x260">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/works/preview/600x600_prv-02.webp"/>
 </div>
 <div class="mxd-awards-list__inner">
 <div class="container-fluid px-0">
@@ -2048,10 +2052,10 @@
 <div class="mxd-awards-list__border"></div>
 </a>
 <!-- item -->
-<a class="mxd-awards-list__item" href="https://www.behance.net/" target="_blank">
+<a class="mxd-awards-list__item hover-reveal__item" href="https://www.behance.net/" target="_blank">
 <div class="mxd-awards-list__border"></div>
-<div class="overflow-visible">
-<img alt="Project Preview" src="/uc-assets/img/works/preview/600x600_prv-03.webp"/>
+<div class="hover-reveal__content overflow-visible hover-reveal-260x260">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/works/preview/600x600_prv-03.webp"/>
 </div>
 <div class="mxd-awards-list__inner">
 <div class="container-fluid px-0">
@@ -2087,10 +2091,10 @@
 <div class="mxd-awards-list__border"></div>
 </a>
 <!-- item -->
-<a class="mxd-awards-list__item" href="https://medium.com/" target="_blank">
+<a class="mxd-awards-list__item hover-reveal__item" href="https://medium.com/" target="_blank">
 <div class="mxd-awards-list__border"></div>
-<div class="overflow-visible">
-<img alt="Project Preview" src="/uc-assets/img/works/preview/600x600_prv-04.webp"/>
+<div class="hover-reveal__content overflow-visible hover-reveal-260x260">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/works/preview/600x600_prv-04.webp"/>
 </div>
 <div class="mxd-awards-list__inner">
 <div class="container-fluid px-0">
@@ -2758,7 +2762,7 @@
 <div class="container-fluid p-0">
 <div class="row g-0">
 <div class="col-6 mxd-article-navigation__navitem left">
-<a class="btn btn-line-small btn-muted" href="#0">
+<a class="btn btn-line-small btn-muted anim-no-delay slide-left" href="#0">
 <i class="ph ph-arrow-left"></i>
 <span class="btn-caption"><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span></span>
 </a>
@@ -2767,7 +2771,7 @@
 </a>
 </div>
 <div class="col-6 mxd-article-navigation__navitem right">
-<a class="btn btn-line-small btn-muted" href="#0">
+<a class="btn btn-line-small btn-muted anim-no-delay slide-right" href="#0">
 <span class="btn-caption"><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span></span>
 <i class="ph ph-arrow-right"></i>
 </a>
@@ -2797,7 +2801,7 @@
 </div>
 <p class="t-small"><span class="lang-string" data-ar="فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي." data-en="A longer sample paragraph used as filler to demonstrate how expanded copy renders inside this element, including extended descriptions and supporting text once real content is provided.">فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي.</span></p>
 <div class="mxd-comment__reply">
-<a class="btn btn-default btn-small btn-outline" href="#0">
+<a class="btn btn-anim btn-default btn-small btn-outline slide-right-up" href="#0">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph ph-arrow-up-right"></i>
 </a>
@@ -2817,7 +2821,7 @@
 </div>
 <p class="t-small"><span class="lang-string" data-ar="فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي." data-en="A longer sample paragraph used as filler to demonstrate how expanded copy renders inside this element, including extended descriptions and supporting text once real content is provided.">فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي.</span></p>
 <div class="mxd-comment__reply">
-<a class="btn btn-default btn-small btn-outline" href="#0">
+<a class="btn btn-anim btn-default btn-small btn-outline slide-right-up" href="#0">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph ph-arrow-up-right"></i>
 </a>
@@ -2839,7 +2843,7 @@
 </div>
 <p class="t-small"><span class="lang-string" data-ar="فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي." data-en="A longer sample paragraph used as filler to demonstrate how expanded copy renders inside this element, including extended descriptions and supporting text once real content is provided.">فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي.</span></p>
 <div class="mxd-comment__reply">
-<a class="btn btn-default btn-small btn-outline" href="#0">
+<a class="btn btn-anim btn-default btn-small btn-outline slide-right-up" href="#0">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph ph-arrow-up-right"></i>
 </a>
@@ -2867,7 +2871,7 @@
 <textarea name="Message" placeholder="Message*" required=""></textarea>
 </div>
 <div class="col-12 mxd-grid-item">
-<button class="btn btn-default btn-accent" type="submit">
+<button class="btn btn-anim btn-default btn-accent slide-right-up" type="submit">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </button>
@@ -2914,7 +2918,7 @@
 </div>
 <div class="col-12 col-xl-3 mxd-grid-item no-margin">
 <div class="mxd-section-title__hrcontrols">
-<a class="btn btn-default btn-outline" href="blog-standard.html">
+<a class="btn btn-anim btn-default btn-outline slide-right-up" href="blog-standard.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -3025,7 +3029,7 @@
 <span class="mxd-promo__caption"><span class="lang-string" data-ar="وصف نموذجي قصير لهذا العنصر." data-en="A short sample description for this element.">وصف نموذجي قصير لهذا العنصر.</span></span>
 </p>
 <div class="mxd-promo__controls">
-<a class="btn btn-default btn-large btn-additional" href="contact.html">
+<a class="btn btn-anim btn-default btn-large btn-additional slide-right-up" href="contact.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -3074,7 +3078,7 @@
 </div>
 <div class="col-12 col-xl-3 mxd-grid-item no-margin">
 <div class="mxd-section-title__hrcontrols">
-<a class="btn btn-default btn-outline opposite" href="#testimonials">
+<a class="btn btn-anim btn-default btn-outline opposite slide-right-down" href="#testimonials">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph-bold ph-arrow-down-right"></i>
 </a>
@@ -3463,7 +3467,7 @@
 <textarea name="Message" placeholder="A few words about your project*" required=""></textarea>
 </div>
 <div class="col-12 mxd-grid-item">
-<button class="btn btn-default btn-large btn-opposite" type="submit">
+<button class="btn btn-anim btn-default btn-large btn-opposite slide-right-up" type="submit">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </button>
@@ -3562,7 +3566,7 @@
 <p class="mxd-counter__descr t-140 t-bright"><span class="lang-string" data-ar="فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي." data-en="A medium-length sample paragraph illustrating how content sits inside this element in a clean, professional tone.">فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي.</span></p>
 </div>
 <div class="mxd-stats-cards__btngroup">
-<a class="btn btn-default btn-outline" href="contact.html">
+<a class="btn btn-anim btn-default btn-outline slide-right-up" href="contact.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -3580,7 +3584,7 @@
 <p class="mxd-counter__descr t-140 t-bright"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span><br/><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></p>
 </div>
 <div class="mxd-stats-cards__btngroup">
-<a class="btn btn-default btn-outline" href="works-simple.html">
+<a class="btn btn-anim btn-default btn-outline slide-right-up" href="works-simple.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -3633,7 +3637,7 @@
 </div>
 <div class="col-12">
 <div class="mxd-section-title__controls">
-<a class="btn btn-default btn-outline opposite" href="team.html">
+<a class="btn btn-anim btn-default btn-outline opposite slide-right-up" href="team.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -3669,7 +3673,7 @@
 </div>
 <div class="col-12">
 <div class="mxd-section-title__controls">
-<a class="btn btn-default btn-outline opposite" href="team.html">
+<a class="btn btn-anim btn-default btn-outline opposite slide-right-up" href="team.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -3880,7 +3884,7 @@
 <div class="mxd-container__circle circle-fit">
 <a class="btn-rotating btn-rotating-180 btn-rotating-blur-outline ver-03" href="#0">
 <!-- SVG rotating text -->
-<svg class="btn-rotating__text" data-value="360" id="scrollDown" style="enable-background:new 0 0 160 160;" version="1.1" viewbox="0 0 160 160" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px">
+<svg class="btn-rotating__text animate-rotation" data-value="360" id="scrollDown" style="enable-background:new 0 0 160 160;" version="1.1" viewbox="0 0 160 160" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px">
 <defs>
 <path d="M149.7,80c0,38.5-31.2,69.7-69.7,69.7S10.3,118.5,10.3,80S41.5,10.3,80,10.3S149.7,41.5,149.7,80z" id="textPath"></path>
 </defs>
@@ -4050,7 +4054,7 @@
 </div>
 <div class="col-12 col-xl-3 mxd-grid-item no-margin">
 <div class="mxd-section-title__hrcontrols">
-<a class="btn btn-default btn-outline" href="blog-standard.html">
+<a class="btn btn-anim btn-default btn-outline slide-right-up" href="blog-standard.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -4165,7 +4169,7 @@
 </div>
 <div class="col-12 col-xl-3 mxd-grid-item no-margin">
 <div class="mxd-section-title__hrcontrols">
-<a class="btn btn-default btn-outline" href="services.html">
+<a class="btn btn-anim btn-default btn-outline slide-right-up" href="services.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -4183,10 +4187,10 @@
 <div class="col-12 mxd-grid-item no-margin">
 <div class="mxd-cpb-list">
 <!-- item -->
-<div class="mxd-cpb-list__item">
+<div class="mxd-cpb-list__item hover-reveal__item">
 <div class="mxd-cpb-list__divider"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/illustrations/600x730_cpb-04.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-04.webp"/>
 </div>
 <div class="mxd-cpb-list__content">
 <h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h6>
@@ -4200,10 +4204,10 @@
 <div class="mxd-cpb-list__divider"></div>
 </div>
 <!-- item -->
-<div class="mxd-cpb-list__item">
+<div class="mxd-cpb-list__item hover-reveal__item">
 <div class="mxd-cpb-list__divider"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/illustrations/600x730_cpb-01.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-01.webp"/>
 </div>
 <div class="mxd-cpb-list__content">
 <h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
@@ -4217,10 +4221,10 @@
 <div class="mxd-cpb-list__divider"></div>
 </div>
 <!-- item -->
-<div class="mxd-cpb-list__item">
+<div class="mxd-cpb-list__item hover-reveal__item">
 <div class="mxd-cpb-list__divider"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/illustrations/600x730_cpb-02.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-02.webp"/>
 </div>
 <div class="mxd-cpb-list__content">
 <h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h6>
@@ -4234,10 +4238,10 @@
 <div class="mxd-cpb-list__divider"></div>
 </div>
 <!-- item -->
-<div class="mxd-cpb-list__item">
+<div class="mxd-cpb-list__item hover-reveal__item">
 <div class="mxd-cpb-list__divider"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/illustrations/600x730_cpb-03.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-03.webp"/>
 </div>
 <div class="mxd-cpb-list__content">
 <h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h6>
@@ -4251,10 +4255,10 @@
 <div class="mxd-cpb-list__divider"></div>
 </div>
 <!-- item -->
-<div class="mxd-cpb-list__item">
+<div class="mxd-cpb-list__item hover-reveal__item">
 <div class="mxd-cpb-list__divider"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/illustrations/600x730_cpb-05.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-05.webp"/>
 </div>
 <div class="mxd-cpb-list__content">
 <h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h6>
@@ -4268,10 +4272,10 @@
 <div class="mxd-cpb-list__divider"></div>
 </div>
 <!-- item -->
-<div class="mxd-cpb-list__item">
+<div class="mxd-cpb-list__item hover-reveal__item">
 <div class="mxd-cpb-list__divider"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/illustrations/600x730_cpb-06.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-06.webp"/>
 </div>
 <div class="mxd-cpb-list__content">
 <h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
@@ -4324,7 +4328,7 @@
 </div>
 <div class="col-12 col-xl-3 mxd-grid-item no-margin">
 <div class="mxd-section-title__hrcontrols">
-<a class="btn btn-default btn-outline" href="services.html">
+<a class="btn btn-anim btn-default btn-outline slide-right-up" href="services.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -4342,10 +4346,10 @@
 <div class="col-12 mxd-grid-item no-margin">
 <div class="mxd-cpb-list">
 <!-- item -->
-<div class="mxd-cpb-list__item">
+<div class="mxd-cpb-list__item hover-reveal__item">
 <div class="mxd-cpb-list__divider"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/illustrations/600x730_cpb-01.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-01.webp"/>
 </div>
 <div class="mxd-cpb-list__content">
 <h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
@@ -4359,10 +4363,10 @@
 <div class="mxd-cpb-list__divider"></div>
 </div>
 <!-- item -->
-<div class="mxd-cpb-list__item">
+<div class="mxd-cpb-list__item hover-reveal__item">
 <div class="mxd-cpb-list__divider"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/illustrations/600x730_cpb-03.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-03.webp"/>
 </div>
 <div class="mxd-cpb-list__content">
 <h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
@@ -4376,10 +4380,10 @@
 <div class="mxd-cpb-list__divider"></div>
 </div>
 <!-- item -->
-<div class="mxd-cpb-list__item">
+<div class="mxd-cpb-list__item hover-reveal__item">
 <div class="mxd-cpb-list__divider"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/illustrations/600x730_cpb-02.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-02.webp"/>
 </div>
 <div class="mxd-cpb-list__content">
 <h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
@@ -4393,10 +4397,10 @@
 <div class="mxd-cpb-list__divider"></div>
 </div>
 <!-- item -->
-<div class="mxd-cpb-list__item">
+<div class="mxd-cpb-list__item hover-reveal__item">
 <div class="mxd-cpb-list__divider"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/illustrations/600x730_cpb-04.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-04.webp"/>
 </div>
 <div class="mxd-cpb-list__content">
 <h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h6>
@@ -4410,10 +4414,10 @@
 <div class="mxd-cpb-list__divider"></div>
 </div>
 <!-- item -->
-<div class="mxd-cpb-list__item">
+<div class="mxd-cpb-list__item hover-reveal__item">
 <div class="mxd-cpb-list__divider"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/illustrations/600x730_cpb-05.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-05.webp"/>
 </div>
 <div class="mxd-cpb-list__content">
 <h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
@@ -4427,10 +4431,10 @@
 <div class="mxd-cpb-list__divider"></div>
 </div>
 <!-- item -->
-<div class="mxd-cpb-list__item">
+<div class="mxd-cpb-list__item hover-reveal__item">
 <div class="mxd-cpb-list__divider"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/illustrations/600x730_cpb-06.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-06.webp"/>
 </div>
 <div class="mxd-cpb-list__content">
 <h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
@@ -4444,10 +4448,10 @@
 <div class="mxd-cpb-list__divider"></div>
 </div>
 <!-- item -->
-<div class="mxd-cpb-list__item">
+<div class="mxd-cpb-list__item hover-reveal__item">
 <div class="mxd-cpb-list__divider"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/illustrations/600x730_cpb-07.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-07.webp"/>
 </div>
 <div class="mxd-cpb-list__content">
 <h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
@@ -4500,7 +4504,7 @@
 </div>
 <div class="col-12 col-xl-3 mxd-grid-item no-margin">
 <div class="mxd-section-title__hrcontrols">
-<a class="btn btn-default btn-outline" href="works-masonry.html">
+<a class="btn btn-anim btn-default btn-outline slide-right-up" href="works-masonry.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -4518,10 +4522,10 @@
 <div class="col-12 mxd-grid-item no-margin">
 <div class="mxd-cpb-list">
 <!-- item -->
-<div class="mxd-cpb-list__item">
+<div class="mxd-cpb-list__item hover-reveal__item">
 <div class="mxd-cpb-list__divider"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/illustrations/600x730_cpb-04.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-04.webp"/>
 </div>
 <div class="mxd-cpb-list__content">
 <h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h6>
@@ -4535,10 +4539,10 @@
 <div class="mxd-cpb-list__divider"></div>
 </div>
 <!-- item -->
-<div class="mxd-cpb-list__item">
+<div class="mxd-cpb-list__item hover-reveal__item">
 <div class="mxd-cpb-list__divider"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/illustrations/600x730_cpb-01.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-01.webp"/>
 </div>
 <div class="mxd-cpb-list__content">
 <h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
@@ -4552,10 +4556,10 @@
 <div class="mxd-cpb-list__divider"></div>
 </div>
 <!-- item -->
-<div class="mxd-cpb-list__item">
+<div class="mxd-cpb-list__item hover-reveal__item">
 <div class="mxd-cpb-list__divider"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/illustrations/600x730_cpb-03.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-03.webp"/>
 </div>
 <div class="mxd-cpb-list__content">
 <h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
@@ -4569,10 +4573,10 @@
 <div class="mxd-cpb-list__divider"></div>
 </div>
 <!-- item -->
-<div class="mxd-cpb-list__item">
+<div class="mxd-cpb-list__item hover-reveal__item">
 <div class="mxd-cpb-list__divider"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/illustrations/600x730_cpb-02.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-02.webp"/>
 </div>
 <div class="mxd-cpb-list__content">
 <h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
@@ -4586,10 +4590,10 @@
 <div class="mxd-cpb-list__divider"></div>
 </div>
 <!-- item -->
-<div class="mxd-cpb-list__item">
+<div class="mxd-cpb-list__item hover-reveal__item">
 <div class="mxd-cpb-list__divider"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/illustrations/600x730_cpb-05.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-05.webp"/>
 </div>
 <div class="mxd-cpb-list__content">
 <h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
@@ -4755,7 +4759,7 @@
 <p class="t-small t-muted t-140"><span class="lang-string" data-ar="وصف نموذجي قصير لهذا العنصر." data-en="A short sample description for this element.">وصف نموذجي قصير لهذا العنصر.</span></p>
 </div>
 <div class="pricing-data__btnholder">
-<a class="btn btn-default btn-opposite btn-fullwidth" href="contact.html">
+<a class="btn btn-anim btn-default btn-opposite btn-fullwidth slide-right-up" href="contact.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -4815,7 +4819,7 @@
 <p class="t-small t-muted t-140"><span class="lang-string" data-ar="وصف نموذجي قصير لهذا العنصر." data-en="A short sample description for this element.">وصف نموذجي قصير لهذا العنصر.</span></p>
 </div>
 <div class="pricing-data__btnholder">
-<a class="btn btn-default btn-opposite btn-fullwidth" href="contact.html">
+<a class="btn btn-anim btn-default btn-opposite btn-fullwidth slide-right-up" href="contact.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -4863,7 +4867,7 @@
 </div>
 <div class="pricing-data__info">
 <div class="pricing-data__btnholder">
-<a class="btn btn-default btn-opposite btn-fullwidth" href="contact.html">
+<a class="btn btn-anim btn-default btn-opposite btn-fullwidth slide-right-up" href="contact.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -5049,7 +5053,7 @@
 <div class="container-fluid p-0">
 <div class="row g-0">
 <div class="col-6 mxd-project__navitem left mxd-grid-item no-margin">
-<a class="btn btn-line-small btn-muted" href="project-details.html">
+<a class="btn btn-anim btn-line-small btn-muted anim-no-delay slide-left" href="project-details.html">
 <i class="ph ph-arrow-left"></i>
 <span class="btn-caption"><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span></span>
 </a>
@@ -5058,7 +5062,7 @@
 </a>
 </div>
 <div class="col-6 mxd-project__navitem right mxd-grid-item no-margin">
-<a class="btn btn-line-small btn-muted" href="project-details.html">
+<a class="btn btn-anim btn-line-small btn-muted anim-no-delay slide-right" href="project-details.html">
 <span class="btn-caption"><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span></span>
 <i class="ph ph-arrow-right"></i>
 </a>
@@ -5099,7 +5103,7 @@
 <div class="col-12 col-xl-2 mxd-grid-item no-margin"></div>
 <div class="col-12 col-xl-4 mxd-grid-item no-margin">
 <div class="mxd-section-title__hrcontrols pre-title">
-<a class="btn btn-default btn-outline" href="#testimonials">
+<a class="btn btn-anim btn-default btn-outline slide-right-down" href="#testimonials">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></span>
 <i class="ph-bold ph-arrow-down-right"></i>
 </a>
@@ -5112,12 +5116,12 @@
 <!-- Block - Section Title End -->
 <!-- Block - Projects List #01 Start -->
 <div class="mxd-block">
-<div class="mxd-projects-list">
+<div class="mxd-projects-list hover-reveal">
 <!-- item -->
-<a class="mxd-projects-list__item" href="project-details.html">
+<a class="mxd-projects-list__item hover-reveal__item" href="project-details.html">
 <div class="mxd-projects-list__border"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/works/preview/600x730_prv-01.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/works/preview/600x730_prv-01.webp"/>
 </div>
 <div class="mxd-projects-list__inner">
 <div class="container-fluid px-0">
@@ -5156,10 +5160,10 @@
 <div class="mxd-projects-list__border"></div>
 </a>
 <!-- item -->
-<a class="mxd-projects-list__item" href="project-details.html">
+<a class="mxd-projects-list__item hover-reveal__item" href="project-details.html">
 <div class="mxd-projects-list__border"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/works/preview/600x730_prv-02.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/works/preview/600x730_prv-02.webp"/>
 </div>
 <div class="mxd-projects-list__inner">
 <div class="container-fluid px-0">
@@ -5198,10 +5202,10 @@
 <div class="mxd-projects-list__border"></div>
 </a>
 <!-- item -->
-<a class="mxd-projects-list__item" href="project-details.html">
+<a class="mxd-projects-list__item hover-reveal__item" href="project-details.html">
 <div class="mxd-projects-list__border"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/works/preview/600x730_prv-03.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/works/preview/600x730_prv-03.webp"/>
 </div>
 <div class="mxd-projects-list__inner">
 <div class="container-fluid px-0">
@@ -5240,10 +5244,10 @@
 <div class="mxd-projects-list__border"></div>
 </a>
 <!-- item -->
-<a class="mxd-projects-list__item" href="project-details.html">
+<a class="mxd-projects-list__item hover-reveal__item" href="project-details.html">
 <div class="mxd-projects-list__border"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/works/preview/600x730_prv-04.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/works/preview/600x730_prv-04.webp"/>
 </div>
 <div class="mxd-projects-list__inner">
 <div class="container-fluid px-0">
@@ -5282,10 +5286,10 @@
 <div class="mxd-projects-list__border"></div>
 </a>
 <!-- item -->
-<a class="mxd-projects-list__item" href="project-details.html">
+<a class="mxd-projects-list__item hover-reveal__item" href="project-details.html">
 <div class="mxd-projects-list__border"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/works/preview/600x730_prv-05.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/works/preview/600x730_prv-05.webp"/>
 </div>
 <div class="mxd-projects-list__inner">
 <div class="container-fluid px-0">
@@ -5324,10 +5328,10 @@
 <div class="mxd-projects-list__border"></div>
 </a>
 <!-- item -->
-<a class="mxd-projects-list__item" href="project-details.html">
+<a class="mxd-projects-list__item hover-reveal__item" href="project-details.html">
 <div class="mxd-projects-list__border"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/works/preview/600x730_prv-06.webp"/>
+<div class="hover-reveal__content hover-reveal-280x340">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/works/preview/600x730_prv-06.webp"/>
 </div>
 <div class="mxd-projects-list__inner">
 <div class="container-fluid px-0">
@@ -5385,12 +5389,12 @@
 <div class="mxd-container grid-container">
 <!-- Block - Projects List #02 Start -->
 <div class="mxd-block">
-<div class="mxd-projects-list">
+<div class="mxd-projects-list hover-reveal">
 <!-- item -->
-<a class="mxd-projects-list__item" href="project-details.html">
+<a class="mxd-projects-list__item hover-reveal__item" href="project-details.html">
 <div class="mxd-projects-list__border"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/works/preview/600x730_prv-06.webp"/>
+<div class="hover-reveal__content hover-reveal-360x440">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/works/preview/600x730_prv-06.webp"/>
 </div>
 <div class="mxd-projects-list__inner-v2">
 <div class="container-fluid px-0">
@@ -5440,10 +5444,10 @@
 <div class="mxd-projects-list__border"></div>
 </a>
 <!-- item -->
-<a class="mxd-projects-list__item" href="project-details.html">
+<a class="mxd-projects-list__item hover-reveal__item" href="project-details.html">
 <div class="mxd-projects-list__border"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/works/preview/600x730_prv-07.webp"/>
+<div class="hover-reveal__content hover-reveal-360x440">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/works/preview/600x730_prv-07.webp"/>
 </div>
 <div class="mxd-projects-list__inner-v2">
 <div class="container-fluid px-0">
@@ -5493,10 +5497,10 @@
 <div class="mxd-projects-list__border"></div>
 </a>
 <!-- item -->
-<a class="mxd-projects-list__item" href="project-details.html">
+<a class="mxd-projects-list__item hover-reveal__item" href="project-details.html">
 <div class="mxd-projects-list__border"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/works/preview/600x730_prv-05.webp"/>
+<div class="hover-reveal__content hover-reveal-360x440">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/works/preview/600x730_prv-05.webp"/>
 </div>
 <div class="mxd-projects-list__inner-v2">
 <div class="container-fluid px-0">
@@ -5546,10 +5550,10 @@
 <div class="mxd-projects-list__border"></div>
 </a>
 <!-- item -->
-<a class="mxd-projects-list__item" href="project-details.html">
+<a class="mxd-projects-list__item hover-reveal__item" href="project-details.html">
 <div class="mxd-projects-list__border"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/works/preview/600x730_prv-02.webp"/>
+<div class="hover-reveal__content hover-reveal-360x440">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/works/preview/600x730_prv-02.webp"/>
 </div>
 <div class="mxd-projects-list__inner-v2">
 <div class="container-fluid px-0">
@@ -5599,10 +5603,10 @@
 <div class="mxd-projects-list__border"></div>
 </a>
 <!-- item -->
-<a class="mxd-projects-list__item" href="project-details.html">
+<a class="mxd-projects-list__item hover-reveal__item" href="project-details.html">
 <div class="mxd-projects-list__border"></div>
-<div>
-<img alt="Project Preview" src="/uc-assets/img/works/preview/600x730_prv-03.webp"/>
+<div class="hover-reveal__content hover-reveal-360x440">
+<img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/works/preview/600x730_prv-03.webp"/>
 </div>
 <div class="mxd-projects-list__inner-v2">
 <div class="container-fluid px-0">
@@ -5692,7 +5696,7 @@
 </div>
 <div class="col-12">
 <div class="mxd-section-title__controls">
-<a class="btn btn-default btn-outline" href="works-simple.html">
+<a class="btn btn-anim btn-default btn-outline slide-right-up" href="works-simple.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph ph-arrow-up-right"></i>
 </a>
@@ -5799,10 +5803,10 @@
 </div>
 <!-- Portfolio Gallery End -->
 <!-- Portfolio Link Start -->
-<div class="mxd-projects-masonry__btngroup">
+<div class="mxd-projects-masonry__btngroup animate-in-up">
 <a class="btn-rotating btn-rotating-180 ver-02" href="contact.html">
 <!-- SVG rotating text -->
-<svg class="btn-rotating__text" data-value="360" id="scrollDown" style="enable-background:new 0 0 160 160;" version="1.1" viewbox="0 0 160 160" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px">
+<svg class="btn-rotating__text animate-rotation" data-value="360" id="scrollDown" style="enable-background:new 0 0 160 160;" version="1.1" viewbox="0 0 160 160" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px">
 <defs>
 <path d="M149.7,80c0,38.5-31.2,69.7-69.7,69.7S10.3,118.5,10.3,80S41.5,10.3,80,10.3S149.7,41.5,149.7,80z" id="textPath"></path>
 </defs>
@@ -5964,7 +5968,7 @@
 <div class="mxd-projects-masonry__btngroup">
 <a class="btn-rotating btn-rotating-180 ver-02" href="contact.html">
 <!-- SVG rotating text -->
-<svg class="btn-rotating__text" data-value="360" id="scrollDown" style="enable-background:new 0 0 160 160;" version="1.1" viewbox="0 0 160 160" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px">
+<svg class="btn-rotating__text animate-rotation" data-value="360" id="scrollDown" style="enable-background:new 0 0 160 160;" version="1.1" viewbox="0 0 160 160" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px">
 <defs>
 <path d="M149.7,80c0,38.5-31.2,69.7-69.7,69.7S10.3,118.5,10.3,80S41.5,10.3,80,10.3S149.7,41.5,149.7,80z" id="textPath"></path>
 </defs>
@@ -6023,7 +6027,7 @@
 </div>
 <div class="col-12 mxd-grid-item no-margin">
 <div class="mxd-section-title__controls">
-<a class="btn btn-default btn-outline" href="works-simple.html">
+<a class="btn btn-anim btn-default btn-outline slide-right-up" href="works-simple.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -6161,7 +6165,7 @@
                             </div> -->
 <div class="col-12 mxd-grid-item no-margin">
 <div class="mxd-section-title__controls">
-<a class="btn btn-default btn-outline" href="works-simple.html">
+<a class="btn btn-anim btn-default btn-outline slide-right-up" href="works-simple.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -6349,7 +6353,7 @@
 <div class="col-12 col-xl-3 mxd-grid-item no-margin"></div>
 <div class="col-12 col-xl-3 mxd-grid-item no-margin">
 <div class="mxd-section-title__hrcontrols pre-title">
-<a class="btn btn-default btn-outline" href="services.html">
+<a class="btn btn-anim btn-default btn-outline slide-right-up" href="services.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -6362,12 +6366,12 @@
 <!-- Block - Section Title End -->
 <!-- Block - Approach and Philosophy List Start -->
 <div class="mxd-block">
-<div class="mxd-awards-list">
+<div class="mxd-awards-list hover-reveal">
 <!-- item -->
-<div class="mxd-awards-list__item">
+<div class="mxd-awards-list__item hover-reveal__item">
 <div class="mxd-awards-list__border"></div>
-<div class="overflow-visible">
-<img alt="Healthcare Technology" src="/uc-assets/img/works/preview/600x600_prv-01.webp"/>
+<div class="hover-reveal__content overflow-visible hover-reveal-260x260">
+<img alt="Healthcare Technology" class="hover-reveal__image" src="/uc-assets/img/works/preview/600x600_prv-01.webp"/>
 </div>
 <div class="mxd-awards-list__inner">
 <div class="container-fluid px-0">
@@ -6403,10 +6407,10 @@
 <div class="mxd-awards-list__border"></div>
 </div>
 <!-- item -->
-<div class="mxd-awards-list__item">
+<div class="mxd-awards-list__item hover-reveal__item">
 <div class="mxd-awards-list__border"></div>
-<div class="overflow-visible">
-<img alt="Real Estate" src="/uc-assets/img/works/preview/600x600_prv-02.webp"/>
+<div class="hover-reveal__content overflow-visible hover-reveal-260x260">
+<img alt="Real Estate" class="hover-reveal__image" src="/uc-assets/img/works/preview/600x600_prv-02.webp"/>
 </div>
 <div class="mxd-awards-list__inner">
 <div class="container-fluid px-0">
@@ -6442,10 +6446,10 @@
 <div class="mxd-awards-list__border"></div>
 </div>
 <!-- item -->
-<div class="mxd-awards-list__item">
+<div class="mxd-awards-list__item hover-reveal__item">
 <div class="mxd-awards-list__border"></div>
-<div class="overflow-visible">
-<img alt="E-commerce &amp; Retail" src="/uc-assets/img/works/preview/600x600_prv-03.webp"/>
+<div class="hover-reveal__content overflow-visible hover-reveal-260x260">
+<img alt="E-commerce &amp; Retail" class="hover-reveal__image" src="/uc-assets/img/works/preview/600x600_prv-03.webp"/>
 </div>
 <div class="mxd-awards-list__inner">
 <div class="container-fluid px-0">
@@ -6481,10 +6485,10 @@
 <div class="mxd-awards-list__border"></div>
 </div>
 <!-- item -->
-<div class="mxd-awards-list__item">
+<div class="mxd-awards-list__item hover-reveal__item">
 <div class="mxd-awards-list__border"></div>
-<div class="overflow-visible">
-<img alt="FinTech &amp; Finance" src="/uc-assets/img/works/preview/600x600_prv-04.webp"/>
+<div class="hover-reveal__content overflow-visible hover-reveal-260x260">
+<img alt="FinTech &amp; Finance" class="hover-reveal__image" src="/uc-assets/img/works/preview/600x600_prv-04.webp"/>
 </div>
 <div class="mxd-awards-list__inner">
 <div class="container-fluid px-0">
@@ -6520,10 +6524,10 @@
 <div class="mxd-awards-list__border"></div>
 </div>
 <!-- item -->
-<div class="mxd-awards-list__item">
+<div class="mxd-awards-list__item hover-reveal__item">
 <div class="mxd-awards-list__border"></div>
-<div class="overflow-visible">
-<img alt="Education &amp; E-learning" src="/uc-assets/img/works/preview/600x600_prv-01.webp"/>
+<div class="hover-reveal__content overflow-visible hover-reveal-260x260">
+<img alt="Education &amp; E-learning" class="hover-reveal__image" src="/uc-assets/img/works/preview/600x600_prv-01.webp"/>
 </div>
 <div class="mxd-awards-list__inner">
 <div class="container-fluid px-0">
@@ -6585,7 +6589,7 @@
 <div class="col-12 col-xl-7 mxd-services-cards__item mxd-grid-item">
 <div class="mxd-services-cards__inner align-end bg-base-opp radius-l padding-5x4">
 <div class="mxd-services-cards__controls">
-<a class="btn btn-round btn-round-large btn-additional" href="services.html">
+<a class="btn btn-round btn-round-large btn-additional slide-right-up anim-no-delay" href="services.html">
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
 </div>
@@ -6611,7 +6615,7 @@
 <div class="col-12 col-xl-5 mxd-services-cards__item mxd-grid-item">
 <div class="mxd-services-cards__inner align-end bg-accent radius-l padding-5x4">
 <div class="mxd-services-cards__controls">
-<a class="btn btn-round btn-round-large btn-base" href="services.html">
+<a class="btn btn-round btn-round-large btn-base slide-right-up anim-no-delay" href="services.html">
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
 </div>
@@ -6636,7 +6640,7 @@
 <div class="col-12 mxd-services-cards__item mxd-grid-item">
 <div class="mxd-services-cards__inner justify-between bg-base-tint radius-l padding-5x4">
 <div class="mxd-services-cards__controls">
-<a class="btn btn-round btn-round-large btn-opposite" href="services.html">
+<a class="btn btn-round btn-round-large btn-opposite slide-right-up anim-no-delay" href="services.html">
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
 </div>
@@ -6663,7 +6667,7 @@
 <div class="col-12 col-xl-5 mxd-services-cards__item mxd-grid-item">
 <div class="mxd-services-cards__inner justify-end bg-base-opp radius-l padding-5x4">
 <div class="mxd-services-cards__controls">
-<a class="btn btn-round btn-round-large btn-additional" href="services.html">
+<a class="btn btn-round btn-round-large btn-additional slide-right-up anim-no-delay" href="services.html">
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
 </div>
@@ -6688,7 +6692,7 @@
 <div class="col-12 col-xl-7 mxd-services-cards__item mxd-grid-item">
 <div class="mxd-services-cards__inner justify-between bg-accent radius-l padding-5x4">
 <div class="mxd-services-cards__controls">
-<a class="btn btn-round btn-round-large btn-base" href="services.html">
+<a class="btn btn-round btn-round-large btn-base slide-right-up anim-no-delay" href="services.html">
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
 </div>
@@ -6730,12 +6734,12 @@
 <div class="mxd-container grid-container">
 <!-- Block - Services List Start -->
 <div class="mxd-block">
-<div class="mxd-services-list grid-top">
+<div class="mxd-services-list grid-top hover-reveal">
 <!-- item -->
-<div class="mxd-services-list__item">
+<div class="mxd-services-list__item hover-reveal__item">
 <div class="mxd-services-list__border"></div>
-<div>
-<img alt="" src="/uc-assets/img/illustrations/360x440_list-01.webp"/>
+<div class="hover-reveal__content hover-reveal-360x440">
+<img alt="" class="hover-reveal__image" src="/uc-assets/img/illustrations/360x440_list-01.webp"/>
 </div>
 <div class="mxd-services-list__inner">
 <div class="container-fluid px-0">
@@ -6783,10 +6787,10 @@
 <div class="mxd-services-list__border"></div>
 </div>
 <!-- item -->
-<div class="mxd-services-list__item">
+<div class="mxd-services-list__item hover-reveal__item">
 <div class="mxd-services-list__border"></div>
-<div>
-<img alt="" src="/uc-assets/img/illustrations/360x440_list-02.webp"/>
+<div class="hover-reveal__content hover-reveal-360x440">
+<img alt="" class="hover-reveal__image" src="/uc-assets/img/illustrations/360x440_list-02.webp"/>
 </div>
 <div class="mxd-services-list__inner">
 <div class="container-fluid px-0">
@@ -6834,10 +6838,10 @@
 <div class="mxd-services-list__border"></div>
 </div>
 <!-- item -->
-<div class="mxd-services-list__item">
+<div class="mxd-services-list__item hover-reveal__item">
 <div class="mxd-services-list__border"></div>
-<div>
-<img alt="" src="/uc-assets/img/illustrations/360x440_list-03.webp"/>
+<div class="hover-reveal__content hover-reveal-360x440">
+<img alt="" class="hover-reveal__image" src="/uc-assets/img/illustrations/360x440_list-03.webp"/>
 </div>
 <div class="mxd-services-list__inner">
 <div class="container-fluid px-0">
@@ -6879,10 +6883,10 @@
 <div class="mxd-services-list__border"></div>
 </div>
 <!-- item -->
-<div class="mxd-services-list__item">
+<div class="mxd-services-list__item hover-reveal__item">
 <div class="mxd-services-list__border"></div>
-<div>
-<img alt="" src="/uc-assets/img/illustrations/360x440_list-04.webp"/>
+<div class="hover-reveal__content hover-reveal-360x440">
+<img alt="" class="hover-reveal__image" src="/uc-assets/img/illustrations/360x440_list-04.webp"/>
 </div>
 <div class="mxd-services-list__inner">
 <div class="container-fluid px-0">
@@ -7056,7 +7060,7 @@
 <div class="stack-item">
 <div class="mxd-services-stack__inner justify-between bg-base-opp">
 <div class="mxd-services-stack__controls">
-<a class="btn btn-round btn-round-large btn-additional" href="services.html">
+<a class="btn btn-round btn-round-large btn-additional slide-right-up anim-no-delay" href="services.html">
 <i class="ph ph-arrow-up-right"></i>
 </a>
 </div>
@@ -7083,7 +7087,7 @@
 <div class="stack-item">
 <div class="mxd-services-stack__inner justify-between bg-accent">
 <div class="mxd-services-stack__controls">
-<a class="btn btn-round btn-round-large btn-base" href="services.html">
+<a class="btn btn-round btn-round-large btn-base slide-right-up anim-no-delay" href="services.html">
 <i class="ph ph-arrow-up-right"></i>
 </a>
 </div>
@@ -7109,7 +7113,7 @@
 <div class="stack-item">
 <div class="mxd-services-stack__inner radius-dark justify-between bg-base-tint">
 <div class="mxd-services-stack__controls">
-<a class="btn btn-round btn-round-large btn-opposite" href="services.html">
+<a class="btn btn-round btn-round-large btn-opposite slide-right-up anim-no-delay" href="services.html">
 <i class="ph ph-arrow-up-right"></i>
 </a>
 </div>
@@ -7135,7 +7139,7 @@
 <div class="stack-item">
 <div class="mxd-services-stack__inner justify-between bg-base-opp">
 <div class="mxd-services-stack__controls">
-<a class="btn btn-round btn-round-large btn-additional" href="services.html">
+<a class="btn btn-round btn-round-large btn-additional slide-right-up anim-no-delay" href="services.html">
 <i class="ph ph-arrow-up-right"></i>
 </a>
 </div>
@@ -7267,7 +7271,7 @@
 <p class="mxd-counter__descr t-140 t-bright opposite"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span><br/><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></p>
 </div>
 <div class="mxd-stats-cards__btngroup">
-<a class="btn btn-default btn-outline opposite" href="#testimonials">
+<a class="btn btn-anim btn-default btn-outline opposite slide-right-down" href="#testimonials">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph-bold ph-arrow-down-right"></i>
 </a>
@@ -7323,7 +7327,7 @@
 <p class="mxd-counter__descr t-140 t-bright"><span class="lang-string" data-ar="فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي." data-en="A medium-length sample paragraph illustrating how content sits inside this element in a clean, professional tone.">فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي.</span></p>
 </div>
 <div class="mxd-stats-cards__btngroup">
-<a class="btn btn-default btn-outline" href="contact.html">
+<a class="btn btn-anim btn-default btn-outline slide-right-up" href="contact.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -7341,7 +7345,7 @@
 <p class="mxd-counter__descr t-140 t-bright"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span><br/><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></p>
 </div>
 <div class="mxd-stats-cards__btngroup">
-<a class="btn btn-default btn-outline" href="works-simple.html">
+<a class="btn btn-anim btn-default btn-outline slide-right-up" href="works-simple.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -7472,7 +7476,7 @@
 </div>
 <div class="col-12">
 <div class="mxd-section-title__controls">
-<a class="btn btn-default btn-outline" href="works-simple.html">
+<a class="btn btn-anim btn-default btn-outline slide-right-up" href="works-simple.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -7495,10 +7499,10 @@
 <img alt="" src="/uc-assets/img/avatars/300x300_ava-05.webp"/>
 </div>
 <div class="mxd-team-cards__socials">
-<a class="btn tag tag-default tag-permanent" href="https://www.linkedin.com/" target="_blank">
+<a class="btn btn-anim tag tag-default tag-permanent" href="https://www.linkedin.com/" target="_blank">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 </a>
-<a class="btn tag tag-default tag-permanent" href="https://www.behance.net/" target="_blank">
+<a class="btn btn-anim tag tag-default tag-permanent" href="https://www.behance.net/" target="_blank">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 </a>
 </div>
@@ -7515,10 +7519,10 @@
 <img alt="" src="/uc-assets/img/avatars/300x300_ava-06.webp"/>
 </div>
 <div class="mxd-team-cards__socials">
-<a class="btn tag tag-default tag-permanent" href="https://www.linkedin.com/" target="_blank">
+<a class="btn btn-anim tag tag-default tag-permanent" href="https://www.linkedin.com/" target="_blank">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 </a>
-<a class="btn tag tag-default tag-permanent" href="https://www.behance.net/" target="_blank">
+<a class="btn btn-anim tag tag-default tag-permanent" href="https://www.behance.net/" target="_blank">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></span>
 </a>
 </div>
@@ -7542,10 +7546,10 @@
 <img alt="" src="/uc-assets/img/avatars/300x300_ava-07.webp"/>
 </div>
 <div class="mxd-team-cards__socials">
-<a class="btn tag tag-default tag-permanent" href="https://www.linkedin.com/" target="_blank">
+<a class="btn btn-anim tag tag-default tag-permanent" href="https://www.linkedin.com/" target="_blank">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 </a>
-<a class="btn tag tag-default tag-permanent" href="https://www.behance.net/" target="_blank">
+<a class="btn btn-anim tag tag-default tag-permanent" href="https://www.behance.net/" target="_blank">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 </a>
 </div>
@@ -7562,10 +7566,10 @@
 <img alt="" src="/uc-assets/img/avatars/300x300_ava-08.webp"/>
 </div>
 <div class="mxd-team-cards__socials">
-<a class="btn tag tag-default tag-permanent" href="https://www.linkedin.com/" target="_blank">
+<a class="btn btn-anim tag tag-default tag-permanent" href="https://www.linkedin.com/" target="_blank">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 </a>
-<a class="btn tag tag-default tag-permanent" href="https://dribbble.com/" target="_blank">
+<a class="btn btn-anim tag tag-default tag-permanent" href="https://dribbble.com/" target="_blank">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 </a>
 </div>
@@ -7628,10 +7632,10 @@
 <img alt="" src="/uc-assets/img/avatars/300x300_ava-09.webp"/>
 </div>
 <div class="mxd-team-cards__socials">
-<a class="btn tag tag-default tag-permanent" href="https://www.linkedin.com/" target="_blank">
+<a class="btn btn-anim tag tag-default tag-permanent" href="https://www.linkedin.com/" target="_blank">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 </a>
-<a class="btn tag tag-default tag-permanent" href="https://www.behance.net/" target="_blank">
+<a class="btn btn-anim tag tag-default tag-permanent" href="https://www.behance.net/" target="_blank">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 </a>
 </div>
@@ -7648,10 +7652,10 @@
 <img alt="" src="/uc-assets/img/avatars/300x300_ava-01.webp"/>
 </div>
 <div class="mxd-team-cards__socials">
-<a class="btn tag tag-default tag-permanent" href="https://www.linkedin.com/" target="_blank">
+<a class="btn btn-anim tag tag-default tag-permanent" href="https://www.linkedin.com/" target="_blank">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 </a>
-<a class="btn tag tag-default tag-permanent" href="https://www.figma.com/community" target="_blank">
+<a class="btn btn-anim tag tag-default tag-permanent" href="https://www.figma.com/community" target="_blank">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></span>
 </a>
 </div>
@@ -7683,7 +7687,7 @@
 </div>
 <div class="col-12">
 <div class="mxd-section-title__controls">
-<a class="btn btn-default btn-outline" href="team.html">
+<a class="btn btn-anim btn-default btn-outline slide-right-up" href="team.html">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </a>
@@ -8047,7 +8051,7 @@
 </div>
 <div class="mxd-testimonials-card__text">
 <p><span class="lang-string" data-ar="فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي." data-en="A longer sample paragraph used as filler to demonstrate how expanded copy renders inside this element, including extended descriptions and supporting text once real content is provided.">فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي.</span></p>
-<a class="btn btn-default btn-small btn-outline" href="#0">
+<a class="btn btn-anim btn-default btn-small btn-outline slide-right-up" href="#0">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph ph-arrow-up-right"></i>
 </a>
@@ -8074,7 +8078,7 @@
 </div>
 <div class="mxd-testimonials-card__text">
 <p><span class="lang-string" data-ar="فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي." data-en="A longer sample paragraph used as filler to demonstrate how expanded copy renders inside this element, including extended descriptions and supporting text once real content is provided.">فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي.</span></p>
-<a class="btn btn-default btn-small btn-outline" href="#0">
+<a class="btn btn-anim btn-default btn-small btn-outline slide-right-up" href="#0">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph ph-arrow-up-right"></i>
 </a>
@@ -8101,7 +8105,7 @@
 </div>
 <div class="mxd-testimonials-card__text">
 <p><span class="lang-string" data-ar="فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي." data-en="A longer sample paragraph used as filler to demonstrate how expanded copy renders inside this element, including extended descriptions and supporting text once real content is provided.">فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي.</span></p>
-<a class="btn btn-default btn-small btn-outline" href="#0">
+<a class="btn btn-anim btn-default btn-small btn-outline slide-right-up" href="#0">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph ph-arrow-up-right"></i>
 </a>
@@ -8128,7 +8132,7 @@
 </div>
 <div class="mxd-testimonials-card__text">
 <p><span class="lang-string" data-ar="فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي." data-en="A longer sample paragraph used as filler to demonstrate how expanded copy renders inside this element, including extended descriptions and supporting text once real content is provided.">فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي.</span></p>
-<a class="btn btn-default btn-small btn-outline" href="#0">
+<a class="btn btn-anim btn-default btn-small btn-outline slide-right-up" href="#0">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph ph-arrow-up-right"></i>
 </a>
@@ -8144,12 +8148,12 @@
 </div>
 <!-- navigation buttons -->
 <div class="swiper-button-prev mxd-slider-btn mxd-slider-btn-round-prev">
-<a class="btn btn-round btn-round-small btn-outline" href="#0">
+<a class="btn btn-round btn-round-small btn-outline slide-left anim-no-delay" href="#0">
 <i class="ph ph-arrow-left"></i>
 </a>
 </div>
 <div class="swiper-button-next mxd-slider-btn mxd-slider-btn-round-next">
-<a class="btn btn-round btn-round-small btn-outline" href="#0">
+<a class="btn btn-round btn-round-small btn-outline slide-right anim-no-delay" href="#0">
 <i class="ph ph-arrow-right"></i>
 </a>
 </div>
@@ -8209,7 +8213,7 @@
 </div>
 <div class="mxd-testimonials-photo__text" data-swiper-parallax-opacity="0" data-swiper-parallax-x="-300">
 <p class="t-large"><span class="lang-string" data-ar="فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي." data-en="A longer sample paragraph used as filler to demonstrate how expanded copy renders inside this element, including extended descriptions and supporting text once real content is provided.">فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي.</span></p>
-<a class="btn btn-default btn-small btn-opposite" href="#0">
+<a class="btn btn-anim btn-default btn-small btn-opposite slide-right-up" href="#0">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph ph-arrow-up-right"></i>
 </a>
@@ -8249,7 +8253,7 @@
 </div>
 <div class="mxd-testimonials-photo__text" data-swiper-parallax-opacity="0" data-swiper-parallax-x="-300">
 <p class="t-large"><span class="lang-string" data-ar="فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي." data-en="A longer sample paragraph used as filler to demonstrate how expanded copy renders inside this element, including extended descriptions and supporting text once real content is provided.">فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي.</span></p>
-<a class="btn btn-default btn-small btn-opposite" href="#0">
+<a class="btn btn-anim btn-default btn-small btn-opposite slide-right-up" href="#0">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph ph-arrow-up-right"></i>
 </a>
@@ -8268,13 +8272,13 @@
 <!-- navigation buttons -->
 <div class="swiper-testimonials__controls">
 <div class="swiper-button-prev mxd-slider-btn mxd-slider-btn-round-prev">
-<a class="btn btn-round btn-round-small btn-outline" href="#0">
+<a class="btn btn-round btn-round-small btn-outline slide-left anim-no-delay" href="#0">
 <i class="ph ph-arrow-left"></i>
 </a>
 </div>
 <div class="swiper-pagination mxd-swiper-pagination-fraction"></div>
 <div class="swiper-button-next mxd-slider-btn mxd-slider-btn-round-next">
-<a class="btn btn-round btn-round-small btn-outline" href="#0">
+<a class="btn btn-round btn-round-small btn-outline slide-right anim-no-delay" href="#0">
 <i class="ph ph-arrow-right"></i>
 </a>
 </div>
@@ -8330,7 +8334,7 @@
 </div>
 <div class="mxd-testimonials-image__text" data-swiper-parallax-opacity="0" data-swiper-parallax-x="-100">
 <p class="t-large"><span class="lang-string" data-ar="فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي." data-en="A longer sample paragraph used as filler to demonstrate how expanded copy renders inside this element, including extended descriptions and supporting text once real content is provided.">فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي.</span></p>
-<a class="btn btn-default btn-small btn-opposite" href="#0">
+<a class="btn btn-anim btn-default btn-small btn-opposite slide-right-up" href="#0">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph ph-arrow-up-right"></i>
 </a>
@@ -8368,7 +8372,7 @@
 </div>
 <div class="mxd-testimonials-image__text" data-swiper-parallax-opacity="0" data-swiper-parallax-x="-100">
 <p class="t-large"><span class="lang-string" data-ar="فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي." data-en="A medium-length sample paragraph illustrating how content sits inside this element in a clean, professional tone.">فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي.</span></p>
-<a class="btn btn-default btn-small btn-opposite" href="#0">
+<a class="btn btn-anim btn-default btn-small btn-opposite slide-right-up" href="#0">
 <span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <i class="ph ph-arrow-up-right"></i>
 </a>
@@ -8385,13 +8389,13 @@
 <!-- navigation buttons -->
 <div class="swiper-testimonials__controls">
 <div class="swiper-button-prev mxd-slider-btn mxd-slider-btn-round-prev">
-<a class="btn btn-round btn-round-small btn-outline" href="#0">
+<a class="btn btn-round btn-round-small btn-outline slide-left anim-no-delay" href="#0">
 <i class="ph ph-arrow-left"></i>
 </a>
 </div>
 <div class="swiper-pagination mxd-swiper-pagination-fraction"></div>
 <div class="swiper-button-next mxd-slider-btn mxd-slider-btn-round-next">
-<a class="btn btn-round btn-round-small btn-outline" href="#0">
+<a class="btn btn-round btn-round-small btn-outline slide-right anim-no-delay" href="#0">
 <i class="ph ph-arrow-right"></i>
 </a>
 </div>
@@ -8835,19 +8839,9 @@
           }
         });
 
-        // 2) Defensive reveal pass — if any element inside .ta-asset still
-        //    has an inline opacity:0 or transform left over from the
-        //    template's JS pre-init, force it visible.
-        var assets = document.querySelectorAll('.ta-asset, .ta-asset *');
-        assets.forEach(function (el) {
-          if (el.style) {
-            el.style.opacity = '';
-            el.style.visibility = '';
-            el.style.transform = '';
-            el.style.clipPath = '';
-            el.style.webkitClipPath = '';
-          }
-        });
+        // (no defensive style-clearing pass — GSAP and the template JS
+        //  drive runtime transforms on marquees, sliders, hover-reveals
+        //  and button slides. Clearing inline styles broke those.)
       })();
     </script>
 
