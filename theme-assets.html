@@ -1111,6 +1111,24 @@
          hooks couldn't apply. Catalog inherits the template's natural
          typography. */
 
+      /* ---- font-size-adjust to normalize Arabic x-height ----
+         IBM Plex Sans Arabic has a smaller x-height than the template's
+         intended Latin font (Funnel Display). At the same px font-size
+         Arabic glyphs render visually shorter, making headings feel
+         small. font-size-adjust tells the browser to scale the rendered
+         font so the x-height is a fixed ratio of the font-size,
+         normalising visual height across fonts. Catalog only — does not
+         affect live pages. */
+      body { font-size-adjust: 0.55; font-size-adjust: ex-height 0.55; }
+      .ta-asset h1, .ta-asset h2, .ta-asset h3,
+      .ta-asset h4, .ta-asset h5, .ta-asset h6,
+      .ta-asset .inner-headline__title,
+      .ta-asset .mxd-section-title__hrtitle,
+      .ta-asset .mxd-section-title__title {
+        font-size-adjust: 0.58;
+        font-size-adjust: ex-height 0.58;
+      }
+
       /* Phosphor icons still get their own font */
       body i.ph, body i.ph-bold, body i.ph-fill, body i.ph-duotone,
       body i[class*="ph-"] {
@@ -1692,7 +1710,7 @@
 <div class="mxd-links-lines__item">
 <div class="mxd-links-lines__divider anim-uni-in-up"></div>
 <a class="mxd-links-lines__link anim-uni-in-up" href="https://medium.com/" target="_blank">
-<h6 class="mxd-links-lines__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
+<h6 class="mxd-links-lines__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-links-lines__icon">
 <i class="ph ph-arrow-up-right"></i>
 </div>
@@ -1703,7 +1721,7 @@
 <div class="mxd-links-lines__item">
 <div class="mxd-links-lines__divider anim-uni-in-up"></div>
 <a class="mxd-links-lines__link anim-uni-in-up" href="https://www.awwwards.com/" target="_blank">
-<h6 class="mxd-links-lines__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
+<h6 class="mxd-links-lines__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-links-lines__icon">
 <i class="ph ph-arrow-up-right"></i>
 </div>
@@ -1714,7 +1732,7 @@
 <div class="mxd-links-lines__item">
 <div class="mxd-links-lines__divider anim-uni-in-up"></div>
 <a class="mxd-links-lines__link anim-uni-in-up" href="https://www.behance.net/" target="_blank">
-<h6 class="mxd-links-lines__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
+<h6 class="mxd-links-lines__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-links-lines__icon">
 <i class="ph ph-arrow-up-right"></i>
 </div>
@@ -1725,7 +1743,7 @@
 <div class="mxd-links-lines__item">
 <div class="mxd-links-lines__divider anim-uni-in-up"></div>
 <a class="mxd-links-lines__link anim-uni-in-up" href="https://medium.com/" target="_blank">
-<h6 class="mxd-links-lines__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
+<h6 class="mxd-links-lines__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-links-lines__icon">
 <i class="ph ph-arrow-up-right"></i>
 </div>
@@ -1761,7 +1779,7 @@
 <div class="row g-0">
 <div class="col-12 col-xl-6 mxd-grid-item no-margin">
 <div class="mxd-section-title__hrtitle">
-<h2><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h2>
+<h2><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 <div class="col-12 col-xl-3 mxd-grid-item no-margin">
@@ -1800,7 +1818,7 @@
 </div>
 <div class="col-12 col-xl-4 mxd-grid-item no-margin">
 <div class="mxd-approach-list__title anim-uni-in-up">
-<h6><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h6>
+<h6><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 </div>
 </div>
 <div class="col-12 col-xl-6 mxd-grid-item no-margin">
@@ -1826,7 +1844,7 @@
 </div>
 <div class="col-12 col-xl-4 mxd-grid-item no-margin">
 <div class="mxd-approach-list__title anim-uni-in-up">
-<h6><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h6>
+<h6><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 </div>
 </div>
 <div class="col-12 col-xl-6 mxd-grid-item no-margin">
@@ -1852,7 +1870,7 @@
 </div>
 <div class="col-12 col-xl-4 mxd-grid-item no-margin">
 <div class="mxd-approach-list__title anim-uni-in-up">
-<h6><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h6>
+<h6><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 </div>
 </div>
 <div class="col-12 col-xl-6 mxd-grid-item no-margin">
@@ -1878,7 +1896,7 @@
 </div>
 <div class="col-12 col-xl-4 mxd-grid-item no-margin">
 <div class="mxd-approach-list__title anim-uni-in-up">
-<h6><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
+<h6><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 </div>
 </div>
 <div class="col-12 col-xl-6 mxd-grid-item no-margin">
@@ -1904,7 +1922,7 @@
 </div>
 <div class="col-12 col-xl-4 mxd-grid-item no-margin">
 <div class="mxd-approach-list__title anim-uni-in-up">
-<h6><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
+<h6><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 </div>
 </div>
 <div class="col-12 col-xl-6 mxd-grid-item no-margin">
@@ -1942,7 +1960,7 @@
 <div class="row g-0">
 <div class="col-12 col-xl-6 mxd-grid-item no-margin">
 <div class="mxd-section-title__hrtitle">
-<h2><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span><br/><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h2>
+<h2><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span><br/><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 <div class="col-12 col-xl-3 mxd-grid-item no-margin"></div>
@@ -2181,7 +2199,7 @@
 <span class="meta-date"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></span>
 </div>
 <h3 class="post-featured__title">
-<a href="blog-article.html"><span class="lang-string" data-ar="وصف نموذجي قصير لهذا العنصر." data-en="A short sample description for this element.">وصف نموذجي قصير لهذا العنصر.</span></a>
+<a href="blog-article.html"><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span></a>
 </h3>
 <div class="post-featured__excerpt">
 <p><span class="lang-string" data-ar="فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي." data-en="A longer sample paragraph used as filler to demonstrate how expanded copy renders inside this element, including extended descriptions and supporting text once real content is provided.">فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي.</span></p>
@@ -2240,7 +2258,7 @@
 </div>
 <div class="post-secondary__title">
 <h5>
-<a href="blog-article.html"><span><span class="lang-string" data-ar="وصف نموذجي قصير لهذا العنصر." data-en="A short sample description for this element.">وصف نموذجي قصير لهذا العنصر.</span></span></a>
+<a href="blog-article.html"><span><span class="lang-string" data-ar="عنوان صغير" data-en="Small Heading">عنوان صغير</span></span></a>
 </h5>
 </div>
 </div>
@@ -2295,7 +2313,7 @@
 </div>
 <div class="post-secondary__title">
 <h5>
-<a href="blog-article.html"><span class="lang-string" data-ar="وصف نموذجي قصير لهذا العنصر." data-en="A short sample description for this element.">وصف نموذجي قصير لهذا العنصر.</span></a>
+<a href="blog-article.html"><span class="lang-string" data-ar="عنوان صغير" data-en="Small Heading">عنوان صغير</span></a>
 </h5>
 </div>
 </div>
@@ -2328,7 +2346,7 @@
 <div class="row g-0">
 <div class="col-12 col-xl-8 mxd-grid-item no-margin">
 <div class="mxd-section-title__hrtitle">
-<h2><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span><br/><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h2>
+<h2><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span><br/><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 <div class="col-12 col-xl-4 mxd-grid-item no-margin">
@@ -2581,7 +2599,7 @@
 </div>
 </div>
 <div class="mxd-article__title loading__item">
-<h1 class="h1-small"><span class="lang-string" data-ar="وصف نموذجي قصير لهذا العنصر." data-en="A short sample description for this element.">وصف نموذجي قصير لهذا العنصر.</span></h1>
+<h1 class="h1-small"><span class="lang-string" data-ar="عنوان رئيسي للصفحة" data-en="Main Page Headline">عنوان رئيسي للصفحة</span></h1>
 </div>
 <div class="mxd-article__tags loading__item">
 <span class="tag tag-default tag-outline tag-link-outline">
@@ -2619,14 +2637,14 @@
 </ul>
 </div>
 <div class="mxd-article__block" id="chapter-01">
-<h3><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h3>
+<h3><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span></h3>
 <p><span class="lang-string" data-ar="فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي." data-en="A longer sample paragraph used as filler to demonstrate how expanded copy renders inside this element, including extended descriptions and supporting text once real content is provided.">فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي.</span></p>
 </div>
 <div class="mxd-article__block block-quote">
 <blockquote>
-<p class="quote__text"><span class="lang-string" data-ar="فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي." data-en="A medium-length sample paragraph illustrating how content sits inside this element in a clean, professional tone.">فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي.</span></p>
+<p class="quote__text"><span class="lang-string" data-ar="«اقتباس نموذجي يوضح شكل الشهادة داخل هذا العنصر.»" data-en='"A sample quote illustrating how a testimonial reads inside this element."'>«اقتباس نموذجي يوضح شكل الشهادة داخل هذا العنصر.»</span></p>
 <p class="quote__cite">
-<cite><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></cite>
+<cite><span class="lang-string" data-ar="— مصدر نموذجي" data-en="— Sample source">— مصدر نموذجي</span></cite>
 </p>
 </blockquote>
 </div>
@@ -2634,7 +2652,7 @@
 <p><span class="lang-string" data-ar="فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي." data-en="A longer sample paragraph used as filler to demonstrate how expanded copy renders inside this element, including extended descriptions and supporting text once real content is provided.">فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي.</span></p>
 </div>
 <div class="mxd-article__block" id="chapter-02">
-<h3><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h3>
+<h3><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span></h3>
 <p><span class="lang-string" data-ar="فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي." data-en="A medium-length sample paragraph illustrating how content sits inside this element in a clean, professional tone.">فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي.</span></p>
 <ol class="article-ol">
 <li><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span><ul class="article-ul">
@@ -2663,13 +2681,13 @@
 </div>
 </div>
 <div class="mxd-article__block" id="chapter-03">
-<h3><span class="lang-string" data-ar="وصف نموذجي قصير لهذا العنصر." data-en="A short sample description for this element.">وصف نموذجي قصير لهذا العنصر.</span></h3>
+<h3><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span></h3>
 <p><span class="lang-string" data-ar="فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي." data-en="A medium-length sample paragraph illustrating how content sits inside this element in a clean, professional tone.">فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي.</span></p>
-<h5><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h5>
+<h5><span class="lang-string" data-ar="عنوان صغير" data-en="Small Heading">عنوان صغير</span></h5>
 <p><span class="lang-string" data-ar="فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي." data-en="A longer sample paragraph used as filler to demonstrate how expanded copy renders inside this element, including extended descriptions and supporting text once real content is provided.">فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي.</span></p>
-<h5><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h5>
+<h5><span class="lang-string" data-ar="عنوان صغير" data-en="Small Heading">عنوان صغير</span></h5>
 <p><span class="lang-string" data-ar="فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي." data-en="A longer sample paragraph used as filler to demonstrate how expanded copy renders inside this element, including extended descriptions and supporting text once real content is provided.">فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي.</span></p>
-<h5><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h5>
+<h5><span class="lang-string" data-ar="عنوان صغير" data-en="Small Heading">عنوان صغير</span></h5>
 <p><span class="lang-string" data-ar="فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي." data-en="A longer sample paragraph used as filler to demonstrate how expanded copy renders inside this element, including extended descriptions and supporting text once real content is provided.">فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي.</span></p>
 </div>
 <div class="mxd-article__block block-image">
@@ -2687,7 +2705,7 @@
 </div>
 </div>
 <div class="mxd-article__block" id="chapter-04">
-<h3><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h3>
+<h3><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span></h3>
 <p>
 <span><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></span><span class="lang-string" data-ar="فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي." data-en="A medium-length sample paragraph illustrating how content sits inside this element in a clean, professional tone.">فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي.</span></p>
 <p>
@@ -2696,7 +2714,7 @@
 <span><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></span><span class="lang-string" data-ar="فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي." data-en="A medium-length sample paragraph illustrating how content sits inside this element in a clean, professional tone.">فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي.</span></p>
 </div>
 <div class="mxd-article__block" id="chapter-05">
-<h3><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h3>
+<h3><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span></h3>
 <p><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span><a href="https://www.midjourney.com/home" target="_blank"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></a><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span><a href="https://stablediffusionweb.com/" target="_blank"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></a><span class="lang-string" data-ar="وصف نموذجي قصير لهذا العنصر." data-en="A short sample description for this element.">وصف نموذجي قصير لهذا العنصر.</span></p>
 <ul>
 <li><span class="lang-string" data-ar="وصف نموذجي قصير لهذا العنصر." data-en="A short sample description for this element.">وصف نموذجي قصير لهذا العنصر.</span></li>
@@ -2705,7 +2723,7 @@
 </ul>
 </div>
 <div class="mxd-article__block" id="chapter-06">
-<h3><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h3>
+<h3><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span></h3>
 <p><span class="lang-string" data-ar="فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي." data-en="A medium-length sample paragraph illustrating how content sits inside this element in a clean, professional tone.">فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي.</span></p>
 <ul>
 <li>
@@ -2728,8 +2746,8 @@
 </a>
 <div class="mxd-article-author__info">
 <h5 class="mxd-article-author__name">
-<a href="#0"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></a>
-<small class="mxd-article-author__position"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></small>
+<a href="#0"><span class="lang-string" data-ar="عنوان صغير" data-en="Small Heading">عنوان صغير</span></a>
+<small class="mxd-article-author__position"><span class="lang-string" data-ar="عنوان صغير" data-en="Small Heading">عنوان صغير</span></small>
 </h5>
 <div class="mxd-article-author__socials">
 <span class="tag tag-default tag-opposite tag-link-opposite">
@@ -2775,7 +2793,7 @@
 <!-- Article Comments Start -->
 <div class="mxd-article-comments">
 <div class="mxd-article-comments__container">
-<h3><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h3>
+<h3><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span></h3>
 <div class="mxd-article-comments__list">
 <ul class="mxd-comment__main">
 <li class="mxd-comment">
@@ -2786,7 +2804,7 @@
 <div class="mxd-comment__content">
 <div class="mxd-comment__info">
 <p class="mxd-comment__date t-small t-140"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></p>
-<h6 class="mxd-comment__name"><a href="#0"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></a></h6>
+<h6 class="mxd-comment__name"><a href="#0"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></a></h6>
 </div>
 <p class="t-small"><span class="lang-string" data-ar="فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي." data-en="A longer sample paragraph used as filler to demonstrate how expanded copy renders inside this element, including extended descriptions and supporting text once real content is provided.">فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي.</span></p>
 <div class="mxd-comment__reply">
@@ -2806,7 +2824,7 @@
 <div class="mxd-comment__content">
 <div class="mxd-comment__info">
 <p class="mxd-comment__date t-small t-140"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></p>
-<h6 class="mxd-comment__name"><a href="#0"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></a></h6>
+<h6 class="mxd-comment__name"><a href="#0"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></a></h6>
 </div>
 <p class="t-small"><span class="lang-string" data-ar="فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي." data-en="A longer sample paragraph used as filler to demonstrate how expanded copy renders inside this element, including extended descriptions and supporting text once real content is provided.">فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي.</span></p>
 <div class="mxd-comment__reply">
@@ -2828,7 +2846,7 @@
 <div class="mxd-comment__content">
 <div class="mxd-comment__info">
 <p class="mxd-comment__date t-small t-140"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></p>
-<h6 class="mxd-comment__name"><a href="#0"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></a></h6>
+<h6 class="mxd-comment__name"><a href="#0"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></a></h6>
 </div>
 <p class="t-small"><span class="lang-string" data-ar="فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي." data-en="A longer sample paragraph used as filler to demonstrate how expanded copy renders inside this element, including extended descriptions and supporting text once real content is provided.">فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي.</span></p>
 <div class="mxd-comment__reply">
@@ -2844,7 +2862,7 @@
 </div>
 </div>
 <div class="mxd-article-comments__respond">
-<h3><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h3>
+<h3><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span></h3>
 <p><span class="lang-string" data-ar="فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي." data-en="A medium-length sample paragraph illustrating how content sits inside this element in a clean, professional tone.">فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي.</span></p>
 <div class="comments-respond__form">
 <form class="form">
@@ -2861,7 +2879,7 @@
 </div>
 <div class="col-12 mxd-grid-item">
 <button class="btn btn-default btn-accent slide-right-up" type="submit">
-<span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
+<span class="btn-caption"><span class="lang-string" data-ar="زر إجراء" data-en="Action button">زر إجراء</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </button>
 </div>
@@ -2897,7 +2915,7 @@
 <div class="row g-0">
 <div class="col-12 col-xl-5 mxd-grid-item no-margin">
 <div class="mxd-section-title__hrtitle">
-<h2 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h2>
+<h2 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 <div class="col-12 col-xl-4 mxd-grid-item no-margin">
@@ -3055,7 +3073,7 @@
 <div class="row g-0">
 <div class="col-12 col-xl-6 mxd-grid-item no-margin">
 <div class="mxd-section-title__hrtitle">
-<h2 class="opposite anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span><br/><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h2>
+<h2 class="opposite anim-uni-in-up"><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span><br/><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 <div class="col-12 col-xl-3 mxd-grid-item no-margin">
@@ -3211,7 +3229,7 @@
 <div class="row g-0">
 <div class="col-12 mxd-grid-item no-margin">
 <div class="mxd-section-title__title card-split-title">
-<h2><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span><br/><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h2>
+<h2><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span><br/><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 </div>
@@ -3229,7 +3247,7 @@
 <div class="mxd-res-list__content">
 <div class="mxd-res-list__data">
 <div class="mxd-res-list__title">
-<h4 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h4>
+<h4 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي" data-en="Subheading">عنوان فرعي</span></h4>
 <p class="mxd-res-list__source anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span><a href="#0" target="_blank"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></a>
 </p>
 </div>
@@ -3249,7 +3267,7 @@
 <div class="mxd-res-list__content">
 <div class="mxd-res-list__data">
 <div class="mxd-res-list__title">
-<h4 class="anim-uni-in-up"><span class="lang-string" data-ar="وصف نموذجي قصير لهذا العنصر." data-en="A short sample description for this element.">وصف نموذجي قصير لهذا العنصر.</span></h4>
+<h4 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي" data-en="Subheading">عنوان فرعي</span></h4>
 <p class="mxd-res-list__source anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span><a href="#0" target="_blank"><span class="lang-string" data-ar="وصف نموذجي قصير لهذا العنصر." data-en="A short sample description for this element.">وصف نموذجي قصير لهذا العنصر.</span></a>
 </p>
 </div>
@@ -3269,7 +3287,7 @@
 <div class="mxd-res-list__content">
 <div class="mxd-res-list__data">
 <div class="mxd-res-list__title">
-<h4 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h4>
+<h4 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي" data-en="Subheading">عنوان فرعي</span></h4>
 <p class="mxd-res-list__source anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span><a href="#0" target="_blank"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></a>
 </p>
 </div>
@@ -3319,7 +3337,7 @@
 <div class="row g-0">
 <div class="col-12 mxd-grid-item no-margin">
 <div class="mxd-section-title__title card-split-title">
-<h2><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span><br/><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h2>
+<h2><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span><br/><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 </div>
@@ -3337,7 +3355,7 @@
 <div class="mxd-res-list__content">
 <div class="mxd-res-list__data">
 <div class="mxd-res-list__title">
-<h4 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h4>
+<h4 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي" data-en="Subheading">عنوان فرعي</span></h4>
 <p class="mxd-res-list__source anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span><a href="#0" target="_blank"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></a><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></p>
 </div>
 <div class="mxd-res-list__descr">
@@ -3356,7 +3374,7 @@
 <div class="mxd-res-list__content">
 <div class="mxd-res-list__data">
 <div class="mxd-res-list__title">
-<h4 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h4>
+<h4 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي" data-en="Subheading">عنوان فرعي</span></h4>
 <p class="mxd-res-list__source anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span><a href="#0" target="_blank"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></a><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></p>
 </div>
 <div class="mxd-res-list__descr">
@@ -3375,7 +3393,7 @@
 <div class="mxd-res-list__content">
 <div class="mxd-res-list__data">
 <div class="mxd-res-list__title">
-<h4 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h4>
+<h4 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي" data-en="Subheading">عنوان فرعي</span></h4>
 <p class="mxd-res-list__source anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span><a href="#0" target="_blank"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></a><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></p>
 </div>
 <div class="mxd-res-list__descr">
@@ -3457,7 +3475,7 @@
 </div>
 <div class="col-12 mxd-grid-item anim-uni-in-up">
 <button class="btn btn-default btn-large btn-opposite slide-right-up" type="submit">
-<span class="btn-caption"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
+<span class="btn-caption"><span class="lang-string" data-ar="زر إجراء" data-en="Action button">زر إجراء</span></span>
 <i class="ph-bold ph-arrow-up-right"></i>
 </button>
 </div>
@@ -3500,7 +3518,7 @@
 <div class="col-12 col-xl-7 mxd-grid-item no-margin">
 <div class="mxd-block__content">
 <div class="mxd-block__inner-headline loading__item">
-<h1 class="inner-headline__title headline-img-before headline-img-06"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h1>
+<h1 class="inner-headline__title headline-img-before headline-img-06"><span class="lang-string" data-ar="عنوان رئيسي للصفحة" data-en="Main Page Headline">عنوان رئيسي للصفحة</span></h1>
 </div>
 </div>
 </div>
@@ -4032,7 +4050,7 @@
 <div class="row g-0">
 <div class="col-12 col-xl-5 mxd-grid-item no-margin">
 <div class="mxd-section-title__hrtitle">
-<h2 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h2>
+<h2 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 <div class="col-12 col-xl-4 mxd-grid-item no-margin">
@@ -4146,7 +4164,7 @@
 <div class="row g-0">
 <div class="col-12 col-xl-6 mxd-grid-item no-margin">
 <div class="mxd-section-title__hrtitle">
-<h2><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h2>
+<h2><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 <div class="col-12 col-xl-3 mxd-grid-item no-margin">
@@ -4182,7 +4200,7 @@
 <img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-04.webp"/>
 </div>
 <div class="mxd-cpb-list__content anim-uni-in-up">
-<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h6>
+<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-cpb-list__num">
 <span><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span></span>
 </div>
@@ -4199,7 +4217,7 @@
 <img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-01.webp"/>
 </div>
 <div class="mxd-cpb-list__content anim-uni-in-up">
-<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
+<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-cpb-list__num">
 <span><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span></span>
 </div>
@@ -4216,7 +4234,7 @@
 <img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-02.webp"/>
 </div>
 <div class="mxd-cpb-list__content anim-uni-in-up">
-<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h6>
+<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-cpb-list__num">
 <span><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span></span>
 </div>
@@ -4233,7 +4251,7 @@
 <img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-03.webp"/>
 </div>
 <div class="mxd-cpb-list__content anim-uni-in-up">
-<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h6>
+<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-cpb-list__num">
 <span><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span></span>
 </div>
@@ -4250,7 +4268,7 @@
 <img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-05.webp"/>
 </div>
 <div class="mxd-cpb-list__content anim-uni-in-up">
-<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h6>
+<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-cpb-list__num">
 <span><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span></span>
 </div>
@@ -4267,7 +4285,7 @@
 <img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-06.webp"/>
 </div>
 <div class="mxd-cpb-list__content anim-uni-in-up">
-<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
+<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-cpb-list__num">
 <span><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span></span>
 </div>
@@ -4305,7 +4323,7 @@
 <div class="row g-0">
 <div class="col-12 col-xl-6 mxd-grid-item no-margin">
 <div class="mxd-section-title__hrtitle">
-<h2><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h2>
+<h2><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 <div class="col-12 col-xl-3 mxd-grid-item no-margin">
@@ -4341,7 +4359,7 @@
 <img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-01.webp"/>
 </div>
 <div class="mxd-cpb-list__content anim-uni-in-up">
-<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
+<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-cpb-list__num">
 <span><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span></span>
 </div>
@@ -4358,7 +4376,7 @@
 <img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-03.webp"/>
 </div>
 <div class="mxd-cpb-list__content anim-uni-in-up">
-<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
+<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-cpb-list__num">
 <span><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span></span>
 </div>
@@ -4375,7 +4393,7 @@
 <img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-02.webp"/>
 </div>
 <div class="mxd-cpb-list__content anim-uni-in-up">
-<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
+<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-cpb-list__num">
 <span><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span></span>
 </div>
@@ -4392,7 +4410,7 @@
 <img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-04.webp"/>
 </div>
 <div class="mxd-cpb-list__content anim-uni-in-up">
-<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h6>
+<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-cpb-list__num">
 <span><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span></span>
 </div>
@@ -4409,7 +4427,7 @@
 <img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-05.webp"/>
 </div>
 <div class="mxd-cpb-list__content anim-uni-in-up">
-<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
+<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-cpb-list__num">
 <span><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span></span>
 </div>
@@ -4426,7 +4444,7 @@
 <img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-06.webp"/>
 </div>
 <div class="mxd-cpb-list__content anim-uni-in-up">
-<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
+<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-cpb-list__num">
 <span><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span></span>
 </div>
@@ -4443,7 +4461,7 @@
 <img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-07.webp"/>
 </div>
 <div class="mxd-cpb-list__content anim-uni-in-up">
-<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
+<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-cpb-list__num">
 <span><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span></span>
 </div>
@@ -4481,7 +4499,7 @@
 <div class="row g-0">
 <div class="col-12 col-xl-6 mxd-grid-item no-margin">
 <div class="mxd-section-title__hrtitle">
-<h2><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h2>
+<h2><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 <div class="col-12 col-xl-3 mxd-grid-item no-margin">
@@ -4517,7 +4535,7 @@
 <img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-04.webp"/>
 </div>
 <div class="mxd-cpb-list__content anim-uni-in-up">
-<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h6>
+<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-cpb-list__num">
 <span><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span></span>
 </div>
@@ -4534,7 +4552,7 @@
 <img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-01.webp"/>
 </div>
 <div class="mxd-cpb-list__content anim-uni-in-up">
-<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
+<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-cpb-list__num">
 <span><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span></span>
 </div>
@@ -4551,7 +4569,7 @@
 <img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-03.webp"/>
 </div>
 <div class="mxd-cpb-list__content anim-uni-in-up">
-<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
+<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-cpb-list__num">
 <span><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span></span>
 </div>
@@ -4568,7 +4586,7 @@
 <img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-02.webp"/>
 </div>
 <div class="mxd-cpb-list__content anim-uni-in-up">
-<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
+<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-cpb-list__num">
 <span><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span></span>
 </div>
@@ -4585,7 +4603,7 @@
 <img alt="Project Preview" class="hover-reveal__image" src="/uc-assets/img/illustrations/600x730_cpb-05.webp"/>
 </div>
 <div class="mxd-cpb-list__content anim-uni-in-up">
-<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h6>
+<h6 class="mxd-cpb-list__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-cpb-list__num">
 <span><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span></span>
 </div>
@@ -4735,7 +4753,7 @@
 </div>
 <div class="mxd-pricing-table__data">
 <div class="pricing-data__header">
-<h4 class="pricing-header__title anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h4>
+<h4 class="pricing-header__title anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي" data-en="Subheading">عنوان فرعي</span></h4>
 <p class="pricing-header__descr anim-uni-in-up"><span class="lang-string" data-ar="فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي." data-en="A longer sample paragraph used as filler to demonstrate how expanded copy renders inside this element, including extended descriptions and supporting text once real content is provided.">فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي.</span></p>
 </div>
 <div class="pricing-data__info">
@@ -4795,7 +4813,7 @@
 </div>
 <div class="mxd-pricing-table__data">
 <div class="pricing-data__header">
-<h4 class="pricing-header__title anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h4>
+<h4 class="pricing-header__title anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي" data-en="Subheading">عنوان فرعي</span></h4>
 <p class="pricing-header__descr anim-uni-in-up"><span class="lang-string" data-ar="فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي." data-en="A medium-length sample paragraph illustrating how content sits inside this element in a clean, professional tone.">فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي.</span></p>
 </div>
 <div class="pricing-data__info">
@@ -4852,7 +4870,7 @@
 <div class="mxd-pricing-table__inner">
 <div class="mxd-pricing-table__data">
 <div class="pricing-data__header">
-<h4 class="pricing-header__title anim-uni-in-up"><span class="lang-string" data-ar="فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي." data-en="A medium-length sample paragraph illustrating how content sits inside this element in a clean, professional tone.">فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي.</span></h4>
+<h4 class="pricing-header__title anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي" data-en="Subheading">عنوان فرعي</span></h4>
 </div>
 <div class="pricing-data__info">
 <div class="pricing-data__btnholder anim-uni-in-up">
@@ -4922,7 +4940,7 @@
 <div class="row gx-0">
 <div class="col-12 col-xl-5 mxd-grid-item no-margin">
 <div class="mxd-project__subtitle">
-<h2 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h2>
+<h2 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 <div class="col-12 col-xl-6 mxd-grid-item no-margin">
@@ -4983,7 +5001,7 @@
 <div class="row gx-0">
 <div class="col-12 col-xl-5 mxd-grid-item no-margin">
 <div class="mxd-project__subtitle">
-<h2 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h2>
+<h2 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 <div class="col-12 col-xl-6 mxd-grid-item no-margin">
@@ -5017,7 +5035,7 @@
 <div class="row gx-0">
 <div class="col-12 col-xl-5 mxd-grid-item no-margin">
 <div class="mxd-project__subtitle">
-<h2 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span><br/><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h2>
+<h2 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span><br/><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 <div class="col-12 col-xl-6 mxd-grid-item no-margin">
@@ -5025,7 +5043,7 @@
 <div class="mxd-project__paragraph medium-text">
 <p class="anim-uni-in-up"><span class="lang-string" data-ar="فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي." data-en="A longer sample paragraph used as filler to demonstrate how expanded copy renders inside this element, including extended descriptions and supporting text once real content is provided.">فقرة نموذجية طويلة. هذا نصٌّ بديل يُستخدم لعرض شكل المحتوى الفعلي داخل العنصر، ويوضح كيفية ظهور الفقرات الموسّعة والشروحات الإضافية حين تُستبدل بالنص الحقيقي.</span></p>
 <div class="mxd-project__client anim-uni-in-up">
-<h5 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h5>
+<h5 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان صغير" data-en="Small Heading">عنوان صغير</span></h5>
 <p class="t-small anim-uni-in-up"><span class="lang-string" data-ar="وصف نموذجي قصير لهذا العنصر." data-en="A short sample description for this element.">وصف نموذجي قصير لهذا العنصر.</span></p>
 </div>
 </div>
@@ -5086,7 +5104,7 @@
 <div class="row g-0">
 <div class="col-12 col-xl-6 mxd-grid-item no-margin">
 <div class="mxd-section-title__hrtitle">
-<h2 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h2>
+<h2 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 <div class="col-12 col-xl-2 mxd-grid-item no-margin"></div>
@@ -5675,7 +5693,7 @@
 <div class="row g-0">
 <div class="col-12">
 <div class="mxd-section-title__title anim-uni-in-up">
-<h2><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h2>
+<h2><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 <div class="col-12">
@@ -5840,7 +5858,7 @@
 <!-- portfolio gallery title -->
 <div class="col-12 col-xl-6 mxd-projects-masonry__title headline-title">
 <div class="mxd-block__inner-headline">
-<h1 class="inner-headline__title headline-img-before headline-img-07"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span><br/><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h1>
+<h1 class="inner-headline__title headline-img-before headline-img-07"><span class="lang-string" data-ar="عنوان رئيسي للصفحة" data-en="Main Page Headline">عنوان رئيسي للصفحة</span><br/><span class="lang-string" data-ar="عنوان رئيسي للصفحة" data-en="Main Page Headline">عنوان رئيسي للصفحة</span></h1>
 </div>
 </div>
 <!-- portfolio gallery single item -->
@@ -6006,7 +6024,7 @@
 <div class="row g-0">
 <div class="col-12 mxd-grid-item no-margin">
 <div class="mxd-section-title__title anim-uni-in-up">
-<h2><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span><br/><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h2>
+<h2><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span><br/><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 <div class="col-12 mxd-grid-item no-margin">
@@ -6144,7 +6162,7 @@
 <div class="row g-0">
 <div class="col-12 mxd-grid-item no-margin">
 <div class="mxd-section-title__title">
-<h2 class="h2-large"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h2>
+<h2 class="h2-large"><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 <!-- <div class="col-12 mxd-grid-item no-margin">
@@ -6250,7 +6268,7 @@
 <img alt="Project Preview" class="desktop" src="/uc-assets/img/works/preview/1920x1080_prv-01.webp"/>
 </div>
 <div class="mxd-projects-stack__title">
-<h2 class="permanent-light"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h2>
+<h2 class="permanent-light"><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 <div class="mxd-projects-stack__tags">
 <span class="tag tag-default tag-permanent"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
@@ -6267,7 +6285,7 @@
 <img alt="Project Preview" class="desktop" src="/uc-assets/img/works/preview/1920x1080_prv-07.webp"/>
 </div>
 <div class="mxd-projects-stack__title">
-<h2 class="permanent-light"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h2>
+<h2 class="permanent-light"><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 <div class="mxd-projects-stack__tags">
 <span class="tag tag-default tag-permanent"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
@@ -6284,7 +6302,7 @@
 <img alt="Project Preview" class="desktop" src="/uc-assets/img/works/preview/1920x1080_prv-03.webp"/>
 </div>
 <div class="mxd-projects-stack__title">
-<h2 class="permanent-light"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h2>
+<h2 class="permanent-light"><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 <div class="mxd-projects-stack__tags">
 <span class="tag tag-default tag-permanent"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
@@ -6301,7 +6319,7 @@
 <img alt="Project Preview" class="desktop" src="/uc-assets/img/works/preview/1920x1080_prv-04.webp"/>
 </div>
 <div class="mxd-projects-stack__title">
-<h2 class="permanent-light"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h2>
+<h2 class="permanent-light"><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 <div class="mxd-projects-stack__tags">
 <span class="tag tag-default tag-permanent"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
@@ -6336,7 +6354,7 @@
 <div class="row g-0">
 <div class="col-12 col-xl-6 mxd-grid-item no-margin">
 <div class="mxd-section-title__hrtitle anim-uni-in-up">
-<h2><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span><br/><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h2>
+<h2><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span><br/><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 <div class="col-12 col-xl-3 mxd-grid-item no-margin"></div>
@@ -6966,7 +6984,7 @@
 <div class="mxd-pinned__img-mobile anim-uni-in-up">
 <img alt="Image" src="/uc-assets/img/illustrations/800x800_pinned-image-01.webp"/>
 </div>
-<h2 class="mxd-pinned__title h2-small anim-uni-in-up"><span class="lang-string" data-ar="وصف نموذجي قصير لهذا العنصر." data-en="A short sample description for this element.">وصف نموذجي قصير لهذا العنصر.</span></h2>
+<h2 class="mxd-pinned__title h2-small anim-uni-in-up"><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 <div class="mxd-pinned__tags">
 <span class="tag tag-default tag-outline anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <span class="tag tag-default tag-outline anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
@@ -6980,7 +6998,7 @@
 <div class="mxd-pinned__img-mobile anim-uni-in-up">
 <img alt="Image" src="/uc-assets/img/illustrations/800x800_pinned-image-02.webp"/>
 </div>
-<h2 class="mxd-pinned__title h2-small anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h2>
+<h2 class="mxd-pinned__title h2-small anim-uni-in-up"><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 <div class="mxd-pinned__tags">
 <span class="tag tag-default tag-outline anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <span class="tag tag-default tag-outline anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
@@ -6994,7 +7012,7 @@
 <div class="mxd-pinned__img-mobile anim-uni-in-up">
 <img alt="Image" src="/uc-assets/img/illustrations/800x800_pinned-image-03.webp"/>
 </div>
-<h2 class="mxd-pinned__title h2-small anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h2>
+<h2 class="mxd-pinned__title h2-small anim-uni-in-up"><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 <div class="mxd-pinned__tags">
 <span class="tag tag-default tag-outline anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></span>
 <span class="tag tag-default tag-outline anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
@@ -7009,7 +7027,7 @@
 <div class="mxd-pinned__img-mobile anim-uni-in-up">
 <img alt="Image" src="/uc-assets/img/illustrations/800x800_pinned-image-04.webp"/>
 </div>
-<h2 class="mxd-pinned__title h2-small anim-uni-in-up"><span class="lang-string" data-ar="وصف نموذجي قصير لهذا العنصر." data-en="A short sample description for this element.">وصف نموذجي قصير لهذا العنصر.</span></h2>
+<h2 class="mxd-pinned__title h2-small anim-uni-in-up"><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 <div class="mxd-pinned__tags">
 <span class="tag tag-default tag-outline anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <span class="tag tag-default tag-outline anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></span>
@@ -7054,7 +7072,7 @@
 </a>
 </div>
 <div class="mxd-services-stack__title width-60">
-<h3 class="opposite"><span class="lang-string" data-ar="وصف نموذجي قصير لهذا العنصر." data-en="A short sample description for this element.">وصف نموذجي قصير لهذا العنصر.</span></h3>
+<h3 class="opposite"><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span></h3>
 </div>
 <div class="mxd-services-stack__info width-60">
 <div class="mxd-services-cards__tags">
@@ -7081,7 +7099,7 @@
 </a>
 </div>
 <div class="mxd-services-stack__title width-60">
-<h3 class="opposite"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span><br/><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h3>
+<h3 class="opposite"><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span><br/><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span></h3>
 </div>
 <div class="mxd-services-stack__info width-60">
 <div class="mxd-services-cards__tags">
@@ -7107,7 +7125,7 @@
 </a>
 </div>
 <div class="mxd-services-stack__title width-60">
-<h3><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span><br/><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h3>
+<h3><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span><br/><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span></h3>
 </div>
 <div class="mxd-services-stack__info width-60">
 <div class="mxd-services-cards__tags">
@@ -7133,7 +7151,7 @@
 </a>
 </div>
 <div class="mxd-services-stack__title width-60">
-<h3 class="opposite"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span><br/><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h3>
+<h3 class="opposite"><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span><br/><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span></h3>
 </div>
 <div class="mxd-services-stack__info width-60">
 <div class="mxd-services-cards__tags">
@@ -7178,7 +7196,7 @@
 <div class="mxd-links-lines__item">
 <div class="mxd-links-lines__divider anim-uni-in-up"></div>
 <a class="mxd-links-lines__link anim-uni-in-up" href="https://twitter.com/shfrah" target="_blank">
-<h6 class="mxd-links-lines__title"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h6>
+<h6 class="mxd-links-lines__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-links-lines__icon">
 <i class="ph ph-arrow-up-right"></i>
 </div>
@@ -7189,7 +7207,7 @@
 <div class="mxd-links-lines__item">
 <div class="mxd-links-lines__divider anim-uni-in-up"></div>
 <a class="mxd-links-lines__link anim-uni-in-up" href="https://www.linkedin.com/company/shfrah" target="_blank">
-<h6 class="mxd-links-lines__title"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h6>
+<h6 class="mxd-links-lines__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-links-lines__icon">
 <i class="ph ph-arrow-up-right"></i>
 </div>
@@ -7200,7 +7218,7 @@
 <div class="mxd-links-lines__item">
 <div class="mxd-links-lines__divider anim-uni-in-up"></div>
 <a class="mxd-links-lines__link anim-uni-in-up" href="https://www.instagram.com/shfrah" target="_blank">
-<h6 class="mxd-links-lines__title"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h6>
+<h6 class="mxd-links-lines__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-links-lines__icon">
 <i class="ph ph-arrow-up-right"></i>
 </div>
@@ -7211,7 +7229,7 @@
 <div class="mxd-links-lines__item">
 <div class="mxd-links-lines__divider anim-uni-in-up"></div>
 <a class="mxd-links-lines__link anim-uni-in-up" href="https://github.com/shfrah" target="_blank">
-<h6 class="mxd-links-lines__title"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h6>
+<h6 class="mxd-links-lines__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-links-lines__icon">
 <i class="ph ph-arrow-up-right"></i>
 </div>
@@ -7222,7 +7240,7 @@
 <div class="mxd-links-lines__item">
 <div class="mxd-links-lines__divider anim-uni-in-up"></div>
 <a class="mxd-links-lines__link anim-uni-in-up" href="https://wa.me/966502185471" target="_blank">
-<h6 class="mxd-links-lines__title"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h6>
+<h6 class="mxd-links-lines__title"><span class="lang-string" data-ar="وسم نموذجي" data-en="Label">وسم نموذجي</span></h6>
 <div class="mxd-links-lines__icon">
 <i class="ph ph-arrow-up-right"></i>
 </div>
@@ -7455,7 +7473,7 @@
 <div class="row g-0">
 <div class="col-12">
 <div class="mxd-section-title__title">
-<h2><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h2>
+<h2><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 <div class="col-12">
@@ -7666,7 +7684,7 @@
 <div class="row g-0">
 <div class="col-12">
 <div class="mxd-section-title__title">
-<h2><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h2>
+<h2><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 <div class="col-12">
@@ -7721,7 +7739,7 @@
 <div class="row g-0">
 <div class="col-12 mxd-grid-item no-margin">
 <div class="mxd-section-title__title card-split-title">
-<h2><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span><br/><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h2>
+<h2><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span><br/><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 </div>
@@ -7987,7 +8005,7 @@
 <div class="row g-0">
 <div class="col-12 mxd-grid-item no-margin">
 <div class="mxd-section-title__title anim-uni-in-up">
-<h2><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h2>
+<h2><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 <div class="col-12 mxd-grid-item no-margin">
@@ -8047,7 +8065,7 @@
 </div>
 </div>
 <div class="mxd-testimonials-card__author">
-<h5 class="mxd-testimonials-card__name anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h5>
+<h5 class="mxd-testimonials-card__name anim-uni-in-up"><span class="lang-string" data-ar="عنوان صغير" data-en="Small Heading">عنوان صغير</span></h5>
 <p class="mxd-testimonials-card__position t-small anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span><a class="" href="#"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></a>
 </p>
 </div>
@@ -8074,7 +8092,7 @@
 </div>
 </div>
 <div class="mxd-testimonials-card__author">
-<h5 class="mxd-testimonials-card__name anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h5>
+<h5 class="mxd-testimonials-card__name anim-uni-in-up"><span class="lang-string" data-ar="عنوان صغير" data-en="Small Heading">عنوان صغير</span></h5>
 <p class="mxd-testimonials-card__position t-small anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span><a class="" href="#"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></a>
 </p>
 </div>
@@ -8101,7 +8119,7 @@
 </div>
 </div>
 <div class="mxd-testimonials-card__author">
-<h5 class="mxd-testimonials-card__name anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h5>
+<h5 class="mxd-testimonials-card__name anim-uni-in-up"><span class="lang-string" data-ar="عنوان صغير" data-en="Small Heading">عنوان صغير</span></h5>
 <p class="mxd-testimonials-card__position t-small anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span><a class="" href="#"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></a>
 </p>
 </div>
@@ -8128,7 +8146,7 @@
 </div>
 </div>
 <div class="mxd-testimonials-card__author">
-<h5 class="mxd-testimonials-card__name anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h5>
+<h5 class="mxd-testimonials-card__name anim-uni-in-up"><span class="lang-string" data-ar="عنوان صغير" data-en="Small Heading">عنوان صغير</span></h5>
 <p class="mxd-testimonials-card__position t-small anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span><a class="" href="#"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></a>
 </p>
 </div>
@@ -8188,7 +8206,7 @@
 <img alt="Review Author" src="/uc-assets/img/avatars/300x300_ava-03.webp"/>
 </div>
 <div class="mxd-testimonials-photo__info">
-<h5 class="mxd-testimonials-photo__name"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h5>
+<h5 class="mxd-testimonials-photo__name"><span class="lang-string" data-ar="عنوان صغير" data-en="Small Heading">عنوان صغير</span></h5>
 <p class="mxd-testimonials-photo__position t-small"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span><a class="link-small-underline" href="#"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></a>
 </p>
 <div class="mxd-testimonials-photo__rating">
@@ -8228,7 +8246,7 @@
 <img alt="Review Author" src="/uc-assets/img/avatars/300x300_ava-04.webp"/>
 </div>
 <div class="mxd-testimonials-photo__info">
-<h5 class="mxd-testimonials-photo__name"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h5>
+<h5 class="mxd-testimonials-photo__name"><span class="lang-string" data-ar="عنوان صغير" data-en="Small Heading">عنوان صغير</span></h5>
 <p class="mxd-testimonials-photo__position t-small"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span><a class="link-small-underline" href="#"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></a>
 </p>
 <div class="mxd-testimonials-photo__rating">
@@ -8309,7 +8327,7 @@
 <img alt="Review Author" src="/uc-assets/img/avatars/300x300_ava-03.webp"/>
 </div>
 <div class="mxd-testimonials-image__info">
-<h5 class="mxd-testimonials-image__name"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h5>
+<h5 class="mxd-testimonials-image__name"><span class="lang-string" data-ar="عنوان صغير" data-en="Small Heading">عنوان صغير</span></h5>
 <p class="mxd-testimonials-image__position t-small"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span><a class="link-small-underline" href="#"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></a>
 </p>
 <div class="mxd-testimonials-image__rating">
@@ -8347,7 +8365,7 @@
 <img alt="Review Author" src="/uc-assets/img/avatars/300x300_ava-04.webp"/>
 </div>
 <div class="mxd-testimonials-image__info">
-<h5 class="mxd-testimonials-image__name"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h5>
+<h5 class="mxd-testimonials-image__name"><span class="lang-string" data-ar="عنوان صغير" data-en="Small Heading">عنوان صغير</span></h5>
 <p class="mxd-testimonials-image__position t-small"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span><a class="link-small-underline" href="#"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></a>
 </p>
 <div class="mxd-testimonials-image__rating">
@@ -8414,7 +8432,7 @@
 <div class="row gx-0">
 <div class="col-12 col-xl-5 mxd-grid-item no-margin">
 <div class="mxd-block__name">
-<h2 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h2>
+<h2 class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
 </div>
 </div>
 <div class="col-12 col-xl-6 mxd-grid-item no-margin">
@@ -8583,8 +8601,8 @@
 <!-- title text -->
 <h1 class="hero-01-title">
 <span class="hero-01-title__row loading__item">
-<em class="hero-01-title__item"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></em>
-<em class="hero-01-title__item title-item-transparent"><span class="lang-string" data-ar="وسم" data-en="Tag">وسم</span></em>
+<em class="hero-01-title__item"><span class="lang-string" data-ar="عنوان رئيسي للصفحة" data-en="Main Page Headline">عنوان رئيسي للصفحة</span></em>
+<em class="hero-01-title__item title-item-transparent"><span class="lang-string" data-ar="عنوان رئيسي للصفحة" data-en="Main Page Headline">عنوان رئيسي للصفحة</span></em>
 </span>
 <span class="hero-01-title__row loading__item">
 <em class="hero-01-title__item title-item-image">
@@ -8593,7 +8611,7 @@
 </svg>
 <!-- <img class="inject-me" src="/uc-assets/img/icons/20x20-rayo-star.svg" alt="Divider Icon"> -->
 </em>
-<em class="hero-01-title__item"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></em>
+<em class="hero-01-title__item"><span class="lang-string" data-ar="عنوان رئيسي للصفحة" data-en="Main Page Headline">عنوان رئيسي للصفحة</span></em>
 </span>
 </h1>
 </div>
@@ -9031,7 +9049,7 @@
 <div class="mxd-hero-03__headline">
 <p class="hero-03-headline__caption loading__item"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span><br/><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span><br/><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></p>
 <h1 class="hero-03-headline__title loading__item">
-<span class="hero-03-headline__hidden"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
+<span class="hero-03-headline__hidden"><span class="lang-string" data-ar="عنوان رئيسي للصفحة" data-en="Main Page Headline">عنوان رئيسي للصفحة</span></span>
 <svg class="hero-03-headline__svg-mobile" id="Layer_1" style="enable-background:new 0 0 238.2 108.3;" version="1.1" viewbox="0 0 238.2 108.3" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px">
 <path d="M4.9,40.8V10.7H0V0.8h10.1v7.7h2.8C14,5.8,15.7,3.8,18,2.4s5-2.1,7.9-2.1h3.3v8.5h-3.8c-3.6,0-6.4,1-8.1,3.1
                     c-1.8,2.1-2.7,4.9-2.7,8.3v20.4H4.9V40.8z M69,30.9L69,30.9l-0.1-15.3c0-5.1-1.5-8.9-4.6-11.6c-3.1-2.7-7.5-4-13.4-4
@@ -9190,7 +9208,7 @@
 <!-- title text -->
 <h1 class="hero-04-title">
 <span class="hero-04-title__row loading__item">
-<em class="hero-04-title__item"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></em>
+<em class="hero-04-title__item"><span class="lang-string" data-ar="عنوان رئيسي للصفحة" data-en="Main Page Headline">عنوان رئيسي للصفحة</span></em>
 </span>
 <span class="hero-04-title__row loading__item">
 <em class="hero-04-title__item title-item-image">
@@ -9198,7 +9216,7 @@
 <path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"></path>
 </svg>
 </em>
-<em class="hero-04-title__item"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></em>
+<em class="hero-04-title__item"><span class="lang-string" data-ar="عنوان رئيسي للصفحة" data-en="Main Page Headline">عنوان رئيسي للصفحة</span></em>
 </span>
 </h1>
 </div>
@@ -9367,7 +9385,7 @@
 <!-- title text -->
 <h1 class="hero-05-title">
 <span class="hero-05-title__row loading__item">
-<em class="hero-05-title__item"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></em>
+<em class="hero-05-title__item"><span class="lang-string" data-ar="عنوان رئيسي للصفحة" data-en="Main Page Headline">عنوان رئيسي للصفحة</span></em>
 </span>
 <span class="hero-05-title__row loading__item">
 <em class="hero-05-title__item title-item-image">
@@ -9375,7 +9393,7 @@
 <path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"></path>
 </svg>
 </em>
-<em class="hero-05-title__item"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></em>
+<em class="hero-05-title__item"><span class="lang-string" data-ar="عنوان رئيسي للصفحة" data-en="Main Page Headline">عنوان رئيسي للصفحة</span></em>
 </span>
 </h1>
 </div>
@@ -9541,7 +9559,7 @@
 </div>
 </div>
 <div class="hero-06-headline__content">
-<h1 class="hero-06-headline__title"><span class="lang-string" data-ar="وصف نموذجي قصير لهذا العنصر." data-en="A short sample description for this element.">وصف نموذجي قصير لهذا العنصر.</span></h1>
+<h1 class="hero-06-headline__title"><span class="lang-string" data-ar="عنوان رئيسي للصفحة" data-en="Main Page Headline">عنوان رئيسي للصفحة</span></h1>
 <div class="mxd-hero-06__marquee loading__item">
 <div class="marquee marquee-right--gsap permanent-desktop">
 <div class="marquee__toright" style="translate: none; rotate: none; scale: none; transform: translate3d(11.3417%, 0px, 0px);">
@@ -9653,7 +9671,7 @@
 <div class="mxd-hero-07__wrap loading-wrap">
 <!-- top part -->
 <div class="mxd-hero-07__top">
-<h1 class="mxd-hero-07__title"><span class="lang-string" data-ar="وصف نموذجي قصير لهذا العنصر." data-en="A short sample description for this element.">وصف نموذجي قصير لهذا العنصر.</span></h1>
+<h1 class="mxd-hero-07__title"><span class="lang-string" data-ar="عنوان رئيسي للصفحة" data-en="Main Page Headline">عنوان رئيسي للصفحة</span></h1>
 <div class="mxd-hero-07__marquee loading__item">
 <div class="marquee marquee-right--gsap bright">
 <div class="marquee__toright">
@@ -9812,7 +9830,7 @@
 <img alt="Hero Image" class="mxd-rotate-slow" src="/uc-assets/img/hero/16_hero-img.webp"/>
 </div>
 <div class="hero-08-headline__title hero-08-slide-out-scroll loading__item">
-<h1><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span><br/><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></h1>
+<h1><span class="lang-string" data-ar="عنوان رئيسي للصفحة" data-en="Main Page Headline">عنوان رئيسي للصفحة</span><br/><span class="lang-string" data-ar="عنوان رئيسي للصفحة" data-en="Main Page Headline">عنوان رئيسي للصفحة</span></h1>
 </div>
 </div>
 </div>
@@ -9863,7 +9881,7 @@
 <p><span class="lang-string" data-ar="فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي." data-en="A medium-length sample paragraph illustrating how content sits inside this element in a clean, professional tone.">فقرة نموذجية متوسطة الطول تشرح شكل المحتوى داخل هذا العنصر بأسلوب احترافي.</span></p>
 </div>
 <div class="hero-09-headline__title loading__item">
-<h1 class="hero-09-headline__hidden"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></h1>
+<h1 class="hero-09-headline__hidden"><span class="lang-string" data-ar="عنوان رئيسي للصفحة" data-en="Main Page Headline">عنوان رئيسي للصفحة</span></h1>
 <svg class="hero-09-svg-mobile" style="enable-background:new 0 0 153.2 74.1;" viewbox="0 0 153.2 74.1" x="0px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" y="0px">
 <path d="M9.7,34c-2.8,0-5-0.7-6.6-2c-1.6-1.4-2.4-3.2-2.4-5.4c0-2.3,0.8-4.2,2.4-5.4c1.6-1.3,3.9-1.9,7-1.9h7.3v-1
                   c0-2.9-1.7-4.4-5.1-4.4c-2.9,0-4.7,1-5.2,3.1h-6c0.5-2.6,1.7-4.5,3.6-5.9c1.9-1.3,4.4-2,7.6-2c3.5,0,6.2,0.8,8,2.4
