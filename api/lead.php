@@ -20,8 +20,8 @@ declare(strict_types=1);
    ============================================================ */
 
 $LEAD_LOG_DIR   = '/var/log/hawih-leads';
-$THANK_YOU_URL  = '/thank-you.html?ok=1';
-$FALLBACK_BACK  = '/contact.html';
+$THANK_YOU_URL  = '/thank-you?ok=1';
+$FALLBACK_BACK  = '/contact';
 
 /* CRM endpoint (Rise CRM) */
 $CRM_URL        = 'https://crm.hawih.com.sa/index.php/collect_leads/save';
@@ -33,11 +33,16 @@ $CRM_STATUS_ID  = 1;     /* "New" */
    IDs MUST match rise_lead_source rows in the CRM (see DEPLOY.md §1) */
 $SOURCE_MAP = [
     '/'              =>  6,   /* Website — Home */
-    '/index.html'    =>  6,
-    '/work.html'     =>  7,   /* Website — Work */
-    '/services.html' =>  8,   /* Website — Services */
-    '/about.html'    =>  9,   /* Website — About */
-    '/contact.html'  => 10,   /* Website — Contact form */
+    '/index'         =>  6,
+    '/index.html'    =>  6,   /* legacy — kept for redirects/inbound links */
+    '/work'          =>  7,   /* Website — Work */
+    '/work.html'     =>  7,
+    '/services'      =>  8,   /* Website — Services */
+    '/services.html' =>  8,
+    '/about'         =>  9,   /* Website — About */
+    '/about.html'    =>  9,
+    '/contact'       => 10,   /* Website — Contact form */
+    '/contact.html'  => 10,
 ];
 $DEFAULT_SOURCE_ID = 10;
 
@@ -142,7 +147,7 @@ if ($brief === '')                              $errors[] = 'brief';
 
 if ($errors) {
     /* Save submitted values in a short cookie so JS can re-fill the form
-       on the redirect-back to /contact.html?err=1 */
+       on the redirect-back to /contact?err=1 */
     $payload = base64_encode(json_encode([
         'name'    => $name,
         'company' => $company,
