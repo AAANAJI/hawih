@@ -1263,6 +1263,39 @@
         color: var(--t-opp-bright, #fff) !important;
       }
 
+      /* ---- Hero composite blocks: lock LTR layout direction ----
+         Heros mxd-hero-01 / -04 / -09 are highly visual composites that
+         use physical `left:`/`right:` positions for floating images, the
+         marquee pill, and the title-item rows. Those positions were
+         designed for LTR and don't auto-flip in an RTL context — in
+         Arabic mode the helmet/heart/ring end up in the wrong corners.
+         Force direction:ltr on the composite container while letting
+         each text-bearing descendant resolve its own direction from
+         Unicode (Arabic chars still render right-to-left thanks to
+         unicode-bidi: plaintext). */
+      .ta-asset .mxd-hero-01,
+      .ta-asset .mxd-hero-04,
+      .ta-asset .mxd-hero-09,
+      .ta-asset .mxd-hero-00,
+      .ta-asset .mxd-hero-section .mxd-hero-01__title-wrap,
+      .ta-asset .mxd-hero-section .mxd-hero-04__title-wrap,
+      .ta-asset .mxd-hero-section .mxd-hero-09__title-wrap {
+        direction: ltr;
+      }
+      .ta-asset .mxd-hero-01 .lang-string,
+      .ta-asset .mxd-hero-04 .lang-string,
+      .ta-asset .mxd-hero-09 .lang-string,
+      .ta-asset .mxd-hero-00 .lang-string {
+        unicode-bidi: plaintext;
+      }
+
+      /* Marquee pill in hero-01 sits at top:0 right:7rem. Push the
+         title-wrap content down a bit so the title doesn't overlap the
+         pill, and stack the title above the marquee on z. */
+      .ta-asset .mxd-hero-01__title-wrap { padding-top: 12rem; }
+      .ta-asset .mxd-hero-01 .hero-01-title { position: relative; z-index: 5; }
+      .ta-asset .mxd-hero-01__marquee { z-index: 2; }
+
       /* Tag outlines inside dark cards need light border + light text */
       .ta-asset .bg-base-opp .tag.tag-outline,
       .ta-asset .bg-base-opp .tag-outline,
