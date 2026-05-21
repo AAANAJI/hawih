@@ -187,6 +187,15 @@
       [dir="rtl"] .btn .ph-arrow-right {
         transform: scaleX(-1);
       }
+      /* Left-pointing arrow on the Swiper "previous" button: flip in RTL so
+         the prev arrow visually points right (towards the previous-slide
+         direction in RTL reading order). Without this, both prev and next
+         buttons end up looking like left arrows in RTL because the next
+         arrow already gets flipped by the rule above. */
+      [dir="rtl"] .swiper-button-prev .ph-arrow-left,
+      [dir="rtl"] .btn .ph-arrow-left {
+        transform: scaleX(-1);
+      }
 
       /* --- 2. Hero rotating word chips (Craft / Identity / Packaging / Digital / Strategy)
          These chips live as direct flex children of .mxd-hero-08__wrap, which
@@ -2945,13 +2954,32 @@
       (function () {
         function applyLang(lang) {
           var html = document.documentElement;
+          var newDir = (lang === 'ar') ? 'rtl' : 'ltr';
           html.lang = lang;
-          html.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+          html.dir = newDir;
           try { localStorage.setItem('lang', lang); } catch (e) {}
           document.querySelectorAll('.lang-string').forEach(function (el) {
             var v = el.getAttribute('data-' + lang);
             if (v != null) el.textContent = v;
           });
+          // Re-orient any Swiper sliders to match the new page direction.
+          // Without this the slider's internal translate math stays in the
+          // previous direction and the slides drift off-canvas after a
+          // language toggle. changeLanguageDirection is a Swiper 6+ API.
+          setTimeout(function () {
+            var swSelectors = '.swiper-testimonials, .swiper-testimonials-2, .mxd-demo-swiper, .swiper';
+            document.querySelectorAll(swSelectors).forEach(function (el) {
+              if (el.swiper && typeof el.swiper.changeLanguageDirection === 'function') {
+                try {
+                  el.swiper.changeLanguageDirection(newDir);
+                  el.swiper.update();
+                  if (typeof el.swiper.slideToLoop === 'function') {
+                    el.swiper.slideToLoop(0, 0);
+                  }
+                } catch (e) { /* swallow */ }
+              }
+            });
+          }, 30);
           // Refresh ScrollTrigger and layout-dependent plugins after dir change
           if (window.ScrollTrigger && typeof window.ScrollTrigger.refresh === 'function') {
             setTimeout(function () { window.ScrollTrigger.refresh(); }, 60);
