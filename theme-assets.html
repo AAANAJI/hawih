@@ -1198,26 +1198,79 @@
         text-transform: none !important;
       }
 
-      /* ---- "opposite" color classes assume a dark parent bg. When the
-              parent doesn't supply one, the text is invisible on light
-              backgrounds. Use the bright color by default, then re-flip
-              to white only when a dark bg is explicitly set on the parent. */
+      /* ---- "opposite" / "t-opposite-*" color classes assume the parent
+              card has a dark background (template's t-opp-bright resolves
+              to white in light theme). Without a dark wrapper, the text
+              becomes white-on-light and disappears. We force dark text by
+              default with !important (beats template specificity such as
+              .mxd-services-cards__title p.opposite), then re-flip to
+              white only inside known dark-bg ancestors. */
       .ta-asset .opposite,
-      .ta-asset .t-opposite-medium,
       .ta-asset .t-opposite,
+      .ta-asset .t-opposite-medium,
       .ta-asset .t-bright.opposite {
-        color: var(--t-bright, #111);
+        color: var(--t-bright, #111) !important;
       }
+
+      /* Known dark backgrounds — text inside these flips to white. The
+         Hawih site overrides --accent to #1F1FFE (dark blue), so
+         bg-accent is also a dark surface. bg-additional is the yellow-
+         green secondary — text stays dark. */
+      .ta-asset .bg-base-opp,
+      .ta-asset .bg-base-opp *,
+      .ta-asset [class*="bg-base-opp"],
+      .ta-asset [class*="bg-base-opp"] * { }
+
       .ta-asset .bg-base-opp .opposite,
-      .ta-asset .bg-accent .opposite,
+      .ta-asset .bg-base-opp .t-opposite,
       .ta-asset .bg-base-opp .t-opposite-medium,
+      .ta-asset .bg-accent .opposite,
+      .ta-asset .bg-accent .t-opposite,
       .ta-asset .bg-accent .t-opposite-medium,
-      .ta-asset [style*="background-color:#16150F"] .opposite,
-      .ta-asset [style*="background-color:#22392D"] .opposite,
-      .ta-asset [style*="background-color:#C45B3C"] .opposite,
-      .ta-asset [style*="background-color:#1F3050"] .opposite,
-      .ta-asset [style*="background-color:#43365C"] .opposite {
-        color: #fff;
+      .ta-asset [class*="bg-base-opp"] .opposite,
+      .ta-asset [class*="bg-base-opp"] .t-opposite,
+      .ta-asset [class*="bg-base-opp"] .t-opposite-medium,
+      .ta-asset [style*="background-color:#0"] .opposite,
+      .ta-asset [style*="background-color:#1"] .opposite,
+      .ta-asset [style*="background-color:#2"] .opposite,
+      .ta-asset [style*="background-color:#3"] .opposite,
+      .ta-asset [style*="background-color:#4"] .opposite,
+      .ta-asset [style*="background:#0"] .opposite,
+      .ta-asset [style*="background:#1"] .opposite,
+      .ta-asset [style*="background:#2"] .opposite,
+      .ta-asset [style*="background:#3"] .opposite,
+      .ta-asset [style*="background:#4"] .opposite {
+        color: var(--t-opp-bright, #fff) !important;
+      }
+
+      /* Same idea for plain default text inside a dark-bg card —
+         children that DON'T have an explicit color class still need to
+         be readable. The template's body text is var(--t-medium) (dark
+         gray); inside a dark card that becomes invisible. Force light
+         body text on known dark backgrounds. */
+      .ta-asset .bg-base-opp,
+      .ta-asset .bg-base-opp h1, .ta-asset .bg-base-opp h2, .ta-asset .bg-base-opp h3,
+      .ta-asset .bg-base-opp h4, .ta-asset .bg-base-opp h5, .ta-asset .bg-base-opp h6,
+      .ta-asset .bg-base-opp p, .ta-asset .bg-base-opp li, .ta-asset .bg-base-opp span:not(.tag):not([class*="bg-"]),
+      .ta-asset .bg-accent,
+      .ta-asset .bg-accent h1, .ta-asset .bg-accent h2, .ta-asset .bg-accent h3,
+      .ta-asset .bg-accent h4, .ta-asset .bg-accent h5, .ta-asset .bg-accent h6,
+      .ta-asset .bg-accent p, .ta-asset .bg-accent li, .ta-asset .bg-accent span:not(.tag):not([class*="bg-"]),
+      .ta-asset [class*="bg-base-opp"] h1, .ta-asset [class*="bg-base-opp"] h2,
+      .ta-asset [class*="bg-base-opp"] h3, .ta-asset [class*="bg-base-opp"] h4,
+      .ta-asset [class*="bg-base-opp"] h5, .ta-asset [class*="bg-base-opp"] h6,
+      .ta-asset [class*="bg-base-opp"] p, .ta-asset [class*="bg-base-opp"] li {
+        color: var(--t-opp-bright, #fff) !important;
+      }
+
+      /* Tag outlines inside dark cards need light border + light text */
+      .ta-asset .bg-base-opp .tag.tag-outline,
+      .ta-asset .bg-base-opp .tag-outline,
+      .ta-asset .bg-accent .tag.tag-outline,
+      .ta-asset .bg-accent .tag-outline,
+      .ta-asset [class*="bg-base-opp"] .tag.tag-outline {
+        color: var(--t-opp-bright, #fff) !important;
+        border-color: rgba(255,255,255,0.3) !important;
       }
 
       /* ---- Click-to-copy code badge ---- */
@@ -6633,7 +6686,7 @@
 </a>
 </div>
 <div class="mxd-services-cards__title">
-<p class="opposite anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></p>
+<p class="opposite anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span></p>
 </div>
 <div class="mxd-services-cards__info">
 <div class="mxd-services-cards__tags">
@@ -6659,7 +6712,7 @@
 </a>
 </div>
 <div class="mxd-services-cards__title">
-<p class="opposite anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></p>
+<p class="opposite anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span></p>
 </div>
 <div class="mxd-services-cards__info">
 <div class="mxd-services-cards__tags">
@@ -6684,7 +6737,7 @@
 </a>
 </div>
 <div class="mxd-services-cards__title width-60">
-<p class="anim-uni-in-up"><span class="lang-string" data-ar="وصف نموذجي قصير لهذا العنصر." data-en="A short sample description for this element.">وصف نموذجي قصير لهذا العنصر.</span></p>
+<p class="anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span></p>
 </div>
 <div class="mxd-services-cards__info width-60">
 <div class="mxd-services-cards__tags">
@@ -6711,7 +6764,7 @@
 </a>
 </div>
 <div class="mxd-services-cards__title">
-<p class="opposite anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span><br/><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></p>
+<p class="opposite anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span><br/><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span></p>
 </div>
 <div class="mxd-services-cards__info">
 <div class="mxd-services-cards__tags">
@@ -6736,7 +6789,7 @@
 </a>
 </div>
 <div class="mxd-services-cards__title width-70">
-<p class="opposite anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span><br/><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></p>
+<p class="opposite anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span><br/><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span></p>
 </div>
 <div class="mxd-services-cards__info width-70">
 <div class="mxd-services-cards__tags">
@@ -7016,7 +7069,7 @@
 <div class="mxd-pinned__img-mobile anim-uni-in-up">
 <img alt="Image" src="/uc-assets/img/illustrations/800x800_pinned-image-01.webp"/>
 </div>
-<h2 class="mxd-pinned__title h2-small anim-uni-in-up"><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
+<h2 class="mxd-pinned__title h2-small anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span></h2>
 <div class="mxd-pinned__tags">
 <span class="tag tag-default tag-outline anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <span class="tag tag-default tag-outline anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
@@ -7030,7 +7083,7 @@
 <div class="mxd-pinned__img-mobile anim-uni-in-up">
 <img alt="Image" src="/uc-assets/img/illustrations/800x800_pinned-image-02.webp"/>
 </div>
-<h2 class="mxd-pinned__title h2-small anim-uni-in-up"><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
+<h2 class="mxd-pinned__title h2-small anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span></h2>
 <div class="mxd-pinned__tags">
 <span class="tag tag-default tag-outline anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <span class="tag tag-default tag-outline anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
@@ -7044,7 +7097,7 @@
 <div class="mxd-pinned__img-mobile anim-uni-in-up">
 <img alt="Image" src="/uc-assets/img/illustrations/800x800_pinned-image-03.webp"/>
 </div>
-<h2 class="mxd-pinned__title h2-small anim-uni-in-up"><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
+<h2 class="mxd-pinned__title h2-small anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span></h2>
 <div class="mxd-pinned__tags">
 <span class="tag tag-default tag-outline anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></span>
 <span class="tag tag-default tag-outline anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
@@ -7059,7 +7112,7 @@
 <div class="mxd-pinned__img-mobile anim-uni-in-up">
 <img alt="Image" src="/uc-assets/img/illustrations/800x800_pinned-image-04.webp"/>
 </div>
-<h2 class="mxd-pinned__title h2-small anim-uni-in-up"><span class="lang-string" data-ar="عنوان نموذجي للقسم" data-en="Sample Section Heading">عنوان نموذجي للقسم</span></h2>
+<h2 class="mxd-pinned__title h2-small anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر فرعي" data-en="Sample Card Heading">عنوان عنصر فرعي</span></h2>
 <div class="mxd-pinned__tags">
 <span class="tag tag-default tag-outline anim-uni-in-up"><span class="lang-string" data-ar="عنوان عنصر" data-en="Item Title">عنوان عنصر</span></span>
 <span class="tag tag-default tag-outline anim-uni-in-up"><span class="lang-string" data-ar="عنوان فرعي نموذجي" data-en="Sample Subtitle">عنوان فرعي نموذجي</span></span>
