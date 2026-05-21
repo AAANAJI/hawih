@@ -2421,7 +2421,37 @@
       <!-- Section - Blog Preview End -->
 
       <!-- Section - Voice of Our Clients (S049 Testimonials Slider) Start -->
-      <div class="mxd-section padding-grid-pre-mtext">
+      <div class="mxd-section padding-grid-pre-mtext uc-voice-clients">
+        <style id="uc-voice-clients-fix">
+          /* The template's .mxd-testimonials-card is hard-coded to
+             height: 600-700px and expects a photo + company-logo media
+             block to fill that height. Our cards only carry the quote
+             and the author name, so without the override we get tall
+             empty boxes. Scope this rule to .uc-voice-clients so other
+             pages that use the full card layout are untouched. */
+          .uc-voice-clients .mxd-testimonials-card {
+            height: auto !important;
+            min-height: 26rem !important;
+            max-width: 52rem !important;
+            justify-content: space-between !important;
+            gap: 2.4rem !important;
+          }
+          .uc-voice-clients .mxd-testimonials-card__content {
+            gap: 2.4rem !important;
+          }
+          /* anim-uni-in-up GSAP ScrollTrigger doesn't reliably fire on
+             elements inside a horizontally-translating Swiper slide, so
+             text often stays stuck at opacity:0, translateY(50). Force
+             visibility on every animated descendant of these cards. */
+          .uc-voice-clients .mxd-testimonials-card .anim-uni-in-up,
+          .uc-voice-clients .mxd-testimonials-card [class*="anim-uni-"] {
+            opacity: 1 !important;
+            transform: none !important;
+            visibility: visible !important;
+          }
+          /* Match the section's right-edge fade to the page base. */
+          .uc-voice-clients .testimonials-slider__shadow { display: none; }
+        </style>
         <div class="mxd-container no-padding-container">
           <div class="mxd-block">
             <div class="container-fluid px-0">
@@ -2434,13 +2464,13 @@
                         <div class="container-fluid p-0">
                           <div class="row g-0">
                             <div class="col-12 mxd-grid-item no-margin">
-                              <div class="mxd-section-title__title anim-uni-in-up">
+                              <div class="mxd-section-title__title">
                                 <h2><span class="lang-string" data-ar="صوت عملائنا" data-en="Voice of Our Clients">صوت عملائنا</span></h2>
                               </div>
                             </div>
                             <div class="col-12 mxd-grid-item no-margin">
                               <div class="mxd-section-title__descr">
-                                <p class="anim-uni-in-up"><span class="lang-string" data-ar="نستمع لصوت عملائنا، ومخاوفهم، واقتراحاتهم، وكذلك ملاحظاتهم. ونحرص على تقديم خدمة متكاملة تليق بتوقّعاتهم وآمالهم." data-en="We listen to our clients — their concerns, suggestions, and feedback — and strive to deliver an integrated service worthy of their expectations and aspirations.">نستمع لصوت عملائنا، ومخاوفهم، واقتراحاتهم، وكذلك ملاحظاتهم. ونحرص على تقديم خدمة متكاملة تليق بتوقّعاتهم وآمالهم.</span></p>
+                                <p><span class="lang-string" data-ar="نستمع لصوت عملائنا، ومخاوفهم، واقتراحاتهم، وكذلك ملاحظاتهم. ونحرص على تقديم خدمة متكاملة تليق بتوقّعاتهم وآمالهم." data-en="We listen to our clients — their concerns, suggestions, and feedback — and strive to deliver an integrated service worthy of their expectations and aspirations.">نستمع لصوت عملائنا، ومخاوفهم، واقتراحاتهم، وكذلك ملاحظاتهم. ونحرص على تقديم خدمة متكاملة تليق بتوقّعاتهم وآمالهم.</span></p>
                               </div>
                             </div>
                           </div>
@@ -2451,7 +2481,7 @@
                 </div>
                 <!-- RIGHT: testimonials slider -->
                 <div class="col-12 col-xl-7">
-                  <div class="testimonials-slider overflow-hidden anim-uni-in-up">
+                  <div class="testimonials-slider overflow-hidden">
                     <div class="swiper-testimonials">
                       <div class="swiper-wrapper">
                         <!-- Muhara -->
@@ -2459,12 +2489,12 @@
                           <div class="mxd-testimonials-card bg-base-tint radius-m">
                             <div class="mxd-testimonials-card__content">
                               <div class="mxd-testimonials-card__text">
-                                <p class="anim-uni-in-up"><span class="lang-string" data-ar="«فريق مميز وأداء فاق التوقعات»" data-en="“An exceptional team — performance that exceeded expectations.”">«فريق مميز وأداء فاق التوقعات»</span></p>
+                                <p><span class="lang-string" data-ar="«فريق مميز وأداء فاق التوقعات»" data-en="“An exceptional team — performance that exceeded expectations.”">«فريق مميز وأداء فاق التوقعات»</span></p>
                               </div>
                             </div>
                             <div class="mxd-testimonials-card__author">
-                              <h5 class="mxd-testimonials-card__name anim-uni-in-up"><span class="lang-string" data-ar="مُحارة" data-en="Muhara">مُحارة</span></h5>
-                              <p class="mxd-testimonials-card__position t-small anim-uni-in-up"><span class="lang-string" data-ar="من عملائنا" data-en="One of our clients">من عملائنا</span></p>
+                              <h5 class="mxd-testimonials-card__name"><span class="lang-string" data-ar="مُحارة" data-en="Muhara">مُحارة</span></h5>
+                              <p class="mxd-testimonials-card__position t-small"><span class="lang-string" data-ar="من عملائنا" data-en="One of our clients">من عملائنا</span></p>
                             </div>
                           </div>
                         </div>
@@ -2473,16 +2503,16 @@
                           <div class="mxd-testimonials-card bg-base-tint radius-m">
                             <div class="mxd-testimonials-card__content">
                               <div class="mxd-testimonials-card__text">
-                                <p class="anim-uni-in-up"><span class="lang-string" data-ar="«فريق مميز وأداء فاق التوقعات»" data-en="“An exceptional team — performance that exceeded expectations.”">«فريق مميز وأداء فاق التوقعات»</span></p>
-                                <a class="btn btn-anim btn-default btn-small btn-outline slide-right-up anim-uni-in-up" href="/work-athr.html">
+                                <p><span class="lang-string" data-ar="«فريق مميز وأداء فاق التوقعات»" data-en="“An exceptional team — performance that exceeded expectations.”">«فريق مميز وأداء فاق التوقعات»</span></p>
+                                <a class="btn btn-default btn-small btn-outline" href="/work-athr.html">
                                   <span class="btn-caption lang-string" data-ar="صفحة المشروع" data-en="Project Page">صفحة المشروع</span>
                                   <i class="ph ph-arrow-up-right"></i>
                                 </a>
                               </div>
                             </div>
                             <div class="mxd-testimonials-card__author">
-                              <h5 class="mxd-testimonials-card__name anim-uni-in-up"><span class="lang-string" data-ar="أثر المكان" data-en="Athar Al Makan">أثر المكان</span></h5>
-                              <p class="mxd-testimonials-card__position t-small anim-uni-in-up"><span class="lang-string" data-ar="من عملائنا" data-en="One of our clients">من عملائنا</span></p>
+                              <h5 class="mxd-testimonials-card__name"><span class="lang-string" data-ar="أثر المكان" data-en="Athar Al Makan">أثر المكان</span></h5>
+                              <p class="mxd-testimonials-card__position t-small"><span class="lang-string" data-ar="من عملائنا" data-en="One of our clients">من عملائنا</span></p>
                             </div>
                           </div>
                         </div>
@@ -2491,33 +2521,32 @@
                           <div class="mxd-testimonials-card bg-base-tint radius-m">
                             <div class="mxd-testimonials-card__content">
                               <div class="mxd-testimonials-card__text">
-                                <p class="anim-uni-in-up"><span class="lang-string" data-ar="«فريق مميز وأداء فاق التوقعات»" data-en="“An exceptional team — performance that exceeded expectations.”">«فريق مميز وأداء فاق التوقعات»</span></p>
-                                <a class="btn btn-anim btn-default btn-small btn-outline slide-right-up anim-uni-in-up" href="/work-nab.html">
+                                <p><span class="lang-string" data-ar="«فريق مميز وأداء فاق التوقعات»" data-en="“An exceptional team — performance that exceeded expectations.”">«فريق مميز وأداء فاق التوقعات»</span></p>
+                                <a class="btn btn-default btn-small btn-outline" href="/work-nab.html">
                                   <span class="btn-caption lang-string" data-ar="صفحة المشروع" data-en="Project Page">صفحة المشروع</span>
                                   <i class="ph ph-arrow-up-right"></i>
                                 </a>
                               </div>
                             </div>
                             <div class="mxd-testimonials-card__author">
-                              <h5 class="mxd-testimonials-card__name anim-uni-in-up"><span class="lang-string" data-ar="NAB Marketing" data-en="NAB Marketing">NAB Marketing</span></h5>
-                              <p class="mxd-testimonials-card__position t-small anim-uni-in-up"><span class="lang-string" data-ar="من عملائنا" data-en="One of our clients">من عملائنا</span></p>
+                              <h5 class="mxd-testimonials-card__name"><span class="lang-string" data-ar="NAB Marketing" data-en="NAB Marketing">NAB Marketing</span></h5>
+                              <p class="mxd-testimonials-card__position t-small"><span class="lang-string" data-ar="من عملائنا" data-en="One of our clients">من عملائنا</span></p>
                             </div>
                           </div>
                         </div>
                       </div>
                       <!-- navigation buttons -->
-                      <div class="swiper-button-prev mxd-slider-btn mxd-slider-btn-round-prev animate-card-2">
-                        <a class="btn btn-round btn-round-small btn-outline slide-left anim-no-delay" href="#0" aria-label="Previous">
+                      <div class="swiper-button-prev mxd-slider-btn mxd-slider-btn-round-prev">
+                        <a class="btn btn-round btn-round-small btn-outline" href="#0" aria-label="Previous">
                           <i class="ph ph-arrow-left"></i>
                         </a>
                       </div>
-                      <div class="swiper-button-next mxd-slider-btn mxd-slider-btn-round-next animate-card-2">
-                        <a class="btn btn-round btn-round-small btn-outline slide-right anim-no-delay" href="#0" aria-label="Next">
+                      <div class="swiper-button-next mxd-slider-btn mxd-slider-btn-round-next">
+                        <a class="btn btn-round btn-round-small btn-outline" href="#0" aria-label="Next">
                           <i class="ph ph-arrow-right"></i>
                         </a>
                       </div>
                     </div>
-                    <div class="testimonials-slider__shadow"></div>
                   </div>
                 </div>
               </div>
