@@ -1324,6 +1324,51 @@
         gap: 12rem;
       }
 
+      /* ---- Arabic mirror: pill on LEFT, "إبداع" on RIGHT ----
+         Default rule above locks the hero composite to direction:ltr so
+         floating images / marquee / title row keep the LTR-designed
+         layout. In Arabic mode, mirror everything: switch direction to
+         rtl on the composite (which auto-reverses flex row order so the
+         visible <em> goes to the right and the ghost — with the pill
+         overlaying it — goes to the left), and flip every physical
+         left/right anchor that the template uses for absolute
+         positioning. */
+      html[lang="ar"] .ta-asset .mxd-hero-01,
+      html[lang="ar"] .ta-asset .mxd-hero-04,
+      html[lang="ar"] .ta-asset .mxd-hero-09,
+      html[lang="ar"] .ta-asset .mxd-hero-00,
+      html[lang="ar"] .ta-asset .mxd-hero-section .mxd-hero-01__title-wrap,
+      html[lang="ar"] .ta-asset .mxd-hero-section .mxd-hero-04__title-wrap,
+      html[lang="ar"] .ta-asset .mxd-hero-section .mxd-hero-09__title-wrap {
+        direction: rtl !important;
+      }
+
+      /* Marquee pill: was right:7rem, now left:7rem in Arabic */
+      html[lang="ar"] .ta-asset .mxd-hero-01__marquee {
+        right: auto !important;
+        left: 7rem !important;
+      }
+      @media (max-width: 991px) {
+        html[lang="ar"] .ta-asset .mxd-hero-01__marquee {
+          right: auto !important;
+          left: 0 !important;
+        }
+      }
+
+      /* Floating images: mirror each one across the vertical center */
+      html[lang="ar"] .ta-asset .hero-01-image.image-01 {
+        left: auto !important;
+        right: -5% !important;
+      }
+      html[lang="ar"] .ta-asset .hero-01-image.image-02 {
+        right: auto !important;
+        left: 5% !important;
+      }
+      html[lang="ar"] .ta-asset .hero-01-image.image-03 {
+        left: auto !important;
+        right: 35% !important;
+      }
+
       /* Tag outlines inside dark cards need light border + light text */
       .ta-asset .bg-base-opp .tag.tag-outline,
       .ta-asset .bg-base-opp .tag-outline,
