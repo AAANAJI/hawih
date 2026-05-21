@@ -1289,29 +1289,32 @@
         unicode-bidi: plaintext;
       }
 
-      /* Hero-01 marquee pill is designed to render INLINE with the title
-         row — it visually sits at the same y-level as title row 1
-         (the marquee is the animated stand-in for the .title-item-
-         transparent pill that's part of row 1). We previously added
-         padding-top to push the title down, which broke that alignment.
-         Now: keep the template's natural positioning, and align the
-         marquee vertically with the FIRST title row so it visually
-         reads as part of the title composition. */
-      .ta-asset .mxd-hero-01 .hero-01-title { position: relative; z-index: 5; }
-      .ta-asset .mxd-hero-01__marquee {
-        /* Pull the marquee pill DOWN from top:0 so it lines up with the
-           visual center of title row 1 (which sits at the top of title-
-           wrap with the row's font-size+line-height). At 14rem font-size
-           and line-height:1.1, row 1 is about 15.4rem tall; the marquee
-           pill is 8.8rem tall, so center on (15.4-8.8)/2 ≈ 3.3rem from
-           top of the row. */
-        top: 3.3rem !important;
-        z-index: 4 !important;
-      }
-      @media (max-width: 991px) {
-        .ta-asset .mxd-hero-01__marquee {
-          top: 7.6rem !important;
-        }
+      /* Hero-01 layout: the template intends the marquee pill to render
+         ON THE SAME ROW as title row 1's .title-item-transparent ghost
+         (which has opacity:0). The pill visually replaces it. With my
+         short "Design" placeholders (5 chars) in both em items, the row
+         becomes "Design  Design[ghost]"  — and the marquee pill at
+         right:7rem of the title-wrap sits over the SECOND em position
+         (the ghost). That's the design.
+
+         The previous offsets we tried either pushed the title down
+         (creating a vertical gap) or pulled the pill up (mis-aligning
+         with the row). Trust the template's top:0 — the pill is sized
+         to fit visually within row 1's tall line-height. */
+      .ta-asset .mxd-hero-01 .hero-01-title { position: relative; z-index: 1; }
+      .ta-asset .mxd-hero-01__marquee { z-index: 3; }
+
+      /* Hero-01 row 1 NEEDS the ghost to occupy real space so the
+         marquee pill has a slot to overlay. The template sets the ghost
+         to opacity:0 but PADDING/border-radius give it the same width
+         the marquee pill needs. Force it to remain space-occupying so
+         the title and pill line up horizontally. */
+      .ta-asset .mxd-hero-01 .title-item-transparent {
+        visibility: visible;
+        opacity: 0; /* invisible but takes space */
+        /* Make the ghost roughly the marquee width so the pill sits
+           inside its slot in the row */
+        min-width: 265px;
       }
 
       /* Tag outlines inside dark cards need light border + light text */
