@@ -1770,20 +1770,33 @@ body header.mxd-header.uc-scrolled {
     }
 
     /* ------------------------------------------------------------
-       Mobile experiment: hide the header theme toggle, surface the
-       lang switch + Contact CTA in its place. The theme toggle is
-       added inside the hamburger popup menu instead (the popup also
-       carries Contact + Lang pills for parity).
-       ------------------------------------------------------------ */
-    body .mxd-header__controls #color-switcher {
-        display: none !important;
-    }
+       Mobile header arrangement:
+         - Theme toggle (back in the header)
+         - Lang switch ("ع" / "EN" — single-char in Arabic)
+         - "Start your project" CTA with caption visible (not the
+           icon-only mode the template defaults to)
+       Theme toggle ALSO stays inside the hamburger popup; both
+       triggers forward to the same #color-switcher via the bridge. */
     body .mxd-header__controls [data-lang-toggle],
     body .mxd-header__controls a.btn-mobile-icon {
         display: inline-flex !important;
     }
-    /* Trim the lang switch + CTA so the two pills + hamburger all
-       fit comfortably on a narrow screen. */
+    /* Defeat the template's `.btn-mobile-icon` rule that strips the
+       caption and forces a round icon-only shape — we want the full
+       "ابدأ مشروعك / Start your project" pill with text + arrow. */
+    body header.mxd-header .mxd-header__controls a.btn-mobile-icon {
+        width: auto !important;
+        height: 3.6rem !important;
+        padding: 0 1.2rem !important;
+        border-radius: 1.8rem !important;
+        gap: 0.4rem !important;
+    }
+    body header.mxd-header .mxd-header__controls a.btn-mobile-icon .btn-caption {
+        display: inline-block !important;
+        white-space: nowrap;
+    }
+    /* Trim everything else to fit on a narrow viewport without
+       crowding the hamburger. */
     body header.mxd-header .mxd-header__controls .btn.btn-default,
     body header.mxd-header .mxd-header__controls button[data-lang-toggle],
     body header.mxd-header .mxd-header__controls a.btn {
@@ -1796,9 +1809,20 @@ body header.mxd-header.uc-scrolled {
     body header.mxd-header .mxd-header__controls .btn i {
         font-size: 1.5rem !important;
     }
-    /* Lang button can be a tighter pill since it's only "EN" / "عربي". */
+    /* Lang button is now a single-character pill ("ع" / "EN") so
+       give it just a square-ish footprint. */
     body header.mxd-header .mxd-header__controls button[data-lang-toggle] {
-        padding-inline: 1rem !important;
-        min-width: 4rem;
+        padding-inline: 0.8rem !important;
+        min-width: 3.6rem;
+    }
+    /* Tighten the theme toggle disc to share the same 3.6rem height
+       as the other pills (it was 4.6rem when it was the only visible
+       control). */
+    body header.mxd-header .mxd-header__controls #color-switcher.mxd-color-switcher {
+        width: 3.6rem !important;
+        height: 3.6rem !important;
+    }
+    body header.mxd-header .mxd-header__controls #color-switcher.mxd-color-switcher i {
+        font-size: 1.6rem !important;
     }
 }
