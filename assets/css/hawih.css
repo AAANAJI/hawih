@@ -1534,18 +1534,33 @@ html[lang="ar"] .work-tile__chip { letter-spacing: 0 !important; }
 }
 
 /* ============================================================
-   Header controls — outline consistency
+   Header controls — outline + fill consistency
    ============================================================
-   The template ships .mxd-color-switcher with `border: none`, so the
-   theme-toggle disc looked visually different from the lang switch
-   and the "Start your project" pill (both .btn-outline). Apply the
-   same outline treatment so all three render with a black stroke
-   + transparent fill in light mode (and a light stroke on dark
-   cobalt in dark mode). */
-.mxd-header__controls #color-switcher.mxd-color-switcher {
+   Three buttons sit in the header: theme toggle (.mxd-color-switcher,
+   round), lang switch ([data-lang-toggle], pill), and the
+   "Start your project" CTA (.btn-mobile-icon.btn-outline, pill).
+
+   The template ships them with three different visual treatments —
+   theme toggle has no border, the CTA has a backdrop-filter blur,
+   the lang switch is bare. Apply the same outline + subtle filled
+   look to all three so they read as a matched set:
+
+     - 1px stroke in --st-bright (auto flips to light on dark mode)
+     - --base-tint fill (white in light, near-black in dark)
+     - backdrop-filter blur for the soft frosted feel
+   */
+.mxd-header__controls #color-switcher.mxd-color-switcher,
+.mxd-header__controls button[data-lang-toggle],
+.mxd-header__controls a.btn.btn-outline {
     border: 1px solid var(--st-bright) !important;
-    background-color: transparent !important;
-}
-.mxd-header__controls #color-switcher.mxd-color-switcher:hover {
     background-color: var(--base-tint) !important;
+    -webkit-backdrop-filter: blur(6px) !important;
+    backdrop-filter: blur(6px) !important;
+}
+/* Hover state — small lift via the next shade up. Same recipe for
+   each of the three so feedback is uniform. */
+.mxd-header__controls #color-switcher.mxd-color-switcher:hover,
+.mxd-header__controls button[data-lang-toggle]:hover,
+.mxd-header__controls a.btn.btn-outline:hover {
+    background-color: var(--base-shade) !important;
 }
