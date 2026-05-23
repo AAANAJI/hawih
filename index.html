@@ -868,49 +868,42 @@
         font-weight: 500 !important;
       }
 
-      /* WebGL divider — force WHITE text on every descendant regardless of
+      /* WebGL hero — force WHITE text on every descendant regardless of
          theme. In light mode the page's ink color cascades through to
          .lang-string spans, making text render black on the cobalt frame. */
-      .uc-divider-content,
-      .uc-divider-content *,
-      .uc-divider-content p,
-      .uc-divider-content span,
-      .uc-divider-content li,
-      .uc-divider-content .lang-string {
+      .uc-hero-intro,
+      .uc-hero-intro *,
+      .uc-hero-intro p,
+      .uc-hero-intro span,
+      .uc-hero-intro li,
+      .uc-hero-intro h1,
+      .uc-hero-intro h1 .lang-string,
+      .uc-hero-intro .lang-string {
         color: #fff !important;
       }
-      .uc-divider-content .uc-divider-descr,
-      .uc-divider-content .uc-divider-descr .lang-string {
-        color: rgba(255, 255, 255, 0.78) !important;
-      }
       /* The eyebrow gets a slightly softer white for visual hierarchy */
-      .uc-divider-content > div > div:first-child span:last-child,
-      .uc-divider-content > div > div:first-child span:last-child .lang-string {
+      .uc-hero-intro__eyebrow,
+      .uc-hero-intro__eyebrow .lang-string {
         color: rgba(255, 255, 255, 0.85) !important;
       }
-
-      /* Trim the empty space BELOW the divider section — the template's
-         `padding-hero-08 padding-pre-manifest` classes add a lot of vertical
-         padding above and below; we don't need the bottom padding since we
-         removed the hero's bottom block. */
-      .mxd-section.padding-hero-08.padding-pre-manifest {
-        padding-top: 4rem !important;
-        padding-bottom: 4rem !important;
-      }
-      @media (max-width: 768px) {
-        .mxd-section.padding-hero-08.padding-pre-manifest {
-          padding-top: 2rem !important;
-          padding-bottom: 2rem !important;
-        }
+      /* Hero greeting headline "حياك في هوية" — bold, large, sits above
+         the lead paragraph */
+      .uc-hero-intro__greeting {
+        font-size: clamp(3.6rem, 6vw, 6.4rem);
+        font-weight: 700;
+        line-height: 1.05;
+        margin: 0;
+        text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
       }
 
-      /* Reduce the height of the WebGL frame — content only needs ~300px,
-         not 760px. The width stays at template default. We override both
-         the inline min-height AND the GSAP-injected height that the
-         template's parallax script writes onto the divider wrappers. */
+      /* Force the .uc-hero-intro overlay to keep its 560px min-height even
+         when sitting inside a .mxd-divider__image (whose other children get
+         their min-height stripped to 0 by the rule further down). */
+      .uc-hero-intro {
+        min-height: 560px !important;
+      }
       .mxd-divider,
-      .mxd-divider__image,
-      .uc-divider-content {
+      .mxd-divider__image {
         min-height: 0 !important;
         max-height: none !important;
         height: auto !important;
@@ -918,23 +911,30 @@
       /* In case the parallax-img wrapper script injects an inline height
          on a generated child element, force its height too. The hero
          overlay (.uc-hero-intro) is exempt — it needs its 560px min-height
-         to give the eyebrow + lead + 3 service items room to breathe. */
+         to give the greeting + eyebrow + lead + 3 service items room to
+         breathe. */
       .mxd-divider > div,
       .mxd-divider__image > div:not(#webgl-container):not(.uc-hero-intro) {
         height: auto !important;
         min-height: 0 !important;
       }
-      /* WebGL canvas mounts absolutely — its parent .mxd-divider__image
-         needs to be positioned and have the frame's actual content height. */
-      .uc-divider-content {
-        padding: 56px 80px !important;
-      }
+      /* Mobile: collapse the row layout into a column with tighter padding. */
       @media (max-width: 900px) {
-        .uc-divider-content {
+        .uc-hero-intro {
           flex-direction: column !important;
           padding: 40px 32px !important;
           gap: 32px !important;
+          align-items: flex-start !important;
         }
+      }
+
+      /* Trim the empty space between the clients marquee and the
+         "من نحن" (About) section. The marquee uses .padding-pre-title
+         (≈13rem bottom) and the about block has .uc-about-even which
+         we previously set to 11rem top — total gap ~24rem (240px).
+         Pull both in so the two sections sit closer together. */
+      .uc-clients-marquee.padding-pre-title {
+        padding-bottom: 4rem !important;
       }
 
       /* "Who we are / من نحن" heading on the manifest block — was too
@@ -974,7 +974,7 @@
         color: #fff !important;
       }
       .uc-about-even {
-        padding-top: 11rem !important;
+        padding-top: 4rem !important;
         padding-bottom: 11rem !important;
       }
       .mxd-section-title__hrtitle h2,
@@ -1356,19 +1356,24 @@
               <!-- Agency intro overlay: eyebrow + medium lead + 3 service items -->
               <div class="uc-hero-intro" style="position: relative; z-index: 10; width: 100%; min-height: 560px; display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 64px; padding: 80px 80px; color: #fff; flex-wrap: wrap;">
 
-                <!-- Left column: eyebrow + medium lead -->
-                <div style="flex: 1 1 480px; max-width: 640px; display: flex; flex-direction: column; gap: 28px;">
+                <!-- Left column: eyebrow + greeting + medium lead -->
+                <div style="flex: 1 1 480px; max-width: 640px; display: flex; flex-direction: column; gap: 24px;">
 
                   <!-- Eyebrow: green dot + "Available for Projects" -->
                   <div style="display: inline-flex; align-items: center; gap: 12px;">
                     <span style="width: 9px; height: 9px; border-radius: 50%; background: #B6F66B; box-shadow: 0 0 12px rgba(182, 246, 107, 0.65); display: inline-block; flex-shrink: 0;"></span>
-                    <span style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.18em; color: rgba(255,255,255,0.85); font-weight: 500;">
+                    <span class="uc-hero-intro__eyebrow" style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.18em; font-weight: 500;">
                       <span class="lang-string" data-ar="متاحون لمشاريع جديدة" data-en="Available for Projects">متاحون لمشاريع جديدة</span>
                     </span>
                   </div>
 
+                  <!-- Greeting headline: "حياك في هوية" -->
+                  <h1 class="uc-hero-intro__greeting">
+                    <span class="lang-string" data-ar="حيّاك في هوية" data-en="Welcome to Hawih">حيّاك في هوية</span>
+                  </h1>
+
                   <!-- Medium-size lead -->
-                  <p style="font-size: 26px; line-height: 1.45; font-weight: 500; color: #fff; margin: 0; max-width: 560px; text-shadow: 0 2px 18px rgba(0,0,0,0.45);">
+                  <p style="font-size: 26px; line-height: 1.45; font-weight: 500; margin: 0; max-width: 560px; text-shadow: 0 2px 18px rgba(0,0,0,0.45);">
                     <span class="lang-string" data-ar="نعمل لنجعل العالم يراك من خلال خدمات إبداعية ومتميزة." data-en="One creative services agency — running your project from the first brief to the final delivery.">نعمل لنجعل العالم يراك من خلال خدمات إبداعية ومتميزة.</span>
                   </p>
 
