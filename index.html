@@ -917,10 +917,10 @@
       }
       /* In case the parallax-img wrapper script injects an inline height
          on a generated child element, force its height too. The hero
-         block (.uc-divider-hero) is exempt — it needs its own min-height
-         to give the rotating sphere + headline room to breathe. */
+         overlay (.uc-hero-intro) is exempt — it needs its 560px min-height
+         to give the eyebrow + lead + 3 service items room to breathe. */
       .mxd-divider > div,
-      .mxd-divider__image > div:not(#webgl-container):not(.uc-divider-hero) {
+      .mxd-divider__image > div:not(#webgl-container):not(.uc-hero-intro) {
         height: auto !important;
         min-height: 0 !important;
       }
@@ -1336,57 +1336,56 @@
     <!-- Page Content Start -->
     <main id="mxd-page-content" class="mxd-page-content">
 
-      <!-- Hero Section Start — content swapped per owner request:
-           agency-intro block (eyebrow + lead + 3 service items) now lives
-           here; the rotating sphere + big title was moved into the WebGL
-           cosmic frame in the Parallax Divider section below. -->
-      <div class="mxd-section">
-        <div class="mxd-hero-08">
-          <div class="mxd-hero-08__wrap loading-wrap">
+      <!-- Hero Section Start — WebGL cobalt cosmic frame with the
+           agency-intro overlay (eyebrow + lead + 3 service items).
+           The previous rotating sphere + "حياك في وكالة هوية." headline
+           were removed per owner request. -->
+      <div class="mxd-section uc-hero-webgl" style="padding-top: 12rem; padding-bottom: 4rem;">
+        <div class="mxd-container">
+          <div class="mxd-divider">
+            <div class="mxd-divider__image divider-image-1" style="position: relative; overflow: hidden; border-radius: 2rem; background: #06061A;">
+              <!-- WebGL cobalt cosmic background fills the frame -->
+              <div id="webgl-container" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0;"></div>
+              <!-- Soft ink scrim for legibility -->
+              <div style="position: absolute; inset: 0; z-index: 0; background: linear-gradient(to top, rgba(6,6,26,0.55) 0%, rgba(6,6,26,0.20) 70%, rgba(6,6,26,0.10) 100%); pointer-events: none;"></div>
+              <!-- Agency intro overlay: eyebrow + medium lead + 3 service items -->
+              <div class="uc-hero-intro" style="position: relative; z-index: 10; width: 100%; min-height: 560px; display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 64px; padding: 80px 80px; color: #fff; flex-wrap: wrap;">
 
-            <!-- Agency intro block (was the .uc-divider-content overlay) -->
-            <div class="uc-hero-intro" style="position: relative; z-index: 10; width: 100%; min-height: 480px; display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 64px; padding: 80px 80px; flex-wrap: wrap;">
+                <!-- Left column: eyebrow + medium lead -->
+                <div style="flex: 1 1 480px; max-width: 640px; display: flex; flex-direction: column; gap: 28px;">
 
-              <!-- Left column: eyebrow + medium lead -->
-              <div style="flex: 1 1 480px; max-width: 640px; display: flex; flex-direction: column; gap: 28px;">
+                  <!-- Eyebrow: green dot + "Available for Projects" -->
+                  <div style="display: inline-flex; align-items: center; gap: 12px;">
+                    <span style="width: 9px; height: 9px; border-radius: 50%; background: #B6F66B; box-shadow: 0 0 12px rgba(182, 246, 107, 0.65); display: inline-block; flex-shrink: 0;"></span>
+                    <span style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.18em; color: rgba(255,255,255,0.85); font-weight: 500;">
+                      <span class="lang-string" data-ar="متاحون لمشاريع جديدة" data-en="Available for Projects">متاحون لمشاريع جديدة</span>
+                    </span>
+                  </div>
 
-                <!-- Eyebrow: green dot + "Available for Projects" -->
-                <div style="display: inline-flex; align-items: center; gap: 12px;">
-                  <span style="width: 9px; height: 9px; border-radius: 50%; background: #5BBF4A; box-shadow: 0 0 12px rgba(91, 191, 74, 0.55); display: inline-block; flex-shrink: 0;"></span>
-                  <span style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.18em; color: var(--t-muted); font-weight: 500;">
-                    <span class="lang-string" data-ar="متاحون لمشاريع جديدة" data-en="Available for Projects">متاحون لمشاريع جديدة</span>
-                  </span>
+                  <!-- Medium-size lead -->
+                  <p style="font-size: 26px; line-height: 1.45; font-weight: 500; color: #fff; margin: 0; max-width: 560px; text-shadow: 0 2px 18px rgba(0,0,0,0.45);">
+                    <span class="lang-string" data-ar="نعمل لنجعل العالم يراك من خلال خدمات إبداعية ومتميزة." data-en="One creative services agency — running your project from the first brief to the final delivery.">نعمل لنجعل العالم يراك من خلال خدمات إبداعية ومتميزة.</span>
+                  </p>
+
                 </div>
 
-                <!-- Medium-size lead -->
-                <p style="font-size: 26px; line-height: 1.45; font-weight: 500; color: var(--t-bright); margin: 0; max-width: 560px;">
-                  <span class="lang-string" data-ar="نعمل لنجعل العالم يراك من خلال خدمات إبداعية ومتميزة." data-en="One creative services agency — running your project from the first brief to the final delivery.">نعمل لنجعل العالم يراك من خلال خدمات إبداعية ومتميزة.</span>
-                </p>
-
+                <!-- Right: 3 service items -->
+                <ul class="uc-divider-list" style="display: flex; flex-direction: column; gap: 18px; font-size: 19px; list-style: none; padding: 0; margin: 0; flex: 0 0 auto; line-height: 1.4; color: #fff;">
+                  <li style="display: flex; align-items: center; gap: 14px;">
+                    <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" style="opacity: 0.85; flex-shrink: 0;"><path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/></svg>
+                    <span class="lang-string" data-ar="علامات تجارية وهوية" data-en="Branding &amp; Identity">علامات تجارية وهوية</span>
+                  </li>
+                  <li style="display: flex; align-items: center; gap: 14px;">
+                    <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" style="opacity: 0.85; flex-shrink: 0;"><path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/></svg>
+                    <span class="lang-string" data-ar="UI/UX وبرمجة" data-en="UI/UX &amp; Programming">UI/UX وبرمجة</span>
+                  </li>
+                  <li style="display: flex; align-items: center; gap: 14px;">
+                    <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" style="opacity: 0.85; flex-shrink: 0;"><path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/></svg>
+                    <span class="lang-string" data-ar="ذكاء اصطناعي واستراتيجية" data-en="AI &amp; Strategy">ذكاء اصطناعي واستراتيجية</span>
+                  </li>
+                </ul>
               </div>
-
-              <!-- Right: 3 service items -->
-              <ul class="uc-divider-list" style="display: flex; flex-direction: column; gap: 18px; font-size: 19px; list-style: none; padding: 0; margin: 0; flex: 0 0 auto; line-height: 1.4; color: var(--t-bright);">
-                <li style="display: flex; align-items: center; gap: 14px;">
-                  <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" style="opacity: 0.85; flex-shrink: 0;"><path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/></svg>
-                  <span class="lang-string" data-ar="علامات تجارية وهوية" data-en="Branding &amp; Identity">علامات تجارية وهوية</span>
-                </li>
-                <li style="display: flex; align-items: center; gap: 14px;">
-                  <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" style="opacity: 0.85; flex-shrink: 0;"><path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/></svg>
-                  <span class="lang-string" data-ar="UI/UX وبرمجة" data-en="UI/UX &amp; Programming">UI/UX وبرمجة</span>
-                </li>
-                <li style="display: flex; align-items: center; gap: 14px;">
-                  <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" style="opacity: 0.85; flex-shrink: 0;"><path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/></svg>
-                  <span class="lang-string" data-ar="ذكاء اصطناعي واستراتيجية" data-en="AI &amp; Strategy">ذكاء اصطناعي واستراتيجية</span>
-                </li>
-              </ul>
             </div>
-
-            <!-- Empty stub so libs.min.js's "Element not found:
-                 .mxd-hero-08__tl-trigger" warning stops firing. Hidden
-                 visually but present in the DOM. -->
-            <div class="mxd-hero-08__tl-trigger" style="display: none;" aria-hidden="true"></div>
-
           </div>
         </div>
       </div>
@@ -1422,35 +1421,6 @@
         </div>
       </div>
       <!-- Section - Clients Marquee End -->
-
-      <!-- Section - Parallax Divider Start (WebGL framed inside the divider element) -->
-      <div class="mxd-section padding-hero-08 padding-pre-manifest mobile-point-subtitle">
-        <div class="mxd-container">
-          <div class="mxd-divider">
-            <div class="mxd-divider__image divider-image-1" style="position: relative; overflow: hidden; border-radius: 2rem; background: #06061A;">
-              <!-- WebGL cobalt cosmic background fills the divider frame -->
-              <div id="webgl-container" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0;"></div>
-              <!-- Soft ink scrim for legibility -->
-              <div style="position: absolute; inset: 0; z-index: 0; background: linear-gradient(to top, rgba(6,6,26,0.55) 0%, rgba(6,6,26,0.20) 70%, rgba(6,6,26,0.10) 100%); pointer-events: none;"></div>
-              <!-- Hero centerpiece (rotating sphere + bilingual headline)
-                   moved here from the top hero section per owner request.
-                   Sits over the WebGL cosmic background. -->
-              <div class="uc-divider-hero" style="position: relative; z-index: 10; width: 100%; min-height: 560px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 32px; padding: 80px 40px; color: #fff; text-align: center;">
-                <!-- Rotating sphere -->
-                <div style="width: 12rem; height: 12rem; display: flex; align-items: center; justify-content: center;">
-                  <img class="mxd-rotate-slow" src="/uc-assets/img/hero/16_hero-img.webp" alt="Hawih" style="width: 100%; height: 100%; object-fit: contain;">
-                </div>
-                <!-- Big bilingual headline -->
-                <h1 style="color: #fff; margin: 0; line-height: 1.05; font-weight: 700; font-size: clamp(4.4rem, 8vw, 9rem); text-shadow: 0 2px 24px rgba(0,0,0,0.35);">
-                  <span class="lang-string" data-ar="حياك في" data-en="Creative services,">حياك في</span><br>
-                  <span class="lang-string" data-ar="وكالة هوية." data-en="end to end.">وكالة هوية.</span>
-                </h1>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!-- Section - Parallax Divider End -->
 
       <!-- Section - About Start -->
       <div class="mxd-section padding-pre-grid uc-about-even">
