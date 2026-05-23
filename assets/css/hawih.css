@@ -1842,37 +1842,23 @@ body header.mxd-header .mxd-header__logo img {
 }
 
 /* ============================================================
-   Progressive narrowing — fewer header chrome elements as the
-   viewport shrinks, so the four controls + logo never overlap.
+   Progressive narrowing — drop secondary chrome (lang, theme) as
+   the viewport shrinks so the "Contact us / تواصل معنا" CTA pill
+   ALWAYS stays visible with its caption. Popup menu still carries
+   every dropped control so nothing is unreachable.
    ============================================================ */
 
-/* Phone-narrow (≤460px): drop the CTA caption, keep the icon. The
-   popup menu still surfaces "Contact us" as a full pill, so users
-   don't lose access — they just open the menu to reach it. */
+/* Phone-narrow (≤460px): drop the lang switch from the header. */
 @media (max-width: 460px) {
-    body header.mxd-header .mxd-header__controls a.btn-mobile-icon {
-        width: 3.6rem !important;
-        padding: 0 !important;
-        justify-content: center;
-        gap: 0 !important;
-    }
-    body header.mxd-header .mxd-header__controls a.btn-mobile-icon .btn-caption {
-        display: none !important;
-    }
-}
-
-/* Very narrow (≤380px) like Galaxy Fold cover / older small phones:
-   also drop the lang switch from the header — popup carries it. */
-@media (max-width: 380px) {
     body .mxd-header__controls [data-lang-toggle] {
         display: none !important;
     }
 }
 
-/* Ultra-narrow (≤340px): also hide the CTA icon entirely. Theme +
-   hamburger only — the popup carries everything else. */
-@media (max-width: 340px) {
-    body .mxd-header__controls a.btn-mobile-icon {
+/* Very narrow (≤380px) like Galaxy Fold cover: also drop the theme
+   toggle from the header. The popup still has both lang + theme. */
+@media (max-width: 380px) {
+    body .mxd-header__controls #color-switcher {
         display: none !important;
     }
 }
