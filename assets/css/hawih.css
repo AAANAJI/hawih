@@ -1843,3 +1843,19 @@ body header.mxd-header .mxd-header__logo img {
         font-size: clamp(1.1rem, 3.5vw, 1.6rem) !important;
     }
 }
+
+/* ============================================================
+   .mxd-block__name h2 sizing
+   ============================================================
+   The S052 Text Block uses `.mxd-block__name > h2` for its
+   section title, but the template's CSS only bumps font-size on
+   `.mxd-section-title__hrtitle h2` and `.mxd-section-title__title h2`.
+   Without an explicit override, .mxd-block__name h2 inherits a
+   tiny font-size from Tailwind's preflight. Match the same scale
+   as the other section titles so it reads as a proper heading. */
+.mxd-block__name h2,
+.mxd-block__name h2 .lang-string {
+    font-size: clamp(2.8rem, 5.5vw, 5.5rem) !important;
+    line-height: 1.1 !important;
+    font-weight: 600 !important;
+}
