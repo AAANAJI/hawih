@@ -1744,121 +1744,102 @@ body header.mxd-header .mxd-header__logo img {
     flex-shrink: 0 !important;
 }
 
-/* Narrow screens: the pill spans the full viewport width with 1rem
-   margin on each side, AND the standalone hamburger trigger is
-   repositioned so it visually sits inside the pill's writing-end
-   corner (instead of floating outside as a separate element). The
-   pill gets extra `padding-inline-end` so the theme toggle inside
-   the controls shifts inward, leaving clean room for the hamburger. */
+/* ============================================================
+   Mobile header — fluid sizing instead of progressive hide
+   ============================================================
+   All five items (logo · theme · lang · CTA · hamburger) stay
+   visible at every width. Everything scales between a min and max
+   via `clamp()` so the row tightens proportionally as the viewport
+   narrows. Tested visually across iPhone (375px), Samsung Ultra
+   (~412px), down to ~320px before things get truly cramped.
+
+   Scale curves (max → min):
+     pill control height : 3.6rem → 2.6rem
+     control font-size   : 1.3rem → 0.95rem
+     control padding     : 1.2rem → 0.5rem
+     button icon         : 1.5rem → 1.1rem
+     gap                 : 0.3rem → 0.1rem
+     pill end-padding    : 6rem   → 3.6rem (hamburger zone)
+     logo image height   : 40px   → 26px   */
 @media (max-width: 991px) {
     body header.mxd-header {
         inset: 1rem 1rem auto 1rem !important;
-        padding-block: 0.6rem !important;
-        padding-inline-start: 1.4rem !important;
-        padding-inline-end: 6rem !important;
+        padding-block: clamp(0.4rem, 1.5vw, 0.6rem) !important;
+        padding-inline-start: clamp(0.8rem, 3.5vw, 1.4rem) !important;
+        padding-inline-end: clamp(3.6rem, 14vw, 6rem) !important;
         border-radius: 999px !important;
     }
-    /* Tighter inter-control gap on mobile — the default 1.4rem is
-       too generous once we have four items (theme · lang · CTA ·
-       hamburger) fighting for space. */
     body header.mxd-header .mxd-header__controls {
-        gap: 0.3rem !important;
+        gap: clamp(0.1rem, 0.5vw, 0.3rem) !important;
     }
-    /* Park the hamburger wrapper at the pill's writing-end corner.
-       Position with logical insets so it lands at the right side in
-       LTR and the left side in RTL — both inside the pill. */
+    /* Logo height scales too (aspect ratio preserved via width: auto
+       inline + the flex-shrink: 0 lock above) so the wordmark
+       proportionally shrinks instead of overflowing. */
+    body header.mxd-header .mxd-header__logo img {
+        height: clamp(26px, 8vw, 40px) !important;
+    }
+
+    /* Hamburger wrapper parked at the pill's writing-end corner.
+       Inset-end scales so the hamburger stays roughly the same
+       distance from the pill edge proportionally. */
     body .mxd-nav__contain {
-        inset-block-start: 1.6rem !important;
+        inset-block-start: calc(1rem + clamp(0.4rem, 1.5vw, 0.6rem)) !important;
         inset-block-end: auto !important;
         inset-inline-start: auto !important;
-        inset-inline-end: 2rem !important;
+        inset-inline-end: clamp(0.8rem, 3.5vw, 2rem) !important;
         width: auto !important;
         padding: 0 !important;
     }
-    /* Force the hamburger button to match the 3.6rem square of the
-       other compact controls inside the pill, so the four items
-       (theme · lang · CTA · hamburger) share one baseline. */
     body .mxd-nav__hamburger {
-        width: 3.6rem !important;
-        height: 3.6rem !important;
+        width: clamp(2.6rem, 8.5vw, 3.6rem) !important;
+        height: clamp(2.6rem, 8.5vw, 3.6rem) !important;
     }
 
-    /* ------------------------------------------------------------
-       Mobile header arrangement:
-         - Theme toggle (back in the header)
-         - Lang switch ("ع" / "EN" — single-char in Arabic)
-         - "Start your project" CTA with caption visible (not the
-           icon-only mode the template defaults to)
-       Theme toggle ALSO stays inside the hamburger popup; both
-       triggers forward to the same #color-switcher via the bridge. */
+    /* All four header controls are always visible on mobile. */
     body .mxd-header__controls [data-lang-toggle],
     body .mxd-header__controls a.btn-mobile-icon {
         display: inline-flex !important;
     }
-    /* Defeat the template's `.btn-mobile-icon` rule that strips the
-       caption and forces a round icon-only shape — we want the full
-       "ابدأ مشروعك / Start your project" pill with text + arrow. */
+    /* Defeat the template's `.btn-mobile-icon` icon-only treatment
+       so the CTA reads as a full pill with text + arrow. The
+       "Contact us / تواصل معنا" caption must remain visible at
+       every viewport width — that's the protected element here. */
     body header.mxd-header .mxd-header__controls a.btn-mobile-icon {
         width: auto !important;
-        height: 3.6rem !important;
-        padding: 0 1.2rem !important;
-        border-radius: 1.8rem !important;
-        gap: 0.4rem !important;
+        height: clamp(2.6rem, 8.5vw, 3.6rem) !important;
+        padding: 0 clamp(0.5rem, 2.5vw, 1.2rem) !important;
+        border-radius: clamp(1.3rem, 4.25vw, 1.8rem) !important;
+        gap: clamp(0.2rem, 1vw, 0.4rem) !important;
     }
     body header.mxd-header .mxd-header__controls a.btn-mobile-icon .btn-caption {
         display: inline-block !important;
         white-space: nowrap;
     }
-    /* Trim everything else to fit on a narrow viewport without
-       crowding the hamburger. */
+    /* Fluid sizing on all pill controls. */
     body header.mxd-header .mxd-header__controls .btn.btn-default,
     body header.mxd-header .mxd-header__controls button[data-lang-toggle],
     body header.mxd-header .mxd-header__controls a.btn {
-        font-size: 1.3rem !important;
-        height: 3.6rem !important;
-        line-height: 3.6rem !important;
-        padding-inline: 1.2rem !important;
-        border-radius: 1.8rem !important;
+        font-size: clamp(0.95rem, 3vw, 1.3rem) !important;
+        height: clamp(2.6rem, 8.5vw, 3.6rem) !important;
+        line-height: clamp(2.6rem, 8.5vw, 3.6rem) !important;
+        padding-inline: clamp(0.5rem, 2.5vw, 1.2rem) !important;
+        border-radius: clamp(1.3rem, 4.25vw, 1.8rem) !important;
     }
     body header.mxd-header .mxd-header__controls .btn i {
-        font-size: 1.5rem !important;
+        font-size: clamp(1.1rem, 3.5vw, 1.5rem) !important;
     }
-    /* Lang button is now a single-character pill ("ع" / "EN") so
-       give it just a square-ish footprint. */
+    /* Lang button is a single-character ("ع" / "EN") so it can be
+       tighter than the other pills. */
     body header.mxd-header .mxd-header__controls button[data-lang-toggle] {
-        padding-inline: 0.8rem !important;
-        min-width: 3.6rem;
+        padding-inline: clamp(0.3rem, 1.8vw, 0.8rem) !important;
+        min-width: clamp(2.6rem, 8.5vw, 3.6rem);
     }
-    /* Tighten the theme toggle disc to share the same 3.6rem height
-       as the other pills (it was 4.6rem when it was the only visible
-       control). */
+    /* Theme toggle (round disc) scales square. */
     body header.mxd-header .mxd-header__controls #color-switcher.mxd-color-switcher {
-        width: 3.6rem !important;
-        height: 3.6rem !important;
+        width: clamp(2.6rem, 8.5vw, 3.6rem) !important;
+        height: clamp(2.6rem, 8.5vw, 3.6rem) !important;
     }
     body header.mxd-header .mxd-header__controls #color-switcher.mxd-color-switcher i {
-        font-size: 1.6rem !important;
-    }
-}
-
-/* ============================================================
-   Progressive narrowing — drop secondary chrome (lang, theme) as
-   the viewport shrinks so the "Contact us / تواصل معنا" CTA pill
-   ALWAYS stays visible with its caption. Popup menu still carries
-   every dropped control so nothing is unreachable.
-   ============================================================ */
-
-/* Phone-narrow (≤460px): drop the lang switch from the header. */
-@media (max-width: 460px) {
-    body .mxd-header__controls [data-lang-toggle] {
-        display: none !important;
-    }
-}
-
-/* Very narrow (≤380px) like Galaxy Fold cover: also drop the theme
-   toggle from the header. The popup still has both lang + theme. */
-@media (max-width: 380px) {
-    body .mxd-header__controls #color-switcher {
-        display: none !important;
+        font-size: clamp(1.1rem, 3.5vw, 1.6rem) !important;
     }
 }
