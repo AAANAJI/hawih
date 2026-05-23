@@ -1860,3 +1860,55 @@ html body .mxd-block__name h2 span {
     line-height: 1.1 !important;
     font-weight: 600 !important;
 }
+
+/* ============================================================
+   Lead-capture forms (.contact-form)
+   ============================================================
+   The contact form's inline style block ships these rules to
+   turn the .form/.contact-form markup into proper bordered
+   pill-style inputs. Hoisted into the shared stylesheet so any
+   page using <form class="form contact-form"> picks them up —
+   /contact, /affiliate, /careers, and anything we add later. */
+.contact-form .uc-field-label {
+    display: block;
+    font-size: 1.5rem;
+    margin: 0 0 1rem;
+    color: var(--t-medium);
+}
+.contact-form .mxd-grid-item {
+    padding: 0 1.2rem;
+    margin-bottom: 2.4rem;
+}
+.contact-form input,
+.contact-form select,
+.contact-form textarea {
+    width: 100%;
+    padding: 1.8rem 2rem;
+    font-size: 1.7rem;
+    font-family: inherit;
+    color: var(--t-bright);
+    background: var(--base-tint);
+    border: 1px solid var(--st-medium);
+    border-radius: 1.2rem;
+    outline: none;
+}
+.contact-form textarea {
+    min-height: 16rem;
+    resize: vertical;
+}
+.contact-form input:focus,
+.contact-form select:focus,
+.contact-form textarea:focus {
+    border-color: #1F1FFE;
+}
+.uc-form-submit {
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    flex-wrap: wrap;
+    margin-top: 1rem;
+}
+.uc-form-note {
+    font-size: 1.4rem;
+    opacity: 0.6;
+}
