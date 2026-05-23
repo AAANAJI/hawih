@@ -677,14 +677,30 @@
          to 0, sliding the icon in from the left while pushing the text right.
          In RTL the icon naturally sits at the visual RIGHT edge; we mirror
          the offset to `+5.4rem` so the icon is hidden off the RIGHT edge
-         instead, and on hover slides leftward into view. */
-      [dir="rtl"] .mxd-awards-list__icon,
-      [dir="rtl"] .mxd-awards-list__title p {
-        transform: translateX(5.4rem) !important;
+         instead, and on hover slides leftward into view.
+         IMPORTANT: only apply on >=1200px. Below that the template itself
+         drops the slide animation, and on touch devices "hover" never
+         fires — leaving the title permanently pushed off-screen if we
+         keep forcing the translate. */
+      @media (min-width: 1200px) {
+        [dir="rtl"] .mxd-awards-list__icon,
+        [dir="rtl"] .mxd-awards-list__title p {
+          transform: translateX(5.4rem) !important;
+        }
+        [dir="rtl"] .mxd-awards-list__item:hover .mxd-awards-list__icon,
+        [dir="rtl"] .mxd-awards-list__item:hover .mxd-awards-list__title p {
+          transform: translateX(0) !important;
+        }
       }
-      [dir="rtl"] .mxd-awards-list__item:hover .mxd-awards-list__icon,
-      [dir="rtl"] .mxd-awards-list__item:hover .mxd-awards-list__title p {
-        transform: translateX(0) !important;
+      /* On mobile / tablet, kill any inherited translate so the title is
+         visible by default. */
+      @media (max-width: 1199px) {
+        [dir="rtl"] .mxd-awards-list__icon,
+        [dir="rtl"] .mxd-awards-list__title p,
+        .mxd-awards-list__icon,
+        .mxd-awards-list__title p {
+          transform: none !important;
+        }
       }
       /* The arrow inside the icon is `ph ph-arrow-right`. In LTR it points
          rightward = "outgoing" reading-direction arrow. In RTL we need it
@@ -1006,6 +1022,16 @@
         flex-wrap: wrap;
         gap: 0.4rem 2.4rem;
         margin-top: 2.4rem;
+      }
+      /* In RTL the three labels (e.g. "أفكار خلاقة · استشارات موثوقة
+         · شراكات مثمرة") are long enough to mid-wrap awkwardly when
+         flexed inline. Stack them vertically in Arabic so each label
+         starts cleanly at the right (RTL inline-start) on its own line. */
+      [dir="rtl"] .mxd-section-title__hrdescr {
+        flex-direction: column !important;
+        flex-wrap: nowrap !important;
+        gap: 0.4rem !important;
+        align-items: flex-start;
       }
       .mxd-section-title__hrdescr p,
       .mxd-section-title__hrdescr p .lang-string {
