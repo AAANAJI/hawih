@@ -1736,17 +1736,22 @@ body header.mxd-header.uc-scrolled {
         font-size: 2rem !important;
     }
 }
-/* On mobile, undo the float-pill since the header is narrow
-   and a flush bar reads better at small widths. */
+/* Narrow screens: keep the floating-pill treatment but tighten the
+   inset + inline padding so the bar doesn't feel cramped, and pull
+   in the right-side padding (no need for the 7rem hamburger-clearance
+   gap any more — the hamburger sits inside the pill flow on mobile). */
 @media (max-width: 991px) {
     body header.mxd-header {
-        inset: 0 0 auto 0 !important;
-        width: 100% !important;
-        max-width: none !important;
-        border-radius: 0 !important;
-        border-inline: 0 !important;
-        padding-block: 1rem !important;
-        padding-inline-start: 1.5rem !important;
-        padding-inline-end: 7rem !important;
+        inset: 1rem 1rem auto 1rem !important;
+        padding-block: 0.6rem !important;
+        padding-inline: 1.4rem !important;
+        border-radius: 999px !important;
+    }
+    /* Re-align the standalone hamburger wrapper so its trigger sits
+       vertically centred on the same line as the floating pill's
+       content (pill top inset 1rem + 0.6rem padding-block ≈ 1.6rem). */
+    body .mxd-nav__contain {
+        padding-block: 1.6rem !important;
+        padding-inline: 1.5rem !important;
     }
 }
