@@ -1736,25 +1736,32 @@ body header.mxd-header.uc-scrolled {
         font-size: 2rem !important;
     }
 }
-/* Narrow screens: keep the floating-pill treatment but tighten the
-   inset + inline padding so the bar doesn't feel cramped. The pill's
-   inline-end (right in LTR / left in RTL) gets a wider inset to leave
-   room for the standalone hamburger trigger that floats in that
-   corner — otherwise the hamburger ends up overlapping the theme
-   toggle inside the pill. */
+/* Narrow screens: the pill spans the full viewport width with 1rem
+   margin on each side, AND the standalone hamburger trigger is
+   repositioned so it visually sits inside the pill's writing-end
+   corner (instead of floating outside as a separate element). The
+   pill gets extra `padding-inline-end` so the theme toggle inside
+   the controls shifts inward, leaving clean room for the hamburger. */
 @media (max-width: 991px) {
     body header.mxd-header {
         inset: 1rem 1rem auto 1rem !important;
-        inset-inline-end: 7rem !important;
         padding-block: 0.6rem !important;
-        padding-inline: 1.4rem !important;
+        padding-inline-start: 1.4rem !important;
+        padding-inline-end: 8rem !important;
         border-radius: 999px !important;
     }
-    /* Re-align the standalone hamburger wrapper so its trigger sits
-       vertically centred on the same line as the floating pill's
-       content (pill top inset 1rem + 0.6rem padding-block ≈ 1.6rem). */
+    /* Park the hamburger wrapper at the pill's writing-end corner.
+       Position with logical insets so it lands at the right side in
+       LTR and the left side in RTL — both inside the pill, vertically
+       aligned with the pill content (pill top 1rem + 0.6rem padding
+       ≈ 1.6rem; hamburger 5.6rem tall, so its top sits ~1rem from the
+       viewport edge to center on the same line). */
     body .mxd-nav__contain {
-        padding-block: 1.6rem !important;
-        padding-inline: 1.5rem !important;
+        inset-block-start: 1rem !important;
+        inset-block-end: auto !important;
+        inset-inline-start: auto !important;
+        inset-inline-end: 2rem !important;
+        width: auto !important;
+        padding: 0 !important;
     }
 }
