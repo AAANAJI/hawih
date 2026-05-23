@@ -1339,8 +1339,13 @@
       <!-- Hero Section Start — WebGL cobalt cosmic frame with the
            agency-intro overlay (eyebrow + lead + 3 service items).
            The previous rotating sphere + "حياك في وكالة هوية." headline
-           were removed per owner request. -->
-      <div class="mxd-section uc-hero-webgl" style="padding-top: 12rem; padding-bottom: 4rem;">
+           were removed per owner request.
+           NOTE: the `loading-wrap` class on the outer wrapper is required —
+           app.min.js does `document.querySelector(".loading-wrap")` at
+           startup and then dereferences it; removing the class crashes the
+           bundle and chains to the theme toggle, ScrollTriggers, Swipers,
+           etc. all going dead. -->
+      <div class="mxd-section uc-hero-webgl loading-wrap" style="padding-top: 12rem; padding-bottom: 4rem;">
         <div class="mxd-container">
           <div class="mxd-divider">
             <div class="mxd-divider__image divider-image-1" style="position: relative; overflow: hidden; border-radius: 2rem; background: #06061A;">
