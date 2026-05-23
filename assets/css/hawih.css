@@ -1752,16 +1752,20 @@ body header.mxd-header.uc-scrolled {
     }
     /* Park the hamburger wrapper at the pill's writing-end corner.
        Position with logical insets so it lands at the right side in
-       LTR and the left side in RTL — both inside the pill, vertically
-       aligned with the pill content (pill top 1rem + 0.6rem padding
-       ≈ 1.6rem; hamburger 5.6rem tall, so its top sits ~1rem from the
-       viewport edge to center on the same line). */
+       LTR and the left side in RTL — both inside the pill. */
     body .mxd-nav__contain {
-        inset-block-start: 1rem !important;
+        inset-block-start: 1.6rem !important;
         inset-block-end: auto !important;
         inset-inline-start: auto !important;
         inset-inline-end: 2rem !important;
         width: auto !important;
         padding: 0 !important;
+    }
+    /* Force the hamburger button to the same 4.6rem square as the
+       theme toggle inside the pill, so both controls share one
+       baseline. (Template default is 5.6rem at this breakpoint.) */
+    body .mxd-nav__hamburger {
+        width: 4.6rem !important;
+        height: 4.6rem !important;
     }
 }
