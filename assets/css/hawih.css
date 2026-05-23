@@ -1922,39 +1922,59 @@ html body .mxd-block__name h2 span {
    because of Tailwind preflight's `color: inherit` reset that
    loads after main.min.css. Force-white anything sitting inside a
    .bg-base-opp or .bg-accent card so titles, paragraphs, and tag
-   contents always read correctly regardless of theme cascade. */
-.mxd-services-cards__inner.bg-base-opp,
-.mxd-services-cards__inner.bg-base-opp *,
-.mxd-services-cards__inner.bg-base-opp .opposite,
-.mxd-services-cards__inner.bg-base-opp .opposite .lang-string,
-.mxd-services-cards__inner.bg-base-opp .t-opposite,
-.mxd-services-cards__inner.bg-base-opp .t-opposite .lang-string,
+   contents always read correctly regardless of theme cascade.
+
+   NOTE: don't use `*` here — that catches the round arrow button's
+   <i> icon too, turning it white-on-cream (invisible). Target the
+   actual text nodes only: title <p>, info <p>, tag <span>, and
+   their nested .lang-string spans. The button keeps its own
+   colour from .btn-base / .btn-additional / etc. */
+.mxd-services-cards__inner.bg-base-opp .mxd-services-cards__title,
+.mxd-services-cards__inner.bg-base-opp .mxd-services-cards__title p,
+.mxd-services-cards__inner.bg-base-opp .mxd-services-cards__title .lang-string,
+.mxd-services-cards__inner.bg-base-opp .mxd-services-cards__info,
+.mxd-services-cards__inner.bg-base-opp .mxd-services-cards__info p,
+.mxd-services-cards__inner.bg-base-opp .mxd-services-cards__info .lang-string,
 .mxd-services-cards__inner.bg-base-opp .tag,
 .mxd-services-cards__inner.bg-base-opp .tag .lang-string,
-.mxd-services-cards__inner.bg-accent,
-.mxd-services-cards__inner.bg-accent *,
-.mxd-services-cards__inner.bg-accent .opposite,
-.mxd-services-cards__inner.bg-accent .opposite .lang-string,
-.mxd-services-cards__inner.bg-accent .t-opposite,
-.mxd-services-cards__inner.bg-accent .t-opposite .lang-string,
+.mxd-services-cards__inner.bg-accent .mxd-services-cards__title,
+.mxd-services-cards__inner.bg-accent .mxd-services-cards__title p,
+.mxd-services-cards__inner.bg-accent .mxd-services-cards__title .lang-string,
+.mxd-services-cards__inner.bg-accent .mxd-services-cards__info,
+.mxd-services-cards__inner.bg-accent .mxd-services-cards__info p,
+.mxd-services-cards__inner.bg-accent .mxd-services-cards__info .lang-string,
 .mxd-services-cards__inner.bg-accent .tag,
 .mxd-services-cards__inner.bg-accent .tag .lang-string,
-.mxd-services-stack__inner.bg-base-opp,
-.mxd-services-stack__inner.bg-base-opp *,
-.mxd-services-stack__inner.bg-base-opp .opposite,
-.mxd-services-stack__inner.bg-base-opp .opposite .lang-string,
-.mxd-services-stack__inner.bg-base-opp .t-opposite,
-.mxd-services-stack__inner.bg-base-opp .t-opposite .lang-string,
+.mxd-services-stack__inner.bg-base-opp .mxd-services-stack__title,
+.mxd-services-stack__inner.bg-base-opp .mxd-services-stack__title h3,
+.mxd-services-stack__inner.bg-base-opp .mxd-services-stack__title .lang-string,
+.mxd-services-stack__inner.bg-base-opp .mxd-services-stack__info,
+.mxd-services-stack__inner.bg-base-opp .mxd-services-stack__info p,
+.mxd-services-stack__inner.bg-base-opp .mxd-services-stack__info .lang-string,
 .mxd-services-stack__inner.bg-base-opp .tag,
 .mxd-services-stack__inner.bg-base-opp .tag .lang-string,
-.mxd-services-stack__inner.bg-accent,
-.mxd-services-stack__inner.bg-accent *,
-.mxd-services-stack__inner.bg-accent .opposite,
-.mxd-services-stack__inner.bg-accent .opposite .lang-string,
-.mxd-services-stack__inner.bg-accent .t-opposite,
-.mxd-services-stack__inner.bg-accent .t-opposite .lang-string,
+.mxd-services-stack__inner.bg-accent .mxd-services-stack__title,
+.mxd-services-stack__inner.bg-accent .mxd-services-stack__title h3,
+.mxd-services-stack__inner.bg-accent .mxd-services-stack__title .lang-string,
+.mxd-services-stack__inner.bg-accent .mxd-services-stack__info,
+.mxd-services-stack__inner.bg-accent .mxd-services-stack__info p,
+.mxd-services-stack__inner.bg-accent .mxd-services-stack__info .lang-string,
 .mxd-services-stack__inner.bg-accent .tag,
 .mxd-services-stack__inner.bg-accent .tag .lang-string {
+    color: var(--t-opp-bright) !important;
+}
+/* The round arrow button's icon stays explicit so it reads
+   against the button's own fill colour (not the card's bg). */
+.mxd-services-cards__controls .btn-round.btn-base i,
+.mxd-services-stack__controls .btn-round.btn-base i {
+    color: var(--t-bright) !important;
+}
+.mxd-services-cards__controls .btn-round.btn-additional i,
+.mxd-services-stack__controls .btn-round.btn-additional i {
+    color: var(--t-bright) !important;
+}
+.mxd-services-cards__controls .btn-round.btn-opposite i,
+.mxd-services-stack__controls .btn-round.btn-opposite i {
     color: var(--t-opp-bright) !important;
 }
 /* tag-outline-opposite border (white-ish stroke on dark/accent bg) */
