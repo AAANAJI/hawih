@@ -1775,12 +1775,12 @@ body header.mxd-header .mxd-header__logo img {
         width: auto !important;
         padding: 0 !important;
     }
-    /* Force the hamburger button to the same 4.6rem square as the
-       theme toggle inside the pill, so both controls share one
-       baseline. (Template default is 5.6rem at this breakpoint.) */
+    /* Force the hamburger button to match the 3.6rem square of the
+       other compact controls inside the pill, so the four items
+       (theme · lang · CTA · hamburger) share one baseline. */
     body .mxd-nav__hamburger {
-        width: 4.6rem !important;
-        height: 4.6rem !important;
+        width: 3.6rem !important;
+        height: 3.6rem !important;
     }
 
     /* ------------------------------------------------------------
@@ -1838,5 +1838,41 @@ body header.mxd-header .mxd-header__logo img {
     }
     body header.mxd-header .mxd-header__controls #color-switcher.mxd-color-switcher i {
         font-size: 1.6rem !important;
+    }
+}
+
+/* ============================================================
+   Progressive narrowing — fewer header chrome elements as the
+   viewport shrinks, so the four controls + logo never overlap.
+   ============================================================ */
+
+/* Phone-narrow (≤460px): drop the CTA caption, keep the icon. The
+   popup menu still surfaces "Contact us" as a full pill, so users
+   don't lose access — they just open the menu to reach it. */
+@media (max-width: 460px) {
+    body header.mxd-header .mxd-header__controls a.btn-mobile-icon {
+        width: 3.6rem !important;
+        padding: 0 !important;
+        justify-content: center;
+        gap: 0 !important;
+    }
+    body header.mxd-header .mxd-header__controls a.btn-mobile-icon .btn-caption {
+        display: none !important;
+    }
+}
+
+/* Very narrow (≤380px) like Galaxy Fold cover / older small phones:
+   also drop the lang switch from the header — popup carries it. */
+@media (max-width: 380px) {
+    body .mxd-header__controls [data-lang-toggle] {
+        display: none !important;
+    }
+}
+
+/* Ultra-narrow (≤340px): also hide the CTA icon entirely. Theme +
+   hamburger only — the popup carries everything else. */
+@media (max-width: 340px) {
+    body .mxd-header__controls a.btn-mobile-icon {
+        display: none !important;
     }
 }
