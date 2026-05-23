@@ -804,6 +804,22 @@
         color: #ffffff !important;
       }
 
+      /* --- Fix 4b: Client-logo marquee — shrink the card size.
+         Template default for `.marquee__item.item-partners` is 380×250
+         which makes the cards feel oversized for these client logos.
+         Tighter 256×140 (per owner) reads better; scale the inner
+         <img> proportionally (170px → 115px) so the logo keeps its
+         comfortable padding inside the card. */
+      .uc-clients-marquee .marquee__item.item-partners {
+        width: 256px !important;
+        height: 140px !important;
+      }
+      .uc-clients-marquee .marquee__item.item-partners img {
+        width: 115px !important;
+        max-height: 80px;
+        object-fit: contain;
+      }
+
       /* --- Fix 5: Off-canvas hamburger menu text contrast.
          When `.hamburger__base` paints its dark backdrop (rgb(28,28,28))
          behind the slide-down menu, the promo captions and footer-data
