@@ -2,9 +2,14 @@
 /* ============================================================
    Hawih lead-intake endpoint
    ------------------------------------------------------------
-   Receives contact-form POST → saves to local JSONL log →
-   pushes to Rise CRM (crm.hawih.com.sa) → redirects visitor
-   to /thank-you.html.
+   Receives form POST → saves to local JSONL log → routes to
+   the right CRM endpoint based on `source`:
+
+     /careers   → https://crm.hawih.com.sa/index.php/job_applications/public_save
+     /affiliate → https://crm.hawih.com.sa/index.php/affiliates/public_save
+     anything else (/, /contact, /services, /work, …)
+                → https://crm.hawih.com.sa/index.php/collect_leads/save
+                  (the generic Leads module — current behaviour)
 
    File-log FIRST, CRM SECOND. If the CRM is down we never
    lose a lead — replay from the .jsonl later.
@@ -16,25 +21,35 @@
 declare(strict_types=1);
 
 /* ============================================================
-   CONFIG — edit when CRM IDs are confirmed (see DEPLOY.md §1)
+   CONFIG
    ============================================================ */
 
 $LEAD_LOG_DIR   = '/var/log/hawih-leads';
 $THANK_YOU_URL  = '/thank-you?ok=1';
 $FALLBACK_BACK  = '/contact';
 
-/* CRM endpoint (Rise CRM) */
-$CRM_URL        = 'https://crm.hawih.com.sa/index.php/collect_leads/save';
-$CRM_RESOLVE    = 'crm.hawih.com.sa:443:127.0.0.1';   /* same-server: force traffic to localhost */
+/* CRM endpoints (all served from the same host; CURLOPT_RESOLVE
+   below forces traffic to localhost so we bypass the shared-server
+   SSL lockdown that blocks public-IP loopback). */
+$CRM_LEADS_URL        = 'https://crm.hawih.com.sa/index.php/collect_leads/save';
+$CRM_CAREERS_URL      = 'https://crm.hawih.com.sa/index.php/job_applications/public_save';
+$CRM_AFFILIATES_URL   = 'https://crm.hawih.com.sa/index.php/affiliates/public_save';
+$CRM_RESOLVE          = 'crm.hawih.com.sa:443:127.0.0.1';
+
 $CRM_OWNER_ID   = 1;     /* default lead owner = admin */
 $CRM_STATUS_ID  = 1;     /* "New" */
 
+/* ----- LEGACY (collect_leads/save) mappings ----------------- */
+
 /* Source page → CRM lead_source_id
-   IDs MUST match rise_lead_source rows in the CRM (see DEPLOY.md §1) */
+   IDs MUST match rise_lead_source rows in the CRM (see DEPLOY.md §1).
+   Note: /careers and /affiliate are listed here for legacy reasons
+   but they're routed to dedicated modules now — these IDs only
+   apply if the dedicated path is ever disabled. */
 $SOURCE_MAP = [
     '/'              =>  6,   /* Website — Home */
     '/index'         =>  6,
-    '/index.html'    =>  6,   /* legacy — kept for redirects/inbound links */
+    '/index.html'    =>  6,
     '/work'          =>  7,   /* Website — Work */
     '/work.html'     =>  7,
     '/services'      =>  8,   /* Website — Services */
@@ -43,16 +58,14 @@ $SOURCE_MAP = [
     '/about.html'    =>  9,
     '/contact'       => 10,   /* Website — Contact form */
     '/contact.html'  => 10,
-    '/affiliate'     => 11,   /* Website — Affiliate form */
-    '/careers'       => 12,   /* Website — Careers form */
+    '/affiliate'     => 11,
+    '/careers'       => 12,
 ];
 $DEFAULT_SOURCE_ID = 10;
 
-/* Form value → CRM project_type dropdown value
-   Form ships explicit English short codes; AR strings kept as fallback
-   in case markup is changed later. */
+/* Form value → CRM project_type dropdown value (legacy Leads) */
 $PT_MAP = [
-    /* English short codes (preferred — what the form posts) */
+    /* English short codes (preferred — what /contact posts) */
     'brand-identity' => 'Brand Identity',
     'brand-refresh'  => 'Brand Refresh',
     'social-wasil'   => 'Social — Wasil',
@@ -76,20 +89,49 @@ $PT_MAP = [
     'آخر'                         => 'Other',
 ];
 
-/* Form value → CRM budget dropdown value
-   Same approach: English short codes + AR fallbacks. */
 $BUDGET_MAP = [
-    /* Preferred — what the form posts */
     '1-5K SAR'     => '1–5K SAR',
     '5-25K SAR'    => '5–25K SAR',
     '25-100K SAR'  => '25–100K SAR',
     '100K+ SAR'    => '100K+ SAR',
-
-    /* AR-indic numerals fallbacks */
     '١ – ٥ آلاف ر.س'      => '1–5K SAR',
     '٥ – ٢٥ ألف ر.س'      => '5–25K SAR',
     '٢٥ – ١٠٠ ألف ر.س'    => '25–100K SAR',
     '١٠٠ ألف ر.س +'       => '100K+ SAR',
+];
+
+/* ----- CAREERS (job_applications/public_save) mappings ----- */
+
+$CAREERS_POSITION_MAP = [
+    'careers-design'      => 'التصميم البصري',
+    'careers-development' => 'تطوير الواجهات والمنتجات',
+    'careers-strategy'    => 'الاستراتيجية والمحتوى',
+    'careers-pm'          => 'إدارة المشاريع الإبداعية',
+    'careers-other'       => 'غير ذلك',
+];
+
+$CAREERS_EXP_MAP = [
+    'exp-junior' => '0-1',
+    'exp-mid'    => '1-3',
+    'exp-senior' => '3-5',
+    'exp-lead'   => '5-10',
+];
+
+/* ----- AFFILIATE (affiliates/public_save) mappings --------- */
+
+$AFFILIATE_CHANNELS_MAP = [
+    'affiliate-freelancer' => 'مستقل / فريلانسر',
+    'affiliate-agency'     => 'وكالة أو استوديو',
+    'affiliate-consultant' => 'مستشار تسويق أو علامة',
+    'affiliate-creator'    => 'صانع محتوى أو مؤثر',
+    'affiliate-other'      => 'غير ذلك',
+];
+
+$AFFILIATE_AUDIENCE_MAP = [
+    'reach-personal'     => '<1k',
+    'reach-professional' => '1k-10k',
+    'reach-audience'     => '10k-100k',
+    'reach-clients'      => '100k+',
 ];
 
 /* ============================================================
@@ -140,6 +182,7 @@ $utmCt       = clean('utm_content', 120);
 
 /* ============================================================
    VALIDATION — lenient. Don't reject "نريد هوية" type briefs.
+   Same rule across all three endpoints: name + email + brief.
    ============================================================ */
 
 $errors = [];
@@ -219,48 +262,149 @@ if (!is_dir($LEAD_LOG_DIR)) @mkdir($LEAD_LOG_DIR, 0750, true);
 setcookie('lead_form', '', ['expires' => time() - 3600, 'path' => '/']);
 
 /* ============================================================
-   BUILD CRM PAYLOAD
+   PAYLOAD BUILDERS — one per CRM endpoint
    ============================================================ */
 
-$parts      = preg_split('/\s+/', $name, 2);
-$first_name = (string)($parts[0] ?? $name);
-$last_name  = (string)($parts[1] ?? '-');
+/**
+ * /job_applications/public_save — Careers module.
+ * Splits `name` on the first whitespace into first_name + last_name.
+ * Form's `company` field carries the portfolio URL, mapped to
+ * `linkedin_url`. Brief goes into `notes`.
+ */
+function build_careers_payload(
+    string $name, string $email, string $phone, string $company,
+    string $projectType, string $budget, string $brief,
+    array $position_map, array $exp_map
+): array {
+    $parts      = preg_split('/\s+/', $name, 2);
+    $first_name = (string)($parts[0] ?? $name);
+    $last_name  = (string)($parts[1] ?? '');
 
-$source_id = $SOURCE_MAP[$source] ?? $DEFAULT_SOURCE_ID;
+    $position = $position_map[$projectType] ?? $projectType;
+    $years    = $exp_map[$budget]            ?? $budget;
 
-/* Lookup is case-insensitive on the English short codes */
-$pt_key    = strtolower($projectType);
-$pt_value  = $PT_MAP[$pt_key] ?? ($PT_MAP[$projectType] ?? $projectType);
-$bg_value  = $BUDGET_MAP[$budget] ?? $budget;
+    return [
+        'first_name'       => $first_name,
+        'last_name'        => $last_name,
+        'email'            => $email,
+        'phone'            => $phone,
+        'linkedin_url'     => $company,
+        'position'         => $position,
+        'years_experience' => $years,
+        'notes'            => $brief,
+        'source'           => 'website /careers',
+    ];
+}
 
-$crm_payload = [
-    'first_name'       => $first_name,
-    'last_name'        => $last_name,
-    'email'            => $email,
-    'phone'            => $phone,
-    'company_name'     => $company,
-    'lead_source_id'   => $source_id,
-    'owner_id'         => $CRM_OWNER_ID,
-    'lead_status_id'   => $CRM_STATUS_ID,
-    'is_embedded_form' => 1,
+/**
+ * /affiliates/public_save — Affiliates module.
+ * Single `name` field (no split). Form's `company` → `company_name`.
+ * project_type → channels, budget → audience_size.
+ */
+function build_affiliate_payload(
+    string $name, string $email, string $phone, string $company,
+    string $projectType, string $budget, string $brief,
+    array $channels_map, array $audience_map
+): array {
+    $channels = $channels_map[$projectType] ?? $projectType;
+    $audience = $audience_map[$budget]       ?? $budget;
 
-    /* Custom fields — IDs must match rise_custom_fields rows
-       (see DEPLOY.md §1.5 for the create-order) */
-    'custom_field_1'   => $pt_value,    /* project_type */
-    'custom_field_2'   => $bg_value,    /* budget       */
-    'custom_field_3'   => $brief,       /* brief        */
-    'custom_field_4'   => $source,      /* source_page  */
-    'custom_field_5'   => $gclid,       /* gclid        */
-    'custom_field_6'   => $utmS,        /* utm_source   */
-    'custom_field_7'   => $utmM,        /* utm_medium   */
-    'custom_field_8'   => $utmC,        /* utm_campaign */
-    'custom_field_9'   => $utmT,        /* utm_term     */
-    'custom_field_10'  => $utmCt,       /* utm_content  */
-    'custom_field_11'  => $lang,        /* language     */
-];
+    return [
+        'name'          => $name,
+        'company_name'  => $company,
+        'email'         => $email,
+        'phone'         => $phone,
+        'website'       => '',
+        'audience_size' => $audience,
+        'channels'      => $channels,
+        'notes'         => $brief,
+    ];
+}
+
+/**
+ * /collect_leads/save — Generic Leads module (legacy + all other
+ * sources). Splits `name` on the first whitespace and remaps the
+ * project_type / budget dropdowns into CRM custom-field values.
+ */
+function build_lead_payload(
+    string $name, string $email, string $phone, string $company,
+    string $projectType, string $budget, string $brief,
+    string $source, string $lang,
+    string $gclid, string $utmS, string $utmM, string $utmC,
+    string $utmT, string $utmCt,
+    int $source_id, int $owner_id, int $status_id,
+    array $pt_map, array $bg_map
+): array {
+    $parts      = preg_split('/\s+/', $name, 2);
+    $first_name = (string)($parts[0] ?? $name);
+    $last_name  = (string)($parts[1] ?? '-');
+
+    /* Lookup is case-insensitive on the English short codes */
+    $pt_key   = strtolower($projectType);
+    $pt_value = $pt_map[$pt_key] ?? ($pt_map[$projectType] ?? $projectType);
+    $bg_value = $bg_map[$budget] ?? $budget;
+
+    return [
+        'first_name'       => $first_name,
+        'last_name'        => $last_name,
+        'email'            => $email,
+        'phone'            => $phone,
+        'company_name'     => $company,
+        'lead_source_id'   => $source_id,
+        'owner_id'         => $owner_id,
+        'lead_status_id'   => $status_id,
+        'is_embedded_form' => 1,
+        /* Custom fields — IDs must match rise_custom_fields rows */
+        'custom_field_1'   => $pt_value,
+        'custom_field_2'   => $bg_value,
+        'custom_field_3'   => $brief,
+        'custom_field_4'   => $source,
+        'custom_field_5'   => $gclid,
+        'custom_field_6'   => $utmS,
+        'custom_field_7'   => $utmM,
+        'custom_field_8'   => $utmC,
+        'custom_field_9'   => $utmT,
+        'custom_field_10'  => $utmCt,
+        'custom_field_11'  => $lang,
+    ];
+}
+
+/* ============================================================
+   ROUTE — pick endpoint + payload based on $source
+   ============================================================ */
+
+if ($source === '/careers') {
+    $CRM_URL     = $CRM_CAREERS_URL;
+    $crm_payload = build_careers_payload(
+        $name, $email, $phone, $company,
+        $projectType, $budget, $brief,
+        $CAREERS_POSITION_MAP, $CAREERS_EXP_MAP
+    );
+} elseif ($source === '/affiliate') {
+    $CRM_URL     = $CRM_AFFILIATES_URL;
+    $crm_payload = build_affiliate_payload(
+        $name, $email, $phone, $company,
+        $projectType, $budget, $brief,
+        $AFFILIATE_CHANNELS_MAP, $AFFILIATE_AUDIENCE_MAP
+    );
+} else {
+    $CRM_URL     = $CRM_LEADS_URL;
+    $source_id   = $SOURCE_MAP[$source] ?? $DEFAULT_SOURCE_ID;
+    $crm_payload = build_lead_payload(
+        $name, $email, $phone, $company,
+        $projectType, $budget, $brief,
+        $source, $lang,
+        $gclid, $utmS, $utmM, $utmC, $utmT, $utmCt,
+        $source_id, $CRM_OWNER_ID, $CRM_STATUS_ID,
+        $PT_MAP, $BUDGET_MAP
+    );
+}
 
 /* ============================================================
    POST TO CRM (synchronous, ~80–150 ms on localhost)
+   Same curl block for all three endpoints — only URL + payload
+   differ. CURLOPT_RESOLVE bypasses the shared-server SSL
+   lockdown by forcing the host to resolve to 127.0.0.1.
    ============================================================ */
 
 $ch = curl_init($CRM_URL);
@@ -286,6 +430,7 @@ curl_close($ch);
 $crm_json   = json_decode((string)$crm_resp, true);
 $crm_ok     = is_array($crm_json) && !empty($crm_json['success']);
 $crm_msg    = is_array($crm_json) ? (string)($crm_json['message'] ?? '') : '';
+$crm_id     = is_array($crm_json) ? ($crm_json['id'] ?? null) : null;
 $crm_status = $crm_ok ? 'ok'
             : ((is_array($crm_json) && str_contains(strtolower($crm_msg), 'already registered'))
                 ? 'duplicate' : 'error');
@@ -293,13 +438,15 @@ $crm_status = $crm_ok ? 'ok'
 @file_put_contents(
     $LEAD_LOG_DIR . '/_crm.log',
     json_encode([
-        'ts'      => date('c'),
-        'status'  => $crm_status,
-        'http'    => $crm_code,
-        'message' => $crm_msg,
-        'err'     => $crm_err,
-        'email'   => $email,
-        'source'  => $source,
+        'ts'       => date('c'),
+        'status'   => $crm_status,
+        'http'     => $crm_code,
+        'endpoint' => parse_url($CRM_URL, PHP_URL_PATH) ?: $CRM_URL,
+        'crm_id'   => $crm_id,
+        'message'  => $crm_msg,
+        'err'      => $crm_err,
+        'email'    => $email,
+        'source'   => $source,
     ], JSON_UNESCAPED_UNICODE) . "\n",
     FILE_APPEND | LOCK_EX
 );
