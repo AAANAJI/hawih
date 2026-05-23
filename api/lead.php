@@ -43,6 +43,8 @@ $SOURCE_MAP = [
     '/about.html'    =>  9,
     '/contact'       => 10,   /* Website — Contact form */
     '/contact.html'  => 10,
+    '/affiliate'     => 11,   /* Website — Affiliate form */
+    '/careers'       => 12,   /* Website — Careers form */
 ];
 $DEFAULT_SOURCE_ID = 10;
 
