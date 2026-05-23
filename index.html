@@ -1335,7 +1335,61 @@
           <img class="mxd-logo__image mxd-logo__light" src="/assets/img/hawih-logo-black.png" alt="Hawih · هوية" style="height: 40px; width: auto; display: none;">
         </a>
       </div>
+            <!-- Desktop main navigation — visible on >=992px, mirrors the
+           hamburger menu items. Sub-menu cards open on hover/focus. -->
+      <nav class="uc-desktop-nav" aria-label="Main">
+        <ul class="uc-desktop-nav__list">
+        <li class="uc-desktop-nav__item">
+          <a class="uc-desktop-nav__link" href="/">
+            <svg class="uc-desktop-nav__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/></svg>
+            <span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span>
+          </a>
+        </li>
+        <li class="uc-desktop-nav__item">
+          <a class="uc-desktop-nav__link" href="/work">
+            <svg class="uc-desktop-nav__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/></svg>
+            <span class="lang-string" data-ar="أعمالنا" data-en="Work">أعمالنا</span>
+          </a>
+        </li>
+        <li class="uc-desktop-nav__item uc-desktop-nav__item--has-submenu">
+          <button class="uc-desktop-nav__link" type="button" aria-haspopup="true" aria-expanded="false">
+            <svg class="uc-desktop-nav__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/></svg>
+            <span class="lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span>
+          </button>
+          <ul class="uc-desktop-nav__submenu" role="menu">
+            <li><a href="/services"><span class="lang-string" data-ar="كل الخدمات" data-en="All services">كل الخدمات</span></a></li>
+            <li><a href="/services"><span class="lang-string" data-ar="العلامة التجارية" data-en="Brand">العلامة التجارية</span></a></li>
+            <li><a href="/services"><span class="lang-string" data-ar="الهوية البصرية" data-en="Identity">الهوية البصرية</span></a></li>
+            <li><a href="/services"><span class="lang-string" data-ar="واجهات المستخدم" data-en="UI design">واجهات المستخدم</span></a></li>
+            <li><a href="/services"><span class="lang-string" data-ar="تجربة المستخدم" data-en="UX design">تجربة المستخدم</span></a></li>
+            <li><a href="/services"><span class="lang-string" data-ar="التسويق البصري" data-en="Marketing visuals">التسويق البصري</span></a></li>
+            <li><a href="/services"><span class="lang-string" data-ar="الاستشارات الفنّية" data-en="Creative consulting">الاستشارات الفنّية</span></a></li>
+            <li><a href="/services"><span class="lang-string" data-ar="الفعاليات والمناسبات" data-en="Events">الفعاليات والمناسبات</span></a></li>
+            <li><a href="/services"><span class="lang-string" data-ar="إحياء العلامات" data-en="Brand refresh">إحياء العلامات</span></a></li>
+          </ul>
+        </li>
+        <li class="uc-desktop-nav__item uc-desktop-nav__item--has-submenu">
+          <button class="uc-desktop-nav__link" type="button" aria-haspopup="true" aria-expanded="false">
+            <svg class="uc-desktop-nav__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/></svg>
+            <span class="lang-string" data-ar="الوكالة" data-en="Agency">الوكالة</span>
+          </button>
+          <ul class="uc-desktop-nav__submenu" role="menu">
+            <li><a href="/about"><span class="lang-string" data-ar="من نحن" data-en="About us">من نحن</span></a></li>
+            <li><a href="/quality-guarantee"><span class="lang-string" data-ar="ضمان الجودة" data-en="Quality guarantee">ضمان الجودة</span></a></li>
+            <li><a href="/affiliate"><span class="lang-string" data-ar="برنامج العمولة" data-en="Affiliate program">برنامج العمولة</span></a></li>
+            <li><a href="/careers"><span class="lang-string" data-ar="انضمّ إلينا" data-en="Careers">انضمّ إلينا</span></a></li>
+          </ul>
+        </li>
+        <li class="uc-desktop-nav__item">
+          <a class="uc-desktop-nav__link" href="/contact">
+            <svg class="uc-desktop-nav__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/></svg>
+            <span class="lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span>
+          </a>
+        </li>
+        </ul>
+      </nav>
       <!-- header controls -->
+
       <div class="mxd-header__controls loading__fade">
         <button id="color-switcher" class="mxd-color-switcher" type="button" role="switch" aria-label="light/dark mode" aria-checked="true"></button>
         <button data-lang-toggle type="button" class="btn btn-anim btn-default btn-outline" aria-label="Toggle language">

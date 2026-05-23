@@ -1553,14 +1553,105 @@ html[lang="ar"] .work-tile__chip { letter-spacing: 0 !important; }
 .mxd-header__controls button[data-lang-toggle],
 .mxd-header__controls a.btn.btn-outline {
     border: 1px solid var(--st-bright) !important;
-    background-color: var(--base-tint) !important;
-    -webkit-backdrop-filter: blur(6px) !important;
-    backdrop-filter: blur(6px) !important;
+    background-color: rgba(250, 247, 246, 0.45) !important;
+    -webkit-backdrop-filter: blur(8px) !important;
+    backdrop-filter: blur(8px) !important;
 }
-/* Hover state — small lift via the next shade up. Same recipe for
-   each of the three so feedback is uniform. */
+/* In dark mode the page is near-black, so the same translucent
+   cream wash would look out of place — flip the rgba to a dark
+   wash so the buttons stay readable on the cobalt header bg. */
+:root[color-scheme="dark"] .mxd-header__controls #color-switcher.mxd-color-switcher,
+:root[color-scheme="dark"] .mxd-header__controls button[data-lang-toggle],
+:root[color-scheme="dark"] .mxd-header__controls a.btn.btn-outline {
+    background-color: rgba(28, 28, 28, 0.45) !important;
+}
+/* Hover state — small lift via a denser wash. Same recipe for each
+   of the three so feedback is uniform. */
 .mxd-header__controls #color-switcher.mxd-color-switcher:hover,
 .mxd-header__controls button[data-lang-toggle]:hover,
 .mxd-header__controls a.btn.btn-outline:hover {
-    background-color: var(--base-shade) !important;
+    background-color: rgba(250, 247, 246, 0.75) !important;
+}
+:root[color-scheme="dark"] .mxd-header__controls #color-switcher.mxd-color-switcher:hover,
+:root[color-scheme="dark"] .mxd-header__controls button[data-lang-toggle]:hover,
+:root[color-scheme="dark"] .mxd-header__controls a.btn.btn-outline:hover {
+    background-color: rgba(28, 28, 28, 0.75) !important;
+}
+
+/* ============================================================
+   Desktop inline main nav (visible >=992px)
+   ============================================================
+   Mirrors the hamburger menu items inline between the Hawih logo
+   and the header controls. Sub-menus open as small cards on hover
+   / focus-within. The hamburger panel stays available for mobile
+   only — desktop hides the trigger and uses this nav instead. */
+.uc-desktop-nav { display: none; }
+
+@media (min-width: 992px) {
+    /* Show the inline nav, hide the hamburger trigger. */
+    .uc-desktop-nav { display: block; flex: 1; padding-inline: 2.4rem; }
+    .mxd-nav__hamburger { display: none !important; }
+
+    .uc-desktop-nav__list {
+        list-style: none; margin: 0; padding: 0;
+        display: flex; gap: 2.4rem;
+        justify-content: center; align-items: center;
+        flex-wrap: nowrap;
+    }
+    .uc-desktop-nav__item { position: relative; }
+    .uc-desktop-nav__link {
+        display: inline-flex; align-items: center; gap: 0.6rem;
+        background: transparent; border: 0;
+        font: inherit; color: var(--t-bright);
+        padding: 0.6rem 0.2rem;
+        font-size: 1.5rem; font-weight: 500;
+        text-decoration: none; cursor: pointer;
+        white-space: nowrap;
+        transition: opacity 0.2s ease;
+    }
+    .uc-desktop-nav__link:hover,
+    .uc-desktop-nav__link:focus-visible { opacity: 0.7; }
+
+    /* Star/sparkle icon before each top-level item */
+    .uc-desktop-nav__icon {
+        width: 1.4rem; height: 1.4rem;
+        color: var(--accent);
+        fill: currentColor;
+        flex-shrink: 0;
+    }
+
+    /* Submenu card */
+    .uc-desktop-nav__submenu {
+        position: absolute; top: 100%;
+        inset-inline-start: 0;
+        list-style: none;
+        margin: 0.4rem 0 0; padding: 1rem 1.4rem;
+        background: var(--base-tint);
+        border: 1px solid var(--st-bright);
+        border-radius: 1.2rem;
+        min-width: 22rem;
+        box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+        opacity: 0; visibility: hidden;
+        transform: translateY(-4px);
+        transition: opacity 0.18s ease, transform 0.18s ease,
+                    visibility 0.18s ease;
+        z-index: 120;
+    }
+    .uc-desktop-nav__item--has-submenu:hover .uc-desktop-nav__submenu,
+    .uc-desktop-nav__item--has-submenu:focus-within .uc-desktop-nav__submenu {
+        opacity: 1; visibility: visible; transform: translateY(0);
+    }
+    .uc-desktop-nav__submenu li { margin: 0; padding: 0; }
+    .uc-desktop-nav__submenu a {
+        display: block; padding: 0.55rem 0;
+        color: var(--t-bright); font-size: 1.4rem;
+        font-weight: 400; text-decoration: none;
+        white-space: nowrap;
+        transition: color 0.15s ease;
+    }
+    .uc-desktop-nav__submenu a:hover,
+    .uc-desktop-nav__submenu a:focus-visible { color: var(--accent); }
+
+    /* In RTL the submenu should still hug the start edge of its item */
+    [dir="rtl"] .uc-desktop-nav__submenu { inset-inline-start: 0; }
 }
