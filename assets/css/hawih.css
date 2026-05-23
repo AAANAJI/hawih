@@ -1768,4 +1768,37 @@ body header.mxd-header.uc-scrolled {
         width: 4.6rem !important;
         height: 4.6rem !important;
     }
+
+    /* ------------------------------------------------------------
+       Mobile experiment: hide the header theme toggle, surface the
+       lang switch + Contact CTA in its place. The theme toggle is
+       added inside the hamburger popup menu instead (the popup also
+       carries Contact + Lang pills for parity).
+       ------------------------------------------------------------ */
+    body .mxd-header__controls #color-switcher {
+        display: none !important;
+    }
+    body .mxd-header__controls [data-lang-toggle],
+    body .mxd-header__controls a.btn-mobile-icon {
+        display: inline-flex !important;
+    }
+    /* Trim the lang switch + CTA so the two pills + hamburger all
+       fit comfortably on a narrow screen. */
+    body header.mxd-header .mxd-header__controls .btn.btn-default,
+    body header.mxd-header .mxd-header__controls button[data-lang-toggle],
+    body header.mxd-header .mxd-header__controls a.btn {
+        font-size: 1.3rem !important;
+        height: 3.6rem !important;
+        line-height: 3.6rem !important;
+        padding-inline: 1.2rem !important;
+        border-radius: 1.8rem !important;
+    }
+    body header.mxd-header .mxd-header__controls .btn i {
+        font-size: 1.5rem !important;
+    }
+    /* Lang button can be a tighter pill since it's only "EN" / "عربي". */
+    body header.mxd-header .mxd-header__controls button[data-lang-toggle] {
+        padding-inline: 1rem !important;
+        min-width: 4rem;
+    }
 }

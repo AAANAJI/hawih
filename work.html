@@ -1248,6 +1248,9 @@
                     <button data-lang-toggle type="button" class="btn btn-default btn-large btn-outline" aria-label="Toggle language">
                       <span class="btn-caption lang-string" data-ar="EN" data-en="عربي">EN</span>
                     </button>
+                    <button data-theme-toggle type="button" class="btn btn-default btn-large btn-outline" aria-label="Toggle theme">
+                      <span class="btn-caption lang-string" data-ar="تبديل المظهر" data-en="Toggle theme">تبديل المظهر</span>
+                    </button>
                   </div>
                 </div>
               </div>
@@ -2034,6 +2037,15 @@
               document.documentElement.classList.toggle('dark');
               try { localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); } catch (e) {}
             }
+          });
+          // Forward clicks from any [data-theme-toggle] (e.g. the popup
+          // menu's pill on mobile) to the main #color-switcher so the
+          // template's own click handler + this bridge both fire.
+          document.querySelectorAll('[data-theme-toggle]').forEach(function (b) {
+            b.addEventListener('click', function (e) {
+              e.preventDefault();
+              btn.click();
+            });
           });
         }
         if (document.readyState === 'loading') {
