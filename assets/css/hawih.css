@@ -1532,3 +1532,20 @@ html[lang="ar"] .work-tile__chip { letter-spacing: 0 !important; }
     .marquee__track { animation: none; }
     .reveal { opacity: 1; transform: none; }
 }
+
+/* ============================================================
+   Header controls — outline consistency
+   ============================================================
+   The template ships .mxd-color-switcher with `border: none`, so the
+   theme-toggle disc looked visually different from the lang switch
+   and the "Start your project" pill (both .btn-outline). Apply the
+   same outline treatment so all three render with a black stroke
+   + transparent fill in light mode (and a light stroke on dark
+   cobalt in dark mode). */
+.mxd-header__controls #color-switcher.mxd-color-switcher {
+    border: 1px solid var(--st-bright) !important;
+    background-color: transparent !important;
+}
+.mxd-header__controls #color-switcher.mxd-color-switcher:hover {
+    background-color: var(--base-tint) !important;
+}
