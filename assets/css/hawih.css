@@ -1736,6 +1736,14 @@ body header.mxd-header.uc-scrolled {
         font-size: 2rem !important;
     }
 }
+/* Logo aspect ratio is sacred — never let flex shrinkage squish the
+   hawih wordmark, at any viewport size. */
+body header.mxd-header .mxd-header__logo,
+body header.mxd-header .mxd-header__logo .mxd-logo,
+body header.mxd-header .mxd-header__logo img {
+    flex-shrink: 0 !important;
+}
+
 /* Narrow screens: the pill spans the full viewport width with 1rem
    margin on each side, AND the standalone hamburger trigger is
    repositioned so it visually sits inside the pill's writing-end
@@ -1747,8 +1755,14 @@ body header.mxd-header.uc-scrolled {
         inset: 1rem 1rem auto 1rem !important;
         padding-block: 0.6rem !important;
         padding-inline-start: 1.4rem !important;
-        padding-inline-end: 8rem !important;
+        padding-inline-end: 6rem !important;
         border-radius: 999px !important;
+    }
+    /* Tighter inter-control gap on mobile — the default 1.4rem is
+       too generous once we have four items (theme · lang · CTA ·
+       hamburger) fighting for space. */
+    body header.mxd-header .mxd-header__controls {
+        gap: 0.3rem !important;
     }
     /* Park the hamburger wrapper at the pill's writing-end corner.
        Position with logical insets so it lands at the right side in
