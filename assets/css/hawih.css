@@ -1912,3 +1912,77 @@ html body .mxd-block__name h2 span {
     font-size: 1.4rem;
     opacity: 0.6;
 }
+
+/* ============================================================
+   S038 / S041 — force white text on dark + accent cards
+   ============================================================
+   The template's `.opposite` and `.t-opposite` classes set color
+   to var(--t-opp-bright) (#FFFFFF), but the inner <span class=
+   "lang-string"> sometimes inherits the page's default ink colour
+   because of Tailwind preflight's `color: inherit` reset that
+   loads after main.min.css. Force-white anything sitting inside a
+   .bg-base-opp or .bg-accent card so titles, paragraphs, and tag
+   contents always read correctly regardless of theme cascade. */
+.mxd-services-cards__inner.bg-base-opp,
+.mxd-services-cards__inner.bg-base-opp *,
+.mxd-services-cards__inner.bg-base-opp .opposite,
+.mxd-services-cards__inner.bg-base-opp .opposite .lang-string,
+.mxd-services-cards__inner.bg-base-opp .t-opposite,
+.mxd-services-cards__inner.bg-base-opp .t-opposite .lang-string,
+.mxd-services-cards__inner.bg-base-opp .tag,
+.mxd-services-cards__inner.bg-base-opp .tag .lang-string,
+.mxd-services-cards__inner.bg-accent,
+.mxd-services-cards__inner.bg-accent *,
+.mxd-services-cards__inner.bg-accent .opposite,
+.mxd-services-cards__inner.bg-accent .opposite .lang-string,
+.mxd-services-cards__inner.bg-accent .t-opposite,
+.mxd-services-cards__inner.bg-accent .t-opposite .lang-string,
+.mxd-services-cards__inner.bg-accent .tag,
+.mxd-services-cards__inner.bg-accent .tag .lang-string,
+.mxd-services-stack__inner.bg-base-opp,
+.mxd-services-stack__inner.bg-base-opp *,
+.mxd-services-stack__inner.bg-base-opp .opposite,
+.mxd-services-stack__inner.bg-base-opp .opposite .lang-string,
+.mxd-services-stack__inner.bg-base-opp .t-opposite,
+.mxd-services-stack__inner.bg-base-opp .t-opposite .lang-string,
+.mxd-services-stack__inner.bg-base-opp .tag,
+.mxd-services-stack__inner.bg-base-opp .tag .lang-string,
+.mxd-services-stack__inner.bg-accent,
+.mxd-services-stack__inner.bg-accent *,
+.mxd-services-stack__inner.bg-accent .opposite,
+.mxd-services-stack__inner.bg-accent .opposite .lang-string,
+.mxd-services-stack__inner.bg-accent .t-opposite,
+.mxd-services-stack__inner.bg-accent .t-opposite .lang-string,
+.mxd-services-stack__inner.bg-accent .tag,
+.mxd-services-stack__inner.bg-accent .tag .lang-string {
+    color: var(--t-opp-bright) !important;
+}
+/* tag-outline-opposite border (white-ish stroke on dark/accent bg) */
+.mxd-services-cards__inner.bg-base-opp .tag-outline-opposite,
+.mxd-services-cards__inner.bg-accent .tag-outline-opposite,
+.mxd-services-stack__inner.bg-base-opp .tag-outline-opposite,
+.mxd-services-stack__inner.bg-accent .tag-outline-opposite {
+    border-color: rgba(255, 255, 255, 0.5) !important;
+}
+
+/* ============================================================
+   S038 — keep title text clear of the icon-button corner
+   ============================================================
+   The .mxd-services-cards__controls (the round arrow button) is
+   positioned absolutely in one corner of the card. Without a
+   matching inline-padding on the .__title block, the title text
+   wraps directly under / over the icon's coloured fill, looking
+   like a layout collision. Reserve a clear zone on the icon side
+   so the title always sits in the free area of the card. */
+.mxd-services-cards__inner {
+    position: relative;
+    overflow: hidden;
+}
+.mxd-services-cards__title,
+.mxd-services-cards__info {
+    padding-inline-end: 7rem;
+}
+/* In LTR the controls float to the right end (inline-end), so the
+   title has padding-right above. In RTL the controls flip to the
+   left end (inline-end in RTL), and padding-inline-end keeps the
+   text clear of them automatically because it's direction-aware. */
