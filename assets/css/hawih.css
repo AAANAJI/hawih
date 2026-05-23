@@ -1853,8 +1853,9 @@ body header.mxd-header .mxd-header__logo img {
    Without an explicit override, .mxd-block__name h2 inherits a
    tiny font-size from Tailwind's preflight. Match the same scale
    as the other section titles so it reads as a proper heading. */
-.mxd-block__name h2,
-.mxd-block__name h2 .lang-string {
+html body .mxd-block__name h2,
+html body .mxd-block__name h2 .lang-string,
+html body .mxd-block__name h2 span {
     font-size: clamp(2.8rem, 5.5vw, 5.5rem) !important;
     line-height: 1.1 !important;
     font-weight: 600 !important;
