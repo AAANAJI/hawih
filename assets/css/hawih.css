@@ -1604,7 +1604,7 @@ html[lang="ar"] .work-tile__chip { letter-spacing: 0 !important; }
         background: transparent; border: 0;
         font: inherit; color: var(--t-bright);
         padding: 0.6rem 0.2rem;
-        font-size: 1.5rem; font-weight: 500;
+        font-size: 1.8rem; font-weight: 500;
         text-decoration: none; cursor: pointer;
         white-space: nowrap;
         transition: opacity 0.2s ease;
@@ -1620,16 +1620,18 @@ html[lang="ar"] .work-tile__chip { letter-spacing: 0 !important; }
         flex-shrink: 0;
     }
 
-    /* Submenu card */
+    /* Submenu card — frosted glass over the page bg. */
     .uc-desktop-nav__submenu {
         position: absolute; top: 100%;
         inset-inline-start: 0;
         list-style: none;
-        margin: 0.4rem 0 0; padding: 1rem 1.4rem;
-        background: var(--base-tint);
-        border: 1px solid var(--st-bright);
-        border-radius: 1.2rem;
-        min-width: 22rem;
+        margin: 0.4rem 0 0; padding: 1.1rem 1.6rem;
+        background: rgba(250, 247, 246, 0.72);
+        -webkit-backdrop-filter: blur(14px) saturate(1.4);
+        backdrop-filter: blur(14px) saturate(1.4);
+        border: 1px solid rgba(20, 20, 20, 0.10);
+        border-radius: 1.6rem;
+        min-width: 24rem;
         box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
         opacity: 0; visibility: hidden;
         transform: translateY(-4px);
@@ -1637,21 +1639,114 @@ html[lang="ar"] .work-tile__chip { letter-spacing: 0 !important; }
                     visibility 0.18s ease;
         z-index: 120;
     }
+    :root[color-scheme="dark"] .uc-desktop-nav__submenu {
+        background: rgba(18, 18, 20, 0.72);
+        border-color: rgba(255, 255, 255, 0.10);
+    }
     .uc-desktop-nav__item--has-submenu:hover .uc-desktop-nav__submenu,
     .uc-desktop-nav__item--has-submenu:focus-within .uc-desktop-nav__submenu {
         opacity: 1; visibility: visible; transform: translateY(0);
     }
     .uc-desktop-nav__submenu li { margin: 0; padding: 0; }
     .uc-desktop-nav__submenu a {
-        display: block; padding: 0.55rem 0;
-        color: var(--t-bright); font-size: 1.4rem;
+        display: inline-flex; align-items: center; gap: 0.6rem;
+        padding: 0.55rem 0;
+        color: var(--t-bright); font-size: 1.7rem;
         font-weight: 400; text-decoration: none;
         white-space: nowrap;
         transition: color 0.15s ease;
+    }
+    /* "+" sign before each submenu item, in the accent colour */
+    .uc-desktop-nav__submenu a::before {
+        content: "+";
+        color: var(--accent);
+        font-weight: 600; font-size: 1.6rem; line-height: 1;
+        flex-shrink: 0;
     }
     .uc-desktop-nav__submenu a:hover,
     .uc-desktop-nav__submenu a:focus-visible { color: var(--accent); }
 
     /* In RTL the submenu should still hug the start edge of its item */
     [dir="rtl"] .uc-desktop-nav__submenu { inset-inline-start: 0; }
+}
+
+/* ============================================================
+   Header — floating "pill" container (always-on frosted)
+   ============================================================
+   Override the inline page-level style which made the header
+   full-width and only painted a backdrop on scroll. Higher
+   specificity (`body header.mxd-header`) beats the inline rule's
+   `.mxd-header { … !important }` so this loads via the shared
+   stylesheet for all 32 pages at once. */
+body header.mxd-header {
+    /* Float the bar inside the viewport instead of running edge-to-edge. */
+    inset: 1.5rem 1.5rem auto 1.5rem !important;
+    width: auto !important;
+    max-width: 144rem !important;
+    margin-inline: auto !important;
+    /* Pill / rounded corners */
+    border-radius: 999px !important;
+    /* Always-on frosted backdrop, no longer dependent on .uc-scrolled */
+    background: rgba(244, 241, 235, 0.62) !important;
+    -webkit-backdrop-filter: blur(16px) saturate(1.6) !important;
+    backdrop-filter: blur(16px) saturate(1.6) !important;
+    border: 1px solid rgba(20, 20, 20, 0.08) !important;
+    border-bottom-color: rgba(20, 20, 20, 0.08) !important;
+    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06) !important;
+    /* Tighter padding now that we're a contained pill */
+    padding-block: 0.8rem !important;
+    padding-inline: 2.2rem !important;
+}
+:root[color-scheme="dark"] body header.mxd-header {
+    background: rgba(18, 18, 20, 0.55) !important;
+    border-color: rgba(255, 255, 255, 0.10) !important;
+}
+/* Drop the scroll-state "uc-scrolled" deltas — base style now
+   already looks like the scrolled version. */
+body header.mxd-header.uc-scrolled {
+    background: rgba(244, 241, 235, 0.78) !important;
+}
+:root[color-scheme="dark"] body header.mxd-header.uc-scrolled {
+    background: rgba(18, 18, 20, 0.72) !important;
+}
+/* Match the header-controls font size to the inline desktop nav
+   so logo / nav / lang / CTA all read at the same weight. The
+   template defaults header buttons to 2.2rem which sat noticeably
+   bigger than the 1.5rem nav items; matching the nav at 1.8rem
+   on a slimmer control pill. */
+@media (min-width: 992px) {
+    body header.mxd-header .mxd-header__controls .btn.btn-default,
+    body header.mxd-header .mxd-header__controls button[data-lang-toggle],
+    body header.mxd-header .mxd-header__controls a.btn {
+        font-size: 1.8rem !important;
+        height: 4.6rem !important;
+        line-height: 4.6rem !important;
+        padding-inline: 1.8rem !important;
+        border-radius: 2.4rem !important;
+    }
+    body header.mxd-header .mxd-header__controls .btn i {
+        font-size: 2rem !important;
+    }
+    /* Theme-toggle disc stays circular — match height to the pills. */
+    body header.mxd-header .mxd-header__controls #color-switcher.mxd-color-switcher {
+        width: 4.6rem !important;
+        height: 4.6rem !important;
+    }
+    body header.mxd-header .mxd-header__controls #color-switcher.mxd-color-switcher i {
+        font-size: 2rem !important;
+    }
+}
+/* On mobile, undo the float-pill since the header is narrow
+   and a flush bar reads better at small widths. */
+@media (max-width: 991px) {
+    body header.mxd-header {
+        inset: 0 0 auto 0 !important;
+        width: 100% !important;
+        max-width: none !important;
+        border-radius: 0 !important;
+        border-inline: 0 !important;
+        padding-block: 1rem !important;
+        padding-inline-start: 1.5rem !important;
+        padding-inline-end: 7rem !important;
+    }
 }
