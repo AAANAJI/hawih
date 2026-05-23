@@ -1986,3 +1986,78 @@ html body .mxd-block__name h2 span {
    title has padding-right above. In RTL the controls flip to the
    left end (inline-end in RTL), and padding-inline-end keeps the
    text clear of them automatically because it's direction-aware. */
+
+/* ============================================================
+   S038 / S041 cards — round button visibility + RTL flipping
+   ============================================================
+   Three bugs surfaced once these cards went live:
+
+   1) On light backgrounds (bg-base-shade / bg-base-tint), the
+      template's btn-base sets the circle's fill to var(--base)
+      which is the same cream as the page — the button becomes
+      effectively invisible. Force btn-opposite (dark fill + white
+      icon) on any round-large button sitting inside a light-bg
+      card so the corner control always reads.
+   ------------------------------------------------------------ */
+.mxd-services-cards__inner.bg-base-tint .btn-round.btn-base,
+.mxd-services-cards__inner.bg-base-shade .btn-round.btn-base,
+.mxd-services-stack__inner.bg-base-tint .btn-round.btn-base,
+.mxd-services-stack__inner.bg-base-shade .btn-round.btn-base {
+    background-color: var(--base-opp) !important;
+    border-color: var(--base-opp) !important;
+    color: var(--t-opp-bright) !important;
+}
+.mxd-services-cards__inner.bg-base-tint .btn-round.btn-base i,
+.mxd-services-cards__inner.bg-base-shade .btn-round.btn-base i,
+.mxd-services-stack__inner.bg-base-tint .btn-round.btn-base i,
+.mxd-services-stack__inner.bg-base-shade .btn-round.btn-base i {
+    color: var(--t-opp-bright) !important;
+}
+
+/* 2) RTL: the controls icon button is positioned `right: 1rem`
+      (physical) in the template. In Arabic, the reading flow
+      starts on the right, so the button ends up overlapping the
+      title text. Mirror it to the inline-end side (left in RTL)
+      so the title sits in the clear half of the card.
+   ------------------------------------------------------------ */
+[dir="rtl"] .mxd-services-cards__controls,
+[dir="rtl"] .mxd-services-stack__controls {
+    right: auto !important;
+    left: 1rem !important;
+}
+
+/* 3) RTL: the card illustration is positioned with physical
+      `right: 0` (image-1, image-3, image-4) or `left: 50%`
+      (image-2). In Arabic, that puts the image on the SAME
+      side as the title text — the polyhedron / object collides
+      with the heading. Mirror each image variant to the
+      opposite physical side so it sits in the empty half of
+      the card and the title reads clean.
+   ------------------------------------------------------------ */
+[dir="rtl"] .mxd-services-cards__image.mxd-services-cards-image-1 {
+    right: auto !important;
+    left: 0 !important;
+}
+[dir="rtl"] .mxd-services-cards__image.mxd-services-cards-image-2 {
+    /* image-2 was centred via left:50% + translateX(-50%) — already
+       centred horizontally, so no flip needed; keep as-is. */
+}
+[dir="rtl"] .mxd-services-cards__image.mxd-services-cards-image-3 {
+    right: auto !important;
+    left: 0 !important;
+}
+[dir="rtl"] .mxd-services-cards__image.mxd-services-cards-image-3 .image-1 {
+    left: auto !important;
+    right: 0 !important;
+}
+[dir="rtl"] .mxd-services-cards__image.mxd-services-cards-image-3 .image-2 {
+    right: auto !important;
+    left: -40px !important;
+}
+[dir="rtl"] .mxd-services-cards__image.mxd-services-cards-image-4 {
+    right: auto !important;
+    left: -50px !important;
+}
+/* Stacking-card image lives at .services-stack__image; the
+   template doesn't pin a side so it flows naturally — no
+   override required. */
