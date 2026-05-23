@@ -263,12 +263,15 @@
       }
 
       /* --- 6. Approach / philosophy list (icon | title | description rows)
-         Bootstrap grid auto-mirrors with direction:rtl, but the title box has
-         `padding: 0 3rem; text-align: right` baked in - that's fine in RTL.
-         Just make sure the description aligns right and the icon image is at
-         the visual start (now the right edge) without forced margins. */
+         Bootstrap grid auto-mirrors with direction:rtl. The previous rule
+         baked a symmetric `padding: 0 3rem` on the title which pushed the
+         RTL text 3rem away from its inline-start (the right edge). Replace
+         with directional padding so the inline-start is flush and the
+         inline-end keeps its 3rem breathing room, matching how the LTR
+         version sits flush at the left edge of its column. */
       [dir="rtl"] .mxd-approach-list__title {
-        padding: 0 3rem;
+        padding-inline-start: 0;
+        padding-inline-end: 3rem;
         text-align: right;
       }
       [dir="rtl"] .mxd-approach-list__descr {

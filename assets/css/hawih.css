@@ -1737,12 +1737,15 @@ body header.mxd-header.uc-scrolled {
     }
 }
 /* Narrow screens: keep the floating-pill treatment but tighten the
-   inset + inline padding so the bar doesn't feel cramped, and pull
-   in the right-side padding (no need for the 7rem hamburger-clearance
-   gap any more — the hamburger sits inside the pill flow on mobile). */
+   inset + inline padding so the bar doesn't feel cramped. The pill's
+   inline-end (right in LTR / left in RTL) gets a wider inset to leave
+   room for the standalone hamburger trigger that floats in that
+   corner — otherwise the hamburger ends up overlapping the theme
+   toggle inside the pill. */
 @media (max-width: 991px) {
     body header.mxd-header {
         inset: 1rem 1rem auto 1rem !important;
+        inset-inline-end: 7rem !important;
         padding-block: 0.6rem !important;
         padding-inline: 1.4rem !important;
         border-radius: 999px !important;
