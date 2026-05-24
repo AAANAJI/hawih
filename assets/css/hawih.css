@@ -2208,10 +2208,17 @@ html body .mxd-block__name h2 span {
     transform: scaleX(-1);
 }
 
-/* Primary — cobalt fill, white circle, cobalt arrow */
+/* Primary — cobalt fill, white pill text, white circle + cobalt arrow.
+   The `.uc-hero-intro .lang-string` rule earlier in this file pins
+   descendant text to var(--t-bright), so we need !important + reach
+   the inner .lang-string span specifically to keep "تواصل معنا" white. */
+.uc-hero-pill--primary,
+.uc-hero-pill--primary .uc-hero-pill__label,
+.uc-hero-pill--primary .uc-hero-pill__label .lang-string {
+    color: #ffffff !important;
+}
 .uc-hero-pill--primary {
     background-color: #0001fc;
-    color: #ffffff;
 }
 .uc-hero-pill--primary .uc-hero-pill__icon {
     background-color: #ffffff;
@@ -2219,13 +2226,19 @@ html body .mxd-block__name h2 span {
 }
 .uc-hero-pill--primary:hover {
     background-color: #0001cc;
-    color: #ffffff;
 }
 
-/* Secondary — cream fill, dark circle, cream arrow */
+/* Secondary — cream fill, dark pill text, dark circle + cream arrow.
+   Same lang-string-override pattern: pin the label to var(--t-bright)
+   in light mode and to near-black in dark mode regardless of the
+   overlay's global text colour. */
+.uc-hero-pill--secondary,
+.uc-hero-pill--secondary .uc-hero-pill__label,
+.uc-hero-pill--secondary .uc-hero-pill__label .lang-string {
+    color: var(--t-bright) !important;
+}
 .uc-hero-pill--secondary {
     background-color: #ffffff;
-    color: var(--t-bright);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 .uc-hero-pill--secondary .uc-hero-pill__icon {
@@ -2237,11 +2250,16 @@ html body .mxd-block__name h2 span {
     box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
 }
 
-/* Dark-theme variants — flip the cream secondary so it reads
-   on the deep cobalt hero bg. */
+/* Dark theme — secondary stays cream-on-white BUT its label
+   must be near-black, not whatever the overlay's dark-mode ink
+   resolved to. */
 :root[color-scheme="dark"] .uc-hero-pill--secondary {
     background-color: rgba(255, 255, 255, 0.92);
-    color: #0a0e1f;
+}
+:root[color-scheme="dark"] .uc-hero-pill--secondary,
+:root[color-scheme="dark"] .uc-hero-pill--secondary .uc-hero-pill__label,
+:root[color-scheme="dark"] .uc-hero-pill--secondary .uc-hero-pill__label .lang-string {
+    color: #0a0e1f !important;
 }
 :root[color-scheme="dark"] .uc-hero-pill--secondary .uc-hero-pill__icon {
     background-color: #0a0e1f;
