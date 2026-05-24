@@ -1692,16 +1692,15 @@ body header.mxd-header {
     backdrop-filter: blur(16px) saturate(1.6) !important;
     border: 1px solid rgba(20, 20, 20, 0.08) !important;
     border-bottom-color: rgba(20, 20, 20, 0.08) !important;
-    /* Soft cobalt-tinted layered shadow — kept gentle so the pill
-       reads as a piece of glass floating over the page, not a
-       saturated brand element. Three progressive stops at low
-       alpha use the hero shader accent (#0001fc); the inset
-       hairline gives the rim definition. */
+    /* Soft neutral layered shadow — three progressive black stops
+       at low alpha for a clean modern lift; inset hairline gives
+       the rim definition. No brand tint so the pill reads as
+       calm glass over the page. */
     box-shadow:
         0 0 0 1px rgba(255, 255, 255, 0.5) inset,
-        0 1px 2px rgba(0, 1, 252, 0.04),
-        0 4px 12px rgba(0, 1, 252, 0.05),
-        0 16px 40px rgba(0, 1, 252, 0.06) !important;
+        0 1px 2px rgba(0, 0, 0, 0.04),
+        0 4px 12px rgba(0, 0, 0, 0.06),
+        0 16px 40px rgba(0, 0, 0, 0.08) !important;
     /* Tighter padding now that we're a contained pill */
     padding-block: 0.8rem !important;
     padding-inline: 2.2rem !important;
@@ -1709,14 +1708,13 @@ body header.mxd-header {
 :root[color-scheme="dark"] body header.mxd-header {
     background: rgba(18, 18, 20, 0.55) !important;
     border-color: rgba(255, 255, 255, 0.10) !important;
-    /* Dark-mode shadow swap: lighter cobalt (#5b73f5) at modest
-       alpha so the glow stays visible against the dark cobalt
-       page bg without becoming heavy. */
+    /* Dark-mode shadow swap: pure black drops at higher alpha so
+       the lift stays readable against the dark cobalt page bg. */
     box-shadow:
         0 0 0 1px rgba(255, 255, 255, 0.08) inset,
-        0 1px 2px rgba(91, 115, 245, 0.08),
-        0 4px 12px rgba(91, 115, 245, 0.10),
-        0 16px 40px rgba(91, 115, 245, 0.14) !important;
+        0 1px 2px rgba(0, 0, 0, 0.20),
+        0 4px 12px rgba(0, 0, 0, 0.28),
+        0 16px 40px rgba(0, 0, 0, 0.36) !important;
 }
 /* Scrolled state — the template's per-page inline CSS rewrites
    .mxd-header.uc-scrolled's box-shadow to a flat grey when the
@@ -1730,17 +1728,17 @@ body header.mxd-header.uc-scrolled {
        feels the pill "lift" as they scroll, but still soft. */
     box-shadow:
         0 0 0 1px rgba(255, 255, 255, 0.5) inset,
-        0 1px 2px rgba(0, 1, 252, 0.05),
-        0 4px 12px rgba(0, 1, 252, 0.07),
-        0 16px 40px rgba(0, 1, 252, 0.09) !important;
+        0 1px 2px rgba(0, 0, 0, 0.05),
+        0 4px 12px rgba(0, 0, 0, 0.07),
+        0 16px 40px rgba(0, 0, 0, 0.10) !important;
 }
 :root[color-scheme="dark"] body header.mxd-header.uc-scrolled {
     background: rgba(18, 18, 20, 0.72) !important;
     box-shadow:
         0 0 0 1px rgba(255, 255, 255, 0.08) inset,
-        0 1px 2px rgba(91, 115, 245, 0.10),
-        0 4px 12px rgba(91, 115, 245, 0.14),
-        0 16px 40px rgba(91, 115, 245, 0.18) !important;
+        0 1px 2px rgba(0, 0, 0, 0.24),
+        0 4px 12px rgba(0, 0, 0, 0.32),
+        0 16px 40px rgba(0, 0, 0, 0.40) !important;
 }
 /* (Older uc-scrolled rules folded into the cobalt-shadow block
    above so background + shadow get applied together.) */
