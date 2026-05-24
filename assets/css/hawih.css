@@ -1762,8 +1762,12 @@ body header.mxd-header .mxd-header__logo img {
     /* Fill the viewport — the hero should be the full first screen,
        not driven by content height. Negative margin-top pulls the
        section up under the floating header pill so the shader bg
-       reaches the very top edge of the viewport. */
-    min-height: 100vh !important;
+       reaches the very top edge of the viewport; the same 8rem is
+       added back to min-height so the section still ends exactly
+       at the viewport bottom (without that, the negative offset
+       would leave an 8rem strip of page bg uncovered at the foot
+       of the hero). */
+    min-height: calc(100vh + 8rem) !important;
     margin-top: -8rem !important;
     padding-top: 8rem !important;
     display: flex !important;
