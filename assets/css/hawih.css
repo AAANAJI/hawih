@@ -1692,14 +1692,15 @@ body header.mxd-header {
     backdrop-filter: blur(16px) saturate(1.6) !important;
     border: 1px solid rgba(20, 20, 20, 0.08) !important;
     border-bottom-color: rgba(20, 20, 20, 0.08) !important;
-    /* Layered soft shadow + subtle cobalt glow (matches hero shader
-       accent #0001fc). 4 stops: hairline ring, near-surface shadow,
-       diffuse depth, color halo. */
+    /* Modern cobalt-tinted layered shadow. Every drop uses the
+       hero shader accent (#0001fc) at progressive alpha so the
+       pill reads as floating in a cobalt glow rather than a
+       grey one. */
     box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.4) inset,
-        0 2px 8px rgba(15, 18, 36, 0.06),
-        0 16px 48px rgba(15, 18, 36, 0.10),
-        0 0 80px rgba(0, 1, 252, 0.07) !important;
+        0 0 0 1px rgba(255, 255, 255, 0.45) inset,
+        0 2px 8px rgba(0, 1, 252, 0.08),
+        0 12px 32px rgba(0, 1, 252, 0.12),
+        0 24px 80px rgba(0, 1, 252, 0.15) !important;
     /* Tighter padding now that we're a contained pill */
     padding-block: 0.8rem !important;
     padding-inline: 2.2rem !important;
@@ -1707,22 +1708,39 @@ body header.mxd-header {
 :root[color-scheme="dark"] body header.mxd-header {
     background: rgba(18, 18, 20, 0.55) !important;
     border-color: rgba(255, 255, 255, 0.10) !important;
-    /* Dark-mode shadow swap: deeper ambient + cobalt glow stays
-       visible on the dark cobalt page bg. */
+    /* Dark-mode shadow swap: lighter cobalt (#5b73f5) at higher
+       alpha so the glow stays visible against the dark cobalt
+       page bg. */
     box-shadow:
-        0 0 0 1px rgba(255, 255, 255, 0.06) inset,
-        0 2px 8px rgba(0, 0, 0, 0.30),
-        0 20px 60px rgba(0, 0, 0, 0.45),
-        0 0 80px rgba(91, 115, 245, 0.22) !important;
+        0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+        0 2px 8px rgba(91, 115, 245, 0.18),
+        0 12px 32px rgba(91, 115, 245, 0.25),
+        0 24px 80px rgba(91, 115, 245, 0.35) !important;
 }
-/* Drop the scroll-state "uc-scrolled" deltas — base style now
-   already looks like the scrolled version. */
+/* Scrolled state — the template's per-page inline CSS rewrites
+   .mxd-header.uc-scrolled's box-shadow to a flat grey when the
+   user scrolls past 10px. Override with the same cobalt-glow
+   recipe so the modern look persists through scroll. The selector
+   `body header.mxd-header.uc-scrolled` has higher specificity
+   than the inline rule's `.mxd-header.uc-scrolled`, so this wins. */
 body header.mxd-header.uc-scrolled {
     background: rgba(244, 241, 235, 0.78) !important;
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.45) inset,
+        0 2px 8px rgba(0, 1, 252, 0.10),
+        0 12px 32px rgba(0, 1, 252, 0.14),
+        0 24px 80px rgba(0, 1, 252, 0.18) !important;
 }
 :root[color-scheme="dark"] body header.mxd-header.uc-scrolled {
     background: rgba(18, 18, 20, 0.72) !important;
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.08) inset,
+        0 2px 8px rgba(91, 115, 245, 0.22),
+        0 12px 32px rgba(91, 115, 245, 0.30),
+        0 24px 80px rgba(91, 115, 245, 0.40) !important;
 }
+/* (Older uc-scrolled rules folded into the cobalt-shadow block
+   above so background + shadow get applied together.) */
 /* Match the header-controls font size to the inline desktop nav
    so logo / nav / lang / CTA all read at the same weight. The
    template defaults header buttons to 2.2rem which sat noticeably
