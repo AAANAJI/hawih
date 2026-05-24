@@ -903,23 +903,22 @@
         font-weight: 500 !important;
       }
 
-      /* WebGL hero — force WHITE text on every descendant regardless of
-         theme. In light mode the page's ink color cascades through to
-         .lang-string spans, making text render black on the cobalt frame. */
+      /* Axion shader hero — force DARK text on every descendant.
+         The Swirl + ChromaFlow background is light blue/white with
+         blue accents, so the page's default ink (#161616) is the
+         right colour for legibility. */
       .uc-hero-intro,
-      .uc-hero-intro *,
       .uc-hero-intro p,
-      .uc-hero-intro span,
       .uc-hero-intro li,
       .uc-hero-intro h1,
       .uc-hero-intro h1 .lang-string,
       .uc-hero-intro .lang-string {
-        color: #fff !important;
+        color: var(--t-bright) !important;
       }
-      /* The eyebrow gets a slightly softer white for visual hierarchy */
+      /* The eyebrow gets a softer muted dark for visual hierarchy */
       .uc-hero-intro__eyebrow,
       .uc-hero-intro__eyebrow .lang-string {
-        color: rgba(255, 255, 255, 0.85) !important;
+        color: var(--t-muted) !important;
       }
       /* Hero greeting headline "حياك في هوية" — bold, large, sits above
          the lead paragraph */
@@ -928,7 +927,6 @@
         font-weight: 700;
         line-height: 1.05;
         margin: 0;
-        text-shadow: 0 2px 24px rgba(0, 0, 0, 0.35);
       }
 
       /* Force the .uc-hero-intro overlay to keep its 560px min-height even
@@ -1450,20 +1448,18 @@
       <div class="mxd-section uc-hero-webgl loading-wrap" style="padding-top: 12rem; padding-bottom: 4rem;">
         <div class="mxd-container">
           <div class="mxd-divider">
-            <div class="mxd-divider__image divider-image-1" style="position: relative; overflow: hidden; border-radius: 2rem; background: #06061A;">
-              <!-- WebGL cobalt cosmic background fills the frame -->
-              <div id="webgl-container" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0;"></div>
-              <!-- Soft ink scrim for legibility -->
-              <div style="position: absolute; inset: 0; z-index: 0; background: linear-gradient(to top, rgba(6,6,26,0.55) 0%, rgba(6,6,26,0.20) 70%, rgba(6,6,26,0.10) 100%); pointer-events: none;"></div>
+            <div class="mxd-divider__image divider-image-1" style="position: relative; overflow: hidden; border-radius: 2rem; background: #EFEFEF;">
+              <!-- Axion shader background (4-layer: Swirl + ChromaFlow + FlutedGlass + FilmGrain) -->
+              <canvas id="bgShader" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;"></canvas>
               <!-- Agency intro overlay: eyebrow + medium lead + 3 service items -->
-              <div class="uc-hero-intro" style="position: relative; z-index: 10; width: 100%; min-height: 560px; display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 64px; padding: 80px 80px; color: #fff; flex-wrap: wrap;">
+              <div class="uc-hero-intro" style="position: relative; z-index: 10; width: 100%; min-height: 560px; display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 64px; padding: 80px 80px; flex-wrap: wrap;">
 
                 <!-- Left column: eyebrow + greeting + medium lead -->
                 <div style="flex: 1 1 480px; max-width: 640px; display: flex; flex-direction: column; gap: 24px;">
 
                   <!-- Eyebrow: green dot + "Available for Projects" -->
                   <div style="display: inline-flex; align-items: center; gap: 12px;">
-                    <span style="width: 9px; height: 9px; border-radius: 50%; background: #B6F66B; box-shadow: 0 0 12px rgba(182, 246, 107, 0.65); display: inline-block; flex-shrink: 0;"></span>
+                    <span style="width: 9px; height: 9px; border-radius: 50%; background: #5BBF4A; box-shadow: 0 0 12px rgba(91, 191, 74, 0.55); display: inline-block; flex-shrink: 0;"></span>
                     <span class="uc-hero-intro__eyebrow" style="font-size: 13px; text-transform: uppercase; letter-spacing: 0.18em; font-weight: 500;">
                       <span class="lang-string" data-ar="متاحون لمشاريع جديدة" data-en="Available for Projects">متاحون لمشاريع جديدة</span>
                     </span>
@@ -1475,14 +1471,14 @@
                   </h1>
 
                   <!-- Medium-size lead -->
-                  <p style="font-size: 26px; line-height: 1.45; font-weight: 500; margin: 0; max-width: 560px; text-shadow: 0 2px 18px rgba(0,0,0,0.45);">
+                  <p style="font-size: 26px; line-height: 1.45; font-weight: 500; margin: 0; max-width: 560px;">
                     <span class="lang-string" data-ar="نعمل لنجعل العالم يراك من خلال خدمات إبداعية ومتميزة." data-en="One creative services agency — running your project from the first brief to the final delivery.">نعمل لنجعل العالم يراك من خلال خدمات إبداعية ومتميزة.</span>
                   </p>
 
                 </div>
 
                 <!-- Right: 3 service items -->
-                <ul class="uc-divider-list" style="display: flex; flex-direction: column; gap: 18px; font-size: 19px; list-style: none; padding: 0; margin: 0; flex: 0 0 auto; line-height: 1.4; color: #fff;">
+                <ul class="uc-divider-list" style="display: flex; flex-direction: column; gap: 18px; font-size: 19px; list-style: none; padding: 0; margin: 0; flex: 0 0 auto; line-height: 1.4; color: var(--t-bright);">
                   <li style="display: flex; align-items: center; gap: 14px;">
                     <svg width="18" height="18" viewBox="0 0 20 20" fill="currentColor" style="opacity: 0.85; flex-shrink: 0;"><path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/></svg>
                     <span class="lang-string" data-ar="علامات تجارية وهوية" data-en="Branding &amp; Identity">علامات تجارية وهوية</span>
@@ -3004,8 +3000,40 @@
     <!-- Load Scripts Start -->
     <script src="/uc-assets/js/libs.min.js"></script>
     <script src="/uc-assets/js/app.min.js"></script>
-    <!-- WebGL hero shader (mounts to #webgl-container) -->
-    <script src="/assets/js/webgl-hero.js"></script>
+    <!-- Hero background — Axion 4-layer shader (Swirl + ChromaFlow +
+         FlutedGlass + FilmGrain). Mounts to #bgShader inside the hero
+         frame. ESM bundle from a pinned jsDelivr release for prod
+         stability. Auto-resize + auto-pause when off-screen handled
+         by the bundle's built-in observers. Wrapped in a try/catch
+         so a CDN hiccup never blocks the rest of the page JS. -->
+    <script type="module">
+      try {
+        const { createShader } = await import("https://cdn.jsdelivr.net/npm/shaders@2.5.128/dist/js/bundle.js");
+        const canvas = document.getElementById("bgShader");
+        if (canvas) {
+          await createShader(canvas, {
+            components: [
+              { type: "Swirl",       props: { colorA: "#e8edff", colorB: "#9aadff", detail: 1.7 } },
+              { type: "ChromaFlow",  props: {
+                  baseColor: "#dbe2ff",
+                  downColor: "#0001fc", leftColor: "#0001fc",
+                  rightColor: "#0001fc", upColor: "#0001fc",
+                  momentum: 13, radius: 5
+              } },
+              { type: "FlutedGlass", props: {
+                  aberration: 0.61, angle: 31, frequency: 8,
+                  highlight: 0.12, highlightSoftness: 0,
+                  lightAngle: -90, refraction: 4,
+                  shape: "rounded", softness: 1, speed: 0.15
+              } },
+              { type: "FilmGrain",   props: { strength: 0.05 } }
+            ]
+          });
+        }
+      } catch (err) {
+        console.warn("Axion shader failed to load — falling back to the static frame bg.", err);
+      }
+    </script>
     <!-- Preloader auto-hide: the template's preloader counter reaches 100% but
          the built-in hide handler doesn't always fire on our build (extra deps).
          Let the 0→100 animation play, then fade it out after a safety delay or
