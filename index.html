@@ -1450,9 +1450,12 @@
           <div class="mxd-divider">
             <div class="mxd-divider__image divider-image-1" style="position: relative; overflow: hidden; border-radius: 2rem; background: linear-gradient(135deg, #e8edff 0%, #c5d2ff 35%, #9aadff 70%, #6f88f5 100%);">
               <!-- Axion shader background (4-layer: Swirl + ChromaFlow + FlutedGlass + FilmGrain).
-                   Fallback gradient on the parent renders behind, so a CDN
-                   or WebGPU failure still leaves a nice blue wash, not flat grey. -->
-              <canvas id="bgShader" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;"></canvas>
+                   Container <div> for the React shader components to mount
+                   into — the `<Shader>` component creates its own internal
+                   canvas. Fallback gradient on the parent renders behind,
+                   so a CDN or WebGPU failure still leaves a nice blue wash,
+                   not flat grey. -->
+              <div id="bgShader" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;"></div>
               <!-- Agency intro overlay: eyebrow + medium lead + 3 service items -->
               <div class="uc-hero-intro" style="position: relative; z-index: 10; width: 100%; min-height: 560px; display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 64px; padding: 80px 80px; flex-wrap: wrap;">
 
@@ -3003,63 +3006,47 @@
     <script src="/uc-assets/js/libs.min.js"></script>
     <script src="/uc-assets/js/app.min.js"></script>
     <!-- Hero background — Axion 4-layer shader (Swirl + ChromaFlow +
-         FlutedGlass + FilmGrain). Mounts to #bgShader inside the hero
-         frame. Tries esm.sh first (handles WebGPU/WebGL fallback
-         better on some browsers) then falls back to jsDelivr.
-         If both fail or the shader's internal WebGPU pipeline
-         compile errors out, the parent .mxd-divider__image's CSS
-         gradient fallback shows through instead of flat grey. -->
+         FlutedGlass + FilmGrain). Uses the React API from the same
+         `shaders` package via esm.sh — the vanilla JS bundle's
+         WebGPU code path was failing inside Three.js on some
+         browsers (pipeline-compile errors); the React API has
+         shown to work in the same environments. esm.sh resolves
+         the React 18 deps inline so no build step is needed.
+         Parent .mxd-divider__image gradient is the visible
+         fallback if any import fails or the shader throws. -->
     <script type="module">
-      const preset = {
-        components: [
-          { type: "Swirl",       props: { colorA: "#e8edff", colorB: "#9aadff", detail: 1.7 } },
-          { type: "ChromaFlow",  props: {
+      const container = document.getElementById("bgShader");
+      if (container) {
+        try {
+          const [React, ReactDOM, shaders] = await Promise.all([
+            import("https://esm.sh/react@18.3.1"),
+            import("https://esm.sh/react-dom@18.3.1/client"),
+            import("https://esm.sh/shaders@2.5.128/react?deps=react@18.3.1"),
+          ]);
+          const e = React.default.createElement;
+          const { Shader, Swirl, ChromaFlow, FlutedGlass, FilmGrain } = shaders;
+
+          const tree = e(Shader, { style: { position: "absolute", inset: 0, width: "100%", height: "100%" } },
+            e(Swirl,       { colorA: "#e8edff", colorB: "#9aadff", detail: 1.7 }),
+            e(ChromaFlow,  {
               baseColor: "#dbe2ff",
               downColor: "#0001fc", leftColor: "#0001fc",
               rightColor: "#0001fc", upColor: "#0001fc",
-              momentum: 13, radius: 5
-          } },
-          { type: "FlutedGlass", props: {
+              momentum: 13, radius: 5,
+            }),
+            e(FlutedGlass, {
               aberration: 0.61, angle: 31, frequency: 8,
               highlight: 0.12, highlightSoftness: 0,
               lightAngle: -90, refraction: 4,
-              shape: "rounded", softness: 1, speed: 0.15
-          } },
-          { type: "FilmGrain",   props: { strength: 0.05 } }
-        ]
-      };
+              shape: "rounded", softness: 1, speed: 0.15,
+            }),
+            e(FilmGrain,   { strength: 0.05 })
+          );
 
-      const SOURCES = [
-        "https://esm.sh/shaders@2.5/js/bundle",
-        "https://cdn.jsdelivr.net/npm/shaders@2.5.128/dist/js/bundle.js",
-      ];
-
-      const canvas = document.getElementById("bgShader");
-      if (canvas) {
-        let mod = null;
-        for (const src of SOURCES) {
-          try {
-            mod = await import(src);
-            if (mod && typeof mod.createShader === "function") break;
-          } catch (e) {
-            console.warn("Axion shader: import failed for", src, e);
-          }
-        }
-        if (mod && typeof mod.createShader === "function") {
-          try {
-            await mod.createShader(canvas, preset, {
-              onError: (reason) => {
-                console.warn("Axion shader runtime error — gradient fallback visible.", reason);
-                /* Hide the canvas so the parent gradient shows clean. */
-                canvas.style.display = "none";
-              },
-            });
-          } catch (err) {
-            console.warn("Axion shader: createShader threw — gradient fallback visible.", err);
-            canvas.style.display = "none";
-          }
-        } else {
-          canvas.style.display = "none";
+          ReactDOM.createRoot(container).render(tree);
+        } catch (err) {
+          console.warn("Axion shader (React API) failed — gradient fallback visible.", err);
+          container.style.display = "none";
         }
       }
     </script>
