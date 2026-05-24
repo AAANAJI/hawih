@@ -1692,7 +1692,14 @@ body header.mxd-header {
     backdrop-filter: blur(16px) saturate(1.6) !important;
     border: 1px solid rgba(20, 20, 20, 0.08) !important;
     border-bottom-color: rgba(20, 20, 20, 0.08) !important;
-    box-shadow: 0 6px 24px rgba(0, 0, 0, 0.06) !important;
+    /* Layered soft shadow + subtle cobalt glow (matches hero shader
+       accent #0001fc). 4 stops: hairline ring, near-surface shadow,
+       diffuse depth, color halo. */
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.4) inset,
+        0 2px 8px rgba(15, 18, 36, 0.06),
+        0 16px 48px rgba(15, 18, 36, 0.10),
+        0 0 80px rgba(0, 1, 252, 0.07) !important;
     /* Tighter padding now that we're a contained pill */
     padding-block: 0.8rem !important;
     padding-inline: 2.2rem !important;
@@ -1700,6 +1707,13 @@ body header.mxd-header {
 :root[color-scheme="dark"] body header.mxd-header {
     background: rgba(18, 18, 20, 0.55) !important;
     border-color: rgba(255, 255, 255, 0.10) !important;
+    /* Dark-mode shadow swap: deeper ambient + cobalt glow stays
+       visible on the dark cobalt page bg. */
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+        0 2px 8px rgba(0, 0, 0, 0.30),
+        0 20px 60px rgba(0, 0, 0, 0.45),
+        0 0 80px rgba(91, 115, 245, 0.22) !important;
 }
 /* Drop the scroll-state "uc-scrolled" deltas — base style now
    already looks like the scrolled version. */
@@ -1833,7 +1847,13 @@ body header.mxd-header .mxd-header__logo img {
     border-radius: 999px;
     background: rgba(255, 255, 255, 0.7);
     border: 1px solid rgba(20, 20, 20, 0.08);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    /* Layered glow: hairline highlight (inner) + soft ambient drop
+       + diffuse green halo matching the availability dot. */
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.45) inset,
+        0 2px 8px rgba(15, 18, 36, 0.06),
+        0 12px 32px rgba(15, 18, 36, 0.08),
+        0 0 28px rgba(91, 191, 74, 0.18);
     -webkit-backdrop-filter: blur(8px);
     backdrop-filter: blur(8px);
     /* Prevent flex parent from stretching this to full width. */
@@ -1857,7 +1877,11 @@ body header.mxd-header .mxd-header__logo img {
 :root[color-scheme="dark"] .uc-hero-intro__eyebrow-pill {
     background: rgba(255, 255, 255, 0.12);
     border-color: rgba(255, 255, 255, 0.18);
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
+    box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.10) inset,
+        0 2px 8px rgba(0, 0, 0, 0.30),
+        0 12px 32px rgba(0, 0, 0, 0.35),
+        0 0 28px rgba(91, 191, 74, 0.30);
 }
 
 /* ============================================================
