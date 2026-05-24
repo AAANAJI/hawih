@@ -1452,7 +1452,14 @@
                 <div class="uc-hero-intro" style="position: relative; z-index: 10; max-width: 144rem; margin: 0 auto; min-height: calc(100vh - 8rem); display: flex; flex-direction: row; align-items: flex-end; justify-content: space-between; gap: 64px; padding: 80px 80px 96px; flex-wrap: wrap;">
 
                 <!-- Left column: eyebrow + greeting + medium lead -->
-                <div style="flex: 1 1 480px; max-width: 640px; display: flex; flex-direction: column; gap: 24px;">
+                <!-- Left column: eyebrow + greeting + lead + CTAs.
+                     `flex: none` is critical — without it (e.g. with
+                     `flex: 1 1 480px`), on mobile the parent flips to
+                     flex-direction: column and the 480px basis becomes
+                     a forced height, leaving a big vertical gap below
+                     the content. `none` lets the column shrink to
+                     its natural height. -->
+                <div style="flex: none; max-width: 640px; display: flex; flex-direction: column; gap: 24px;">
 
                   <!-- Eyebrow: green dot + "Available for Projects" in a frosted pill -->
                   <div class="uc-hero-intro__eyebrow-pill">
