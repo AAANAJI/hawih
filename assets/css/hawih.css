@@ -1745,6 +1745,51 @@ body header.mxd-header .mxd-header__logo img {
 }
 
 /* ============================================================
+   Full-bleed hero with Axion shader background
+   ============================================================
+   The hero section spans edge-to-edge (no .mxd-container or
+   rounded inner card). Light-mode fallback gradient sits behind
+   the shader's canvas; dark mode swaps to a deep-cobalt gradient.
+   Both are direct backgrounds on the section, so a CDN/WebGPU
+   failure still leaves a graceful coloured backdrop instead of
+   flat page bg. */
+.uc-hero-fullbleed {
+    position: relative !important;
+    overflow: hidden !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    width: 100% !important;
+    /* Light fallback gradient (overridden in dark mode below). */
+    background: linear-gradient(135deg,
+        #e8edff 0%,
+        #c5d2ff 35%,
+        #9aadff 70%,
+        #6f88f5 100%) !important;
+}
+:root[color-scheme="dark"] .uc-hero-fullbleed {
+    background: linear-gradient(135deg,
+        #0a0e1f 0%,
+        #1a2348 35%,
+        #2b3470 70%,
+        #4255a3 100%) !important;
+}
+/* Dark mode: the hero's overlay text should read white-ish even
+   though the page-level rule already pins it to var(--t-bright)
+   (which becomes light in dark mode via the design tokens — so
+   no override needed here, this comment is just a marker). */
+
+/* Mobile: tighten the overlay padding and let it stack. */
+@media (max-width: 900px) {
+    .uc-hero-fullbleed .uc-hero-intro {
+        flex-direction: column !important;
+        padding: 60px 24px !important;
+        gap: 32px !important;
+        align-items: flex-start !important;
+        min-height: calc(100vh - 6rem) !important;
+    }
+}
+
+/* ============================================================
    Mobile header — fluid sizing instead of progressive hide
    ============================================================
    All five items (logo · theme · lang · CTA · hamburger) stay

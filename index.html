@@ -1436,28 +1436,20 @@
     <!-- Page Content Start -->
     <main id="mxd-page-content" class="mxd-page-content">
 
-      <!-- Hero Section Start — WebGL cobalt cosmic frame with the
+      <!-- Hero Section Start — full-bleed Axion shader bg with the
            agency-intro overlay (eyebrow + lead + 3 service items).
-           The previous rotating sphere + "حياك في وكالة هوية." headline
-           were removed per owner request.
-           NOTE: the `loading-wrap` class on the outer wrapper is required —
-           app.min.js does `document.querySelector(".loading-wrap")` at
-           startup and then dereferences it; removing the class crashes the
-           bundle and chains to the theme toggle, ScrollTriggers, Swipers,
-           etc. all going dead. -->
-      <div class="mxd-section uc-hero-webgl loading-wrap" style="padding-top: 12rem; padding-bottom: 4rem;">
-        <div class="mxd-container">
-          <div class="mxd-divider">
-            <div class="mxd-divider__image divider-image-1" style="position: relative; overflow: hidden; border-radius: 2rem; background: linear-gradient(135deg, #e8edff 0%, #c5d2ff 35%, #9aadff 70%, #6f88f5 100%);">
-              <!-- Axion shader background (4-layer: Swirl + ChromaFlow + FlutedGlass + FilmGrain).
-                   Container <div> for the React shader components to mount
-                   into — the `<Shader>` component creates its own internal
-                   canvas. Fallback gradient on the parent renders behind,
-                   so a CDN or WebGPU failure still leaves a nice blue wash,
-                   not flat grey. -->
-              <div id="bgShader" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;"></div>
-              <!-- Agency intro overlay: eyebrow + medium lead + 3 service items -->
-              <div class="uc-hero-intro" style="position: relative; z-index: 10; width: 100%; min-height: 560px; display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 64px; padding: 80px 80px; flex-wrap: wrap;">
+           Edge-to-edge: no container / divider / rounded card around
+           it; the shader fills the section, the content is centred
+           in a max-width inside. -->
+      <div class="mxd-section uc-hero-webgl uc-hero-fullbleed loading-wrap">
+        <!-- Axion shader background (4-layer: Swirl + ChromaFlow + FlutedGlass + FilmGrain).
+             Container <div> for the React shader components to mount
+             into — the `<Shader>` component creates its own internal
+             canvas. Fallback gradient on the section renders behind,
+             so a CDN or WebGPU failure still leaves a nice wash. -->
+        <div id="bgShader" style="position: absolute; inset: 0; width: 100%; height: 100%; z-index: 0; pointer-events: none;"></div>
+        <!-- Agency intro overlay: eyebrow + greeting + lead + 3 service items -->
+        <div class="uc-hero-intro" style="position: relative; z-index: 10; max-width: 144rem; margin: 0 auto; min-height: calc(100vh - 8rem); display: flex; flex-direction: row; align-items: center; justify-content: space-between; gap: 64px; padding: 80px 80px; flex-wrap: wrap;">
 
                 <!-- Left column: eyebrow + greeting + medium lead -->
                 <div style="flex: 1 1 480px; max-width: 640px; display: flex; flex-direction: column; gap: 24px;">
@@ -1498,9 +1490,6 @@
                   </li>
                 </ul>
               </div>
-            </div>
-          </div>
-        </div>
       </div>
       <!-- Hero Section End -->
 
@@ -3006,14 +2995,13 @@
     <script src="/uc-assets/js/libs.min.js"></script>
     <script src="/uc-assets/js/app.min.js"></script>
     <!-- Hero background — Axion 4-layer shader (Swirl + ChromaFlow +
-         FlutedGlass + FilmGrain). Uses the React API from the same
-         `shaders` package via esm.sh — the vanilla JS bundle's
-         WebGPU code path was failing inside Three.js on some
-         browsers (pipeline-compile errors); the React API has
-         shown to work in the same environments. esm.sh resolves
-         the React 18 deps inline so no build step is needed.
-         Parent .mxd-divider__image gradient is the visible
-         fallback if any import fails or the shader throws. -->
+         FlutedGlass + FilmGrain). React API via esm.sh. The shader
+         palette flips with the page's color-scheme: light = the
+         pale-blue Axion default; dark = deep cobalt. A
+         MutationObserver re-renders the shader on theme toggle so
+         the swap happens live, not just at first paint. Parent
+         section's CSS gradient is the visible fallback if the
+         import chain or renderer throws. -->
     <script type="module">
       const container = document.getElementById("bgShader");
       if (container) {
@@ -3026,24 +3014,58 @@
           const e = React.default.createElement;
           const { Shader, Swirl, ChromaFlow, FlutedGlass, FilmGrain } = shaders;
 
-          const tree = e(Shader, { style: { position: "absolute", inset: 0, width: "100%", height: "100%" } },
-            e(Swirl,       { colorA: "#e8edff", colorB: "#9aadff", detail: 1.7 }),
-            e(ChromaFlow,  {
+          const LIGHT = {
+            swirl:      { colorA: "#e8edff", colorB: "#9aadff", detail: 1.7 },
+            chromaFlow: {
               baseColor: "#dbe2ff",
               downColor: "#0001fc", leftColor: "#0001fc",
               rightColor: "#0001fc", upColor: "#0001fc",
               momentum: 13, radius: 5,
-            }),
-            e(FlutedGlass, {
-              aberration: 0.61, angle: 31, frequency: 8,
-              highlight: 0.12, highlightSoftness: 0,
-              lightAngle: -90, refraction: 4,
-              shape: "rounded", softness: 1, speed: 0.15,
-            }),
-            e(FilmGrain,   { strength: 0.05 })
-          );
+            },
+          };
+          const DARK = {
+            swirl:      { colorA: "#0c1024", colorB: "#1f2a55", detail: 1.7 },
+            chromaFlow: {
+              baseColor: "#0a0e1f",
+              downColor: "#5b73f5", leftColor: "#5b73f5",
+              rightColor: "#5b73f5", upColor: "#5b73f5",
+              momentum: 13, radius: 5,
+            },
+          };
+          /* Layers shared between palettes — visual character of
+             the glass + grain shouldn't change with the theme. */
+          const SHARED_FLUTED = {
+            aberration: 0.61, angle: 31, frequency: 8,
+            highlight: 0.12, highlightSoftness: 0,
+            lightAngle: -90, refraction: 4,
+            shape: "rounded", softness: 1, speed: 0.15,
+          };
+          const SHARED_GRAIN = { strength: 0.05 };
 
-          ReactDOM.createRoot(container).render(tree);
+          function buildTree() {
+            const isDark = document.documentElement.getAttribute("color-scheme") === "dark";
+            const p = isDark ? DARK : LIGHT;
+            return e(Shader, { style: { position: "absolute", inset: 0, width: "100%", height: "100%" } },
+              e(Swirl,       p.swirl),
+              e(ChromaFlow,  p.chromaFlow),
+              e(FlutedGlass, SHARED_FLUTED),
+              e(FilmGrain,   SHARED_GRAIN),
+            );
+          }
+
+          const root = ReactDOM.createRoot(container);
+          root.render(buildTree());
+
+          /* Re-render when the theme attribute on <html> flips. */
+          const obs = new MutationObserver((muts) => {
+            if (muts.some(m => m.attributeName === "color-scheme")) {
+              root.render(buildTree());
+            }
+          });
+          obs.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ["color-scheme"],
+          });
         } catch (err) {
           console.warn("Axion shader (React API) failed — gradient fallback visible.", err);
           container.style.display = "none";
