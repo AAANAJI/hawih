@@ -32,7 +32,7 @@
 /* ---------- Fonts ----------
    Inter for Latin, IBM Plex Sans Arabic for Arabic. Same weights
    shfrah uses, different family choice so it doesn't read as a clone. */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Alyamama:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap');
 
 html, body {
     background-color: var(--hawih-paper);
@@ -44,8 +44,8 @@ html.dark, html.dark body {
     color: var(--hawih-paper);
 }
 
-html[lang="ar"] body { font-family: 'Alyamama', sans-serif; }
-html[lang="en"] body { font-family: 'Inter', 'Alyamama', sans-serif; }
+html[lang="ar"] body { font-family: 'IBM Plex Sans Arabic', sans-serif; }
+html[lang="en"] body { font-family: 'Inter', 'IBM Plex Sans Arabic', sans-serif; }
 
 /* Arabic ligatures: kill letter-spacing on every text element */
 html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3,
