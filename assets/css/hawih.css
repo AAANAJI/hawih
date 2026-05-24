@@ -1759,12 +1759,27 @@ body header.mxd-header .mxd-header__logo img {
     margin: 0 !important;
     padding: 0 !important;
     width: 100% !important;
+    /* Fill the viewport — the hero should be the full first screen,
+       not driven by content height. Negative margin-top pulls the
+       section up under the floating header pill so the shader bg
+       reaches the very top edge of the viewport. */
+    min-height: 100vh !important;
+    margin-top: -8rem !important;
+    padding-top: 8rem !important;
+    display: flex !important;
+    align-items: stretch !important;
     /* Light fallback gradient (overridden in dark mode below). */
     background: linear-gradient(135deg,
         #e8edff 0%,
         #c5d2ff 35%,
         #9aadff 70%,
         #6f88f5 100%) !important;
+}
+/* Section owns the height now — let the inner overlay grow to fill
+   it via flex:1, no internal min-height needed. */
+.uc-hero-fullbleed .uc-hero-intro {
+    flex: 1 1 100%;
+    min-height: 0 !important;
 }
 :root[color-scheme="dark"] .uc-hero-fullbleed {
     background: linear-gradient(135deg,
