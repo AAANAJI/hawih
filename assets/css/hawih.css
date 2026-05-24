@@ -1797,15 +1797,63 @@ body header.mxd-header .mxd-header__logo img {
    (which becomes light in dark mode via the design tokens — so
    no override needed here, this comment is just a marker). */
 
-/* Mobile: tighten the overlay padding and let it stack. */
+/* Mobile: tighten the overlay padding and let it stack.
+   The inline `justify-content: space-between` (set for the
+   desktop row layout) becomes vertical on mobile (because we
+   flip to flex-direction: column), which pushes the top group
+   and the service-list to opposite ends of the 100vh hero —
+   leaving a huge dead zone between them. Force them to stack
+   together at the bottom with the gap controlling spacing. */
 @media (max-width: 900px) {
     .uc-hero-fullbleed .uc-hero-intro {
         flex-direction: column !important;
-        padding: 60px 24px !important;
-        gap: 32px !important;
+        padding: 60px 24px 96px !important;
+        gap: 24px !important;
         align-items: flex-start !important;
+        justify-content: flex-end !important;
         min-height: calc(100vh - 6rem) !important;
     }
+}
+
+/* ============================================================
+   Hero eyebrow pill ("متاحون لمشاريع جديدة")
+   ============================================================
+   Replaces the inline dot+label pair with a proper frosted
+   chip. Light mode: translucent white over the shader/cobalt
+   bg; dark mode: translucent dark with light text. */
+.uc-hero-intro__eyebrow-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 0.8rem 1.6rem;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.7);
+    border: 1px solid rgba(20, 20, 20, 0.08);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    -webkit-backdrop-filter: blur(8px);
+    backdrop-filter: blur(8px);
+    /* Prevent flex parent from stretching this to full width. */
+    align-self: flex-start;
+}
+.uc-hero-intro__eyebrow-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #5BBF4A;
+    box-shadow: 0 0 12px rgba(91, 191, 74, 0.55);
+    display: inline-block;
+    flex-shrink: 0;
+}
+.uc-hero-intro .uc-hero-intro__eyebrow {
+    font-size: 1.3rem;
+    text-transform: uppercase;
+    letter-spacing: 0.18em;
+    font-weight: 500;
+}
+:root[color-scheme="dark"] .uc-hero-intro__eyebrow-pill {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.18);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.25);
 }
 
 /* ============================================================
