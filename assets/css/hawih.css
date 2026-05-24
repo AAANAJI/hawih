@@ -32,7 +32,7 @@
 /* ---------- Fonts ----------
    Inter for Latin, IBM Plex Sans Arabic for Arabic. Same weights
    shfrah uses, different family choice so it doesn't read as a clone. */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Alyamama:wght@300;400;500;600;700&display=swap');
 
 html, body {
     background-color: var(--hawih-paper);
@@ -44,8 +44,8 @@ html.dark, html.dark body {
     color: var(--hawih-paper);
 }
 
-html[lang="ar"] body { font-family: 'IBM Plex Sans Arabic', sans-serif; }
-html[lang="en"] body { font-family: 'Inter', 'IBM Plex Sans Arabic', sans-serif; }
+html[lang="ar"] body { font-family: 'Alyamama', sans-serif; }
+html[lang="en"] body { font-family: 'Inter', 'Alyamama', sans-serif; }
 
 /* Arabic ligatures: kill letter-spacing on every text element */
 html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3,
@@ -1797,21 +1797,24 @@ body header.mxd-header .mxd-header__logo img {
    (which becomes light in dark mode via the design tokens — so
    no override needed here, this comment is just a marker). */
 
-/* Mobile: tighten the overlay padding and let it stack.
-   The inline `justify-content: space-between` (set for the
-   desktop row layout) becomes vertical on mobile (because we
-   flip to flex-direction: column), which pushes the top group
-   and the service-list to opposite ends of the 100vh hero —
-   leaving a huge dead zone between them. Force them to stack
-   together at the bottom with the gap controlling spacing. */
+/* Mobile: tighten the overlay and let it shrink to content.
+   Previous fix kept min-height: calc(100vh - 6rem) on the
+   overlay and used justify-content: flex-end — but on Arabic
+   mobile (where the content is shorter than the English
+   equivalent) the column still stretched, leaving a visible
+   gap between the top group and the service-list.
+   Cleanest fix: drop the overlay's min-height entirely on
+   mobile (the section's own min-height already gives the hero
+   its full-viewport bg), and top-justify the column so the
+   two groups stack together right under the header pill. */
 @media (max-width: 900px) {
     .uc-hero-fullbleed .uc-hero-intro {
         flex-direction: column !important;
-        padding: 60px 24px 96px !important;
-        gap: 24px !important;
+        padding: 32px 24px 96px !important;
+        gap: 28px !important;
         align-items: flex-start !important;
-        justify-content: flex-end !important;
-        min-height: calc(100vh - 6rem) !important;
+        justify-content: flex-start !important;
+        min-height: 0 !important;
     }
 }
 
