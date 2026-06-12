@@ -283,31 +283,111 @@
 /* ============================================================
    Shfrah sister-studio promotion — runtime behaviours
    ------------------------------------------------------------
-   1. Announcement strip dismiss (home page): removing the
-      `has-shfrah-strip` class collapses the strip AND restores
-      the header/hero offsets in one move; persisted so the
-      visitor doesn't see it again.
-   2. Contact-form nudge: when the project type select lands on
-      a Shfrah-territory value (programming / ui-ux), reveal the
-      inline note pointing at the sister studio.
-   Both blocks no-op on pages where their elements don't exist.
+   Campaign window: until SHFRAH_CAMPAIGN_END (same date lives in
+   index.html's early <head> script — keep the two in sync). To
+   extend or end the campaign, change the date in BOTH places.
+
+   1. Announcement strip (home): pinned for the campaign window.
+      Closing it only hides it for the current tab session
+      (sessionStorage) — it returns on the next visit. After the
+      end date it never renders.
+   2. Promo popup (site-wide, built from JS — no markup on the
+      pages): shows once every SHFRAH_PROMO_COOLDOWN_DAYS per
+      visitor, 5 s after load, except on pages with a lead form
+      (contact / careers / affiliate) where interrupting a
+      form-filler costs more than the impression is worth.
+   3. Contact-form nudge: reveals the inline Shfrah note when
+      the project-type select lands on programming / ui-ux.
+   All blocks no-op where their elements don't exist.
    ============================================================ */
 (function () {
   'use strict';
 
-  /* ---------- 1. strip dismiss ---------- */
+  var SHFRAH_CAMPAIGN_END = new Date('2026-07-12T23:59:59+03:00').getTime();
+  var SHFRAH_PROMO_COOLDOWN_DAYS = 7;
+  var campaignActive = Date.now() <= SHFRAH_CAMPAIGN_END;
+
+  /* ---------- 1. strip close (session-only) ---------- */
   var strip = document.getElementById('shfrahStrip');
   if (strip) {
     var close = strip.querySelector('.uc-shfrah-strip__close');
     if (close) {
       close.addEventListener('click', function () {
         document.documentElement.classList.remove('has-shfrah-strip');
-        try { localStorage.setItem('shfrahStripDismissed', '1'); } catch (e) {}
+        try { sessionStorage.setItem('shfrahStripClosed', '1'); } catch (e) {}
       });
     }
   }
 
-  /* ---------- 2. contact nudge ---------- */
+  /* ---------- 2. promo popup ---------- */
+  function maybeShowPromo() {
+    if (!campaignActive) return;
+    if (document.getElementById('leadForm')) return;   /* don't interrupt forms */
+    var KEY = 'shfrahPromoLastShown';
+    try {
+      var last = parseInt(localStorage.getItem(KEY), 10) || 0;
+      if (Date.now() - last < SHFRAH_PROMO_COOLDOWN_DAYS * 864e5) return;
+    } catch (e) {}
+
+    setTimeout(function () {
+      var isEn = document.documentElement.lang === 'en';
+      var wrap = document.createElement('div');
+      wrap.className = 'uc-shfrah-modal';
+      wrap.setAttribute('role', 'dialog');
+      wrap.setAttribute('aria-modal', 'true');
+      wrap.innerHTML =
+        '<div class="uc-shfrah-modal__backdrop"></div>' +
+        '<div class="uc-shfrah-modal__card">' +
+          '<button class="uc-shfrah-modal__close" type="button" aria-label="\u0625\u063a\u0644\u0627\u0642"><i class="ph-bold ph-x"></i></button>' +
+          '<img class="uc-shfrah-modal__logo uc-shfrah-logo--light" src="/assets/img/shfrah/logo-ar-light.png" alt="\u0634\u0641\u0631\u0629 \u00b7 Shfrah">' +
+          '<img class="uc-shfrah-modal__logo uc-shfrah-logo--dark" src="/assets/img/shfrah/logo-ar-dark.png" alt="\u0634\u0641\u0631\u0629 \u00b7 Shfrah">' +
+          '<p class="uc-shfrah-modal__eyebrow"><span class="lang-string" data-ar="\u0625\u0639\u0644\u0627\u0646 \u0645\u0646 \u0627\u0644\u0639\u0627\u0626\u0644\u0629" data-en="A family announcement"></span></p>' +
+          '<h3 class="uc-shfrah-modal__title"><span class="lang-string" data-ar="\u0623\u0637\u0644\u0642\u0646\u0627 \u0634\u0641\u0631\u0629 \u2014 \u0627\u0633\u062a\u0648\u062f\u064a\u0648\u0646\u0627 \u0627\u0644\u0634\u0642\u064a\u0642 \u0644\u0644\u0628\u0631\u0645\u062c\u0629 \u0648\u0627\u0644\u0630\u0643\u0627\u0621 \u0627\u0644\u0627\u0635\u0637\u0646\u0627\u0639\u064a" data-en="Meet Shfrah \u2014 our sister studio for software &amp; AI"></span></h3>' +
+          '<p class="uc-shfrah-modal__body"><span class="lang-string" data-ar="\u0628\u0646\u0641\u0633 \u062d\u0631\u0641\u064a\u0651\u0629 \u0647\u0648\u064a\u0629\u060c \u064a\u0628\u0646\u064a \u0641\u0631\u064a\u0642 \u0634\u0641\u0631\u0629 \u062a\u0637\u0628\u064a\u0642\u0627\u062a \u0627\u0644\u062c\u0648\u0627\u0644 \u0648\u0627\u0644\u0648\u064a\u0628\u060c \u0648\u0623\u0646\u0638\u0645\u0629 \u0627\u0644\u0623\u0639\u0645\u0627\u0644\u060c \u0648\u062d\u0644\u0648\u0644 \u0627\u0644\u0630\u0643\u0627\u0621 \u0627\u0644\u0627\u0635\u0637\u0646\u0627\u0639\u064a \u2014 \u0644\u0644\u0633\u0648\u0642 \u0627\u0644\u0633\u0639\u0648\u062f\u064a \u0648\u0627\u0644\u062e\u0644\u064a\u062c\u064a." data-en="With the same Hawih craftsmanship, the Shfrah team builds mobile &amp; web apps, business systems, and AI solutions \u2014 for the Saudi and GCC market."></span></p>' +
+          '<div class="uc-shfrah-modal__chips">' +
+            '<span><span class="lang-string" data-ar="\u0630\u0643\u0627\u0621 \u0627\u0635\u0637\u0646\u0627\u0639\u064a" data-en="AI"></span></span>' +
+            '<span><span class="lang-string" data-ar="\u0647\u0646\u062f\u0633\u0629 \u0628\u0631\u0645\u062c\u064a\u0627\u062a" data-en="Software engineering"></span></span>' +
+            '<span><span class="lang-string" data-ar="\u062a\u0637\u0628\u064a\u0642\u0627\u062a \u062c\u0648\u0627\u0644 \u0648\u0648\u064a\u0628" data-en="Mobile &amp; web apps"></span></span>' +
+            '<span><span class="lang-string" data-ar="\u0627\u0633\u062a\u0634\u0627\u0631\u0627\u062a \u062a\u0642\u0646\u064a\u0629" data-en="Tech consulting"></span></span>' +
+          '</div>' +
+          '<div class="uc-shfrah-modal__actions">' +
+            '<a class="uc-hero-pill uc-hero-pill--primary" href="https://www.shfrah.com/?utm_source=hawih&utm_medium=referral&utm_campaign=promo-popup" target="_blank" rel="noopener">' +
+              '<span class="uc-hero-pill__label"><span class="lang-string" data-ar="\u0632\u064a\u0627\u0631\u0629 \u0634\u0641\u0631\u0629" data-en="Visit Shfrah"></span></span>' +
+              '<span class="uc-hero-pill__icon" aria-hidden="true"><i class="ph-bold ph-arrow-up-right"></i></span>' +
+            '</a>' +
+            '<button class="uc-shfrah-modal__later" type="button"><span class="lang-string" data-ar="\u0644\u0627\u062d\u0642\u064b\u0627" data-en="Maybe later"></span></button>' +
+          '</div>' +
+        '</div>';
+
+      /* Fill the lang-string spans for the CURRENT language (new nodes
+         missed the page-load sync; later toggles still update them). */
+      wrap.querySelectorAll('.lang-string').forEach(function (el) {
+        var v = el.getAttribute(isEn ? 'data-en' : 'data-ar');
+        if (v != null) el.textContent = v;
+      });
+
+      document.body.appendChild(wrap);
+      var prevOverflow = document.body.style.overflow;
+      document.body.style.overflow = 'hidden';
+      requestAnimationFrame(function () { wrap.classList.add('is-open'); });
+      try { localStorage.setItem(KEY, String(Date.now())); } catch (e) {}
+
+      function dismiss() {
+        wrap.classList.remove('is-open');
+        document.body.style.overflow = prevOverflow;
+        document.removeEventListener('keydown', onKey);
+        setTimeout(function () { wrap.remove(); }, 250);
+      }
+      function onKey(ev) { if (ev.key === 'Escape') dismiss(); }
+      wrap.querySelector('.uc-shfrah-modal__backdrop').addEventListener('click', dismiss);
+      wrap.querySelector('.uc-shfrah-modal__close').addEventListener('click', dismiss);
+      wrap.querySelector('.uc-shfrah-modal__later').addEventListener('click', dismiss);
+      document.addEventListener('keydown', onKey);
+    }, 5000);
+  }
+  maybeShowPromo();
+
+  /* ---------- 3. contact nudge ---------- */
   var typeSelect = document.getElementById('f-type');
   var nudge = document.getElementById('shfrahNudge');
   if (typeSelect && nudge) {

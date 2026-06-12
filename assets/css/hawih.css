@@ -2556,3 +2556,158 @@ html.has-shfrah-strip .uc-hero-fullbleed {
 }
 .uc-shfrah-inline:hover { opacity: 1; }
 [dir="rtl"] .uc-shfrah-inline .ph-arrow-up-right { transform: scaleX(-1); }
+
+/* ---- Strip v2: gradient + "NEW" chip ----------------------- */
+html.has-shfrah-strip .uc-shfrah-strip {
+    background: linear-gradient(90deg, #1f2d68 0%, #2d3f8d 50%, #1f2d68 100%);
+}
+.uc-shfrah-strip__chip,
+.uc-shfrah-strip__chip .lang-string {
+    display: inline-flex;
+    align-items: center;
+    background: #DDF160;            /* template additional / lime */
+    color: #14142a;
+    font-size: 1.05rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    padding: 0.25rem 0.8rem;
+    border-radius: 999px;
+    line-height: 1.3;
+    flex-shrink: 0;
+}
+
+/* ---- Footer family block v2 (pitch + CTA) ------------------ */
+.uc-shfrah-footer__text {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    min-width: 0;
+}
+.uc-shfrah-footer__cta,
+.uc-shfrah-footer__cta .lang-string {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 1.35rem;
+    font-weight: 600;
+    color: #2d3f8d;
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+}
+:root[color-scheme="dark"] .uc-shfrah-footer__cta,
+:root[color-scheme="dark"] .uc-shfrah-footer__cta .lang-string {
+    color: #8fa1f8;
+}
+[dir="rtl"] .uc-shfrah-footer__cta .ph-arrow-up-right { transform: scaleX(-1); }
+
+/* ---- Promo popup ------------------------------------------- */
+.uc-shfrah-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem;
+    opacity: 0;
+    transition: opacity 0.25s ease;
+}
+.uc-shfrah-modal.is-open { opacity: 1; }
+.uc-shfrah-modal__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(10, 14, 31, 0.55);
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
+}
+.uc-shfrah-modal__card {
+    position: relative;
+    width: min(52rem, 100%);
+    background: var(--base);
+    border: 1px solid var(--st-muted);
+    border-radius: 2.4rem;
+    padding: 4rem 3.6rem 3.2rem;
+    box-shadow: 0 24px 80px rgba(0, 0, 0, 0.35);
+    transform: translateY(12px) scale(0.97);
+    transition: transform 0.25s cubic-bezier(0.25, 0.1, 0.25, 1);
+    text-align: start;
+}
+.uc-shfrah-modal.is-open .uc-shfrah-modal__card {
+    transform: translateY(0) scale(1);
+}
+.uc-shfrah-modal__close {
+    position: absolute;
+    top: 1.6rem;
+    inset-inline-end: 1.6rem;
+    background: transparent;
+    border: 0;
+    color: var(--t-muted);
+    font-size: 1.8rem;
+    cursor: pointer;
+    padding: 0.6rem;
+    line-height: 1;
+}
+.uc-shfrah-modal__close:hover { color: var(--t-bright); }
+.uc-shfrah-modal__logo { height: 3.2rem; width: auto; display: none; margin-bottom: 2rem; }
+:root:not([color-scheme="dark"]) .uc-shfrah-modal .uc-shfrah-logo--light { display: inline-block; }
+:root[color-scheme="dark"] .uc-shfrah-modal .uc-shfrah-logo--dark { display: inline-block; }
+.uc-shfrah-modal__eyebrow,
+.uc-shfrah-modal__eyebrow .lang-string {
+    font-size: 1.2rem;
+    text-transform: uppercase;
+    letter-spacing: 0.16em;
+    color: var(--t-muted);
+    margin: 0 0 1rem;
+}
+.uc-shfrah-modal__title,
+.uc-shfrah-modal__title .lang-string {
+    font-size: 2.4rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--t-bright);
+    margin: 0 0 1.2rem;
+}
+.uc-shfrah-modal__body,
+.uc-shfrah-modal__body .lang-string {
+    font-size: 1.5rem;
+    line-height: 1.65;
+    color: var(--t-medium);
+    margin: 0 0 2rem;
+}
+.uc-shfrah-modal__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.8rem;
+    margin-bottom: 2.4rem;
+}
+.uc-shfrah-modal__chips > span {
+    font-size: 1.25rem;
+    padding: 0.5rem 1.2rem;
+    border-radius: 999px;
+    border: 1px solid var(--st-medium);
+    color: var(--t-medium);
+    white-space: nowrap;
+}
+.uc-shfrah-modal__actions {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 1.6rem;
+}
+.uc-shfrah-modal__later,
+.uc-shfrah-modal__later .lang-string {
+    background: transparent;
+    border: 0;
+    font-size: 1.4rem;
+    color: var(--t-muted);
+    cursor: pointer;
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+}
+.uc-shfrah-modal__later:hover,
+.uc-shfrah-modal__later:hover .lang-string { color: var(--t-bright); }
+@media (max-width: 600px) {
+    .uc-shfrah-modal { padding: 1.2rem; align-items: flex-end; }
+    .uc-shfrah-modal__card { padding: 3.2rem 2.4rem 2.8rem; border-radius: 2rem 2rem 1.2rem 1.2rem; }
+    .uc-shfrah-modal__title, .uc-shfrah-modal__title .lang-string { font-size: 2rem; }
+}
