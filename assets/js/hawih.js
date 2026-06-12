@@ -279,3 +279,43 @@
 
   window.Hawih = { applyLanguage };
 })();
+
+/* ============================================================
+   Shfrah sister-studio promotion — runtime behaviours
+   ------------------------------------------------------------
+   1. Announcement strip dismiss (home page): removing the
+      `has-shfrah-strip` class collapses the strip AND restores
+      the header/hero offsets in one move; persisted so the
+      visitor doesn't see it again.
+   2. Contact-form nudge: when the project type select lands on
+      a Shfrah-territory value (programming / ui-ux), reveal the
+      inline note pointing at the sister studio.
+   Both blocks no-op on pages where their elements don't exist.
+   ============================================================ */
+(function () {
+  'use strict';
+
+  /* ---------- 1. strip dismiss ---------- */
+  var strip = document.getElementById('shfrahStrip');
+  if (strip) {
+    var close = strip.querySelector('.uc-shfrah-strip__close');
+    if (close) {
+      close.addEventListener('click', function () {
+        document.documentElement.classList.remove('has-shfrah-strip');
+        try { localStorage.setItem('shfrahStripDismissed', '1'); } catch (e) {}
+      });
+    }
+  }
+
+  /* ---------- 2. contact nudge ---------- */
+  var typeSelect = document.getElementById('f-type');
+  var nudge = document.getElementById('shfrahNudge');
+  if (typeSelect && nudge) {
+    var SHFRAH_TYPES = ['programming', 'ui-ux'];
+    var sync = function () {
+      nudge.hidden = SHFRAH_TYPES.indexOf(typeSelect.value) === -1;
+    };
+    typeSelect.addEventListener('change', sync);
+    sync(); /* in case the form was repopulated from the error cookie */
+  }
+})();

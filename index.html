@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar" dir="rtl" class="has-shfrah-strip">
 
   <head>
     <!--uc-theme-init--><script>(function(){try{var e=document.documentElement;e.setAttribute("data-theme","light");e.setAttribute("color-scheme","light");e.classList.add("light-mode");e.classList.remove("dark");e.style.colorScheme="light";localStorage.setItem("template.theme","light");}catch(_){}})();</script>
@@ -1192,6 +1192,10 @@
       @media (max-width:991px){.mxd-header{padding-inline-start:1.5rem!important;padding-inline-end:7rem!important;padding-block:1rem!important}.mxd-nav__contain{padding-inline:1.5rem!important;padding-block:1rem!important}}
       :root[color-scheme="dark"] .mxd-logo__dark img{display:block!important}
     </style>
+    <!-- Shfrah strip: if the visitor dismissed it before, drop the
+         html class BEFORE first paint so neither the strip nor the
+         header offset flash in. -->
+    <script>try{if(localStorage.getItem('shfrahStripDismissed')==='1'){document.documentElement.classList.remove('has-shfrah-strip')}}catch(e){}</script>
   </head>
 
   <body>
@@ -1356,6 +1360,21 @@
     <!-- Menu & Menu Hamburger End -->
 
     <!-- Header Start -->
+    <!-- Shfrah announcement strip — dismissible, home page only.
+         Visibility + the header/hero offsets are driven by the
+         `has-shfrah-strip` class on <html>; the close button removes
+         it and persists the choice in localStorage. -->
+    <div class="uc-shfrah-strip" id="shfrahStrip">
+      <a class="uc-shfrah-strip__link" href="https://www.shfrah.com/?utm_source=hawih&amp;utm_medium=referral&amp;utm_campaign=family-strip" target="_blank" rel="noopener">
+        <span class="uc-shfrah-strip__brand">هوية &times; شفرة</span>
+        <span class="uc-shfrah-strip__copy"><span class="lang-string" data-ar="البرمجة والذكاء الاصطناعي لدى استوديونا الشقيق شفرة" data-en="Software &amp; AI live at our sister studio Shfrah">البرمجة والذكاء الاصطناعي لدى استوديونا الشقيق شفرة</span></span>
+        <i class="ph-bold ph-arrow-up-right" aria-hidden="true"></i>
+      </a>
+      <button class="uc-shfrah-strip__close" type="button" aria-label="إغلاق الشريط">
+        <i class="ph-bold ph-x" aria-hidden="true"></i>
+      </button>
+    </div>
+
     <header id="header" class="mxd-header">
       <!-- header logo -->
       <div class="mxd-header__logo loading__fade">
@@ -2795,6 +2814,14 @@
               </ul>
             </div>
             <!-- links -->
+            <!-- Shfrah — sister studio -->
+            <div class="uc-shfrah-footer anim-uni-in-up">
+              <a class="uc-shfrah-footer__link" href="https://www.shfrah.com/?utm_source=hawih&amp;utm_medium=referral&amp;utm_campaign=family-footer" target="_blank" rel="noopener" aria-label="Shfrah">
+                <img class="uc-shfrah-footer__logo uc-shfrah-logo--light" src="/assets/img/shfrah/logo-ar-light.png" alt="شفرة · Shfrah">
+                <img class="uc-shfrah-footer__logo uc-shfrah-logo--dark" src="/assets/img/shfrah/logo-ar-dark.png" alt="شفرة · Shfrah">
+              </a>
+              <p class="uc-shfrah-footer__line"><span class="lang-string" data-ar="استوديونا الشقيق للبرمجة والذكاء الاصطناعي" data-en="Our sister studio for software &amp; AI">استوديونا الشقيق للبرمجة والذكاء الاصطناعي</span></p>
+            </div>
             <div class="footer-blocks__links anim-uni-in-up">
               <a class="btn btn-line-xsmall btn-muted slide-right anim-no-delay" href="/privacy-policy">
                 <span class="btn-caption lang-string" data-ar="سياسة الخصوصية" data-en="Privacy Policy">سياسة الخصوصية</span>
