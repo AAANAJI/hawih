@@ -49,6 +49,24 @@ LOADER_LINK_RE = re.compile(
     r'[ \t]*<link\s+rel="stylesheet"[^>]*href="/uc-assets/css/loaders/loader\.min\.css"[^>]*>\n?',
     re.IGNORECASE,
 )
+# Tailwind CDN footprint: the loader comment + the CDN script tag +
+# the inline tailwind.config script. Removed wholesale; the template +
+# Bootstrap already provide every utility class actually used in
+# markup (verified by grep), and assets/css/tailwind-shim.css
+# defensively covers the few Tailwind-only ones (items-stretch, gap-N
+# in Tailwind naming, etc.).
+TAILWIND_HERO_COMMENT_RE = re.compile(
+    r'[ \t]*<!--\s*Hawih WebGL hero deps[^>]*-->\n?',
+    re.IGNORECASE,
+)
+TAILWIND_CDN_FULL_RE = re.compile(
+    r'[ \t]*<script\b[^>]*\bsrc="https://cdn\.tailwindcss\.com"[^>]*></script>\n?',
+    re.IGNORECASE,
+)
+INLINE_TAILWIND_CONFIG_RE = re.compile(
+    r'[ \t]*<script>\s*tailwind\.config\s*=.*?</script>\n?',
+    re.DOTALL,
+)
 TAILWIND_SCRIPT_RE = re.compile(
     r'<script\b[^>]*\bsrc="' + re.escape(TAILWIND_CDN) + r'"[^>]*></script>',
     re.IGNORECASE,
@@ -132,8 +150,10 @@ def process_file(path: Path, check: bool) -> dict:
     content, n_tw_defer = strip_defer(content, TAILWIND_SCRIPT_RE)
     content, n_three_defer = strip_defer(content, THREEJS_SCRIPT_RE)
     content, n_dims = add_img_dimensions(content)
-    new_content, n_loader = LOADER_LINK_RE.subn("", content)
-    content = new_content
+    content, n_loader = LOADER_LINK_RE.subn("", content)
+    content, n_tw_comment = TAILWIND_HERO_COMMENT_RE.subn("", content)
+    content, n_tw_cdn = TAILWIND_CDN_FULL_RE.subn("", content)
+    content, n_tw_config = INLINE_TAILWIND_CONFIG_RE.subn("", content)
 
     changed = content != original
     if changed and not check:
@@ -145,6 +165,8 @@ def process_file(path: Path, check: bool) -> dict:
         "three_defer_stripped": n_three_defer,
         "dims": n_dims,
         "loader_removed": n_loader,
+        "tw_cdn_removed": n_tw_cdn,
+        "tw_config_removed": n_tw_config,
     }
 
 
@@ -171,7 +193,8 @@ def main() -> int:
 
     files = iter_html()
     totals = {"changed": 0, "three_removed": 0, "tw_defer_stripped": 0,
-              "three_defer_stripped": 0, "dims": 0, "loader_removed": 0}
+              "three_defer_stripped": 0, "dims": 0, "loader_removed": 0,
+              "tw_cdn_removed": 0, "tw_config_removed": 0}
     for path in files:
         r = process_file(path, args.check)
         for k in totals:
@@ -184,6 +207,8 @@ def main() -> int:
     print(f"  Three.js defer stripped:         {totals['three_defer_stripped']}")
     print(f"  Img dimensions added:            {totals['dims']}")
     print(f"  loader.min.css links stripped:   {totals['loader_removed']}")
+    print(f"  Tailwind CDN script tags removed:{totals['tw_cdn_removed']}")
+    print(f"  inline tailwind.config removed:  {totals['tw_config_removed']}")
     if args.check and totals["changed"]:
         return 1
     return 0

@@ -1,0 +1,42 @@
+/* ===================================================================
+ * tailwind-shim.css — defensive Tailwind utility fallback.
+ * ===================================================================
+ * The cdn.tailwindcss.com runtime has been removed from every page
+ * (it was adding render-blocking work + a MutationObserver scanning
+ * every GSAP class change). The vast majority of utility classes the
+ * markup uses (p-0, flex, justify-between, bg-base, etc.) are already
+ * defined by the template's plugins.min.css / main.min.css. This file
+ * is the small belt-and-suspenders allowlist for the few that aren't,
+ * plus a safety net in case a Tailwind class gets pasted in from a
+ * snippet later.
+ * ================================================================ */
+
+/* ---- align-items / align-self (items-stretch was the only
+   Tailwind-only class detected in current markup) ---- */
+.items-stretch  { align-items: stretch; }
+.items-center   { align-items: center; }
+.items-start    { align-items: flex-start; }
+.items-end      { align-items: flex-end; }
+.items-baseline { align-items: baseline; }
+.self-stretch   { align-self: stretch; }
+.self-center    { align-self: center; }
+.self-start     { align-self: flex-start; }
+.self-end       { align-self: flex-end; }
+
+/* ---- flex direction / wrap / grow (defensive) ---- */
+.flex-row       { flex-direction: row; }
+.flex-col       { flex-direction: column; }
+.flex-wrap      { flex-wrap: wrap; }
+.flex-nowrap    { flex-wrap: nowrap; }
+.flex-1         { flex: 1 1 0%; }
+.flex-auto      { flex: 1 1 auto; }
+.flex-none      { flex: none; }
+
+/* ---- gap (Tailwind names; Bootstrap uses g-N — different) ---- */
+.gap-0          { gap: 0; }
+.gap-1          { gap: 0.25rem; }
+.gap-2          { gap: 0.5rem; }
+.gap-3          { gap: 0.75rem; }
+.gap-4          { gap: 1rem; }
+.gap-6          { gap: 1.5rem; }
+.gap-8          { gap: 2rem; }

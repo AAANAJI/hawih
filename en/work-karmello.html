@@ -72,8 +72,9 @@
     <!-- Template Styles End -->
 
     <!-- HAWIH_PERF_HEAD_START -->
-    <!-- Perf: Phosphor font-display:swap override -->
+    <!-- Perf: Phosphor font-display:swap override + Tailwind utility shim -->
     <link rel="stylesheet" type="text/css" href="/assets/css/font-display-fix.css?v=eb1f020477">
+    <link rel="stylesheet" type="text/css" href="/assets/css/tailwind-shim.css?v=9a27f0aa8f">
     <!-- HAWIH_PERF_HEAD_END -->
 
     <!-- Custom Styles Start -->
@@ -1012,28 +1013,6 @@
     }
   </style>
 
-    <!-- Hawih WebGL hero deps (Tailwind utilities + hawih.css tokens + Three.js) -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script>
-      tailwind.config = {
-        darkMode: 'class',
-        theme: {
-          extend: {
-            colors: {
-              ink:     '#0B0B10',
-              ink2:    '#14141C',
-              paper:   '#F4F1EB',
-              paper2:  '#E9E4D7',
-              brand:   '#1F1FFE',
-            },
-            fontFamily: {
-              sans: ['Inter', 'IBM Plex Sans Arabic', 'sans-serif'],
-              ar:   ['IBM Plex Sans Arabic', 'sans-serif'],
-            },
-          },
-        },
-      };
-    </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap">

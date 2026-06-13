@@ -51,8 +51,9 @@ PERF_END = "<!-- HAWIH_PERF_HEAD_END -->"
 TEMPLATE_STYLES_END_ANCHOR = "<!-- Template Styles End -->"
 PERF_BLOCK = (
     f"    {PERF_START}\n"
-    f"    <!-- Perf: Phosphor font-display:swap override -->\n"
+    f"    <!-- Perf: Phosphor font-display:swap override + Tailwind utility shim -->\n"
     f'    <link rel="stylesheet" type="text/css" href="/assets/css/font-display-fix.css">\n'
+    f'    <link rel="stylesheet" type="text/css" href="/assets/css/tailwind-shim.css">\n'
     f"    {PERF_END}"
 )
 
@@ -160,13 +161,23 @@ def update_fouc_guard(content: str) -> str:
 
 
 def update_perf_block(content: str) -> str:
-    """Inject the perf head block (font-display-fix.css link) once.
+    """Inject (or replace) the perf head block.
     Sits AFTER `<!-- Template Styles End -->` so its @font-face rules
-    override the template's Phosphor declarations. Once injected, leave
-    it alone — the link path never changes, and version-assets.py adds
-    a `?v=<hash>` stamp later in the pipeline that we must not wipe."""
+    and utility shim override the template's declarations. version-
+    assets.py later stamps each link with `?v=<hash>`; we strip those
+    stamps from the existing block before comparing so we only re-
+    write when the SET of links actually changes."""
     if PERF_START in content and PERF_END in content:
-        return content
+        pattern = re.compile(
+            rf"[ \t]*{re.escape(PERF_START)}.*?{re.escape(PERF_END)}",
+            re.DOTALL,
+        )
+        m = pattern.search(content)
+        if m:
+            existing_stripped = re.sub(r"\?v=[a-f0-9]+", "", m.group(0))
+            if existing_stripped == PERF_BLOCK:
+                return content
+        return pattern.sub(PERF_BLOCK, content, count=1)
     if TEMPLATE_STYLES_END_ANCHOR in content:
         return content.replace(
             TEMPLATE_STYLES_END_ANCHOR,
