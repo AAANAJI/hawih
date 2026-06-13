@@ -2,25 +2,23 @@
 """
 optimize-perf.py — Phase 4 performance optimisations for Hawih.
 
-Three mechanical wins, all reversible and idempotent:
+Two reversible mechanical wins (idempotent):
 
   1. Remove Three.js script tag from every page except index.html.
      Three.js is ~150KB and only the index hero WebGL shader uses it.
      Loading it on the other 42 pages wastes ~6MB of cumulative
      bandwidth per visitor session and blocks the LCP unnecessarily.
 
-  2. Add defer to the Tailwind CDN script on every page. The site
-     uses ~5–7 utility classes per page (mostly the hero column
-     layout) — small enough that deferring tail-end JIT processing
-     doesn't cause a perceptible flash of unstyled content, but big
-     enough that render-blocking is a real LCP penalty.
-
-  3. Add defer to the Three.js script on index.html. The hero shader
-     script runs at end-of-body anyway, so the THREE global is ready
-     in time.
-
-  4. Add width/height attributes to <img> tags whose filename embeds
+  2. Add width/height attributes to <img> tags whose filename embeds
      dimensions (pattern `WIDTHxHEIGHT_…`). Fixes CLS for those imgs.
+
+NOT done (intentionally reverted): adding `defer` to the Tailwind CDN
+or Three.js scripts. The Tailwind CDN JIT was designed to inject
+styles synchronously during DOM parsing; deferring it means the
+GSAP ScrollTrigger (which runs at end-of-body) computes pin
+positions against a layout that has not yet had Tailwind classes
+applied — visible as scroll jitter on the home-page service-stack
+cards. The bandwidth saving wasn't worth the visible regression.
 
 Usage:
   python3 scripts/optimize-perf.py            # walk and write
@@ -43,12 +41,12 @@ THREEJS_CDN_RE = re.compile(
     re.IGNORECASE,
 )
 TAILWIND_SCRIPT_RE = re.compile(
-    r'<script\s+src="' + re.escape(TAILWIND_CDN) + r'"\s*></script>',
+    r'<script\b[^>]*\bsrc="' + re.escape(TAILWIND_CDN) + r'"[^>]*></script>',
     re.IGNORECASE,
 )
 THREEJS_SCRIPT_RE = re.compile(
-    r"<script\s+src=\"https://cdnjs\.cloudflare\.com"
-    r"/ajax/libs/three\.js/[^\"]+\"\s*></script>",
+    r'<script\b[^>]*\bsrc="https://cdnjs\.cloudflare\.com'
+    r'/ajax/libs/three\.js/[^"]+"[^>]*></script>',
     re.IGNORECASE,
 )
 
@@ -71,21 +69,25 @@ def remove_threejs_if_not_index(content: str, filename: str) -> tuple[str, int]:
     return new_content, n
 
 
-def defer_external_script(content: str, pattern: re.Pattern) -> tuple[str, int]:
-    """Add `defer` to a <script src="..."> tag if not already present."""
+def strip_defer(content: str, pattern: re.Pattern) -> tuple[str, int]:
+    """Remove `defer` from a <script src="..."> tag if present.
+    Tailwind CDN and Three.js need to run synchronously so GSAP
+    ScrollTrigger sees the final layout when it computes pin
+    positions at end-of-body."""
     count = 0
 
-    def add_defer(match: re.Match) -> str:
+    def remove_defer(match: re.Match) -> str:
         nonlocal count
         tag = match.group(0)
-        if re.search(r"\bdefer\b", tag, re.IGNORECASE) or \
-           re.search(r"\basync\b", tag, re.IGNORECASE):
+        if not re.search(r"\bdefer\b", tag, re.IGNORECASE):
             return tag
         count += 1
-        # Insert `defer` right after the opening `<script`.
-        return tag.replace("<script ", "<script defer ", 1)
+        new_tag = re.sub(r"\s+defer\b", "", tag, flags=re.IGNORECASE)
+        new_tag = re.sub(r"<script\s+defer\s+", "<script ", new_tag,
+                         flags=re.IGNORECASE)
+        return new_tag
 
-    new_content = pattern.sub(add_defer, content)
+    new_content = pattern.sub(remove_defer, content)
     return new_content, count
 
 
@@ -118,8 +120,8 @@ def process_file(path: Path, check: bool) -> dict:
     content = original
 
     content, n_three_removed = remove_threejs_if_not_index(content, path.name)
-    content, n_tw_defer = defer_external_script(content, TAILWIND_SCRIPT_RE)
-    content, n_three_defer = defer_external_script(content, THREEJS_SCRIPT_RE)
+    content, n_tw_defer = strip_defer(content, TAILWIND_SCRIPT_RE)
+    content, n_three_defer = strip_defer(content, THREEJS_SCRIPT_RE)
     content, n_dims = add_img_dimensions(content)
 
     changed = content != original
@@ -128,8 +130,8 @@ def process_file(path: Path, check: bool) -> dict:
     return {
         "changed": changed,
         "three_removed": n_three_removed,
-        "tw_defer": n_tw_defer,
-        "three_defer": n_three_defer,
+        "tw_defer_stripped": n_tw_defer,
+        "three_defer_stripped": n_three_defer,
         "dims": n_dims,
     }
 
@@ -156,8 +158,8 @@ def main() -> int:
     args = parser.parse_args()
 
     files = iter_html()
-    totals = {"changed": 0, "three_removed": 0, "tw_defer": 0,
-              "three_defer": 0, "dims": 0}
+    totals = {"changed": 0, "three_removed": 0, "tw_defer_stripped": 0,
+              "three_defer_stripped": 0, "dims": 0}
     for path in files:
         r = process_file(path, args.check)
         for k in totals:
@@ -165,10 +167,10 @@ def main() -> int:
                           (r[k] if k != "changed" else 0))
     verb = "would change" if args.check else "updated"
     print(f"{totals['changed']}/{len(files)} files {verb}.")
-    print(f"  Three.js tags removed: {totals['three_removed']}")
-    print(f"  Tailwind defer adds:   {totals['tw_defer']}")
-    print(f"  Three.js defer adds:   {totals['three_defer']}")
-    print(f"  Img dimensions added:  {totals['dims']}")
+    print(f"  Three.js tags removed:           {totals['three_removed']}")
+    print(f"  Tailwind defer stripped:         {totals['tw_defer_stripped']}")
+    print(f"  Three.js defer stripped:         {totals['three_defer_stripped']}")
+    print(f"  Img dimensions added:            {totals['dims']}")
     if args.check and totals["changed"]:
         return 1
     return 0
