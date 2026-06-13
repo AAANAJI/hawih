@@ -1,0 +1,41 @@
+# Hawih measurement configuration
+# -------------------------------------------------------------------
+# The SEO build pipeline reads this file and conditionally injects:
+#
+#   1. <meta name="google-site-verification"> when gsc_verification is set
+#   2. <meta name="msvalidate.01"> for Bing Webmaster, when bing_verification is set
+#   3. Google Analytics 4 (gtag.js) + Consent Mode v2 defaults when
+#      ga4_measurement_id is set
+#   4. The PDPL-compliant consent banner (assets/css + js) automatically
+#      activates when GA4 is configured
+#
+# Leave fields blank to skip injection (the site keeps working with no
+# analytics or verification beacons).
+#
+# To populate:
+#   1. Verify the domain in Google Search Console:
+#      https://search.google.com/search-console — pick "HTML tag" method,
+#      copy the content="..." value into gsc_verification below.
+#   2. Create a GA4 property at https://analytics.google.com — copy the
+#      "G-XXXXXXXXXX" Measurement ID into ga4_measurement_id.
+#   3. (Optional) Repeat for Bing Webmaster Tools.
+#   4. Commit. The Actions workflow rebuilds and the meta tags / gtag
+#      script appear on the next deploy.
+# -------------------------------------------------------------------
+
+# Google Search Console — HTML tag verification.
+# Example: "abc123XYZdef456-789ghi"
+gsc_verification: ""
+
+# Bing Webmaster Tools verification.
+# Example: "1A2B3C4D5E6F7G8H9I0J"
+bing_verification: ""
+
+# Google Analytics 4 Measurement ID. Format: "G-XXXXXXXXXX"
+# When set, the gtag.js script is loaded with Consent Mode v2:
+#   - all consent signals default to "denied"
+#   - the consent banner is shown to the user
+#   - on Accept, analytics_storage flips to "granted" and pageviews flow
+#   - on Decline, analytics_storage stays "denied" — gtag does NOT send
+#     identifiable hits; only anonymous denied-mode pings (no cookies set)
+ga4_measurement_id: ""

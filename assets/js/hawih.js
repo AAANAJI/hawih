@@ -419,3 +419,94 @@
     sync(); /* in case the form was repopulated from the error cookie */
   }
 })();
+
+/* ============================================================
+   PDPL-compliant analytics consent banner.
+   ------------------------------------------------------------
+   Activates only when window.HAWIH_GA4_ID is set (inject-head.py
+   only emits gtag + that flag when measurement.yaml has a GA4 ID).
+   Stores the visitor decision in localStorage so the banner is
+   one-shot. Suppressed on /thank-you and /privacy-policy (lead-
+   funnel + the policy page itself) so it doesn't interrupt.
+   ============================================================ */
+(function () {
+  'use strict';
+  if (!window.HAWIH_GA4_ID) return;
+  if (typeof gtag !== 'function') return;
+
+  var DECIDED_KEY = 'hawihConsent';   // values: 'granted' | 'denied'
+  var path = location.pathname;
+  if (path.indexOf('/thank-you') !== -1 || path.indexOf('/privacy-policy') !== -1) {
+    return;
+  }
+
+  var prior = null;
+  try { prior = localStorage.getItem(DECIDED_KEY); } catch (_) {}
+  if (prior === 'granted') {
+    gtag('consent', 'update', { analytics_storage: 'granted' });
+    gtag('event', 'page_view');
+    return;
+  }
+  if (prior === 'denied') return;
+
+  function privacyHref() {
+    return path.indexOf('/en/') === 0 ? '/en/privacy-policy' : '/privacy-policy';
+  }
+
+  function render() {
+    var wrap = document.createElement('div');
+    wrap.className = 'hawih-consent';
+    wrap.setAttribute('role', 'dialog');
+    wrap.setAttribute('aria-label', 'Analytics consent');
+    wrap.innerHTML =
+      '<p class="hawih-consent__body">' +
+        '<span class="lang-string" ' +
+          'data-ar="نَستخدم تحليلات غوغل لقياس أداء الموقع. بإمكانك القبول أو الرفض. ' +
+                   'مزيد من التفاصيل في ' +
+                   '<a href="' + privacyHref() + '">سياسة الخصوصية</a>." ' +
+          'data-en="We use Google Analytics to measure site performance. You can accept or decline. ' +
+                   'More in our ' +
+                   '<a href="' + privacyHref() + '">privacy policy</a>.">' +
+        '</span>' +
+      '</p>' +
+      '<div class="hawih-consent__actions">' +
+        '<button class="hawih-consent__btn hawih-consent__btn--decline" type="button">' +
+          '<span class="lang-string" data-ar="رفض" data-en="Decline"></span>' +
+        '</button>' +
+        '<button class="hawih-consent__btn hawih-consent__btn--accept" type="button">' +
+          '<span class="lang-string" data-ar="قبول" data-en="Accept"></span>' +
+        '</button>' +
+      '</div>';
+
+    /* The lang-string contents include inline HTML (the privacy link),
+       so we cannot use textContent. Render data-ar/en as HTML by
+       writing innerHTML directly per current language. */
+    var lang = document.documentElement.lang === 'en' ? 'en' : 'ar';
+    wrap.querySelectorAll('.lang-string').forEach(function (el) {
+      var v = el.getAttribute('data-' + lang);
+      if (v != null) el.innerHTML = v;
+    });
+
+    function decide(value) {
+      try { localStorage.setItem(DECIDED_KEY, value); } catch (_) {}
+      gtag('consent', 'update', { analytics_storage: value });
+      if (value === 'granted') gtag('event', 'page_view');
+      wrap.classList.remove('is-visible');
+      setTimeout(function () { wrap.remove(); }, 200);
+    }
+    wrap.querySelector('.hawih-consent__btn--accept')
+        .addEventListener('click', function () { decide('granted'); });
+    wrap.querySelector('.hawih-consent__btn--decline')
+        .addEventListener('click', function () { decide('denied'); });
+
+    document.body.appendChild(wrap);
+    /* Delay one frame so the CSS transition triggers if we add any. */
+    requestAnimationFrame(function () { wrap.classList.add('is-visible'); });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', render);
+  } else {
+    render();
+  }
+})();

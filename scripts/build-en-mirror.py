@@ -48,6 +48,8 @@ EXCLUDE_FILES = {"use-cases.html", "theme-assets.html"}
 
 HREFLANG_START = "<!-- HAWIH_HREFLANG_START -->"
 HREFLANG_END = "<!-- HAWIH_HREFLANG_END -->"
+JSONLD_START = "<!-- HAWIH_JSONLD_START -->"
+JSONLD_END = "<!-- HAWIH_JSONLD_END -->"
 
 # Internal paths that should NOT be rewritten to /en/.
 PATH_SKIP_PREFIXES = (
@@ -270,15 +272,16 @@ def inject_hreflang(content: str, block: str) -> str:
             re.DOTALL,
         )
         return pattern.sub(block, content, count=1)
-    # Insert just before HAWIH_SEO_HEAD_END (Phase 0 block) if present,
-    # else before </head>.
+    # Insert AFTER HAWIH_SEO_HEAD_END (so the hreflang block lives
+    # OUTSIDE the SEO_HEAD bracketed region — otherwise inject-head.py's
+    # full-block replacement on re-run would wipe the hreflang block).
+    # Falls back to before </head> on legacy files.
     if "<!-- HAWIH_SEO_HEAD_END -->" in content:
         return content.replace(
             "<!-- HAWIH_SEO_HEAD_END -->",
-            f"{block}\n    <!-- HAWIH_SEO_HEAD_END -->",
+            f"<!-- HAWIH_SEO_HEAD_END -->\n{block}",
             1,
         )
-    # Fallback: before </head> with leading-whitespace strip.
     return re.sub(
         r"[ \t]*</head>",
         f"{block}\n  </head>",
@@ -307,6 +310,17 @@ def inject_form_lang(content: str) -> str:
 
 # --- main transformations -------------------------------------------
 
+def strip_jsonld(content: str) -> str:
+    """Remove the AR-side JSON-LD bracketed block; inject-jsonld.py
+    regenerates EN-prefixed schemas on a subsequent pass. Reduces noise
+    when build-en-mirror runs without the full pipeline behind it."""
+    pattern = re.compile(
+        rf"[ \t]*{re.escape(JSONLD_START)}.*?{re.escape(JSONLD_END)}\n?",
+        re.DOTALL,
+    )
+    return pattern.sub("", content, count=1)
+
+
 def transform_for_en(filename: str, original: str) -> str:
     en_abs = en_canonical(filename)
     ar_abs = ar_canonical(filename)
@@ -322,6 +336,7 @@ def transform_for_en(filename: str, original: str) -> str:
     content = update_og_locale(content)
     content = inject_hreflang(content, build_hreflang_block(ar_abs, en_abs))
     content = inject_form_lang(content)
+    content = strip_jsonld(content)
     return content
 
 

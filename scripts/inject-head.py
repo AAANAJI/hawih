@@ -35,6 +35,10 @@ EXCLUDE_FILES = {"use-cases.html", "theme-assets.html"}
 EXCLUDE_DIRS = {"reference", "en", "scripts", "seo", "assets",
                 "uc-assets", "api", "node_modules", ".git"}
 
+MEASUREMENT_CONFIG_PATH = REPO_ROOT / "seo" / "measurement.yaml"
+MEASUREMENT_START = "<!-- HAWIH_MEASUREMENT_START -->"
+MEASUREMENT_END = "<!-- HAWIH_MEASUREMENT_END -->"
+
 START_ANCHOR = "<!-- HAWIH_SEO_HEAD_START -->"
 END_ANCHOR = "<!-- HAWIH_SEO_HEAD_END -->"
 FB_END_ANCHOR = "<!-- Facebook Metadata End -->"
@@ -66,11 +70,20 @@ LEGACY_FOUC_RE = re.compile(
 ARTICLE_PREFIXES = ("service-", "work-")
 
 
-def canonical_for(filename: str) -> str:
-    """Map an HTML filename to its public clean URL."""
+def canonical_for(filename: str, prefix: str = "") -> str:
+    """Map an HTML filename to its public clean URL.
+
+    `prefix` is "" for AR files in repo root, "/en" for EN files."""
     if filename == "index.html":
-        return f"{SITE_ORIGIN}/"
-    return f"{SITE_ORIGIN}/{filename[:-5]}"  # strip .html
+        return f"{SITE_ORIGIN}{prefix}/"
+    return f"{SITE_ORIGIN}{prefix}/{filename[:-5]}"
+
+
+def og_locales_for(prefix: str) -> tuple[str, str]:
+    """Return (primary, alternate) og:locale values."""
+    if prefix == "/en":
+        return "en_US", "ar_SA"
+    return "ar_SA", "en_US"
 
 
 def og_type_for(filename: str) -> str:
@@ -95,9 +108,10 @@ def get_title(content: str) -> str | None:
     return m.group(1).strip() if m else None
 
 
-def build_block(filename: str, content: str) -> str:
-    canonical = canonical_for(filename)
+def build_block(filename: str, content: str, prefix: str = "") -> str:
+    canonical = canonical_for(filename, prefix)
     og_type = og_type_for(filename)
+    og_locale, og_alt = og_locales_for(prefix)
 
     og_title = read_meta(content, "property", "og:title") or get_title(content) or ""
     og_desc = read_meta(content, "property", "og:description") or \
@@ -113,8 +127,8 @@ def build_block(filename: str, content: str) -> str:
         f'    <link rel="canonical" href="{canonical}">\n'
         f'    <meta name="robots" content="index,follow,max-image-preview:large">\n'
         f'    <meta property="og:type" content="{og_type}">\n'
-        f'    <meta property="og:locale" content="ar_SA">\n'
-        f'    <meta property="og:locale:alternate" content="en_US">\n'
+        f'    <meta property="og:locale" content="{og_locale}">\n'
+        f'    <meta property="og:locale:alternate" content="{og_alt}">\n'
         f'    <meta property="og:site_name" content="Hawih">\n'
         f'    <meta name="twitter:card" content="summary_large_image">\n'
         f'    <meta name="twitter:site" content="@hawihcom">\n'
@@ -132,17 +146,111 @@ def update_fouc_guard(content: str) -> str:
     return content
 
 
-def update_file(path: Path, check: bool) -> bool:
+def load_measurement_config() -> dict:
+    """Read seo/measurement.yaml. Returns empty dict if missing/invalid."""
+    if not MEASUREMENT_CONFIG_PATH.is_file():
+        return {}
+    raw = MEASUREMENT_CONFIG_PATH.read_text(encoding="utf-8")
+    # Tiny YAML subset parser — we only support `key: value` lines so we
+    # don't drag in PyYAML just for this. Strings are unquoted scalars
+    # or double-quoted; everything else is ignored as comment.
+    cfg: dict = {}
+    for line in raw.splitlines():
+        line = line.split("#", 1)[0].rstrip()
+        if not line or ":" not in line:
+            continue
+        key, _, val = line.partition(":")
+        key = key.strip()
+        val = val.strip()
+        if val.startswith('"') and val.endswith('"'):
+            val = val[1:-1]
+        cfg[key] = val
+    return cfg
+
+
+def build_measurement_block(cfg: dict) -> str:
+    """Render the conditional measurement block.
+
+    Always wraps in anchor comments so re-runs replace cleanly. If the
+    config has no IDs set, the block is just the anchor pair (no body),
+    which is still idempotent and removable later."""
+    ga4 = (cfg.get("ga4_measurement_id") or "").strip()
+    gsc = (cfg.get("gsc_verification") or "").strip()
+    bing = (cfg.get("bing_verification") or "").strip()
+
+    parts = [f"    {MEASUREMENT_START}"]
+    if gsc:
+        parts.append(
+            f'    <meta name="google-site-verification" content="{gsc}">'
+        )
+    if bing:
+        parts.append(f'    <meta name="msvalidate.01" content="{bing}">')
+    if ga4:
+        # GA4 + Consent Mode v2. Consent defaults to denied so no
+        # identifying hits fire until the user explicitly accepts via
+        # the consent banner (hawih.js).
+        parts.extend([
+            "    <!-- GA4: Consent Mode v2 + gtag.js. Hits only fire",
+            "         after the user accepts via the consent banner. -->",
+            "    <script>",
+            "      window.dataLayer = window.dataLayer || [];",
+            "      function gtag(){dataLayer.push(arguments);}",
+            "      gtag('js', new Date());",
+            "      gtag('consent', 'default', {",
+            "        ad_storage: 'denied',",
+            "        ad_user_data: 'denied',",
+            "        ad_personalization: 'denied',",
+            "        analytics_storage: 'denied',",
+            "        wait_for_update: 500",
+            "      });",
+            f"      gtag('config', '{ga4}', {{",
+            "        anonymize_ip: true,",
+            "        send_page_view: false",
+            "      });",
+            f'      window.HAWIH_GA4_ID = "{ga4}";',
+            "    </script>",
+            (f'    <script async src="https://www.googletagmanager.com/'
+             f'gtag/js?id={ga4}"></script>'),
+        ])
+    parts.append(f"    {MEASUREMENT_END}")
+    return "\n".join(parts)
+
+
+def update_measurement_block(content: str, block: str) -> str:
+    if MEASUREMENT_START in content and MEASUREMENT_END in content:
+        pattern = re.compile(
+            rf"[ \t]*{re.escape(MEASUREMENT_START)}.*?{re.escape(MEASUREMENT_END)}",
+            re.DOTALL,
+        )
+        return pattern.sub(block, content, count=1)
+    # Insert AFTER the SEO head close anchor so the block lives outside
+    # the SEO_HEAD bracketed region and isn't wiped by full-block
+    # SEO_HEAD replacements on subsequent re-runs.
+    if END_ANCHOR in content:
+        return content.replace(
+            END_ANCHOR,
+            f"{END_ANCHOR}\n{block}",
+            1,
+        )
+    return re.sub(
+        r"[ \t]*</head>",
+        f"{block}\n  </head>",
+        content,
+        count=1,
+    )
+
+
+def update_file(path: Path, check: bool,
+                measurement_block: str = "",
+                prefix: str = "") -> bool:
     """Return True if the file was (or would be) changed."""
     original = path.read_text(encoding="utf-8")
-    new_block = build_block(path.name, original)
+    new_block = build_block(path.name, original, prefix)
 
-    # First normalize the FOUC guard (idempotent — no-op if already
-    # the URL-aware version).
+    # First normalize the FOUC guard (idempotent).
     working = update_fouc_guard(original)
 
-    # If the bracketed block exists, replace it. Otherwise insert
-    # immediately after the FB metadata anchor.
+    # SEO head block (canonical, robots, OG, Twitter).
     if START_ANCHOR in working and END_ANCHOR in working:
         pattern = re.compile(
             rf"[ \t]*{re.escape(START_ANCHOR)}.*?{re.escape(END_ANCHOR)}",
@@ -159,16 +267,20 @@ def update_file(path: Path, check: bool) -> bool:
         print(f"  ! {path.name}: no FB anchor; skipped", file=sys.stderr)
         return False
 
+    # Measurement block (GA4, GSC, Bing verification).
+    if measurement_block:
+        updated = update_measurement_block(updated, measurement_block)
+
     if updated == original:
         return False
-
     if not check:
         path.write_text(updated, encoding="utf-8")
     return True
 
 
-def iter_html() -> list[Path]:
-    files = []
+def iter_html() -> list[tuple[Path, str]]:
+    """Yield (path, prefix) pairs. prefix is '' for AR, '/en' for EN."""
+    pairs = []
     for child in sorted(REPO_ROOT.iterdir()):
         if child.is_dir():
             continue
@@ -176,8 +288,13 @@ def iter_html() -> list[Path]:
             continue
         if child.name in EXCLUDE_FILES:
             continue
-        files.append(child)
-    return files
+        pairs.append((child, ""))
+    en_dir = REPO_ROOT / "en"
+    if en_dir.is_dir():
+        for child in sorted(en_dir.iterdir()):
+            if child.suffix == ".html" and child.name not in EXCLUDE_FILES:
+                pairs.append((child, "/en"))
+    return pairs
 
 
 def main() -> int:
@@ -186,16 +303,28 @@ def main() -> int:
                         help="dry-run; exit non-zero if anything would change")
     args = parser.parse_args()
 
-    files = iter_html()
-    changed = 0
-    for path in files:
-        if update_file(path, args.check):
-            changed += 1
-            print(f"  ~ {path.name}")
-        else:
-            print(f"  = {path.name}")
+    cfg = load_measurement_config()
+    measurement_block = build_measurement_block(cfg)
+    enabled = bool((cfg.get("ga4_measurement_id") or "").strip()
+                   or (cfg.get("gsc_verification") or "").strip()
+                   or (cfg.get("bing_verification") or "").strip())
+    if enabled:
+        print(f"Measurement config: GA4={bool(cfg.get('ga4_measurement_id'))}, "
+              f"GSC={bool(cfg.get('gsc_verification'))}, "
+              f"Bing={bool(cfg.get('bing_verification'))}")
+    else:
+        print("Measurement config: all empty (no GA4/GSC/Bing tags emitted)")
 
-    print(f"\n{changed}/{len(files)} files {'would change' if args.check else 'updated'}.")
+    pairs = iter_html()
+    changed = 0
+    for path, prefix in pairs:
+        if update_file(path, args.check, measurement_block, prefix):
+            changed += 1
+            print(f"  ~ {path.relative_to(REPO_ROOT)}")
+        else:
+            print(f"  = {path.relative_to(REPO_ROOT)}")
+
+    print(f"\n{changed}/{len(pairs)} files {'would change' if args.check else 'updated'}.")
     if args.check and changed:
         return 1
     return 0
