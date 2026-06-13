@@ -2713,6 +2713,39 @@ html.has-shfrah-strip .uc-shfrah-strip {
 }
 
 /* =========================================================
+   GSAP-pinned card scroll smoothness.
+   ---------------------------------------------------------
+   The services-stack section pins each card and animates it
+   on scroll. By default the browser handles those transforms
+   on the main thread, contending with image decode + style
+   recalc work and causing perceived jitter on devices with
+   modest GPUs. Two surgical hints fix it:
+
+     will-change: transform   Tells the compositor to promote
+                              each card to its own layer, so
+                              GSAP's transform during scroll
+                              runs on the GPU compositor.
+
+     contain: layout paint    Promises the browser that the
+                              card's layout doesn't affect
+                              the document's outer layout —
+                              skip unnecessary recalcs when
+                              the card transforms.
+
+   Both are additive: no visible change, no page-speed cost,
+   no behavior change for the rest of the page.
+   ========================================================= */
+.services-stack .stack-item {
+    will-change: transform;
+    contain: layout paint;
+    transform: translateZ(0);          /* compositor layer hint */
+    backface-visibility: hidden;
+}
+.stack-wrapper.in-content-stack {
+    contain: layout;
+}
+
+/* =========================================================
    PDPL-compliant analytics consent banner.
    ---------------------------------------------------------
    Renders only when window.HAWIH_GA4_ID is defined and the
