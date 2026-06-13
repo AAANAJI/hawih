@@ -25,3 +25,5 @@ api/lead.php.bak
 node_modules/
 .tmp/
 tmp/
+__pycache__/
+*.pyc
