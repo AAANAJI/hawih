@@ -106,7 +106,19 @@ jobs:
             echo "::error::HAWIH_DOCROOT failed the safety check (no index.html, or it looks like the CRM). Aborting — nothing changed."
             exit 1
           fi
-          $SSH "tar czf /root/hawih-backup-\$(date +%F-%H%M%S).tgz -C '$DOCROOT' . 2>/dev/null && ls -1t /root/hawih-backup-*.tgz | head -1"
+          # Rotate backups BEFORE creating a new one. Each deploy writes a
+          # /root/hawih-backup-*.tgz; left unpruned they accumulate and fill
+          # the partition, which makes `tar` fail with exit 2 (fatal) and
+          # aborts the deploy. Keep only the 3 most recent, delete the rest,
+          # so the disk can never be filled by backup history.
+          echo "Disk before prune:"; $SSH "df -h / | tail -1"
+          $SSH "ls -1t /root/hawih-backup-*.tgz 2>/dev/null | tail -n +4 | xargs -r rm -f; echo 'Backups retained:'; ls -1t /root/hawih-backup-*.tgz 2>/dev/null | wc -l"
+          # Create the new backup. tar exit 1 = benign warnings (e.g. a file
+          # changed as we read the live docroot); exit >=2 = fatal (disk
+          # full, unwritable path) and must abort the deploy. stderr is left
+          # visible so the cause surfaces in the log.
+          $SSH "tar czf /root/hawih-backup-\$(date +%F-%H%M%S).tgz -C '$DOCROOT' . ; rc=\$?; if [ \$rc -gt 1 ]; then echo \"backup tar failed rc=\$rc\"; exit \$rc; fi; ls -1t /root/hawih-backup-*.tgz | head -1"
+          echo "Disk after backup:"; $SSH "df -h / | tail -1"
 
       - name: Deploy site (rsync — CRM untouched)
         if: steps.gate.outputs.configured == 'true'
