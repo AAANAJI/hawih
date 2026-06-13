@@ -47,6 +47,33 @@ html.dark, html.dark body {
 html[lang="ar"] body { font-family: 'IBM Plex Sans Arabic', sans-serif; }
 html[lang="en"] body { font-family: 'Inter', 'IBM Plex Sans Arabic', sans-serif; }
 
+/* Redefine the template's font CSS variables for Arabic pages so that
+   every component using `var(--_font-default)` / `var(--_font-accent)`
+   (template's Funnel Sans / Funnel Display — Latin-only) automatically
+   picks up IBM Plex Sans Arabic instead. This catches the title fonts,
+   button captions, stat counters, list numbers (٠١ ٠٢ ٠٣ …) that
+   would otherwise fall back to the OS default (Tahoma / Segoe). */
+html[lang="ar"],
+[dir="rtl"] {
+    --_font-default: 'IBM Plex Sans Arabic', sans-serif;
+    --_font-accent:  'IBM Plex Sans Arabic', sans-serif;
+}
+
+/* The template's awards / projects list components hide the leading
+   icon at rest via `translateX(-5.4rem)` and slide it in on hover.
+   On touch devices there is no hover, so the slide never plays —
+   on RTL pages this also pushes the title text the wrong direction,
+   clipping its leading characters. Force the at-rest position to
+   zero in RTL so the title shows in full immediately. The hover
+   animation still works on desktop (LTR keeps the original behaviour). */
+[dir="rtl"] .mxd-awards-list__title p,
+[dir="rtl"] .mxd-awards-list__icon,
+[dir="rtl"] .mxd-projects-list__title p,
+[dir="rtl"] .mxd-projects-list__icon,
+[dir="rtl"] .mxd-projects-archive__title {
+    transform: translateX(0) !important;
+}
+
 /* Arabic ligatures: kill letter-spacing on every text element */
 html[lang="ar"] h1, html[lang="ar"] h2, html[lang="ar"] h3,
 html[lang="ar"] h4, html[lang="ar"] h5, html[lang="ar"] h6,
