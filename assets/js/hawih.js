@@ -559,3 +559,90 @@
     render();
   }
 })();
+
+/* ============================================================
+   ANALYTICS EVENT TRACKING (GTM dataLayer)
+   ------------------------------------------------------------
+   Pushes named custom events into dataLayer so the GTM container
+   (GTM-N3BWDWG) can forward them to GA4 / Google Ads. The site
+   owns the event logic (reliable for JS-injected buttons and the
+   full-page form POST); GTM only needs a "Custom Event" trigger
+   per event name. Events emitted:
+
+     whatsapp_click     — any wa.me / WhatsApp link
+     phone_call_click   — any tel: link
+     email_click        — any mailto: link
+     shfrah_click       — any link to shfrah.com (sister studio)
+     lead_form_submit   — lead form submit attempt (/api/lead.php)
+     generate_lead      — confirmed lead (the /thank-you page loaded)
+
+   Each event carries: link_url, link_text, link_domain, page_path,
+   language. dataLayer.push is a no-op-safe array push even if GTM
+   is blocked, so this never throws.
+   ============================================================ */
+(function () {
+  'use strict';
+  var dl = function () {
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push.apply(window.dataLayer, arguments);
+  };
+  function lang() {
+    return document.documentElement.lang || 'ar';
+  }
+  function domainOf(href) {
+    try { return new URL(href, location.href).hostname; } catch (e) { return ''; }
+  }
+  function base(a, href) {
+    return {
+      link_url: href,
+      link_text: a ? (a.textContent || '').trim().slice(0, 100) : '',
+      link_domain: domainOf(href),
+      page_path: location.pathname,
+      language: lang()
+    };
+  }
+
+  /* ---- link clicks (capture phase so it fires before the nav /
+     new-tab open, and even if a handler stops propagation) ---- */
+  document.addEventListener('click', function (e) {
+    var a = e.target && e.target.closest ? e.target.closest('a') : null;
+    if (!a) return;
+    var href = a.getAttribute('href') || '';
+    if (!href) return;
+    var ev = null;
+    if (/wa\.me|api\.whatsapp\.com|whatsapp/i.test(href)) ev = 'whatsapp_click';
+    else if (/^tel:/i.test(href)) ev = 'phone_call_click';
+    else if (/^mailto:/i.test(href)) ev = 'email_click';
+    else if (/shfrah\.com/i.test(href)) ev = 'shfrah_click';
+    if (ev) {
+      var data = base(a, href);
+      data.event = ev;
+      dl(data);
+    }
+  }, true);
+
+  /* ---- lead-form submit attempt ----
+     The form does a full-page POST to /api/lead.php, so this event may
+     race the navigation; the reliable conversion is generate_lead on
+     /thank-you below. Both are emitted. ---- */
+  document.addEventListener('submit', function (e) {
+    var f = e.target;
+    if (f && f.matches && f.matches('form[action="/api/lead.php"]')) {
+      dl({
+        event: 'lead_form_submit',
+        form_id: f.id || '',
+        page_path: location.pathname,
+        language: lang()
+      });
+    }
+  }, true);
+
+  /* ---- confirmed lead: the thank-you page loaded ---- */
+  if (/(^|\/)thank-you(\/|$)/.test(location.pathname)) {
+    dl({
+      event: 'generate_lead',
+      page_path: location.pathname,
+      language: lang()
+    });
+  }
+})();
