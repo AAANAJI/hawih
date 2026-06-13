@@ -2713,6 +2713,44 @@ html.has-shfrah-strip .uc-shfrah-strip {
 }
 
 /* =========================================================
+   Skip the 0→100% page loader.
+   ---------------------------------------------------------
+   The template ships a full-page preloader (#loader) that
+   animates a 0-to-100 counter on every page load and on
+   every cross-page navigation. We saw no payoff for it —
+   it just adds perceived wait. CSS-only neutralisation:
+
+     1. Hide #loader entirely (the safety script in
+        index.html still runs, fades nothing visible — no
+        JS errors).
+     2. Force every .loading__fade / .loading__item /
+        .loading-wrap target to be visible immediately, so
+        the header / nav / hero text that previously waited
+        for the loader to finish are painted with the rest
+        of the page.
+
+   The loader.min.css link, the #loader markup, and the
+   safety script can all be removed later if desired. Doing
+   it via CSS first means a clean revert if anything visible
+   broke.
+   ========================================================= */
+#loader,
+.loader,
+.preloader,
+.mxd-preloader {
+    display: none !important;
+}
+.loading__fade,
+.loading__item,
+.loading-wrap,
+.loading__hide,
+[class*="loading__"] {
+    opacity: 1 !important;
+    visibility: visible !important;
+    transform: none !important;
+}
+
+/* =========================================================
    GSAP-pinned card scroll smoothness.
    ---------------------------------------------------------
    The services-stack section pins each card and animates it
