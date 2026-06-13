@@ -32,10 +32,21 @@ gsc_verification: ""
 bing_verification: ""
 
 # Google Analytics 4 Measurement ID. Format: "G-XXXXXXXXXX"
-# When set, the gtag.js script is loaded with Consent Mode v2:
-#   - all consent signals default to "denied"
-#   - the consent banner is shown to the user
-#   - on Accept, analytics_storage flips to "granted" and pageviews flow
-#   - on Decline, analytics_storage stays "denied" — gtag does NOT send
-#     identifiable hits; only anonymous denied-mode pings (no cookies set)
+# Leave BLANK when GA4 is managed inside Google Tag Manager (the GTM
+# container fires GA4) — setting both would double-count pageviews.
+# Only fill this for a direct gtag.js install WITHOUT GTM. When set,
+# gtag.js loads with Consent Mode v2 + the consent banner.
 ga4_measurement_id: ""
+
+# Google Tag Manager container ID. Format: "GTM-XXXXXXX"
+# When set, the standard GTM snippet is injected (script high in <head>
+# + <noscript> iframe right after <body>). GA4 (G-5HTT49JBJE) and
+# Google Ads (AW-10992465435) are configured as tags INSIDE this
+# container, so one snippet drives all three and you manage them from
+# the GTM UI with no further code changes.
+#
+# Owner choice (2026-06-13): fire immediately (no consent gate), matching
+# the previous WordPress site. The standard GTM snippet below fires on
+# every load; the PDPL consent banner stays dormant (it only activates
+# for the direct-GA4 path above).
+gtm_container_id: "GTM-N3BWDWG"

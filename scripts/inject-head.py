@@ -38,6 +38,9 @@ EXCLUDE_DIRS = {"reference", "en", "scripts", "seo", "assets",
 MEASUREMENT_CONFIG_PATH = REPO_ROOT / "seo" / "measurement.yaml"
 MEASUREMENT_START = "<!-- HAWIH_MEASUREMENT_START -->"
 MEASUREMENT_END = "<!-- HAWIH_MEASUREMENT_END -->"
+# GTM <noscript> goes right after <body>; bracketed for idempotency.
+GTM_BODY_START = "<!-- HAWIH_GTM_BODY_START -->"
+GTM_BODY_END = "<!-- HAWIH_GTM_BODY_END -->"
 
 START_ANCHOR = "<!-- HAWIH_SEO_HEAD_START -->"
 END_ANCHOR = "<!-- HAWIH_SEO_HEAD_END -->"
@@ -218,6 +221,7 @@ def build_measurement_block(cfg: dict) -> str:
     ga4 = (cfg.get("ga4_measurement_id") or "").strip()
     gsc = (cfg.get("gsc_verification") or "").strip()
     bing = (cfg.get("bing_verification") or "").strip()
+    gtm = (cfg.get("gtm_container_id") or "").strip()
 
     parts = [f"    {MEASUREMENT_START}"]
     if gsc:
@@ -226,6 +230,21 @@ def build_measurement_block(cfg: dict) -> str:
         )
     if bing:
         parts.append(f'    <meta name="msvalidate.01" content="{bing}">')
+    if gtm:
+        # Standard Google Tag Manager snippet (fires immediately — owner
+        # choice). GA4 + Google Ads are configured as tags inside this
+        # container. The <noscript> half is injected after <body>.
+        parts.extend([
+            "    <!-- Google Tag Manager -->",
+            "    <script>(function(w,d,s,l,i){w[l]=w[l]||[];"
+            "w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});"
+            "var f=d.getElementsByTagName(s)[0],j=d.createElement(s),"
+            "dl=l!='dataLayer'?'&l='+l:'';j.async=true;"
+            "j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;"
+            "f.parentNode.insertBefore(j,f);"
+            f"}})(window,document,'script','dataLayer','{gtm}');</script>",
+            "    <!-- End Google Tag Manager -->",
+        ])
     if ga4:
         # GA4 + Consent Mode v2. Consent defaults to denied so no
         # identifying hits fire until the user explicitly accepts via
@@ -281,9 +300,53 @@ def update_measurement_block(content: str, block: str) -> str:
     )
 
 
+def build_gtm_body_block(cfg: dict) -> str | None:
+    """GTM <noscript> iframe, injected right after <body>. None if no GTM."""
+    gtm = (cfg.get("gtm_container_id") or "").strip()
+    if not gtm:
+        return None
+    return (
+        f"    {GTM_BODY_START}\n"
+        "    <!-- Google Tag Manager (noscript) -->\n"
+        f'    <noscript><iframe src="https://www.googletagmanager.com/ns.html?id={gtm}"\n'
+        '    height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>\n'
+        "    <!-- End Google Tag Manager (noscript) -->\n"
+        f"    {GTM_BODY_END}"
+    )
+
+
+def update_gtm_body(content: str, block: str | None) -> str:
+    """Inject/replace the GTM <noscript> right after the opening <body>.
+    If block is None (no GTM configured), strip any previously-injected
+    block so disabling GTM cleans up after itself."""
+    has = GTM_BODY_START in content and GTM_BODY_END in content
+    if block is None:
+        if has:
+            pattern = re.compile(
+                rf"\n?[ \t]*{re.escape(GTM_BODY_START)}.*?{re.escape(GTM_BODY_END)}",
+                re.DOTALL,
+            )
+            return pattern.sub("", content, count=1)
+        return content
+    if has:
+        pattern = re.compile(
+            rf"[ \t]*{re.escape(GTM_BODY_START)}.*?{re.escape(GTM_BODY_END)}",
+            re.DOTALL,
+        )
+        return pattern.sub(block, content, count=1)
+    # Insert immediately after the opening <body ...> tag.
+    return re.sub(
+        r"(<body\b[^>]*>)",
+        lambda m: m.group(1) + "\n" + block,
+        content,
+        count=1,
+    )
+
+
 def update_file(path: Path, check: bool,
                 measurement_block: str = "",
-                prefix: str = "") -> bool:
+                prefix: str = "",
+                gtm_body_block: str | None = None) -> bool:
     """Return True if the file was (or would be) changed."""
     original = path.read_text(encoding="utf-8")
     new_block = build_block(path.name, original, prefix)
@@ -316,9 +379,12 @@ def update_file(path: Path, check: bool,
         print(f"  ! {path.name}: no FB anchor; skipped", file=sys.stderr)
         return False
 
-    # Measurement block (GA4, GSC, Bing verification).
+    # Measurement block (GTM/GA4 head, GSC, Bing verification).
     if measurement_block:
         updated = update_measurement_block(updated, measurement_block)
+
+    # GTM <noscript> right after <body> (or strip it when GTM is off).
+    updated = update_gtm_body(updated, gtm_body_block)
 
     if updated == original:
         return False
@@ -354,20 +420,24 @@ def main() -> int:
 
     cfg = load_measurement_config()
     measurement_block = build_measurement_block(cfg)
+    gtm_body_block = build_gtm_body_block(cfg)
     enabled = bool((cfg.get("ga4_measurement_id") or "").strip()
                    or (cfg.get("gsc_verification") or "").strip()
-                   or (cfg.get("bing_verification") or "").strip())
+                   or (cfg.get("bing_verification") or "").strip()
+                   or (cfg.get("gtm_container_id") or "").strip())
     if enabled:
-        print(f"Measurement config: GA4={bool(cfg.get('ga4_measurement_id'))}, "
+        print(f"Measurement config: GTM={cfg.get('gtm_container_id') or '-'}, "
+              f"GA4={cfg.get('ga4_measurement_id') or '-'}, "
               f"GSC={bool(cfg.get('gsc_verification'))}, "
               f"Bing={bool(cfg.get('bing_verification'))}")
     else:
-        print("Measurement config: all empty (no GA4/GSC/Bing tags emitted)")
+        print("Measurement config: all empty (no tags emitted)")
 
     pairs = iter_html()
     changed = 0
     for path, prefix in pairs:
-        if update_file(path, args.check, measurement_block, prefix):
+        if update_file(path, args.check, measurement_block, prefix,
+                       gtm_body_block):
             changed += 1
             print(f"  ~ {path.relative_to(REPO_ROOT)}")
         else:
