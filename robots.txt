@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /reference/
+Disallow: /use-cases
+Disallow: /theme-assets
+Disallow: /thank-you
+
+Sitemap: https://hawih.com.sa/sitemap.xml
