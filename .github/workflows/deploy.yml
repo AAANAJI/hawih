@@ -65,6 +65,11 @@ jobs:
           python3 scripts/improve-alts.py
           python3 scripts/inject-jsonld.py
           python3 scripts/generate-sitemap.py
+          # Must run LAST: stamps ?v=<hash> on hawih.css/js across the
+          # final HTML (AR + EN) so returning visitors fetch fresh assets
+          # the instant a real change ships, without waiting for the
+          # browser cache to expire.
+          python3 scripts/version-assets.py
 
       - name: Build clean deploy tree
         if: steps.gate.outputs.configured == 'true'
