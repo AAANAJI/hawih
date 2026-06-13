@@ -47,6 +47,19 @@ html.dark, html.dark body {
 html[lang="ar"] body { font-family: 'IBM Plex Sans Arabic', sans-serif; }
 html[lang="en"] body { font-family: 'Inter', 'IBM Plex Sans Arabic', sans-serif; }
 
+/* Screen-reader-only utility: visually hidden, still announced. Used to
+   give icon-only links (hamburger, round arrow buttons) a discernible
+   accessible name without changing the visual design. */
+.sr-only {
+    position: absolute !important;
+    width: 1px; height: 1px;
+    padding: 0; margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
 /* Redefine the template's font CSS variables for Arabic pages so that
    every component using `var(--_font-default)` / `var(--_font-accent)`
    (template's Funnel Sans / Funnel Display — Latin-only) automatically

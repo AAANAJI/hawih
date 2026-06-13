@@ -61,6 +61,7 @@ jobs:
           python3 scripts/inject-head.py
           python3 scripts/optimize-images.py
           python3 scripts/optimize-perf.py
+          python3 scripts/a11y-fix.py
           python3 scripts/build-en-mirror.py
           python3 scripts/improve-alts.py
           python3 scripts/inject-jsonld.py

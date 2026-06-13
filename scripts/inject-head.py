@@ -290,6 +290,12 @@ def update_file(path: Path, check: bool,
 
     # First normalize the FOUC guard (idempotent).
     working = update_fouc_guard(original)
+    # a11y: allow pinch-zoom. The template ships maximum-scale=1 which
+    # Lighthouse flags (blocks zoom for low-vision users). Strip it.
+    working = working.replace(
+        '<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">',
+        '<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">',
+    )
     # Inject the perf head block (font-display-fix.css link).
     working = update_perf_block(working)
 
