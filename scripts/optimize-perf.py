@@ -2,7 +2,7 @@
 """
 optimize-perf.py — Phase 4 performance optimisations for Hawih.
 
-Two reversible mechanical wins (idempotent):
+Reversible mechanical wins (idempotent):
 
   1. Remove Three.js script tag from every page except index.html.
      Three.js is ~150KB and only the index hero WebGL shader uses it.
@@ -11,6 +11,11 @@ Two reversible mechanical wins (idempotent):
 
   2. Add width/height attributes to <img> tags whose filename embeds
      dimensions (pattern `WIDTHxHEIGHT_…`). Fixes CLS for those imgs.
+
+  3. Remove the /uc-assets/css/loaders/loader.min.css <link>. The
+     loader DOM is hidden by hawih.css (we don't run the 0->100%
+     counter anymore), so the stylesheet is pure render-blocking
+     dead weight (~12 KB + one HTTP round-trip).
 
 NOT done (intentionally reverted): adding `defer` to the Tailwind CDN
 or Three.js scripts. The Tailwind CDN JIT was designed to inject
@@ -38,6 +43,10 @@ TAILWIND_CDN = "https://cdn.tailwindcss.com"
 THREEJS_CDN_RE = re.compile(
     r"[ \t]*<script\s+src=\"https://cdnjs\.cloudflare\.com"
     r"/ajax/libs/three\.js/[^\"]+\"\s*></script>\n?",
+    re.IGNORECASE,
+)
+LOADER_LINK_RE = re.compile(
+    r'[ \t]*<link\s+rel="stylesheet"[^>]*href="/uc-assets/css/loaders/loader\.min\.css"[^>]*>\n?',
     re.IGNORECASE,
 )
 TAILWIND_SCRIPT_RE = re.compile(
@@ -123,6 +132,8 @@ def process_file(path: Path, check: bool) -> dict:
     content, n_tw_defer = strip_defer(content, TAILWIND_SCRIPT_RE)
     content, n_three_defer = strip_defer(content, THREEJS_SCRIPT_RE)
     content, n_dims = add_img_dimensions(content)
+    new_content, n_loader = LOADER_LINK_RE.subn("", content)
+    content = new_content
 
     changed = content != original
     if changed and not check:
@@ -133,6 +144,7 @@ def process_file(path: Path, check: bool) -> dict:
         "tw_defer_stripped": n_tw_defer,
         "three_defer_stripped": n_three_defer,
         "dims": n_dims,
+        "loader_removed": n_loader,
     }
 
 
@@ -159,7 +171,7 @@ def main() -> int:
 
     files = iter_html()
     totals = {"changed": 0, "three_removed": 0, "tw_defer_stripped": 0,
-              "three_defer_stripped": 0, "dims": 0}
+              "three_defer_stripped": 0, "dims": 0, "loader_removed": 0}
     for path in files:
         r = process_file(path, args.check)
         for k in totals:
@@ -171,6 +183,7 @@ def main() -> int:
     print(f"  Tailwind defer stripped:         {totals['tw_defer_stripped']}")
     print(f"  Three.js defer stripped:         {totals['three_defer_stripped']}")
     print(f"  Img dimensions added:            {totals['dims']}")
+    print(f"  loader.min.css links stripped:   {totals['loader_removed']}")
     if args.check and totals["changed"]:
         return 1
     return 0

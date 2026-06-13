@@ -40,6 +40,7 @@ EXCLUDE_FILES = {"use-cases.html", "theme-assets.html"}
 VERSIONED_ASSETS = {
     "/assets/css/hawih.css": REPO_ROOT / "assets" / "css" / "hawih.css",
     "/assets/js/hawih.js": REPO_ROOT / "assets" / "js" / "hawih.js",
+    "/assets/css/font-display-fix.css": REPO_ROOT / "assets" / "css" / "font-display-fix.css",
 }
 
 

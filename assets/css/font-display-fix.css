@@ -1,0 +1,67 @@
+/* ===================================================================
+ * font-display: swap override for Phosphor icon families.
+ * ===================================================================
+ * The template's plugins.min.css declares Phosphor with
+ * `font-display: block`, which makes the browser hide ALL icon glyphs
+ * until the font finishes downloading. Lighthouse penalises this with
+ * the "Font display" insight (≈610 ms savings).
+ *
+ * We can't edit plugins.min.css safely, but per the CSS spec a later
+ * @font-face declaration for the same family overrides an earlier one.
+ * So we redeclare every Phosphor face here with `font-display: swap`
+ * and load this file AFTER plugins.min.css. Result: the OS fallback
+ * shows immediately, then swaps to Phosphor when it loads.
+ *
+ * Source URLs match the template — see
+ * /uc-assets/fonts/Phosphor/Phosphor*.{woff2,woff,ttf}.
+ * ================================================================ */
+
+@font-face {
+    font-family: 'Phosphor';
+    src: url('/uc-assets/fonts/Phosphor/Phosphor.woff2') format('woff2'),
+         url('/uc-assets/fonts/Phosphor/Phosphor.woff') format('woff'),
+         url('/uc-assets/fonts/Phosphor/Phosphor.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Phosphor-Bold';
+    src: url('/uc-assets/fonts/Phosphor/Phosphor-Bold.woff2') format('woff2'),
+         url('/uc-assets/fonts/Phosphor/Phosphor-Bold.woff') format('woff'),
+         url('/uc-assets/fonts/Phosphor/Phosphor-Bold.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Phosphor-Light';
+    src: url('/uc-assets/fonts/Phosphor/Phosphor-Light.woff2') format('woff2'),
+         url('/uc-assets/fonts/Phosphor/Phosphor-Light.woff') format('woff'),
+         url('/uc-assets/fonts/Phosphor/Phosphor-Light.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Phosphor-Fill';
+    src: url('/uc-assets/fonts/Phosphor/Phosphor-Fill.woff2') format('woff2'),
+         url('/uc-assets/fonts/Phosphor/Phosphor-Fill.woff') format('woff'),
+         url('/uc-assets/fonts/Phosphor/Phosphor-Fill.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Phosphor-Duotone';
+    src: url('/uc-assets/fonts/Phosphor/Phosphor-Duotone.woff2') format('woff2'),
+         url('/uc-assets/fonts/Phosphor/Phosphor-Duotone.woff') format('woff'),
+         url('/uc-assets/fonts/Phosphor/Phosphor-Duotone.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}

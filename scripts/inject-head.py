@@ -43,6 +43,19 @@ START_ANCHOR = "<!-- HAWIH_SEO_HEAD_START -->"
 END_ANCHOR = "<!-- HAWIH_SEO_HEAD_END -->"
 FB_END_ANCHOR = "<!-- Facebook Metadata End -->"
 
+# Perf head block — injected AFTER the template stylesheets so its
+# @font-face rules override the ones from plugins.min.css (Phosphor
+# icon fonts with font-display:block → swap).
+PERF_START = "<!-- HAWIH_PERF_HEAD_START -->"
+PERF_END = "<!-- HAWIH_PERF_HEAD_END -->"
+TEMPLATE_STYLES_END_ANCHOR = "<!-- Template Styles End -->"
+PERF_BLOCK = (
+    f"    {PERF_START}\n"
+    f"    <!-- Perf: Phosphor font-display:swap override -->\n"
+    f'    <link rel="stylesheet" type="text/css" href="/assets/css/font-display-fix.css">\n'
+    f"    {PERF_END}"
+)
+
 # URL-aware FOUC language guard. Replaces the legacy localStorage-only
 # version with one that derives lang from the URL (/en/* = en; / = ar).
 # This is the only correct behaviour now that /en/ pages exist —
@@ -143,6 +156,23 @@ def update_fouc_guard(content: str) -> str:
     """Idempotently replace the legacy FOUC guard with the URL-aware one."""
     if LEGACY_FOUC_RE.search(content):
         return LEGACY_FOUC_RE.sub(FOUC_GUARD_BLOCK, content, count=1)
+    return content
+
+
+def update_perf_block(content: str) -> str:
+    """Inject the perf head block (font-display-fix.css link) once.
+    Sits AFTER `<!-- Template Styles End -->` so its @font-face rules
+    override the template's Phosphor declarations. Once injected, leave
+    it alone — the link path never changes, and version-assets.py adds
+    a `?v=<hash>` stamp later in the pipeline that we must not wipe."""
+    if PERF_START in content and PERF_END in content:
+        return content
+    if TEMPLATE_STYLES_END_ANCHOR in content:
+        return content.replace(
+            TEMPLATE_STYLES_END_ANCHOR,
+            f"{TEMPLATE_STYLES_END_ANCHOR}\n\n{PERF_BLOCK}",
+            1,
+        )
     return content
 
 
@@ -249,6 +279,8 @@ def update_file(path: Path, check: bool,
 
     # First normalize the FOUC guard (idempotent).
     working = update_fouc_guard(original)
+    # Inject the perf head block (font-display-fix.css link).
+    working = update_perf_block(working)
 
     # SEO head block (canonical, robots, OG, Twitter).
     if START_ANCHOR in working and END_ANCHOR in working:
