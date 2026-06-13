@@ -60,6 +60,7 @@ jobs:
           # someone made without running the build locally.
           python3 scripts/inject-head.py
           python3 scripts/optimize-images.py
+          python3 scripts/optimize-perf.py
           python3 scripts/build-en-mirror.py
           python3 scripts/inject-jsonld.py
           python3 scripts/generate-sitemap.py
