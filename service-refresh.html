@@ -21,14 +21,10 @@
     <script>
       (function () {
         try {
-          var lang = localStorage.getItem('lang');
-          if (lang === 'en') {
-            document.documentElement.lang = 'en';
-            document.documentElement.dir = 'ltr';
-          } else if (lang === 'ar') {
-            document.documentElement.lang = 'ar';
-            document.documentElement.dir = 'rtl';
-          }
+          var p = location.pathname;
+          var lang = (p === '/en' || p.indexOf('/en/') === 0) ? 'en' : 'ar';
+          document.documentElement.lang = lang;
+          document.documentElement.dir = lang === 'en' ? 'ltr' : 'rtl';
         } catch (e) {}
       })();
     </script>
@@ -61,6 +57,11 @@
     <meta name="twitter:title" content="إحياء العلامات · Brand Refresh — Hawih">
     <meta name="twitter:description" content="علامتُك تَحمل تاريخاً يَستحقّ الاحترام — نُجدّد ملامحها دون أن نَفقد ذاكرتها.">
     <meta name="twitter:image" content="https://hawih.com.sa/assets/img/hawih-og.jpg">
+    <!-- HAWIH_HREFLANG_START -->
+    <link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/service-refresh">
+    <link rel="alternate" hreflang="en" href="https://hawih.com.sa/en/service-refresh">
+    <link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/service-refresh">
+    <!-- HAWIH_HREFLANG_END -->
     <!-- HAWIH_SEO_HEAD_END -->
 
     <!-- Template Styles Start -->
@@ -1248,7 +1249,8 @@
           "name": "Qatar"
         }
       ],
-      "url": "https://hawih.com.sa/service-refresh"
+      "url": "https://hawih.com.sa/service-refresh",
+      "inLanguage": "ar-SA"
     }
     </script>
     <script type="application/ld+json">

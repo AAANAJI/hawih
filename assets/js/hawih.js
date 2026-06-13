@@ -15,7 +15,12 @@
   root.classList.remove('dark');
   try { localStorage.removeItem('theme'); } catch (e) {}
 
-  /* ---------- Language ---------- */
+  /* ---------- Language ----------
+     URL is the source of truth: /<x> is Arabic, /en/<x> is English.
+     The toggle button navigates between the two mirrored URLs.
+     applyLanguage() remains exposed (window.Hawih.applyLanguage) for
+     dynamically injected nodes (e.g. the Shfrah promo modal) to sync
+     their lang-string children to the current document language. */
   let currentLang = root.lang === 'en' ? 'en' : 'ar';
   const langBtns = document.querySelectorAll('.langToggle');
 
@@ -37,21 +42,36 @@
       const val = el.getAttribute('data-' + attr + '-' + lang);
       if (attr && val != null) el.setAttribute(attr, val);
     });
+  }
 
-    try { localStorage.setItem('lang', lang); } catch (e) {}
+  /* Map current path → mirrored path on the other language tree. */
+  function mirroredPath(targetLang) {
+    const p = location.pathname;
+    if (targetLang === 'en') {
+      if (p === '/en' || p === '/en/' || p.indexOf('/en/') === 0) return null;
+      if (p === '/') return '/en/';
+      return '/en' + p;
+    }
+    /* targetLang === 'ar' */
+    if (p === '/en' || p === '/en/') return '/';
+    if (p.indexOf('/en/') === 0) return p.replace(/^\/en/, '');
+    return null;
   }
 
   langBtns.forEach(btn => {
     btn.addEventListener('click', e => {
       e.preventDefault();
-      applyLanguage(currentLang === 'ar' ? 'en' : 'ar');
+      const target = currentLang === 'ar' ? 'en' : 'ar';
+      const dest = mirroredPath(target);
+      try { localStorage.setItem('lang', target); } catch (_) {}
+      if (dest) {
+        location.assign(dest + location.search + location.hash);
+      } else {
+        /* Fallback: same URL serves both languages (legacy pages). */
+        applyLanguage(target);
+      }
     });
   });
-
-  try {
-    const saved = localStorage.getItem('lang');
-    if (saved && saved !== currentLang) applyLanguage(saved);
-  } catch (e) {}
 
   /* ---------- Mobile nav ---------- */
   const mobileToggle = document.querySelector('.mobileNavToggle');

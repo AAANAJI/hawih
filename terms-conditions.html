@@ -21,14 +21,10 @@
     <script>
       (function () {
         try {
-          var lang = localStorage.getItem('lang');
-          if (lang === 'en') {
-            document.documentElement.lang = 'en';
-            document.documentElement.dir = 'ltr';
-          } else if (lang === 'ar') {
-            document.documentElement.lang = 'ar';
-            document.documentElement.dir = 'rtl';
-          }
+          var p = location.pathname;
+          var lang = (p === '/en' || p.indexOf('/en/') === 0) ? 'en' : 'ar';
+          document.documentElement.lang = lang;
+          document.documentElement.dir = lang === 'en' ? 'ltr' : 'rtl';
         } catch (e) {}
       })();
     </script>
@@ -61,6 +57,11 @@
     <meta name="twitter:title" content="الشروط والأحكام · Terms &amp; Conditions — Hawih">
     <meta name="twitter:description" content="The terms and conditions that govern use of the Hawih agency site and engagement with the agency.">
     <meta name="twitter:image" content="https://hawih.com.sa/assets/img/hawih-og.jpg">
+    <!-- HAWIH_HREFLANG_START -->
+    <link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/terms-conditions">
+    <link rel="alternate" hreflang="en" href="https://hawih.com.sa/en/terms-conditions">
+    <link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/terms-conditions">
+    <!-- HAWIH_HREFLANG_END -->
     <!-- HAWIH_SEO_HEAD_END -->
 
     <!-- Template Styles Start -->
@@ -1218,6 +1219,7 @@
       "name": "الشروط والأحكام · Terms & Conditions — Hawih",
       "description": "الشروط والأحكام التي تَحكم استخدام موقع وكالة هوية والتعامل معها.",
       "url": "https://hawih.com.sa/terms-conditions",
+      "inLanguage": "ar-SA",
       "isPartOf": {
         "@id": "https://hawih.com.sa/#website"
       },

@@ -21,14 +21,10 @@
     <script>
       (function () {
         try {
-          var lang = localStorage.getItem('lang');
-          if (lang === 'en') {
-            document.documentElement.lang = 'en';
-            document.documentElement.dir = 'ltr';
-          } else if (lang === 'ar') {
-            document.documentElement.lang = 'ar';
-            document.documentElement.dir = 'rtl';
-          }
+          var p = location.pathname;
+          var lang = (p === '/en' || p.indexOf('/en/') === 0) ? 'en' : 'ar';
+          document.documentElement.lang = lang;
+          document.documentElement.dir = lang === 'en' ? 'ltr' : 'rtl';
         } catch (e) {}
       })();
     </script>
@@ -61,6 +57,11 @@
     <meta name="twitter:title" content="Work — Hawih · أعمالنا — 24 Saudi brands we built">
     <meta name="twitter:description" content="From hospitality and real estate to specialty coffee — twenty-four brands Hawih built between 2021 and 2024.">
     <meta name="twitter:image" content="https://hawih.com.sa/assets/img/hawih-og.jpg">
+    <!-- HAWIH_HREFLANG_START -->
+    <link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work">
+    <link rel="alternate" hreflang="en" href="https://hawih.com.sa/en/work">
+    <link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/work">
+    <!-- HAWIH_HREFLANG_END -->
     <!-- HAWIH_SEO_HEAD_END -->
 
     <!-- Template Styles Start -->

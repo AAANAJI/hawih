@@ -50,6 +50,20 @@ jobs:
         if: steps.gate.outputs.configured == 'true'
         run: sudo apt-get update -qq && sudo apt-get install -y -qq sshpass rsync
 
+      - name: Generate SEO artifacts (idempotent)
+        if: steps.gate.outputs.configured == 'true'
+        run: |
+          # All scripts are idempotent — re-running matches committed
+          # state. We re-run in CI as a safety net so the deployed tree
+          # is always in sync with the source-of-truth pages, sitemap
+          # lastmod is fresh, and the /en/ mirror reflects any AR edits
+          # someone made without running the build locally.
+          python3 scripts/inject-head.py
+          python3 scripts/optimize-images.py
+          python3 scripts/build-en-mirror.py
+          python3 scripts/inject-jsonld.py
+          python3 scripts/generate-sitemap.py
+
       - name: Build clean deploy tree
         if: steps.gate.outputs.configured == 'true'
         run: |

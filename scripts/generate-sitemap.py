@@ -97,23 +97,49 @@ def iter_html() -> list[Path]:
     return files
 
 
+def en_clean_url(filename: str) -> str:
+    if filename == "index.html":
+        return f"{SITE_ORIGIN}/en/"
+    return f"{SITE_ORIGIN}/en/{filename[:-5]}"
+
+
+def url_block(loc: str, alt_loc: str, lastmod: str, freq: str,
+              prio: float, ar_loc: str, en_loc: str) -> list[str]:
+    """One <url> block with hreflang xhtml:link trio."""
+    return [
+        "  <url>",
+        f"    <loc>{loc}</loc>",
+        f"    <lastmod>{lastmod}</lastmod>",
+        f"    <changefreq>{freq}</changefreq>",
+        f"    <priority>{prio:.1f}</priority>",
+        f'    <xhtml:link rel="alternate" hreflang="ar-SA" href="{ar_loc}"/>',
+        f'    <xhtml:link rel="alternate" hreflang="en" href="{en_loc}"/>',
+        f'    <xhtml:link rel="alternate" hreflang="x-default" href="{ar_loc}"/>',
+        "  </url>",
+    ]
+
+
 def build_xml(paths: list[Path]) -> str:
+    en_dir = REPO_ROOT / "en"
+    en_exists = en_dir.is_dir()
+
     lines = [
         '<?xml version="1.0" encoding="UTF-8"?>',
-        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">',
+        '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"',
+        '        xmlns:xhtml="http://www.w3.org/1999/xhtml">',
     ]
     for p in paths:
-        loc = clean_url(p.name)
+        ar_loc = clean_url(p.name)
+        en_loc = en_clean_url(p.name) if en_exists else ar_loc
         prio, freq = page_tier(p.name)
         lastmod = git_lastmod(p)
-        lines.extend([
-            "  <url>",
-            f"    <loc>{loc}</loc>",
-            f"    <lastmod>{lastmod}</lastmod>",
-            f"    <changefreq>{freq}</changefreq>",
-            f"    <priority>{prio:.1f}</priority>",
-            "  </url>",
-        ])
+        # AR variant entry
+        lines.extend(url_block(ar_loc, en_loc, lastmod, freq, prio,
+                               ar_loc, en_loc))
+        # EN variant entry (only if /en/ tree exists)
+        if en_exists:
+            lines.extend(url_block(en_loc, ar_loc, lastmod, freq, prio,
+                                   ar_loc, en_loc))
     lines.append("</urlset>")
     lines.append("")
     return "\n".join(lines)

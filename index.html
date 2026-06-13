@@ -21,14 +21,10 @@
     <script>
       (function () {
         try {
-          var lang = localStorage.getItem('lang');
-          if (lang === 'en') {
-            document.documentElement.lang = 'en';
-            document.documentElement.dir = 'ltr';
-          } else if (lang === 'ar') {
-            document.documentElement.lang = 'ar';
-            document.documentElement.dir = 'rtl';
-          }
+          var p = location.pathname;
+          var lang = (p === '/en' || p.indexOf('/en/') === 0) ? 'en' : 'ar';
+          document.documentElement.lang = lang;
+          document.documentElement.dir = lang === 'en' ? 'ltr' : 'rtl';
         } catch (e) {}
       })();
     </script>
@@ -61,6 +57,11 @@
     <meta name="twitter:title" content="Hawih — Creative Services Agency · Branding, UI/UX, Programming &amp; AI Since 2007">
     <meta name="twitter:description" content="Saudi creative agency in Riyadh, founded in 2007. Branding, websites, programming, social, and events — under one roof.">
     <meta name="twitter:image" content="https://hawih.com.sa/assets/img/hawih-og.jpg">
+    <!-- HAWIH_HREFLANG_START -->
+    <link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/">
+    <link rel="alternate" hreflang="en" href="https://hawih.com.sa/en/">
+    <link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/">
+    <!-- HAWIH_HREFLANG_END -->
     <!-- HAWIH_SEO_HEAD_END -->
 
     <!-- Template Styles Start -->

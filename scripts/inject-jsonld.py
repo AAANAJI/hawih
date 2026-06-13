@@ -122,10 +122,10 @@ WORK_META: dict[str, dict[str, str]] = {
 }
 
 
-def canonical(filename: str) -> str:
+def canonical(filename: str, prefix: str = "") -> str:
     if filename == "index.html":
-        return f"{SITE_ORIGIN}/"
-    return f"{SITE_ORIGIN}/{filename[:-5]}"
+        return f"{SITE_ORIGIN}{prefix}/"
+    return f"{SITE_ORIGIN}{prefix}/{filename[:-5]}"
 
 
 def read_meta(content: str, attr: str, value: str) -> str:
@@ -153,49 +153,62 @@ def org_ref() -> dict:
     return {"@id": ORG_ID}
 
 
-def breadcrumb(filename: str) -> dict:
+def page_url(slug_or_filename: str, prefix: str) -> str:
+    """Public URL for a clean slug (no .html). prefix is '' or '/en'."""
+    if slug_or_filename in ("", "index", "index.html", "/"):
+        return f"{SITE_ORIGIN}{prefix}/"
+    slug = slug_or_filename[:-5] if slug_or_filename.endswith(".html") \
+        else slug_or_filename
+    return f"{SITE_ORIGIN}{prefix}/{slug}"
+
+
+def lang_tag(prefix: str) -> str:
+    return "en" if prefix == "/en" else "ar-SA"
+
+
+def breadcrumb(filename: str, prefix: str) -> dict | None:
     """Build BreadcrumbList for a page."""
+    if filename == "index.html":
+        return None
     items = [{
         "@type": "ListItem",
         "position": 1,
         "name": "Home",
-        "item": f"{SITE_ORIGIN}/",
+        "item": page_url("index", prefix),
     }]
-    slug = filename[:-5]  # strip .html
-    if filename == "index.html":
-        return None
+    slug = filename[:-5]
     if slug.startswith("service-"):
         items.append({
             "@type": "ListItem",
             "position": 2,
             "name": "Services",
-            "item": f"{SITE_ORIGIN}/services",
+            "item": page_url("services", prefix),
         })
         items.append({
             "@type": "ListItem",
             "position": 3,
             "name": SERVICE_META.get(slug, {}).get("name", slug.replace("-", " ").title()),
-            "item": f"{SITE_ORIGIN}/{slug}",
+            "item": page_url(slug, prefix),
         })
     elif slug.startswith("work-"):
         items.append({
             "@type": "ListItem",
             "position": 2,
             "name": "Work",
-            "item": f"{SITE_ORIGIN}/work",
+            "item": page_url("work", prefix),
         })
         items.append({
             "@type": "ListItem",
             "position": 3,
             "name": WORK_META.get(slug, {}).get("name", slug.replace("-", " ").title()),
-            "item": f"{SITE_ORIGIN}/{slug}",
+            "item": page_url(slug, prefix),
         })
     else:
         items.append({
             "@type": "ListItem",
             "position": 2,
             "name": slug.replace("-", " ").title(),
-            "item": f"{SITE_ORIGIN}/{slug}",
+            "item": page_url(slug, prefix),
         })
     return {
         "@context": "https://schema.org",
@@ -204,7 +217,7 @@ def breadcrumb(filename: str) -> dict:
     }
 
 
-def website_block() -> dict:
+def website_block(prefix: str) -> dict:
     return {
         "@context": "https://schema.org",
         "@type": "WebSite",
@@ -218,20 +231,20 @@ def website_block() -> dict:
             "@type": "SearchAction",
             "target": {
                 "@type": "EntryPoint",
-                "urlTemplate": f"{SITE_ORIGIN}/?q={{search_term_string}}",
+                "urlTemplate": f"{SITE_ORIGIN}{prefix}/?q={{search_term_string}}",
             },
             "query-input": "required name=search_term_string",
         },
     }
 
 
-def services_itemlist() -> dict:
+def services_itemlist(prefix: str) -> dict:
     items = []
     for i, (slug, meta) in enumerate(SERVICE_META.items(), start=1):
         items.append({
             "@type": "ListItem",
             "position": i,
-            "url": f"{SITE_ORIGIN}/{slug}",
+            "url": page_url(slug, prefix),
             "name": meta["name"],
         })
     return {
@@ -242,7 +255,7 @@ def services_itemlist() -> dict:
     }
 
 
-def service_block(slug: str, content: str) -> dict:
+def service_block(slug: str, content: str, prefix: str) -> dict:
     meta = SERVICE_META.get(slug, {})
     name = meta.get("name", slug.replace("-", " ").title())
     name_ar = meta.get("name_ar", "")
@@ -251,7 +264,7 @@ def service_block(slug: str, content: str) -> dict:
     block = {
         "@context": "https://schema.org",
         "@type": "Service",
-        "@id": f"{SITE_ORIGIN}/{slug}#service",
+        "@id": f"{page_url(slug, prefix)}#service",
         "name": name,
         "alternateName": name_ar,
         "description": desc,
@@ -265,14 +278,15 @@ def service_block(slug: str, content: str) -> dict:
             {"@type": "Country", "name": "Oman"},
             {"@type": "Country", "name": "Qatar"},
         ],
-        "url": f"{SITE_ORIGIN}/{slug}",
+        "url": page_url(slug, prefix),
+        "inLanguage": lang_tag(prefix),
     }
     if not name_ar:
         block.pop("alternateName")
     return block
 
 
-def creative_work_block(slug: str, content: str) -> dict:
+def creative_work_block(slug: str, content: str, prefix: str) -> dict:
     meta = WORK_META.get(slug, {})
     name = meta.get("name", slug.replace("-", " ").title())
     desc = read_meta(content, "name", "description") or \
@@ -280,36 +294,37 @@ def creative_work_block(slug: str, content: str) -> dict:
     return {
         "@context": "https://schema.org",
         "@type": "CreativeWork",
-        "@id": f"{SITE_ORIGIN}/{slug}#work",
+        "@id": f"{page_url(slug, prefix)}#work",
         "name": name,
         "description": desc,
         "creator": org_ref(),
-        "url": f"{SITE_ORIGIN}/{slug}",
-        "inLanguage": "ar-SA",
+        "url": page_url(slug, prefix),
+        "inLanguage": lang_tag(prefix),
     }
 
 
-def about_block() -> dict:
+def about_block(prefix: str) -> dict:
     return {
         "@context": "https://schema.org",
         "@type": "AboutPage",
-        "@id": f"{SITE_ORIGIN}/about#aboutpage",
+        "@id": f"{page_url('about', prefix)}#aboutpage",
         "name": "About Hawih",
-        "url": f"{SITE_ORIGIN}/about",
+        "url": page_url("about", prefix),
         "mainEntity": org_ref(),
+        "inLanguage": lang_tag(prefix),
     }
 
 
-def localbusiness_block() -> dict:
+def localbusiness_block(prefix: str) -> dict:
     """LocalBusiness for /contact — extends Organization with geo + hours."""
     org = org_block()
-    lb = {
+    return {
         "@context": "https://schema.org",
         "@type": "LocalBusiness",
         "@id": f"{SITE_ORIGIN}/#localbusiness",
         "name": org["name"],
         "image": org["image"],
-        "url": f"{SITE_ORIGIN}/contact",
+        "url": page_url("contact", prefix),
         "telephone": org["contactPoint"][0]["telephone"],
         "priceRange": "$$-$$$",
         "address": org["address"],
@@ -328,10 +343,9 @@ def localbusiness_block() -> dict:
         "sameAs": org["sameAs"],
         "parentOrganization": org_ref(),
     }
-    return lb
 
 
-def faqpage_block() -> dict:
+def faqpage_block(prefix: str) -> dict:
     """FAQPage for /quality-guarantee — high-leverage rich result."""
     qa = [
         {
@@ -354,7 +368,8 @@ def faqpage_block() -> dict:
     return {
         "@context": "https://schema.org",
         "@type": "FAQPage",
-        "@id": f"{SITE_ORIGIN}/quality-guarantee#faqpage",
+        "@id": f"{page_url('quality-guarantee', prefix)}#faqpage",
+        "inLanguage": lang_tag(prefix),
         "mainEntity": [
             {
                 "@type": "Question",
@@ -369,78 +384,79 @@ def faqpage_block() -> dict:
     }
 
 
-def webpage_block(filename: str, content: str) -> dict:
+def webpage_block(filename: str, content: str, prefix: str) -> dict:
     title = read_meta(content, "property", "og:title") or get_title(content)
     desc = read_meta(content, "name", "description")
+    url = page_url(filename, prefix)
     return {
         "@context": "https://schema.org",
         "@type": "WebPage",
-        "@id": f"{canonical(filename)}#webpage",
+        "@id": f"{url}#webpage",
         "name": title,
         "description": desc,
-        "url": canonical(filename),
+        "url": url,
+        "inLanguage": lang_tag(prefix),
         "isPartOf": {"@id": f"{SITE_ORIGIN}/#website"},
         "publisher": org_ref(),
     }
 
 
-def schemas_for(filename: str, content: str) -> list[dict]:
+def schemas_for(filename: str, content: str, prefix: str = "") -> list[dict]:
     """Return the list of JSON-LD blocks for a given page."""
     org = org_block()
     out = [org]
 
-    bc = breadcrumb(filename)
+    bc = breadcrumb(filename, prefix)
 
     if filename == "index.html":
-        out.append(website_block())
+        out.append(website_block(prefix))
     elif filename == "services.html":
-        out.append(services_itemlist())
+        out.append(services_itemlist(prefix))
         if bc:
             out.append(bc)
     elif filename.startswith("service-"):
-        out.append(service_block(filename[:-5], content))
+        out.append(service_block(filename[:-5], content, prefix))
         if bc:
             out.append(bc)
     elif filename == "work.html":
         if bc:
             out.append(bc)
     elif filename.startswith("work-"):
-        out.append(creative_work_block(filename[:-5], content))
+        out.append(creative_work_block(filename[:-5], content, prefix))
         if bc:
             out.append(bc)
     elif filename == "about.html":
-        out.append(about_block())
+        out.append(about_block(prefix))
         if bc:
             out.append(bc)
     elif filename == "contact.html":
-        out.append(localbusiness_block())
+        out.append(localbusiness_block(prefix))
         if bc:
             out.append(bc)
     elif filename == "quality-guarantee.html":
-        out.append(faqpage_block())
+        out.append(faqpage_block(prefix))
         if bc:
             out.append(bc)
     elif filename in ("careers.html", "affiliate.html",
                       "privacy-policy.html", "terms-conditions.html",
                       "thank-you.html"):
-        out.append(webpage_block(filename, content))
+        out.append(webpage_block(filename, content, prefix))
         if bc:
             out.append(bc)
     else:
-        out.append(webpage_block(filename, content))
+        out.append(webpage_block(filename, content, prefix))
         if bc:
             out.append(bc)
 
     return out
 
 
-def render_block(filename: str, content: str) -> str:
-    schemas = schemas_for(filename, content)
+def render_block(filename: str, content: str, prefix: str = "") -> str:
+    schemas = schemas_for(filename, content, prefix)
     lines = [f"    {START_ANCHOR}",
              "    <!-- SEO: JSON-LD structured data (Phase 1) -->"]
     for s in schemas:
         body = json.dumps(s, ensure_ascii=False, indent=2)
-        # Indent each line by 4 spaces so it nests cleanly inside <head>.
         body_indented = "\n".join("    " + line for line in body.splitlines())
         lines.append('    <script type="application/ld+json">')
         lines.append(body_indented)
@@ -449,9 +465,9 @@ def render_block(filename: str, content: str) -> str:
     return "\n".join(lines)
 
 
-def update_file(path: Path, check: bool) -> bool:
+def update_file(path: Path, check: bool, prefix: str = "") -> bool:
     original = path.read_text(encoding="utf-8")
-    new_block = render_block(path.name, original)
+    new_block = render_block(path.name, original, prefix)
 
     if START_ANCHOR in original and END_ANCHOR in original:
         pattern = re.compile(
@@ -480,15 +496,24 @@ def update_file(path: Path, check: bool) -> bool:
     return True
 
 
-def iter_html() -> list[Path]:
-    files = []
+def iter_html() -> list[tuple[Path, str]]:
+    """Yield (path, prefix) pairs for AR root *.html and EN /en/*.html."""
+    pairs = []
     for child in sorted(REPO_ROOT.iterdir()):
         if child.is_dir() or child.suffix != ".html":
             continue
         if child.name in EXCLUDE_FILES:
             continue
-        files.append(child)
-    return files
+        pairs.append((child, ""))
+    en_dir = REPO_ROOT / "en"
+    if en_dir.is_dir():
+        for child in sorted(en_dir.iterdir()):
+            if child.suffix != ".html":
+                continue
+            if child.name in EXCLUDE_FILES:
+                continue
+            pairs.append((child, "/en"))
+    return pairs
 
 
 def main() -> int:
@@ -496,16 +521,16 @@ def main() -> int:
     parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
 
-    files = iter_html()
+    pairs = iter_html()
     changed = 0
-    for path in files:
-        if update_file(path, args.check):
+    for path, prefix in pairs:
+        if update_file(path, args.check, prefix):
             changed += 1
-            print(f"  ~ {path.name}")
+            print(f"  ~ {prefix or '(ar)'} {path.name}")
         else:
-            print(f"  = {path.name}")
+            print(f"  = {prefix or '(ar)'} {path.name}")
     verb = "would change" if args.check else "updated"
-    print(f"\n{changed}/{len(files)} files {verb}.")
+    print(f"\n{changed}/{len(pairs)} files {verb}.")
     if args.check and changed:
         return 1
     return 0

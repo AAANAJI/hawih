@@ -39,6 +39,30 @@ START_ANCHOR = "<!-- HAWIH_SEO_HEAD_START -->"
 END_ANCHOR = "<!-- HAWIH_SEO_HEAD_END -->"
 FB_END_ANCHOR = "<!-- Facebook Metadata End -->"
 
+# URL-aware FOUC language guard. Replaces the legacy localStorage-only
+# version with one that derives lang from the URL (/en/* = en; / = ar).
+# This is the only correct behaviour now that /en/ pages exist —
+# trusting localStorage alone would flash AR styling on EN URLs.
+FOUC_GUARD_BLOCK = """    <!-- FOUC guard: pick lang before paint -->
+    <script>
+      (function () {
+        try {
+          var p = location.pathname;
+          var lang = (p === '/en' || p.indexOf('/en/') === 0) ? 'en' : 'ar';
+          document.documentElement.lang = lang;
+          document.documentElement.dir = lang === 'en' ? 'ltr' : 'rtl';
+        } catch (e) {}
+      })();
+    </script>"""
+
+# Legacy FOUC guard regex — matches the previous localStorage-based
+# implementation so we can replace it idempotently.
+LEGACY_FOUC_RE = re.compile(
+    r"[ \t]*<!--\s*FOUC guard[^>]*-->\s*"
+    r"<script>\s*\(function\s*\(\)\s*\{.*?\}\)\(\);\s*</script>",
+    re.DOTALL,
+)
+
 ARTICLE_PREFIXES = ("service-", "work-")
 
 
@@ -101,21 +125,32 @@ def build_block(filename: str, content: str) -> str:
     )
 
 
+def update_fouc_guard(content: str) -> str:
+    """Idempotently replace the legacy FOUC guard with the URL-aware one."""
+    if LEGACY_FOUC_RE.search(content):
+        return LEGACY_FOUC_RE.sub(FOUC_GUARD_BLOCK, content, count=1)
+    return content
+
+
 def update_file(path: Path, check: bool) -> bool:
     """Return True if the file was (or would be) changed."""
     original = path.read_text(encoding="utf-8")
     new_block = build_block(path.name, original)
 
+    # First normalize the FOUC guard (idempotent — no-op if already
+    # the URL-aware version).
+    working = update_fouc_guard(original)
+
     # If the bracketed block exists, replace it. Otherwise insert
     # immediately after the FB metadata anchor.
-    if START_ANCHOR in original and END_ANCHOR in original:
+    if START_ANCHOR in working and END_ANCHOR in working:
         pattern = re.compile(
             rf"[ \t]*{re.escape(START_ANCHOR)}.*?{re.escape(END_ANCHOR)}",
             re.DOTALL,
         )
-        updated = pattern.sub(new_block, original, count=1)
-    elif FB_END_ANCHOR in original:
-        updated = original.replace(
+        updated = pattern.sub(new_block, working, count=1)
+    elif FB_END_ANCHOR in working:
+        updated = working.replace(
             FB_END_ANCHOR,
             f"{FB_END_ANCHOR}\n\n{new_block}",
             1,
