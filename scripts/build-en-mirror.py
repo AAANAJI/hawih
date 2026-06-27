@@ -237,6 +237,56 @@ def update_og_url(content: str, en_url_abs: str) -> str:
     )
 
 
+def _read_helper(content: str, name: str) -> str | None:
+    m = re.search(
+        rf'<meta\s+name="{re.escape(name)}"\s+content="([^"]*)"\s*>',
+        content, re.IGNORECASE,
+    )
+    return m.group(1) if m else None
+
+
+def localize_en_meta(content: str) -> str:
+    """Localise <title>, meta description, and og:title / og:description on
+    the EN clone using the opt-in `hawih:*-en` helper meta tags, then strip
+    those helpers. No-op when the helpers are absent, so hand-authored pages
+    without them are left exactly as they are. (Twitter Card tags are derived
+    from og:* by inject-head.py, which runs after this — so they inherit the
+    English text automatically.)"""
+    title_en = _read_helper(content, "hawih:title-en")
+    desc_en = _read_helper(content, "hawih:description-en")
+    ogt_en = _read_helper(content, "hawih:og-title-en")
+    ogd_en = _read_helper(content, "hawih:og-description-en")
+    if not any([title_en, desc_en, ogt_en, ogd_en]):
+        return content
+    if title_en:
+        content = re.sub(r"<title>.*?</title>",
+                         f"<title>{title_en}</title>",
+                         content, count=1, flags=re.DOTALL)
+    if desc_en:
+        content = re.sub(
+            r'<meta\s+name="description"\s+content="[^"]*"\s*>',
+            f'<meta name="description" content="{desc_en}">',
+            content, count=1, flags=re.IGNORECASE)
+    if ogt_en:
+        content = re.sub(
+            r'<meta\s+property="og:title"\s+content="[^"]*"\s*>',
+            f'<meta property="og:title" content="{ogt_en}">',
+            content, count=1, flags=re.IGNORECASE)
+    if ogd_en:
+        content = re.sub(
+            r'<meta\s+property="og:description"\s+content="[^"]*"\s*>',
+            f'<meta property="og:description" content="{ogd_en}">',
+            content, count=1, flags=re.IGNORECASE)
+    # Drop the helper comment + the four helper <meta> tags from the EN output.
+    content = re.sub(
+        r"[ \t]*<!-- EN locale metadata.*?-->\n?",
+        "", content, count=1, flags=re.DOTALL)
+    content = re.sub(
+        r'[ \t]*<meta\s+name="hawih:[a-z-]+-en"\s+content="[^"]*"\s*>\n?',
+        "", content, flags=re.IGNORECASE)
+    return content
+
+
 def update_og_locale(content: str) -> str:
     """On the EN page, swap og:locale to en_US and alternate to ar_SA."""
     content = re.sub(
@@ -334,6 +384,7 @@ def transform_for_en(filename: str, original: str) -> str:
     content = update_canonical(content, en_abs)
     content = update_og_url(content, en_abs)
     content = update_og_locale(content)
+    content = localize_en_meta(content)
     content = inject_hreflang(content, build_hreflang_block(ar_abs, en_abs))
     content = inject_form_lang(content)
     content = strip_jsonld(content)

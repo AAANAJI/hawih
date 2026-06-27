@@ -102,10 +102,18 @@ PAGES = [
                     "logo design riyadh, hawih",
         "og_title": "تصميم شعار احترافي | هوية Hawih",
         "og_desc": "شعار يعبّر عن علامتك — من استوديو هوية، خبرة منذ ٢٠٠٧.",
+        "title_en": "Professional Logo Design in Riyadh | Hawih",
+        "description_en": "Professional logo design that captures your brand "
+                          "— crafted with care, delivered in every format. "
+                          "Hawih, a Saudi studio since 2007. Request your "
+                          "logo; we reply within one working day.",
+        "og_title_en": "Professional Logo Design | Hawih",
+        "og_desc_en": "A logo that captures your brand — from Hawih studio, "
+                      "since 2007.",
         "eyebrow": ("تصميم الشعارات · الرياض", "Logo design · Riyadh"),
         "h1": ("تصميم شعار", "Logo Design"),
         "sub": ("شعار يعبّر عن شخصية علامتك ويبقى راسخاً في ذهن عميلك — "
-                "مصمَّم بعناية، بصِيَغ جاهزة لكل استخدام.",
+                "مصمَّم بعناية، بصيغ جاهزة لكل استخدام.",
                 "A logo that captures your brand's character and stays in "
                 "your customer's mind — crafted with care, delivered in "
                 "every format you need."),
@@ -164,6 +172,14 @@ PAGES = [
                     "brand identity riyadh, هوية الرياض, hawih",
         "og_title": "تصميم هوية بصرية متكاملة | هوية Hawih",
         "og_desc": "نظام هوية متكامل يميّز علامتك — استوديو هوية، منذ ٢٠٠٧.",
+        "title_en": "Full Brand Identity Design in Riyadh | Hawih",
+        "description_en": "Complete brand identity: logo, colours, type, and "
+                          "a clear application system. Hawih, a Saudi studio "
+                          "since 2007. Start your identity; we reply within "
+                          "one working day.",
+        "og_title_en": "Full Brand Identity Design | Hawih",
+        "og_desc_en": "A complete identity system that sets your brand apart "
+                      "— Hawih, since 2007.",
         "eyebrow": ("الهوية البصرية · الرياض", "Brand identity · Riyadh"),
         "h1": ("الهوية البصرية", "Brand Identity"),
         "sub": ("نظام بصري متكامل — من الشعار إلى الألوان والخطوط وقواعد "
@@ -226,6 +242,14 @@ PAGES = [
                     "company profile design, ملف الشركة, hawih",
         "og_title": "تصميم بروفايل شركة احترافي | هوية Hawih",
         "og_desc": "ملف تعريفي يعرض شركتك بثقة — ثنائي اللغة، من استوديو هوية.",
+        "title_en": "Professional Company Profile Design | Hawih",
+        "description_en": "Professional, bilingual company profile design that "
+                          "presents your services with confidence. Hawih "
+                          "studio, since 2007. Request your profile; we reply "
+                          "within one working day.",
+        "og_title_en": "Professional Company Profile Design | Hawih",
+        "og_desc_en": "A profile that presents your company with confidence "
+                      "— bilingual, from Hawih studio.",
         "eyebrow": ("البروفايل والملف التعريفي · الرياض",
                     "Company profile · Riyadh"),
         "h1": ("بروفايل شركة", "Company Profile"),
@@ -287,6 +311,13 @@ PAGES = [
                     "website design riyadh, تصميم متجر, hawih",
         "og_title": "تصميم مواقع إلكترونية احترافية | هوية Hawih",
         "og_desc": "موقع سريع ثنائي اللغة يحوّل الزوّار إلى عملاء — استوديو هوية.",
+        "title_en": "Professional Website Design in Riyadh | Hawih",
+        "description_en": "Fast, bilingual, mobile-friendly website design "
+                          "that turns visitors into customers. Hawih, a Saudi "
+                          "studio in Riyadh since 2007.",
+        "og_title_en": "Professional Website Design | Hawih",
+        "og_desc_en": "A fast, bilingual website that turns visitors into "
+                      "customers — from Hawih.",
         "eyebrow": ("تصميم المواقع · الرياض", "Website design · Riyadh"),
         "h1": ("تصميم موقع إلكتروني", "Website Design"),
         "sub": ("موقع سريع ومتوافق مع الجوال وثنائي اللغة — مصمَّم حول رحلة "
@@ -349,6 +380,13 @@ PAGES = [
                     "content writing arabic, كاتب محتوى, hawih",
         "og_title": "كتابة محتوى احترافي وتسويقي | هوية Hawih",
         "og_desc": "محتوى عربي وإنجليزي بنبرة علامتك — من استوديو هوية.",
+        "title_en": "Professional Marketing Content Writing (AR & EN) | Hawih",
+        "description_en": "Professional content writing in Arabic and English: "
+                          "website copy, social content, and marketing copy in "
+                          "your brand's voice. Hawih studio, since 2007.",
+        "og_title_en": "Professional Content Writing | Hawih",
+        "og_desc_en": "Arabic & English content in your brand's voice — from "
+                      "Hawih studio.",
         "eyebrow": ("كتابة المحتوى · عربي وإنجليزي",
                     "Content writing · Arabic & English"),
         "h1": ("كتابة المحتوى", "Content Writing"),
@@ -608,7 +646,7 @@ CSS = r""":root{
   --blue:#1F1FFE; --blue-hover:#1414D6; --blue-soft:rgba(31,31,254,.10);
   --ink:#0B0B10; --ink-2:#14141C; --ink-line:rgba(255,255,255,.12);
   --paper:#F4F1EB; --paper-2:#E9E4D7; --line:rgba(11,11,16,.12);
-  --muted:rgba(11,11,16,.62); --white:#fff; --wa:#25D366;
+  --muted:rgba(11,11,16,.68); --white:#fff; --wa:#25D366;
   --r:16px; --r-lg:22px; --maxw:1160px;
   --shadow:0 1px 2px rgba(11,11,16,.04),0 10px 30px rgba(11,11,16,.07);
   --font-ar:"IBM Plex Sans Arabic","Inter",system-ui,Segoe UI,Tahoma,sans-serif;
@@ -625,6 +663,16 @@ button{font-family:inherit}
 .lp-wrap{width:100%;max-width:var(--maxw);margin-inline:auto;padding-inline:22px}
 .lp-wrap--narrow{max-width:820px}
 .lp-center{text-align:center}
+
+/* a11y: skip link + keyboard focus */
+.lp-skip{position:absolute;inset-inline-start:-9999px;top:0;z-index:100;
+  background:var(--ink);color:#fff;padding:.7em 1.1em;
+  border-radius:0 0 10px 10px;font-weight:600;text-decoration:none}
+.lp-skip:focus{inset-inline-start:0}
+:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:3px}
+.lp-btn--primary:focus-visible,.lp-btn--wa:focus-visible{outline-color:var(--ink)}
+.lp-input:focus-visible{outline:none}
+.lp-cta :focus-visible{outline-color:var(--paper)}
 
 /* buttons */
 .lp-btn{display:inline-flex;align-items:center;justify-content:center;gap:.55em;
@@ -888,6 +936,13 @@ def render(page: dict) -> str:
     <meta property="og:image" content="https://hawih.com.sa/assets/img/hawih-og.jpg">
     <!-- Facebook Metadata End -->
 
+    <!-- EN locale metadata (consumed by scripts/build-en-mirror.py to localise
+         title / description / og:* on the /en mirror; ignored by crawlers) -->
+    <meta name="hawih:title-en" content="{e(page['title_en'])}">
+    <meta name="hawih:description-en" content="{e(page['description_en'])}">
+    <meta name="hawih:og-title-en" content="{e(page['og_title_en'])}">
+    <meta name="hawih:og-description-en" content="{e(page['og_desc_en'])}">
+
     <!-- Template Styles Start -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -899,6 +954,7 @@ def render(page: dict) -> str:
   </head>
 
   <body>
+    <a class="lp-skip" href="#content">{ls("تخطَّ إلى المحتوى", "Skip to main content")}</a>
     <header class="lp-header">
       <div class="lp-wrap lp-header__inner">
         <a class="lp-logo" href="/" aria-label="Hawih · هوية"><img src="/assets/img/hawih-logo-black.png" alt="Hawih · هوية" width="120" height="34"></a>
