@@ -38,6 +38,24 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/affiliate"/>
   </url>
   <url>
+    <loc>https://hawih.com.sa/brand-identity</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/brand-identity"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://hawih.com.sa/en/brand-identity"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/brand-identity"/>
+  </url>
+  <url>
+    <loc>https://hawih.com.sa/en/brand-identity</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/brand-identity"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://hawih.com.sa/en/brand-identity"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/brand-identity"/>
+  </url>
+  <url>
     <loc>https://hawih.com.sa/careers</loc>
     <lastmod>2026-06-13</lastmod>
     <changefreq>monthly</changefreq>
@@ -54,6 +72,24 @@
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/careers"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://hawih.com.sa/en/careers"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/careers"/>
+  </url>
+  <url>
+    <loc>https://hawih.com.sa/company-profile</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/company-profile"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://hawih.com.sa/en/company-profile"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/company-profile"/>
+  </url>
+  <url>
+    <loc>https://hawih.com.sa/en/company-profile</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/company-profile"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://hawih.com.sa/en/company-profile"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/company-profile"/>
   </url>
   <url>
     <loc>https://hawih.com.sa/contact</loc>
@@ -74,6 +110,24 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/contact"/>
   </url>
   <url>
+    <loc>https://hawih.com.sa/content-writing</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/content-writing"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://hawih.com.sa/en/content-writing"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/content-writing"/>
+  </url>
+  <url>
+    <loc>https://hawih.com.sa/en/content-writing</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/content-writing"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://hawih.com.sa/en/content-writing"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/content-writing"/>
+  </url>
+  <url>
     <loc>https://hawih.com.sa/</loc>
     <lastmod>2026-06-13</lastmod>
     <changefreq>weekly</changefreq>
@@ -90,6 +144,24 @@
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://hawih.com.sa/en/"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/"/>
+  </url>
+  <url>
+    <loc>https://hawih.com.sa/logo-design</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/logo-design"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://hawih.com.sa/en/logo-design"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/logo-design"/>
+  </url>
+  <url>
+    <loc>https://hawih.com.sa/en/logo-design</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/logo-design"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://hawih.com.sa/en/logo-design"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/logo-design"/>
   </url>
   <url>
     <loc>https://hawih.com.sa/privacy-policy</loc>
@@ -306,6 +378,24 @@
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/terms-conditions"/>
     <xhtml:link rel="alternate" hreflang="en" href="https://hawih.com.sa/en/terms-conditions"/>
     <xhtml:link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/terms-conditions"/>
+  </url>
+  <url>
+    <loc>https://hawih.com.sa/website-design</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/website-design"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://hawih.com.sa/en/website-design"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/website-design"/>
+  </url>
+  <url>
+    <loc>https://hawih.com.sa/en/website-design</loc>
+    <lastmod>2026-06-27</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/website-design"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://hawih.com.sa/en/website-design"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/website-design"/>
   </url>
   <url>
     <loc>https://hawih.com.sa/work-12p</loc>

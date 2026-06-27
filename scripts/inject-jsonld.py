@@ -93,6 +93,42 @@ SERVICE_META: dict[str, dict[str, str]] = {
     },
 }
 
+# PPC / SEO landing pages (scripts/build-landing-pages.py). Each emits a
+# Service schema + BreadcrumbList (Home → Services → page) so the ad
+# landing pages carry the same structured-data weight as service-*.html.
+LANDING_META: dict[str, dict[str, str]] = {
+    "logo-design": {
+        "name": "Logo Design",
+        "name_ar": "تصميم شعار",
+        "description": "Professional logo design — a primary mark with "
+                       "alternates, full vector files, and a usage guide.",
+    },
+    "brand-identity": {
+        "name": "Brand Identity",
+        "name_ar": "الهوية البصرية",
+        "description": "Complete brand identity systems — logo, colour, "
+                       "type, elements, applications, and a brand guideline.",
+    },
+    "company-profile": {
+        "name": "Company Profile Design",
+        "name_ar": "تصميم بروفايل شركة",
+        "description": "Bilingual company profile design — cover and inner "
+                       "pages, infographics, print-ready PDF, and open files.",
+    },
+    "website-design": {
+        "name": "Website Design",
+        "name_ar": "تصميم موقع إلكتروني",
+        "description": "Mobile-first, bilingual website UI/UX design built "
+                       "around the customer journey to drive conversions.",
+    },
+    "content-writing": {
+        "name": "Content Writing",
+        "name_ar": "كتابة المحتوى",
+        "description": "Bilingual content writing — website copy, social "
+                       "content, and marketing copy in your brand's voice.",
+    },
+}
+
 # Work case-study metadata (slug → bilingual project name).
 WORK_META: dict[str, dict[str, str]] = {
     "work-12p": {"name": "12P"},
@@ -203,6 +239,19 @@ def breadcrumb(filename: str, prefix: str) -> dict | None:
             "name": WORK_META.get(slug, {}).get("name", slug.replace("-", " ").title()),
             "item": page_url(slug, prefix),
         })
+    elif slug in LANDING_META:
+        items.append({
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Services",
+            "item": page_url("services", prefix),
+        })
+        items.append({
+            "@type": "ListItem",
+            "position": 3,
+            "name": LANDING_META[slug]["name"],
+            "item": page_url(slug, prefix),
+        })
     else:
         items.append({
             "@type": "ListItem",
@@ -256,7 +305,7 @@ def services_itemlist(prefix: str) -> dict:
 
 
 def service_block(slug: str, content: str, prefix: str) -> dict:
-    meta = SERVICE_META.get(slug, {})
+    meta = SERVICE_META.get(slug) or LANDING_META.get(slug, {})
     name = meta.get("name", slug.replace("-", " ").title())
     name_ar = meta.get("name_ar", "")
     desc = (read_meta(content, "name", "description")
@@ -415,6 +464,10 @@ def schemas_for(filename: str, content: str, prefix: str = "") -> list[dict]:
         if bc:
             out.append(bc)
     elif filename.startswith("service-"):
+        out.append(service_block(filename[:-5], content, prefix))
+        if bc:
+            out.append(bc)
+    elif filename[:-5] in LANDING_META:
         out.append(service_block(filename[:-5], content, prefix))
         if bc:
             out.append(bc)

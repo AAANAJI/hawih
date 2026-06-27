@@ -68,6 +68,12 @@ $PT_MAP = [
     /* English short codes (preferred — what /contact posts) */
     'brand-identity' => 'Brand Identity',
     'brand-refresh'  => 'Brand Refresh',
+    /* Landing-page ad groups (scripts/build-landing-pages.py). Values are
+       display strings for the CRM project_type field only — no CRM IDs. */
+    'logo-design'     => 'Logo Design',
+    'company-profile' => 'Company Profile',
+    'website-design'  => 'Website Design',
+    'content-writing' => 'Content Writing',
     'social-wasil'   => 'Social — Wasil',
     'hawih-pro'      => 'Personal Branding — Hawih Pro',
     'ui-ux'          => 'UI / UX',
