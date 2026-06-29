@@ -61,10 +61,14 @@ def page_tier(filename: str) -> tuple[float, str]:
     for name, prio, freq in TIERS:
         if filename == name:
             return prio, freq
+    if filename == "articles.html":
+        return (0.8, "weekly")
     if filename.startswith("service-"):
         return SERVICE_PRIO
     if filename.startswith("work-"):
         return WORK_PRIO
+    if filename.startswith("article-"):
+        return (0.7, "monthly")
     return DEFAULT_PRIO
 
 

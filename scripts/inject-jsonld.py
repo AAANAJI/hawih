@@ -142,6 +142,19 @@ def _load_landing_faq() -> dict:
 
 LANDING_FAQ = _load_landing_faq()
 
+# Article metadata sidecar (written by build-articles.py) → Article + FAQPage.
+ARTICLE_META_PATH = SEO_DIR / "article-meta.json"
+
+
+def _load_article_meta() -> dict:
+    try:
+        return json.loads(ARTICLE_META_PATH.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+
+
+ARTICLE_META = _load_article_meta()
+
 # Work case-study metadata (slug → bilingual project name).
 WORK_META: dict[str, dict[str, str]] = {
     "work-12p": {"name": "12P"},
@@ -263,6 +276,21 @@ def breadcrumb(filename: str, prefix: str) -> dict | None:
             "@type": "ListItem",
             "position": 3,
             "name": LANDING_META[slug]["name"],
+            "item": page_url(slug, prefix),
+        })
+    elif slug.startswith("article-"):
+        items.append({
+            "@type": "ListItem",
+            "position": 2,
+            "name": "Articles",
+            "item": page_url("articles", prefix),
+        })
+        meta = ARTICLE_META.get(slug, {})
+        key = "headline_en" if prefix == "/en" else "headline_ar"
+        items.append({
+            "@type": "ListItem",
+            "position": 3,
+            "name": meta.get(key) or slug.replace("-", " ").title(),
             "item": page_url(slug, prefix),
         })
     else:
@@ -467,6 +495,60 @@ def landing_faqpage_block(slug: str, prefix: str, faqs: list) -> dict:
     }
 
 
+def article_block(filename: str, prefix: str, meta: dict) -> dict:
+    """Article schema for an article-*.html page."""
+    is_en = prefix == "/en"
+    url = page_url(filename, prefix)
+    return {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "@id": f"{url}#article",
+        "headline": meta["headline_en"] if is_en else meta["headline_ar"],
+        "description": meta["desc_en"] if is_en else meta["desc_ar"],
+        "inLanguage": lang_tag(prefix),
+        "datePublished": meta.get("date", ""),
+        "dateModified": meta.get("date", ""),
+        "author": org_ref(),
+        "publisher": org_ref(),
+        "image": f"{SITE_ORIGIN}/assets/img/hawih-og.jpg",
+        "mainEntityOfPage": {"@type": "WebPage", "@id": f"{url}#webpage"},
+        "url": url,
+    }
+
+
+def article_faqpage_block(filename: str, prefix: str, meta: dict) -> dict | None:
+    faqs = meta.get("faq") or []
+    if not faqs:
+        return None
+    qkey, akey = ("q_en", "a_en") if prefix == "/en" else ("q_ar", "a_ar")
+    return {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "@id": f"{page_url(filename, prefix)}#faqpage",
+        "inLanguage": lang_tag(prefix),
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": f[qkey],
+                "acceptedAnswer": {"@type": "Answer", "text": f[akey]},
+            }
+            for f in faqs
+        ],
+    }
+
+
+def blog_block(prefix: str) -> dict:
+    return {
+        "@context": "https://schema.org",
+        "@type": "Blog",
+        "@id": f"{page_url('articles', prefix)}#blog",
+        "name": "Hawih Articles",
+        "url": page_url("articles", prefix),
+        "inLanguage": lang_tag(prefix),
+        "publisher": org_ref(),
+    }
+
+
 def webpage_block(filename: str, content: str, prefix: str) -> dict:
     title = read_meta(content, "property", "og:title") or get_title(content)
     desc = read_meta(content, "name", "description")
@@ -527,6 +609,19 @@ def schemas_for(filename: str, content: str, prefix: str = "") -> list[dict]:
             out.append(bc)
     elif filename == "quality-guarantee.html":
         out.append(faqpage_block(prefix))
+        if bc:
+            out.append(bc)
+    elif filename == "articles.html":
+        out.append(blog_block(prefix))
+        if bc:
+            out.append(bc)
+    elif filename.startswith("article-"):
+        meta = ARTICLE_META.get(filename[:-5])
+        if meta:
+            out.append(article_block(filename, prefix, meta))
+            fp = article_faqpage_block(filename, prefix, meta)
+            if fp:
+                out.append(fp)
         if bc:
             out.append(bc)
     elif filename in ("careers.html", "affiliate.html",
