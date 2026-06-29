@@ -324,6 +324,237 @@ ARTICLES = [
              "within one working day with a clear plan."),
         ],
     },
+    {
+        "slug": "choose-branding-agency",
+        "kw": ("كيف تختار شركة تصميم هوية بصرية في الرياض؟",
+               "How to Choose a Brand Identity Agency in Riyadh"),
+        "title": "كيف تختار شركة تصميم هوية بصرية في الرياض؟ دليل ٢٠٢٦ | هوية",
+        "description": "دليل عملي لاختيار شركة تصميم هوية بصرية في الرياض — "
+                       "معايير المقارنة، الأسئلة التي تطرحها، والأخطاء التي "
+                       "تتجنّبها قبل التوقيع. من استوديو هوية.",
+        "title_en": "How to Choose a Brand Identity Agency in Riyadh (2026) "
+                    "| Hawih",
+        "description_en": "A practical guide to choosing a brand identity "
+                          "agency in Riyadh — comparison criteria, the "
+                          "questions to ask, and the mistakes to avoid.",
+        "keywords": "اختيار شركة تصميم هوية, افضل شركة هوية بصرية الرياض, "
+                    "شركة تصميم شعار, branding agency riyadh",
+        "excerpt": ("معايير واضحة تساعدك على اختيار الشريك الصحيح لعلامتك "
+                    "قبل أن تدفع.",
+                    "Clear criteria to help you pick the right partner for "
+                    "your brand before you pay."),
+        "related": ["brand-identity", "logo-design"],
+        "sections": [
+            ("انظر إلى الأعمال لا إلى الوعود",
+             "Look at the work, not the promises",
+             [("أصدق دليل على قدرة أي شركة هو أعمالها السابقة. اطلب نماذج "
+               "حقيقية في مجالك أو قريبة منه، وانظر إلى التنوّع والاتّساق "
+               "والنتائج — لا إلى عدد المتابعين أو الشعارات اللامعة على "
+               "الموقع.",
+               "The truest proof of any studio is its past work. Ask for "
+               "real samples in or near your field, and look at range, "
+               "consistency, and results — not follower counts or shiny "
+               "logos on the homepage.")]),
+            ("اسأل عن العملية والملكية",
+             "Ask about process and ownership",
+             [("الشركة الجادة لديها عملية واضحة: اكتشاف، اتجاه، تنفيذ، "
+               "تسليم. اسأل: كم جولة تعديل؟ ما الملفات التي أستلمها؟ هل "
+               "أملك الحقوق كاملة؟ الإجابات الواضحة مؤشّر احترافية.",
+               "A serious studio has a clear process: discovery, direction, "
+               "execution, handover. Ask: how many revision rounds? which "
+               "files do I receive? do I own full rights? Clear answers are "
+               "a sign of professionalism.")]),
+            ("تجنّب هذه الأخطاء الشائعة",
+             "Avoid these common mistakes",
+             [("لا تختر على أساس السعر الأرخص وحده، ولا تتجاهل التواصل في "
+               "المرحلة الأولى — سرعة الرد ووضوحه ينبئان بتجربة العمل "
+               "كلها. واحذر من غياب أي عقد أو نطاق عمل مكتوب.",
+               "Don't choose on lowest price alone, and don't ignore "
+               "communication early on — reply speed and clarity preview the "
+               "whole engagement. And beware the absence of any written "
+               "contract or scope.")]),
+        ],
+        "faq": [
+            ("كيف أعرف أن الأعمال المعروضة حقيقية؟",
+             "How do I know the portfolio is real?",
+             "اطلب اسم العميل أو رابط المشروع المنشور، أو اسأل عن دور "
+             "الشركة تحديداً في كل عمل.",
+             "Ask for the client name or a link to the published project, or "
+             "ask what the studio's specific role was in each piece."),
+            ("هل الأغلى دائماً أفضل؟",
+             "Is more expensive always better?",
+             "ليس دائماً؛ الأهم توافق الخبرة والعملية مع احتياجك وميزانيتك. "
+             "السعر وحده ليس مقياس الجودة.",
+             "Not always; what matters is the fit of experience and process "
+             "with your need and budget. Price alone isn't a quality "
+             "measure."),
+            ("ما أهم سؤال أطرحه قبل التوقيع؟",
+             "What's the most important question before signing?",
+             "«ماذا أستلم بالضبط، ومن يملك الحقوق؟» — الوضوح هنا يحميك "
+             "لاحقاً.",
+             "“Exactly what do I receive, and who owns the rights?” — clarity "
+             "here protects you later."),
+            ("هل تقدّمون استشارة قبل البدء؟",
+             "Do you offer a consultation first?",
+             "نعم، نبدأ بجلسة قصيرة نفهم فيها نشاطك قبل أي التزام.",
+             "Yes — we start with a short session to understand your business "
+             "before any commitment."),
+        ],
+    },
+    {
+        "slug": "brand-identity-elements",
+        "kw": ("ما هي عناصر الهوية البصرية المتكاملة؟",
+               "What Are the Elements of a Complete Brand Identity?"),
+        "title": "ما هي عناصر الهوية البصرية المتكاملة؟ | هوية",
+        "description": "تعرّف على عناصر الهوية البصرية — الشعار، الألوان، "
+                       "الخطوط، العناصر، ودليل الاستخدام — وكيف تعمل معاً "
+                       "لعلامة متّسقة ومميّزة.",
+        "title_en": "What Are the Elements of a Complete Brand Identity? | "
+                    "Hawih",
+        "description_en": "The elements of a brand identity — logo, colour, "
+                          "type, graphic elements, and a usage guide — and "
+                          "how they work together for a consistent brand.",
+        "keywords": "عناصر الهوية البصرية, مكونات الهوية التجارية, دليل "
+                    "الهوية, brand identity elements",
+        "excerpt": ("الهوية أكثر من شعار — إليك مكوّناتها وكيف تتكامل.",
+                    "An identity is more than a logo — here are its parts "
+                    "and how they fit together."),
+        "related": ["brand-identity", "logo-design"],
+        "sections": [
+            ("الشعار ونظامه",
+             "The logo and its system",
+             [("الشعار هو حجر الأساس، لكنه يأتي بنسخ متعددة: أفقية "
+               "وعمودية وأيقونة، بألوان كاملة وأحادية، لتناسب كل سياق من "
+               "اللافتة إلى أيقونة التطبيق.",
+               "The logo is the cornerstone, but it comes in several "
+               "versions: horizontal, vertical, and icon, in full colour and "
+               "mono — to fit every context from a signboard to an app "
+               "icon.")]),
+            ("الألوان والخطوط",
+             "Colour and typography",
+             [("لوحة الألوان والخطوط تمنح علامتك صوتها البصري. تُختار بعناية "
+               "لتعبّر عن شخصيتك وتبقى واضحة على الشاشة والورق وبالعربية "
+               "والإنجليزية معاً.",
+               "Your colour palette and type give the brand its visual "
+               "voice. They're chosen to express your personality and stay "
+               "legible on screen and print, in Arabic and English alike.")]),
+            ("العناصر والأنماط",
+             "Graphic elements and patterns",
+             [("إلى جانب الشعار، تحتاج علامتك إلى عناصر داعمة: أنماط، "
+               "أيقونات، أسلوب صور، وتخطيطات. هذه العناصر تجعل تصاميمك "
+               "تبدو منتمية لعلامة واحدة حتى دون ظهور الشعار.",
+               "Beyond the logo, your brand needs supporting elements: "
+               "patterns, icons, a photography style, and layouts. These "
+               "make your designs feel like one brand even when the logo "
+               "isn't shown.")]),
+            ("دليل الاستخدام",
+             "The usage guide",
+             [("دليل الهوية يجمع القواعد: كيف ومتى تُستخدم العناصر، "
+               "والمسافات، والأخطاء الممنوعة. هو ما يضمن بقاء علامتك "
+               "متّسقة مهما تعدّد من يعمل عليها.",
+               "The brand guide gathers the rules: how and when elements are "
+               "used, spacing, and what to avoid. It's what keeps your brand "
+               "consistent no matter how many people work on it.")]),
+        ],
+        "faq": [
+            ("هل أحتاج كل هذه العناصر دفعةً واحدة؟",
+             "Do I need all these elements at once?",
+             "لا؛ يمكن البدء بالأساسيات (شعار، ألوان، خطوط) ثم التوسّع حسب "
+             "نموّك واحتياجك.",
+             "No; you can start with the essentials (logo, colours, type) "
+             "and expand as you grow and need more."),
+            ("ما الفرق بين الهوية ودليل الهوية؟",
+             "What's the difference between an identity and a brand guide?",
+             "الهوية هي العناصر نفسها؛ ودليل الهوية هو المستند الذي يشرح "
+             "قواعد استخدامها.",
+             "The identity is the elements themselves; the brand guide is "
+             "the document that explains the rules for using them."),
+            ("هل تصلح الهوية للعربية والإنجليزية؟",
+             "Does the identity work for Arabic and English?",
+             "نعم، نصمّم نظام الخطوط والعناصر ليعمل باللغتين منذ البداية.",
+             "Yes — we design the type system and elements to work in both "
+             "languages from the start."),
+            ("كم يستغرق بناء هوية متكاملة؟",
+             "How long does a full identity take?",
+             "عادةً عدة أسابيع حسب النطاق وعدد التطبيقات المطلوبة.",
+             "Usually several weeks, depending on scope and the number of "
+             "applications required."),
+        ],
+    },
+    {
+        "slug": "company-profile-guide",
+        "kw": ("كيف تكتب بروفايل شركة احترافي؟",
+               "How to Write a Professional Company Profile"),
+        "title": "كيف تكتب بروفايل شركة احترافي؟ خطوات ونصائح | هوية",
+        "description": "دليل كتابة بروفايل شركة احترافي — الأقسام الأساسية، "
+                       "نصائح المحتوى، وكيف يبرز ملفك التعريفي أمام العملاء "
+                       "والمناقصات. من استوديو هوية.",
+        "title_en": "How to Write a Professional Company Profile | Hawih",
+        "description_en": "A guide to writing a professional company profile "
+                          "— the essential sections, content tips, and how "
+                          "to stand out to clients and tenders.",
+        "keywords": "كيف تكتب بروفايل شركة, ملف تعريفي للشركة, محتوى بروفايل "
+                    "الشركة, company profile writing",
+        "excerpt": ("ما الذي يجعل الملف التعريفي مقنعاً — المحتوى قبل "
+                    "التصميم.",
+                    "What makes a profile persuasive — content before "
+                    "design."),
+        "related": ["company-profile", "content-writing"],
+        "sections": [
+            ("ابدأ بالأقسام الأساسية",
+             "Start with the essential sections",
+             [("البروفايل القوي يجيب على أسئلة العميل بترتيب منطقي: من "
+               "نحن، ماذا نقدّم، لماذا نحن، أعمالنا، وكيف نتواصل. ابدأ من "
+               "هذا الهيكل ثم خصّصه لنشاطك.",
+               "A strong profile answers the client's questions in a logical "
+               "order: who we are, what we offer, why us, our work, and how "
+               "to reach us. Start from this skeleton, then tailor it to "
+               "your business.")]),
+            ("اكتب للقارئ لا عن نفسك",
+             "Write for the reader, not about yourself",
+             [("بدّل التركيز من «نحن نقدّم» إلى «أنت تحصل على». تحدّث عن "
+               "المنفعة التي يجنيها العميل، وادعم كلامك بأرقام وأمثلة "
+               "حقيقية بدل العبارات العامة.",
+               "Shift the focus from “we provide” to “you get.” Talk about "
+               "the benefit the client gains, and back it with real numbers "
+               "and examples instead of generic phrases.")]),
+            ("اجعل التصميم يخدم المحتوى",
+             "Let design serve the content",
+             [("التصميم الجيّد يسهّل القراءة لا يزحمها: تسلسل واضح، مساحات "
+               "مريحة، وإنفوجرافيك للأرقام المهمة. وبنسخة ثنائية اللغة "
+               "تصل إلى جمهور أوسع.",
+               "Good design makes reading easier, not busier: a clear "
+               "hierarchy, comfortable spacing, and infographics for key "
+               "numbers. A bilingual version reaches a wider audience.")]),
+        ],
+        "faq": [
+            ("كم صفحة يجب أن يكون البروفايل؟",
+             "How many pages should a profile be?",
+             "لا يوجد رقم ثابت؛ المهم أن يغطّي ما يحتاجه القارئ دون حشو. "
+             "الوضوح أهم من الطول.",
+             "There's no fixed number; what matters is covering what the "
+             "reader needs without padding. Clarity beats length."),
+            ("هل أكتب المحتوى أم أوكله لمختص؟",
+             "Should I write it myself or hire a specialist?",
+             "إن كان لديك وضوح حول رسالتك يمكنك البدء؛ ومختص المحتوى "
+             "يصقلها ويرتّبها لتقنع أكثر.",
+             "If you're clear on your message you can start; a content "
+             "specialist then refines and structures it to be more "
+             "persuasive."),
+            ("هل أحتاج نسخة عربية وإنجليزية؟",
+             "Do I need Arabic and English versions?",
+             "إن كان جمهورك أو شركاؤك ثنائيي اللغة، فنعم — وهذا شائع في "
+             "السوق السعودي.",
+             "If your audience or partners are bilingual, yes — and that's "
+             "common in the Saudi market."),
+            ("هل تساعدون في الكتابة والتصميم معاً؟",
+             "Do you help with both writing and design?",
+             "نعم، يمكننا صياغة المحتوى وتصميم البروفايل كاملاً، أو تنسيق "
+             "محتواك الجاهز.",
+             "Yes — we can write the content and design the full profile, or "
+             "lay out content you already have."),
+        ],
+    },
 ]
 
 

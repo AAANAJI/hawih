@@ -97,5 +97,104 @@
         "a_en": "Send us a note about your business and goals; we'll reply within one working day with a clear plan."
       }
     ]
+  },
+  "article-choose-branding-agency": {
+    "headline_ar": "كيف تختار شركة تصميم هوية بصرية في الرياض؟",
+    "headline_en": "How to Choose a Brand Identity Agency in Riyadh",
+    "desc_ar": "دليل عملي لاختيار شركة تصميم هوية بصرية في الرياض — معايير المقارنة، الأسئلة التي تطرحها، والأخطاء التي تتجنّبها قبل التوقيع. من استوديو هوية.",
+    "desc_en": "A practical guide to choosing a brand identity agency in Riyadh — comparison criteria, the questions to ask, and the mistakes to avoid.",
+    "date": "2026-06-29",
+    "faq": [
+      {
+        "q_ar": "كيف أعرف أن الأعمال المعروضة حقيقية؟",
+        "q_en": "How do I know the portfolio is real?",
+        "a_ar": "اطلب اسم العميل أو رابط المشروع المنشور، أو اسأل عن دور الشركة تحديداً في كل عمل.",
+        "a_en": "Ask for the client name or a link to the published project, or ask what the studio's specific role was in each piece."
+      },
+      {
+        "q_ar": "هل الأغلى دائماً أفضل؟",
+        "q_en": "Is more expensive always better?",
+        "a_ar": "ليس دائماً؛ الأهم توافق الخبرة والعملية مع احتياجك وميزانيتك. السعر وحده ليس مقياس الجودة.",
+        "a_en": "Not always; what matters is the fit of experience and process with your need and budget. Price alone isn't a quality measure."
+      },
+      {
+        "q_ar": "ما أهم سؤال أطرحه قبل التوقيع؟",
+        "q_en": "What's the most important question before signing?",
+        "a_ar": "«ماذا أستلم بالضبط، ومن يملك الحقوق؟» — الوضوح هنا يحميك لاحقاً.",
+        "a_en": "“Exactly what do I receive, and who owns the rights?” — clarity here protects you later."
+      },
+      {
+        "q_ar": "هل تقدّمون استشارة قبل البدء؟",
+        "q_en": "Do you offer a consultation first?",
+        "a_ar": "نعم، نبدأ بجلسة قصيرة نفهم فيها نشاطك قبل أي التزام.",
+        "a_en": "Yes — we start with a short session to understand your business before any commitment."
+      }
+    ]
+  },
+  "article-brand-identity-elements": {
+    "headline_ar": "ما هي عناصر الهوية البصرية المتكاملة؟",
+    "headline_en": "What Are the Elements of a Complete Brand Identity?",
+    "desc_ar": "تعرّف على عناصر الهوية البصرية — الشعار، الألوان، الخطوط، العناصر، ودليل الاستخدام — وكيف تعمل معاً لعلامة متّسقة ومميّزة.",
+    "desc_en": "The elements of a brand identity — logo, colour, type, graphic elements, and a usage guide — and how they work together for a consistent brand.",
+    "date": "2026-06-29",
+    "faq": [
+      {
+        "q_ar": "هل أحتاج كل هذه العناصر دفعةً واحدة؟",
+        "q_en": "Do I need all these elements at once?",
+        "a_ar": "لا؛ يمكن البدء بالأساسيات (شعار، ألوان، خطوط) ثم التوسّع حسب نموّك واحتياجك.",
+        "a_en": "No; you can start with the essentials (logo, colours, type) and expand as you grow and need more."
+      },
+      {
+        "q_ar": "ما الفرق بين الهوية ودليل الهوية؟",
+        "q_en": "What's the difference between an identity and a brand guide?",
+        "a_ar": "الهوية هي العناصر نفسها؛ ودليل الهوية هو المستند الذي يشرح قواعد استخدامها.",
+        "a_en": "The identity is the elements themselves; the brand guide is the document that explains the rules for using them."
+      },
+      {
+        "q_ar": "هل تصلح الهوية للعربية والإنجليزية؟",
+        "q_en": "Does the identity work for Arabic and English?",
+        "a_ar": "نعم، نصمّم نظام الخطوط والعناصر ليعمل باللغتين منذ البداية.",
+        "a_en": "Yes — we design the type system and elements to work in both languages from the start."
+      },
+      {
+        "q_ar": "كم يستغرق بناء هوية متكاملة؟",
+        "q_en": "How long does a full identity take?",
+        "a_ar": "عادةً عدة أسابيع حسب النطاق وعدد التطبيقات المطلوبة.",
+        "a_en": "Usually several weeks, depending on scope and the number of applications required."
+      }
+    ]
+  },
+  "article-company-profile-guide": {
+    "headline_ar": "كيف تكتب بروفايل شركة احترافي؟",
+    "headline_en": "How to Write a Professional Company Profile",
+    "desc_ar": "دليل كتابة بروفايل شركة احترافي — الأقسام الأساسية، نصائح المحتوى، وكيف يبرز ملفك التعريفي أمام العملاء والمناقصات. من استوديو هوية.",
+    "desc_en": "A guide to writing a professional company profile — the essential sections, content tips, and how to stand out to clients and tenders.",
+    "date": "2026-06-29",
+    "faq": [
+      {
+        "q_ar": "كم صفحة يجب أن يكون البروفايل؟",
+        "q_en": "How many pages should a profile be?",
+        "a_ar": "لا يوجد رقم ثابت؛ المهم أن يغطّي ما يحتاجه القارئ دون حشو. الوضوح أهم من الطول.",
+        "a_en": "There's no fixed number; what matters is covering what the reader needs without padding. Clarity beats length."
+      },
+      {
+        "q_ar": "هل أكتب المحتوى أم أوكله لمختص؟",
+        "q_en": "Should I write it myself or hire a specialist?",
+        "a_ar": "إن كان لديك وضوح حول رسالتك يمكنك البدء؛ ومختص المحتوى يصقلها ويرتّبها لتقنع أكثر.",
+        "a_en": "If you're clear on your message you can start; a content specialist then refines and structures it to be more persuasive."
+      },
+      {
+        "q_ar": "هل أحتاج نسخة عربية وإنجليزية؟",
+        "q_en": "Do I need Arabic and English versions?",
+        "a_ar": "إن كان جمهورك أو شركاؤك ثنائيي اللغة، فنعم — وهذا شائع في السوق السعودي.",
+        "a_en": "If your audience or partners are bilingual, yes — and that's common in the Saudi market."
+      },
+      {
+        "q_ar": "هل تساعدون في الكتابة والتصميم معاً؟",
+        "q_en": "Do you help with both writing and design?",
+        "a_ar": "نعم، يمكننا صياغة المحتوى وتصميم البروفايل كاملاً، أو تنسيق محتواك الجاهز.",
+        "a_en": "Yes — we can write the content and design the full profile, or lay out content you already have."
+      }
+    ]
   }
 }
