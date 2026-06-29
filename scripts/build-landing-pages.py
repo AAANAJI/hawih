@@ -43,6 +43,7 @@ Idempotent: re-running overwrites the AR root files in place.
 from __future__ import annotations
 
 import html
+import json
 from pathlib import Path
 from urllib.parse import quote
 
@@ -1043,10 +1044,22 @@ def render(page: dict) -> str:
 
 
 def main() -> int:
+    faq_sidecar: dict[str, list] = {}
     for page in PAGES:
         out = REPO_ROOT / f"{page['slug']}.html"
         out.write_text(render(page), encoding="utf-8")
+        faq_sidecar[page["slug"]] = [
+            {"q_ar": q_ar, "q_en": q_en, "a_ar": a_ar, "a_en": a_en}
+            for (q_ar, q_en, a_ar, a_en) in page["faq"]
+        ]
         print(f"  ~ {out.name}")
+    # FAQ sidecar — single source of truth shared with inject-jsonld.py so the
+    # FAQPage schema always matches the visible <details> FAQ on each page.
+    sidecar = REPO_ROOT / "seo" / "jsonld" / "landing-faq.json"
+    sidecar.write_text(
+        json.dumps(faq_sidecar, ensure_ascii=False, indent=2) + "\n",
+        encoding="utf-8")
+    print(f"  ~ {sidecar.relative_to(REPO_ROOT)}")
     print(f"\n{len(PAGES)} landing pages written.")
     return 0
 

@@ -1,0 +1,132 @@
+{
+  "logo-design": [
+    {
+      "q_ar": "كم يستغرق تصميم الشعار؟",
+      "q_en": "How long does a logo take?",
+      "a_ar": "يعتمد على نطاق العمل، لكن معظم مشاريع الشعار تكتمل خلال أيام إلى أسبوعين بعد اعتماد الاتجاه.",
+      "a_en": "It depends on scope, but most logo projects finish within a few days to two weeks after the direction is approved."
+    },
+    {
+      "q_ar": "هل أحصل على الملفات المفتوحة؟",
+      "q_en": "Do I get the open files?",
+      "a_ar": "نعم، نسلّمك الملفات المتجهة المفتوحة وحقوق الاستخدام كاملة دون رسوم إضافية.",
+      "a_en": "Yes — you receive the open vector files and full usage rights with no extra fees."
+    },
+    {
+      "q_ar": "كم عدد المقترحات وجولات التعديل؟",
+      "q_en": "How many concepts and revisions?",
+      "a_ar": "نتّفق على عدد المقترحات وجولات المراجعة في بداية المشروع حتى تكون الصورة واضحة من البداية.",
+      "a_en": "We agree on the number of concepts and review rounds at the start so expectations are clear from day one."
+    },
+    {
+      "q_ar": "هل تعملون خارج الرياض؟",
+      "q_en": "Do you work outside Riyadh?",
+      "a_ar": "نعم، نخدم عملاء في كل أنحاء السعودية ودول الخليج — والعمل يتم عن بُعد بسلاسة.",
+      "a_en": "Yes — we serve clients across Saudi Arabia and the GCC; everything runs smoothly remotely."
+    }
+  ],
+  "brand-identity": [
+    {
+      "q_ar": "ما الفرق بين الشعار والهوية البصرية؟",
+      "q_en": "What's the difference between a logo and a brand identity?",
+      "a_ar": "الشعار جزء من الهوية. الهوية البصرية نظام كامل يشمل الشعار والألوان والخطوط والعناصر وقواعد تطبيقها على كل وسائطك.",
+      "a_en": "A logo is one part of an identity. A brand identity is the full system — logo, colours, type, elements, and the rules for applying them across all your media."
+    },
+    {
+      "q_ar": "كم يستغرق مشروع الهوية؟",
+      "q_en": "How long does an identity project take?",
+      "a_ar": "مشاريع الهوية المتكاملة تستغرق عادةً عدة أسابيع حسب النطاق وعدد التطبيقات المطلوبة.",
+      "a_en": "Full identity projects usually take several weeks depending on scope and the number of applications required."
+    },
+    {
+      "q_ar": "هل أحصل على دليل الهوية والملفات المصدرية؟",
+      "q_en": "Do I get the brand guide and source files?",
+      "a_ar": "نعم، تستلم دليل الهوية وكل الملفات المفتوحة وحقوق استخدامها كاملة.",
+      "a_en": "Yes — you receive the brand guideline, all open files, and full rights to use them."
+    },
+    {
+      "q_ar": "لديّ هوية قديمة، هل تطوّرونها؟",
+      "q_en": "I have an old identity — can you refresh it?",
+      "a_ar": "نعم، نوازن بين تطوير علامتك والحفاظ على ما يعرفه جمهورك عنها دون فقدان الرصيد المتراكم.",
+      "a_en": "Yes — we evolve your brand while keeping what your audience already recognises, without losing its equity."
+    }
+  ],
+  "company-profile": [
+    {
+      "q_ar": "هل تكتبون المحتوى أم أوفّره أنا؟",
+      "q_en": "Do you write the content or do I provide it?",
+      "a_ar": "يمكننا التنسيق على محتواك الجاهز، أو نساعدك في صياغته وترتيبه — أخبرنا بما يناسبك.",
+      "a_en": "We can lay out your ready content, or help you write and structure it — tell us what suits you."
+    },
+    {
+      "q_ar": "كم صفحة يتضمّن البروفايل؟",
+      "q_en": "How many pages does a profile include?",
+      "a_ar": "يعتمد على نشاطك ومحتواك؛ نتّفق على عدد الصفحات والأقسام في بداية المشروع.",
+      "a_en": "It depends on your business and content; we agree on page count and sections at the start."
+    },
+    {
+      "q_ar": "هل التصميم ثنائي اللغة فعلاً؟",
+      "q_en": "Is the design truly bilingual?",
+      "a_ar": "نعم، نصمّم العربية والإنجليزية معاً منذ البداية — وليست ترجمة لاحقة مقحَمة على التصميم.",
+      "a_en": "Yes — we design Arabic and English together from the start, not a translation bolted on afterward."
+    },
+    {
+      "q_ar": "هل أستطيع تحديث البروفايل لاحقاً؟",
+      "q_en": "Can I update the profile later?",
+      "a_ar": "نعم، نسلّمك الملفات المفتوحة لتحدّث الأرقام والمحتوى عند الحاجة.",
+      "a_en": "Yes — we hand off the open files so you can update numbers and content whenever you need."
+    }
+  ],
+  "website-design": [
+    {
+      "q_ar": "هل تبرمجون الموقع أم التصميم فقط؟",
+      "q_en": "Do you build the site or just design it?",
+      "a_ar": "نركّز على التصميم والتجربة (UI/UX). أمّا التطوير والبرمجة فيتولّاها فريق شفرة الشقيق المتخصّص — ونصلك بالفريق المناسب.",
+      "a_en": "We focus on design and experience (UI/UX). Development is handled by our specialised sister studio, Shfrah, and we connect you to the right team."
+    },
+    {
+      "q_ar": "هل الموقع متوافق مع الجوال؟",
+      "q_en": "Is the site mobile-friendly?",
+      "a_ar": "نعم، نصمّم بمنهجية الجوال أولاً لأن معظم الزيارات في السعودية تأتي من الجوال.",
+      "a_en": "Yes — we design mobile-first, since most traffic in Saudi Arabia comes from mobile."
+    },
+    {
+      "q_ar": "هل يدعم الموقع العربية والإنجليزية؟",
+      "q_en": "Does the site support Arabic and English?",
+      "a_ar": "نعم، نصمّم الاتجاهين (RTL وLTR) معاً مع خطوط مناسبة لكل لغة.",
+      "a_en": "Yes — we design both directions (RTL and LTR) together, with type suited to each language."
+    },
+    {
+      "q_ar": "كم يستغرق تصميم الموقع؟",
+      "q_en": "How long does website design take?",
+      "a_ar": "يعتمد على عدد الصفحات والنطاق؛ نتّفق على جدول واضح بعد جلسة الاكتشاف.",
+      "a_en": "It depends on page count and scope; we agree on a clear timeline after the discovery session."
+    }
+  ],
+  "content-writing": [
+    {
+      "q_ar": "هل تكتبون بالعربية والإنجليزية؟",
+      "q_en": "Do you write in Arabic and English?",
+      "a_ar": "نعم، نكتب باللغتين بنبرة طبيعية لكل لغة — وليست ترجمة حرفية.",
+      "a_en": "Yes — we write in both languages with a natural tone for each, not a literal translation."
+    },
+    {
+      "q_ar": "هل تكتبون لمجال نشاطي تحديداً؟",
+      "q_en": "Can you write for my specific industry?",
+      "a_ar": "نبدأ بفهم مجالك وجمهورك ونبرة علامتك قبل الكتابة حتى يكون المحتوى دقيقاً وملائماً.",
+      "a_en": "We start by understanding your field, audience, and brand voice before writing, so the content is accurate and relevant."
+    },
+    {
+      "q_ar": "هل تشمل الخدمة إدارة الحسابات؟",
+      "q_en": "Does this include account management?",
+      "a_ar": "نوفّر المحتوى والصياغة؛ ويمكن التنسيق على خطة نشر منتظمة حسب احتياجك.",
+      "a_en": "We provide the content and copy; we can also arrange a regular publishing plan to fit your needs."
+    },
+    {
+      "q_ar": "كيف نبدأ؟",
+      "q_en": "How do we start?",
+      "a_ar": "أرسل لنا نبذة عن نشاطك ونوع المحتوى المطلوب، ونرد عليك خلال يوم عمل بخطة واضحة.",
+      "a_en": "Send us a note about your business and the content you need; we'll reply within one working day with a clear plan."
+    }
+  ]
+}

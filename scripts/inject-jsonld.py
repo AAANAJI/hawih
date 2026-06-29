@@ -129,6 +129,19 @@ LANDING_META: dict[str, dict[str, str]] = {
     },
 }
 
+# Landing-page FAQ sidecar (written by build-landing-pages.py) → FAQPage.
+LANDING_FAQ_PATH = SEO_DIR / "landing-faq.json"
+
+
+def _load_landing_faq() -> dict:
+    try:
+        return json.loads(LANDING_FAQ_PATH.read_text(encoding="utf-8"))
+    except (OSError, ValueError):
+        return {}
+
+
+LANDING_FAQ = _load_landing_faq()
+
 # Work case-study metadata (slug → bilingual project name).
 WORK_META: dict[str, dict[str, str]] = {
     "work-12p": {"name": "12P"},
@@ -433,6 +446,27 @@ def faqpage_block(prefix: str) -> dict:
     }
 
 
+def landing_faqpage_block(slug: str, prefix: str, faqs: list) -> dict:
+    """FAQPage for a landing page, built from the FAQ sidecar so it always
+    matches the visible <details> FAQ. Uses AR or EN text per `prefix`."""
+    is_en = prefix == "/en"
+    qkey, akey = ("q_en", "a_en") if is_en else ("q_ar", "a_ar")
+    return {
+        "@context": "https://schema.org",
+        "@type": "FAQPage",
+        "@id": f"{page_url(slug, prefix)}#faqpage",
+        "inLanguage": lang_tag(prefix),
+        "mainEntity": [
+            {
+                "@type": "Question",
+                "name": f[qkey],
+                "acceptedAnswer": {"@type": "Answer", "text": f[akey]},
+            }
+            for f in faqs
+        ],
+    }
+
+
 def webpage_block(filename: str, content: str, prefix: str) -> dict:
     title = read_meta(content, "property", "og:title") or get_title(content)
     desc = read_meta(content, "name", "description")
@@ -459,6 +493,7 @@ def schemas_for(filename: str, content: str, prefix: str = "") -> list[dict]:
 
     if filename == "index.html":
         out.append(website_block(prefix))
+        out.append(localbusiness_block(prefix))
     elif filename == "services.html":
         out.append(services_itemlist(prefix))
         if bc:
@@ -468,7 +503,11 @@ def schemas_for(filename: str, content: str, prefix: str = "") -> list[dict]:
         if bc:
             out.append(bc)
     elif filename[:-5] in LANDING_META:
-        out.append(service_block(filename[:-5], content, prefix))
+        slug = filename[:-5]
+        out.append(service_block(slug, content, prefix))
+        faqs = LANDING_FAQ.get(slug)
+        if faqs:
+            out.append(landing_faqpage_block(slug, prefix, faqs))
         if bc:
             out.append(bc)
     elif filename == "work.html":
