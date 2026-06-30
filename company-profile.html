@@ -2,7 +2,7 @@
 <html lang="ar" dir="rtl">
 
   <head>
-    <script>(function(){try{var e=document.documentElement;e.setAttribute("data-theme","light");e.classList.add("light-mode");e.style.colorScheme="light";}catch(_){}})();</script>
+    <!--uc-theme-init--><script>(function(){try{var e=document.documentElement;e.setAttribute("data-theme","light");e.setAttribute("color-scheme","light");e.classList.add("light-mode");e.classList.remove("dark");e.style.colorScheme="light";localStorage.setItem("template.theme","light");}catch(_){}})();</script>
     <meta charset="UTF-8">
 
     <!-- Page Title -->
@@ -13,6 +13,7 @@
     <meta name="keywords" content="بروفايل شركة, ملف تعريفي, تصميم بروفايل, company profile design, ملف الشركة, hawih">
     <meta name="author" content="Hawih">
 
+    <!-- Viewport Meta-->
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 
@@ -31,6 +32,7 @@
     <!-- Template Favicon & Icons Start -->
     <link rel="icon" type="image/png" href="/assets/img/favicon.png" sizes="any">
     <link rel="apple-touch-icon" href="/assets/img/favicon.png">
+    <link rel="manifest" href="/uc-assets/img/favicon/manifest.webmanifest">
     <!-- Template Favicon & Icons End -->
 
     <!-- Facebook Metadata Start -->
@@ -38,9 +40,14 @@
     <meta property="og:image:width" content="1200">
     <meta property="og:title" content="تصميم بروفايل شركة احترافي | هوية Hawih">
     <meta property="og:description" content="ملف تعريفي يعرض شركتك بثقة — ثنائي اللغة، من استوديو هوية.">
-    <meta property="og:url" content="https://hawih.com.sa/company-profile">
+    <meta property="og:url" content="https://hawih.com.sa/about">
     <meta property="og:image" content="https://hawih.com.sa/assets/img/hawih-og.jpg">
     <!-- Facebook Metadata End -->
+    <!-- EN locale metadata (consumed by build-en-mirror.py) -->
+    <meta name="hawih:title-en" content="Professional Company Profile Design | Hawih">
+    <meta name="hawih:description-en" content="Professional, bilingual company profile design that presents your services with confidence. Hawih studio, since 2007. Request your profile; we reply within one working day.">
+    <meta name="hawih:og-title-en" content="Professional Company Profile Design | Hawih">
+    <meta name="hawih:og-description-en" content="A profile that presents your company with confidence — bilingual, from Hawih studio.">
 
     <!-- HAWIH_SEO_HEAD_START -->
     <!-- SEO: canonical, robots, OG completion, Twitter Cards -->
@@ -56,23 +63,20 @@
     <meta name="twitter:description" content="ملف تعريفي يعرض شركتك بثقة — ثنائي اللغة، من استوديو هوية.">
     <meta name="twitter:image" content="https://hawih.com.sa/assets/img/hawih-og.jpg">
     <!-- HAWIH_SEO_HEAD_END -->
+    <!-- HAWIH_HREFLANG_START -->
+    <link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/company-profile">
+    <link rel="alternate" hreflang="en" href="https://hawih.com.sa/en/company-profile">
+    <link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/company-profile">
+    <!-- HAWIH_HREFLANG_END -->
     <!-- HAWIH_MEASUREMENT_START -->
     <!-- Google Tag Manager -->
     <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src='https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);})(window,document,'script','dataLayer','GTM-N3BWDWG');</script>
     <!-- End Google Tag Manager -->
     <!-- HAWIH_MEASUREMENT_END -->
 
-    <!-- EN locale metadata (consumed by scripts/build-en-mirror.py to localise
-         title / description / og:* on the /en mirror; ignored by crawlers) -->
-    <meta name="hawih:title-en" content="Professional Company Profile Design | Hawih">
-    <meta name="hawih:description-en" content="Professional, bilingual company profile design that presents your services with confidence. Hawih studio, since 2007. Request your profile; we reply within one working day.">
-    <meta name="hawih:og-title-en" content="Professional Company Profile Design | Hawih">
-    <meta name="hawih:og-description-en" content="A profile that presents your company with confidence — bilingual, from Hawih studio.">
-
     <!-- Template Styles Start -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap">
+    <link rel="stylesheet" type="text/css" href="/uc-assets/css/plugins.min.css">
+    <link rel="stylesheet" type="text/css" href="/uc-assets/css/main.min.css">
     <!-- Template Styles End -->
 
     <!-- HAWIH_PERF_HEAD_START -->
@@ -81,251 +85,1030 @@
     <link rel="stylesheet" type="text/css" href="/assets/css/tailwind-shim.css?v=9a27f0aa8f">
     <!-- HAWIH_PERF_HEAD_END -->
 
+    <!-- Custom Styles Start -->
     <style>
-:root{
-  --blue:#1F1FFE; --blue-hover:#1414D6; --blue-soft:rgba(31,31,254,.10);
-  --ink:#0B0B10; --ink-2:#14141C; --ink-line:rgba(255,255,255,.12);
-  --paper:#F4F1EB; --paper-2:#E9E4D7; --line:rgba(11,11,16,.12);
-  --muted:rgba(11,11,16,.68); --white:#fff; --wa:#25D366;
-  --r:16px; --r-lg:22px; --maxw:1160px;
-  --shadow:0 1px 2px rgba(11,11,16,.04),0 10px 30px rgba(11,11,16,.07);
-  --font-ar:"IBM Plex Sans Arabic","Inter",system-ui,Segoe UI,Tahoma,sans-serif;
-}
-*,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;overflow-x:clip}
-body{overflow-x:clip;max-width:100%}
-body{margin:0;background:var(--paper);color:var(--ink);
-  font-family:var(--font-ar);font-size:17px;line-height:1.7;
-  -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
-img{max-width:100%;display:block}
-a{color:inherit;text-decoration:none}
-h1,h2,h3,p{margin:0}
-button{font-family:inherit}
-.lp-wrap{width:100%;max-width:var(--maxw);margin-inline:auto;padding-inline:22px}
-.lp-wrap--narrow{max-width:820px}
-.lp-center{text-align:center}
 
-/* a11y: skip link + keyboard focus */
-.lp-skip{position:absolute;inset-inline-start:-9999px;top:0;z-index:100;
-  background:var(--ink);color:#fff;padding:.7em 1.1em;
-  border-radius:0 0 10px 10px;font-weight:600;text-decoration:none}
-.lp-skip:focus{inset-inline-start:0}
-:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:3px}
-.lp-btn--primary:focus-visible,.lp-btn--wa:focus-visible{outline-color:var(--ink)}
-.lp-input:focus-visible{outline:none}
-.lp-cta :focus-visible{outline-color:var(--paper)}
+      /* RTL Layout Styles */
+      [dir="rtl"] {
+        text-align: right;
+      }
 
-/* buttons */
-.lp-btn{display:inline-flex;align-items:center;justify-content:center;gap:.55em;
-  padding:.78em 1.4em;border-radius:999px;border:1.5px solid transparent;
-  font-weight:600;font-size:.98rem;cursor:pointer;line-height:1;
-  transition:transform .18s ease,background .18s ease,color .18s ease,border-color .18s ease,box-shadow .18s ease}
-.lp-btn:hover{transform:translateY(-2px)}
-.lp-btn--primary{background:var(--blue);color:#fff}
-.lp-btn--primary:hover{background:var(--blue-hover)}
-.lp-btn--wa{background:var(--wa);color:#fff}
-.lp-btn--wa:hover{box-shadow:0 10px 26px rgba(37,211,102,.4);color:#fff}
-.lp-btn--outline{background:transparent;color:var(--ink);border-color:var(--line)}
-.lp-btn--outline:hover{border-color:var(--ink)}
-.lp-btn--ghost{background:transparent;color:inherit;border-color:currentColor;opacity:.85}
-.lp-btn--ghost:hover{opacity:1}
-.lp-btn--lg{padding:1em 1.7em;font-size:1.05rem}
-.lp-btn--block{width:100%}
-.lp-arrow{transition:transform .18s ease}
-[dir="rtl"] .lp-arrow{transform:scaleX(-1)}
-[dir="rtl"] .lp-btn:hover .lp-arrow{transform:scaleX(-1) translate(-2px,-2px)}
-[dir="ltr"] .lp-btn:hover .lp-arrow{transform:translate(2px,-2px)}
+      [dir="rtl"] .mxd-header__controls {
+        flex-direction: row-reverse;
+      }
 
-/* header */
-.lp-header{position:sticky;top:0;z-index:40;
-  background:rgba(244,241,235,.82);backdrop-filter:saturate(140%) blur(12px);
-  border-bottom:1px solid var(--line)}
-.lp-header__inner{display:flex;align-items:center;justify-content:space-between;
-  gap:14px;height:66px}
-.lp-logo img{height:34px;width:auto}
-.lp-header__actions{display:flex;align-items:center;gap:10px}
-.lp-langtoggle{background:transparent;border:1.5px solid var(--line);
-  color:var(--ink);width:40px;height:40px;border-radius:50%;font-weight:600;
-  cursor:pointer;font-size:.85rem;transition:border-color .18s ease}
-.lp-langtoggle:hover{border-color:var(--ink)}
-.lp-header__actions .lp-btn{padding:.6em 1.05em;font-size:.9rem}
-.lp-header__call{display:inline-flex}
+      [dir="rtl"] .main-menu__content {
+        text-align: right;
+      }
 
-/* hero */
-.lp-hero{padding:54px 0 38px}
-.lp-hero__grid{display:grid;grid-template-columns:1.05fr .95fr;gap:46px;
-  align-items:start}
-.lp-eyebrow{display:inline-block;font-size:.82rem;font-weight:600;
-  letter-spacing:.02em;color:var(--blue);background:var(--blue-soft);
-  padding:.4em .9em;border-radius:999px;margin-bottom:18px}
-.lp-h1{font-size:clamp(2.3rem,6vw,3.7rem);line-height:1.12;font-weight:700;
-  letter-spacing:-.01em}
-.lp-sub{margin-top:18px;font-size:1.16rem;color:var(--muted);max-width:34ch}
-.lp-chips{list-style:none;margin:24px 0 0;padding:0;display:flex;
-  flex-wrap:wrap;gap:10px 18px}
-.lp-chip{display:inline-flex;align-items:center;gap:.5em;font-size:.95rem;
-  font-weight:500}
-.lp-chip svg{color:var(--blue);flex:none}
-.lp-hero__cta{display:flex;flex-wrap:wrap;gap:12px;margin-top:28px}
-.lp-hero__cta.lp-center{justify-content:center}
-.lp-hero__note{margin-top:14px;font-size:.9rem;color:var(--muted)}
+      [dir="rtl"] .mxd-hero-01__title {
+        text-align: right;
+      }
 
-/* form card */
-.lp-card{background:var(--white);border:1px solid var(--line);
-  border-radius:var(--r-lg);padding:26px;box-shadow:var(--shadow)}
-.lp-card__title{font-size:1.4rem;font-weight:700}
-.lp-card__sub{margin-top:6px;color:var(--muted);font-size:.96rem;
-  margin-bottom:18px}
-.lp-form{display:flex;flex-direction:column;gap:13px}
-.lp-field{display:flex;flex-direction:column;gap:6px}
-.lp-label{font-size:.88rem;font-weight:600}
-.lp-input{width:100%;padding:.72em .9em;border:1.5px solid var(--line);
-  border-radius:12px;background:#fdfcfa;font-family:inherit;font-size:1rem;
-  color:var(--ink);transition:border-color .15s ease,box-shadow .15s ease}
-.lp-input::placeholder{color:rgba(11,11,16,.4)}
-.lp-input:focus{outline:none;border-color:var(--blue);
-  box-shadow:0 0 0 3px var(--blue-soft)}
-.lp-textarea{resize:vertical;min-height:84px;line-height:1.6}
-.field--error{border-color:#d33!important;box-shadow:0 0 0 3px rgba(221,51,51,.12)!important}
-.lp-form__note{font-size:.82rem;color:var(--muted);margin-top:2px}
-.lp-form__wa{display:inline-flex;align-items:center;justify-content:center;
-  gap:.5em;color:var(--wa);font-weight:600;font-size:.95rem;margin-top:2px}
-.lp-hp{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+      [dir="rtl"] .mxd-hero-01__data-descr {
+        text-align: right;
+      }
 
-/* logos */
-.lp-logos{padding:22px 0 6px}
-.lp-logos__label{text-align:center;font-size:.84rem;color:var(--muted);
-  margin-bottom:16px}
-.lp-logos__row{display:flex;flex-wrap:wrap;align-items:center;
-  justify-content:center;gap:26px 38px}
-.lp-logos__img{height:34px;width:auto;opacity:.55;filter:grayscale(1);
-  transition:opacity .2s ease,filter .2s ease}
-.lp-logos__img:hover{opacity:1;filter:grayscale(0)}
+      [dir="rtl"] .mxd-services-stack__title {
+        text-align: right;
+      }
 
-/* sections */
-.lp-section{padding:56px 0}
-.lp-section--alt{background:var(--paper-2)}
-.lp-h2{font-size:clamp(1.6rem,3.4vw,2.3rem);font-weight:700;line-height:1.2;
-  letter-spacing:-.01em}
-.lp-section .lp-eyebrow{margin-bottom:12px}
-.lp-section .lp-h2.lp-center{margin-bottom:34px}
+      [dir="rtl"] .mxd-services-stack__info {
+        text-align: right;
+      }
 
-/* deliverables */
-.lp-grid{list-style:none;margin:0;padding:0;display:grid;
-  grid-template-columns:repeat(3,1fr);gap:14px}
-.lp-tile{display:flex;align-items:flex-start;gap:.7em;background:var(--white);
-  border:1px solid var(--line);border-radius:var(--r);padding:18px 18px;
-  font-weight:500;font-size:1rem;box-shadow:var(--shadow)}
-.lp-tile__ic{flex:none;display:inline-flex;align-items:center;
-  justify-content:center;width:30px;height:30px;border-radius:9px;
-  background:var(--blue-soft);color:var(--blue);margin-top:1px}
+      [dir="rtl"] .mxd-testimonials-card__text {
+        text-align: right;
+      }
 
-/* process */
-.lp-steps{list-style:none;margin:0;padding:0;display:grid;
-  grid-template-columns:repeat(4,1fr);gap:16px;counter-reset:none}
-.lp-step{background:var(--white);border:1px solid var(--line);
-  border-radius:var(--r);padding:22px 20px}
-.lp-step__n{display:inline-block;font-size:1.05rem;font-weight:700;
-  color:var(--blue);background:var(--blue-soft);border-radius:9px;
-  padding:.15em .55em;margin-bottom:12px}
-.lp-step__title{font-size:1.12rem;font-weight:700;margin-bottom:6px}
-.lp-step__txt{color:var(--muted);font-size:.96rem}
+      [dir="rtl"] .mxd-approach-list__title {
+        text-align: right;
+      }
 
-/* work */
-.lp-work{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;
-  margin-bottom:26px}
-.lp-work__item{position:relative;border-radius:var(--r);overflow:hidden;
-  border:1px solid var(--line);aspect-ratio:4/3;background:var(--paper-2);
-  box-shadow:var(--shadow)}
-.lp-work__img{width:100%;height:100%;object-fit:cover;
-  transition:transform .35s ease}
-.lp-work__item:hover .lp-work__img{transform:scale(1.05)}
-.lp-work__name{position:absolute;inset-block-end:12px;inset-inline-start:12px;
-  background:rgba(11,11,16,.72);color:#fff;font-size:.82rem;font-weight:600;
-  padding:.3em .8em;border-radius:999px;backdrop-filter:blur(4px)}
-.lp-textlink{display:inline-flex;align-items:center;gap:.4em;color:var(--blue);
-  font-weight:600}
-.lp-textlink:hover{text-decoration:underline}
+      [dir="rtl"] .mxd-approach-list__descr {
+        text-align: right;
+      }
 
-/* faq */
-.lp-faq{display:flex;flex-direction:column;gap:10px}
-.lp-faq__item{background:var(--white);border:1px solid var(--line);
-  border-radius:var(--r);overflow:hidden}
-.lp-faq__q{display:flex;align-items:center;justify-content:space-between;
-  gap:14px;padding:17px 20px;font-weight:600;cursor:pointer;list-style:none}
-.lp-faq__q::-webkit-details-marker{display:none}
-.lp-faq__sign{flex:none;position:relative;width:16px;height:16px}
-.lp-faq__sign::before,.lp-faq__sign::after{content:"";position:absolute;
-  background:var(--blue);inset-block-start:50%;inset-inline-start:0;
-  width:16px;height:2px;transform:translateY(-50%);transition:transform .2s ease}
-.lp-faq__sign::after{transform:translateY(-50%) rotate(90deg)}
-.lp-faq__item[open] .lp-faq__sign::after{transform:translateY(-50%) rotate(0)}
-.lp-faq__a{padding:0 20px 18px;color:var(--muted)}
+      /* RTL rules for use-cases.html sections */
+      [dir="rtl"] .mxd-hero-08__headline,
+      [dir="rtl"] .mxd-hero-08__center,
+      [dir="rtl"] .mxd-section-title__title,
+      [dir="rtl"] .mxd-section-title__hrtitle,
+      [dir="rtl"] .mxd-section-title__hrdescr,
+      [dir="rtl"] .mxd-block__content,
+      [dir="rtl"] .mxd-block__manifest,
+      [dir="rtl"] .mxd-promo__content,
+      [dir="rtl"] .mxd-project-item__name,
+      [dir="rtl"] .mxd-project-item__tags,
+      [dir="rtl"] .mxd-tech-stack-cards__title,
+      [dir="rtl"] .mxd-services-cards__tags,
+      [dir="rtl"] .mxd-footer,
+      [dir="rtl"] .mxd-footer__footer-blocks {
+        text-align: right;
+      }
 
-/* final cta */
-.lp-cta{background:var(--ink);color:var(--paper);padding:64px 0;text-align:center}
-.lp-cta__title{font-size:clamp(1.7rem,3.6vw,2.5rem);font-weight:700;
-  line-height:1.18}
-.lp-cta__sub{margin:14px auto 0;color:rgba(244,241,235,.72);max-width:48ch}
-.lp-cta .lp-hero__cta{margin-top:28px}
-.lp-cta .lp-btn--outline{color:var(--paper);border-color:var(--ink-line)}
-.lp-cta .lp-btn--outline:hover{border-color:var(--paper)}
+      /* ============================================================
+         RTL section-by-section fixes for the MXD template
+         All overrides scoped to [dir="rtl"] so LTR stays untouched.
+         ============================================================ */
 
-/* footer */
-.lp-footer{background:var(--ink-2);color:rgba(244,241,235,.8);padding:40px 0 28px}
-.lp-footer__inner{display:flex;flex-wrap:wrap;gap:24px;align-items:center;
-  justify-content:space-between}
-.lp-footer__brand{display:flex;align-items:center;gap:14px}
-.lp-footer__brand img{height:30px;width:auto}
-.lp-footer__brand p{font-size:.86rem;color:rgba(244,241,235,.6)}
-.lp-footer__nav{display:flex;flex-wrap:wrap;gap:18px;font-size:.92rem;
-  font-weight:500}
-.lp-footer__nav a:hover{color:#fff}
-.lp-footer__contact{display:flex;flex-direction:column;gap:4px;font-size:.9rem}
-.lp-footer__contact a{color:rgba(244,241,235,.8)}
-.lp-footer__contact a:hover{color:#fff}
-.lp-footer__legal{margin-top:26px;padding-top:18px;
-  border-top:1px solid var(--ink-line);font-size:.8rem;
-  color:rgba(244,241,235,.5);text-align:center}
+      /* --- 1. Services stack cards (Identity / Packaging / Digital / Strategy) ---
+         The inner is flex-direction:column with width-60 title + info blocks
+         (60%-wide block children) layered over a full-cover absolute image
+         container; the actual image is anchored to the right side via
+         `right:0` (1200px+) or `right:-15%` (992px+) on `.service-img`.
+         In LTR: text-on-LEFT + image-on-RIGHT.
+         For a proper RTL mirror we need:
+           - title + info to sit on the RIGHT of the card (the natural
+             behaviour of width-60 blocks under direction:rtl — block-start
+             aligns to the inline-start, which in RTL is the right edge)
+           - image to flip to the LEFT side of the card
+         So we just text-align-right the text and mirror the image's
+         right→left anchor. The inner container keeps direction:rtl
+         (inherited from html). */
+      [dir="rtl"] .mxd-services-stack__title,
+      [dir="rtl"] .mxd-services-stack__title h3,
+      [dir="rtl"] .mxd-services-stack__info,
+      [dir="rtl"] .mxd-services-stack__info p,
+      [dir="rtl"] .mxd-services-cards__title,
+      [dir="rtl"] .mxd-services-cards__title p,
+      [dir="rtl"] .mxd-services-cards__info,
+      [dir="rtl"] .mxd-services-cards__info p,
+      [dir="rtl"] .mxd-services-cards__tags {
+        text-align: right;
+      }
+      /* Flip the absolutely-positioned card image to the LEFT side. The
+         template sets `right:-15%` (992px+) and `right:0` (1200px+) on
+         `.services-stack__image .service-img`. We mirror those to `left`. */
+      [dir="rtl"] .services-stack__image .service-img {
+        right: auto;
+        left: -15%;
+      }
+      @media only screen and (min-width: 1200px) {
+        [dir="rtl"] .services-stack__image .service-img {
+          left: 0;
+        }
+      }
+      /* CTA round control in the card corner: LTR places it top-right via
+         `right:1rem`. Mirror to top-left in RTL so it sits opposite the
+         now-LEFT image (the image's transparent area gives the button room). */
+      [dir="rtl"] .mxd-services-stack__controls,
+      [dir="rtl"] .mxd-services-cards__controls {
+        right: auto;
+        left: 1rem;
+      }
+      /* The title has `padding-right:2.6rem` in LTR which adds breathing
+         room on the right edge of the headline. In RTL the title sits at
+         the right edge, so that padding now pushes the title leftward.
+         Flip to padding-left so the equivalent gap appears on the left. */
+      [dir="rtl"] .mxd-services-stack__title {
+        padding-right: 0;
+        padding-left: 2.6rem;
+      }
+      /* Mirror arrow icons that point "right-up" so they read as outgoing
+         in RTL too (towards the start of reading flow). */
+      [dir="rtl"] .mxd-services-stack__controls .ph-arrow-up-right,
+      [dir="rtl"] .mxd-services-cards__controls .ph-arrow-up-right,
+      [dir="rtl"] .mxd-section-title__controls .ph-arrow-up-right,
+      [dir="rtl"] .btn .ph-arrow-up-right {
+        transform: scaleX(-1);
+      }
+      /* Right-pointing chevron / arrow icons on footer links: flip horizontally. */
+      [dir="rtl"] .footer-blocks__links .ph-arrow-right,
+      [dir="rtl"] .btn .ph-arrow-right {
+        transform: scaleX(-1);
+      }
 
-/* floating whatsapp button (assets/js/hawih.js injects .hawih-whatsapp) */
-.hawih-whatsapp{position:fixed;bottom:1.5rem;inset-inline-end:1.5rem;z-index:50;
-  width:56px;height:56px;border-radius:50%;background:#25D366;color:#fff;
-  display:inline-flex;align-items:center;justify-content:center;
-  text-decoration:none;box-shadow:0 8px 24px rgba(37,211,102,.4),0 4px 12px rgba(0,0,0,.15);
-  transition:transform .25s ease,box-shadow .25s ease}
-.hawih-whatsapp::before{content:"";position:absolute;inset:-4px;border-radius:50%;
-  background:#25D366;opacity:.3;z-index:-1;animation:hawih-wa-pulse 2.4s ease-out infinite}
-.hawih-whatsapp:hover{transform:scale(1.08) translateY(-2px);color:#fff;
-  box-shadow:0 12px 32px rgba(37,211,102,.5),0 6px 16px rgba(0,0,0,.2)}
-.hawih-whatsapp:focus-visible{outline:2px solid #fff;outline-offset:3px}
-@keyframes hawih-wa-pulse{0%,100%{transform:scale(1);opacity:.3}50%{transform:scale(1.25);opacity:0}}
+      /* --- 2. Hero rotating word chips (Craft / Identity / Packaging / Digital / Strategy)
+         These chips live as direct flex children of .mxd-hero-08__wrap, which
+         is a flex row that squeezes them to <30px each. In LTR the END of
+         each English word clips visibly ("Cra", "Identi", ...). In RTL the
+         clipping cuts the BEGINNING of each Arabic word, making them
+         unreadable. Give the chips natural sizing so the full word shows,
+         and force LTR layout direction inside each chip so text+icon line up. */
+      [dir="rtl"] .marquee__item.item-regular.text,
+      .mxd-hero-08__wrap > .marquee__item.item-regular.text {
+        flex: 0 0 auto;
+        min-width: max-content;
+        overflow: visible;
+      }
+      [dir="rtl"] .marquee__item.item-regular.text {
+        direction: ltr;
+      }
+      [dir="rtl"] .marquee__item.item-regular.text p {
+        direction: rtl;
+      }
 
-/* responsive */
-@media (max-width:860px){
-  .lp-hero__grid{grid-template-columns:1fr;gap:30px}
-  .lp-sub{max-width:none}
-  .lp-grid,.lp-steps,.lp-work{grid-template-columns:repeat(2,1fr)}
-  .lp-header__call{display:none}
-}
-@media (max-width:560px){
-  body{font-size:16px}
-  .lp-hero{padding:34px 0 26px}
-  .lp-grid,.lp-steps,.lp-work{grid-template-columns:1fr}
-  .lp-hero__cta .lp-btn{flex:1 1 100%}
-  .lp-footer__inner{flex-direction:column;align-items:flex-start}
-  .hawih-whatsapp{width:50px;height:50px;bottom:1rem;inset-inline-end:1rem}
-}
-@media (prefers-reduced-motion:reduce){
-  *{animation-duration:.001ms!important;transition-duration:.001ms!important}
-  html{scroll-behavior:auto}
-}
+      /* --- 3. Marquee tracks (logos / words rows that GSAP translateX-animates)
+         GSAP writes inline `transform: translateX(...)` in one direction.
+         Without `direction: ltr` on the track, RTL parent flips the flex
+         children visual order, breaking the seamless loop. */
+      [dir="rtl"] .marquee,
+      [dir="rtl"] .marquee--gsap,
+      [dir="rtl"] .marquee-right--gsap,
+      [dir="rtl"] .marquee-left--gsap,
+      [dir="rtl"] .marquee__top,
+      [dir="rtl"] .marquee__bottom,
+      [dir="rtl"] .marquee__toleft,
+      [dir="rtl"] .marquee__toright {
+        direction: ltr;
+      }
+
+      /* --- 4. Featured project items (pinned scroll list) and blog preview
+         cards. Tags are absolute bottom:0 left:0 - keep pinned to visual LEFT
+         of the card (matches the design in either direction). Reverse flex so
+         the chip order reads right-to-left within the tag row.
+         Project name underline gradient is "left-to-right" via CSS gradient;
+         in RTL we want it growing from the right under the link text. */
+      [dir="rtl"] .mxd-project-item__tags,
+      [dir="rtl"] .mxd-blog-preview__tags {
+        flex-direction: row-reverse;
+        justify-content: flex-start;
+      }
+      [dir="rtl"] .mxd-project-item__name a,
+      [dir="rtl"] .mxd-blog-preview__data a {
+        background-position: 0% 100%, 100% 100% !important;
+      }
+      [dir="rtl"] .mxd-project-item__name a:hover,
+      [dir="rtl"] .mxd-blog-preview__data a:hover {
+        background-position: 100% 100%, 0% 100% !important;
+      }
+      [dir="rtl"] .mxd-blog-preview__data {
+        text-align: right;
+      }
+
+      /* --- 5. Section-title cluster + "All Works" CTA: text-align right
+         and ensure the CTA icon mirrors. Already covered by the cluster
+         rule above, plus an extra anchor for the small chevron in muted btns. */
+      [dir="rtl"] .mxd-section-title__descr {
+        text-align: right;
+      }
+
+      /* --- 6. Approach / philosophy list (icon | title | description rows)
+         Bootstrap grid auto-mirrors with direction:rtl, but the title box has
+         `padding: 0 3rem; text-align: right` baked in - that's fine in RTL.
+         Just make sure the description aligns right and the icon image is at
+         the visual start (now the right edge) without forced margins. */
+      [dir="rtl"] .mxd-approach-list__title {
+        padding: 0 3rem;
+        text-align: right;
+      }
+      [dir="rtl"] .mxd-approach-list__descr {
+        text-align: right;
+      }
+
+      /* --- 7. Tech-stack cards (square logo tiles)
+         The .mxd-tech-stack-cards__inner is a flex container with logo + title.
+         Keep the row order natural in RTL (title text reads right, logo on
+         the right side of the row). The Bootstrap grid handles column order. */
+      [dir="rtl"] .mxd-tech-stack-cards__inner {
+        text-align: right;
+      }
+
+      /* --- 8. Footer columns: flex container naturally mirrors with direction:rtl
+         so DOM order col1 -> col2 -> col3 appears right-to-left (col1 on right,
+         col3 on left). Anchor text right inside each card so addresses/links
+         read properly. */
+      [dir="rtl"] .footer-blocks__column,
+      [dir="rtl"] .footer-blocks__card,
+      [dir="rtl"] .footer-nav__item,
+      [dir="rtl"] .footer-socials__item,
+      [dir="rtl"] .footer-blocks__links,
+      [dir="rtl"] .footer-blocks__title,
+      [dir="rtl"] .mxd-point-subtitle {
+        text-align: right;
+      }
+      /* `.mxd-point-subtitle` is flex w/ icon + text. Reverse so icon sits
+         on the visual right (start of RTL reading) next to its label. */
+      [dir="rtl"] .mxd-point-subtitle {
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+      }
+      /* Footer nav counter pill (Works "24+") - keep number after the svg. */
+      [dir="rtl"] .footer-nav__counter {
+        flex-direction: row-reverse;
+      }
+
+      /* --- 9. Header controls cluster: keep row-reverse from earlier rule.
+         The parent header is flex with justify-content: space-between, so the
+         logo sits at the visual right and the controls cluster at the visual
+         left in RTL. Within the cluster we use row-reverse so reading right-
+         to-left gives: تواصل (closest to logo) -> EN -> theme switcher. */
+
+      /* --- 10. Pinned-projects sticky column: in LTR the title column is on
+         the LEFT and the project list scrolls on the RIGHT. Bootstrap's
+         col-xl-5 / col-xl-7 auto-mirrors with RTL so the title sits on the
+         RIGHT and the scrolling cards on the LEFT - which reads correctly.
+         Just ensure the static section-title text aligns right. */
+      [dir="rtl"] .mxd-pinned-projects__static-inner {
+        text-align: right;
+      }
+
+      /* --- 11. Section titles + generic content blocks --- */
+      [dir="rtl"] .mxd-section-title__hrtitle,
+      [dir="rtl"] .mxd-section-title__hrdescr,
+      [dir="rtl"] .mxd-section-title__controls {
+        text-align: right;
+      }
+      /* mxd-section-title__controls is a flex container with a CTA button -
+         keep it anchored to the start (visual right) in RTL. */
+      [dir="rtl"] .mxd-section-title__controls {
+        justify-content: flex-start;
+      }
+
+      /* --- 12. Hero-08 bottom row: flex with data-wrap on the visual right
+         in RTL (because of natural rtl flip), video-wrap on the left. Just
+         anchor description text right and put the "Available for Projects"
+         mark's icon to the right side of its label. */
+      [dir="rtl"] .mxd-hero-08__descr {
+        text-align: right;
+      }
+      [dir="rtl"] .mxd-hero__mark {
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+      }
+
+      /* --- 13. Hero rotating spin image: keep visually centered (no fix). --- */
+
+      /* --- 14. Service stack image positioning override
+         The img inside .services-stack__image has right: -15% (extends past
+         right edge to crop into card). In RTL with content-on-left, we keep
+         the image on the right edge. The default rules already do that.
+         Just ensure the img doesn't reverse via the inner's direction:ltr
+         we set above (it inherits ltr, which keeps right:0 meaning right). */
+
+      /* --- 15. mxd-block__manifest, mxd-block__content rows: text-align right
+         already covered. The inner Bootstrap grid auto-flips column order. */
+
+      /* --- 16. Stats cards (white-on-blue counters + illustrations)
+         Each card has an absolute-positioned illustration anchored to a corner.
+         In LTR: image-1 top-left, image-3 bottom-right, image-4 bottom-right.
+         In RTL we mirror each to the opposite horizontal corner. */
+      [dir="rtl"] .mxd-stats-cards__image.mxd-stats-cards-image-1 {
+        left: auto;
+        right: -4rem;
+      }
+      [dir="rtl"] .mxd-stats-cards__image.mxd-stats-cards-image-3 {
+        right: auto;
+        left: -4rem;
+      }
+      [dir="rtl"] .mxd-stats-cards__image.mxd-stats-cards-image-4 {
+        right: auto;
+        left: -6rem;
+      }
+      /* Stats counter text-alignment + flip the "align-end" inside the stat
+         card (which uses align-items: flex-end in cross axis). */
+      [dir="rtl"] .mxd-counter,
+      [dir="rtl"] .mxd-counter__descr,
+      [dir="rtl"] .mxd-counter__number {
+        text-align: right;
+      }
+      [dir="rtl"] .mxd-stats-cards__inner {
+        text-align: right;
+      }
+
+      /* --- 17. CTA / Promo block: the bg illustration peeks in from the right
+         in LTR (right: -10rem on small / right: 0 on large). In RTL we want
+         it peeking in from the LEFT. */
+      [dir="rtl"] .mxd-promo__bg {
+        right: auto;
+        left: -10rem;
+        background-position: right center;
+      }
+      @media only screen and (min-width: 992px) {
+        [dir="rtl"] .mxd-promo__bg {
+          left: 0;
+          right: auto;
+        }
+      }
+      /* Promo title icon: in LTR padding-right pushes caption text away from icon.
+         In RTL flip to padding-left so caption sits to the left of the icon. */
+      [dir="rtl"] .mxd-promo__icon {
+        padding-right: 0;
+        padding-left: 1rem;
+      }
+      [dir="rtl"] .mxd-promo__content,
+      [dir="rtl"] .mxd-promo__title,
+      [dir="rtl"] .mxd-promo__caption {
+        text-align: right;
+      }
+      /* Promo parallax images — proper RTL mirror.
+         The template places `.mxd-promo__images` (the containing flex box)
+         as `position:absolute; top:0; right:0; width:46%; height:100%` so
+         it occupies the RIGHT half of the inner in LTR. Inside it:
+           - image-1 (astronaut) is anchored `right:6rem` → far-right of inner
+           - image-2 (shape)     is anchored `left:6rem`  → middle of inner
+         For a proper RTL mirror we flip the container to occupy the LEFT
+         half (`right:auto; left:0`) AND flip each image's anchor side so
+         their positions within the (now LEFT-half) container mirror as
+         well, giving:
+           - image-1 (astronaut) at far-LEFT of inner
+           - image-2 (shape)     at the middle of inner */
+      [dir="rtl"] .mxd-promo__images {
+        right: auto;
+        left: 0;
+      }
+      [dir="rtl"] .mxd-promo__images .promo-image-1 {
+        right: auto;
+        left: 6rem;
+      }
+      [dir="rtl"] .mxd-promo__images .promo-image-2 {
+        left: auto;
+        right: 0;
+      }
+      @media only screen and (min-width: 992px) {
+        [dir="rtl"] .mxd-promo__images .promo-image-2 {
+          right: 6rem;
+        }
+      }
+      @media only screen and (min-width: 1600px) {
+        [dir="rtl"] .mxd-promo__images .promo-image-1 {
+          left: 9rem;
+        }
+      }
+
+      /* --- 18. Manifest block (Who we are + description): Bootstrap col-5 title /
+         col-7 content row auto-mirrors via direction:rtl. Just anchor text right. */
+      [dir="rtl"] .mxd-block__name,
+      [dir="rtl"] .mxd-block__manifest,
+      [dir="rtl"] .mxd-block__content,
+      [dir="rtl"] .mxd-manifest,
+      [dir="rtl"] .mxd-manifest__controls {
+        text-align: right;
+      }
+      [dir="rtl"] .mxd-manifest__controls {
+        justify-content: flex-start;
+      }
+
+      /* --- 19. Mobile menu / main-menu accordion: text-align right and
+         re-orient toggle arrow icon to the visual right of each link label. */
+      [dir="rtl"] .main-menu__accordion,
+      [dir="rtl"] .main-menu__item,
+      [dir="rtl"] .main-menu__toggle,
+      [dir="rtl"] .submenu,
+      [dir="rtl"] .submenu__item {
+        text-align: right;
+      }
+      [dir="rtl"] .main-menu__toggle {
+        flex-direction: row-reverse;
+        justify-content: flex-end;
+      }
+
+      /* --- 20. Tag chips (.tag) reset internal flex order so star/icon glyph
+         (if present) appears at start of reading direction. */
+      [dir="rtl"] .tag {
+        direction: rtl;
+      }
+
+      /* --- 21. Button caption + icon order: most .btn-default elements have
+         <span class="btn-caption">text</span><i class="ph-arrow-up-right"></i>
+         In LTR icon sits to right of text. In RTL with default flex it moves
+         to left of text - that's actually correct natural mirroring. We
+         already flip the arrow direction via scaleX(-1) above so the icon
+         keeps pointing "outward" in reading direction. */
+
+      /* --- 22. Footer fullwidth SVG text (the giant "HAWIH" footer wordmark)
+         renders correctly in both directions because it's an SVG text path. */
+
+      /* RTL Font Support */
+      [dir="rtl"] * {
+        font-family: 'IBM Plex Sans Arabic', 'Segoe UI', 'Tahoma', 'Arial', sans-serif;
+      }
+
+      /* Show/hide content based on language */
+      .lang-content {
+        display: block;
+      }
+
+      [dir="rtl"] .lang-content.en {
+        display: none;
+      }
+
+      [dir="rtl"] .lang-content.ar {
+        display: block;
+      }
+
+      [dir="ltr"] .lang-content.ar {
+        display: none;
+      }
+
+      [dir="ltr"] .lang-content.en {
+        display: block;
+      }
+
+      /* Logo Theme Switching */
+      .mxd-logo__dark {
+        display: block;
+      }
+      
+      .mxd-logo__light {
+        display: none;
+      }
+      
+      /* Light theme logo switching - using color-scheme attribute */
+      :root[color-scheme="light"] .mxd-logo__dark {
+        display: none !important;
+      }
+      
+      :root[color-scheme="light"] .mxd-logo__light {
+        display: block !important;
+      }
+      
+      /* Alternative selectors for light mode */
+      [data-theme="light"] .mxd-logo__dark,
+      body.light-mode .mxd-logo__dark,
+      html.light-mode .mxd-logo__dark {
+        display: none;
+      }
+      
+      [data-theme="light"] .mxd-logo__light,
+      body.light-mode .mxd-logo__light,
+      html.light-mode .mxd-logo__light {
+        display: block;
+      }
+
+      /* Technology Logos Styling - Square Frames with Normal Colors */
+      .mxd-partners-cards__inner {
+        aspect-ratio: 1 / 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 2rem;
+      }
+
+      .mxd-partners-cards__logo {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        height: 100%;
+      }
+
+      .mxd-partners-cards__logo img {
+        max-width: 100%;
+        max-height: 100%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+        transition: transform 0.3s ease;
+      }
+
+      .mxd-partners-cards__inner:hover .mxd-partners-cards__logo img {
+        transform: scale(1.1);
+      }
+
+      /* ============================================================
+         Hawih owner review fixes (round 2)
+         All RTL/layout overrides scoped to this block.
+         ============================================================ */
+
+      /* --- Fix 1: Header — proper RTL mirror for the burger and controls
+         LTR layout (1440 vp):
+           - `.mxd-header` is `position:absolute; left:6rem; right:9.6rem`
+             (template sets `left` + width, leaving a ~136px gutter on the
+             right where the burger lives).
+           - logo on the LEFT (start of space-between), controls cluster
+             on the RIGHT, then a 56-px burger in the right gutter.
+         For a proper RTL mirror we need:
+           - logo on the visual RIGHT  (already correct via space-between)
+           - controls cluster on the visual LEFT (already correct)
+           - burger on the visual LEFT, sitting in a LEFT gutter
+         To create the left gutter we swap the header's `left/right`
+         offsets so the header is anchored to the right edge instead, and
+         we let `.mxd-nav__contain` use its natural RTL `flex-end` (which
+         resolves to the LEFT edge) — putting the burger ~6rem from the
+         left, mirroring the LTR position of ~6rem from the right.
+         The previous fix forced `.mxd-nav__contain` to `direction:ltr`
+         which kept the burger on the right next to the logo — wrong. */
+      [dir="rtl"] .mxd-header {
+        left: auto;
+        right: 3rem;
+      }
+      @media only screen and (min-width: 768px) {
+        [dir="rtl"] .mxd-header {
+          right: 6rem;
+        }
+      }
+      @media only screen and (min-width: 1600px) {
+        [dir="rtl"] .mxd-header {
+          right: 9rem;
+        }
+      }
+
+      /* --- Fix 2: Hero title (.hero-01-title) is too dominant
+         Template ships 120px; cut to ~80px peak so the
+         "حِرفة عربيّة / هويات سعودية" stack fits more comfortably.
+         Note: this template uses html { font-size: 10px } so 1rem ≈ 10px.
+         Using vw so it scales down on narrower viewports. */
+      .hero-01-title {
+        font-size: clamp(4rem, 6vw, 8rem) !important;
+        line-height: 1.1 !important;
+      }
+      html[lang="ar"] .hero-01-title,
+      [dir="rtl"] .hero-01-title {
+        line-height: 1.25 !important;
+      }
+      /* Title rows/items inherit the font-size from the parent only when
+         not explicitly set — force them so the inner <em> chips shrink too. */
+      .hero-01-title__row,
+      .hero-01-title__item {
+        font-size: inherit !important;
+        line-height: inherit !important;
+      }
+      /* The inline image "title-item-image" sizes off font-size; shrink it
+         proportionally so the row stays visually balanced. */
+      .hero-01-title__item.title-item-image {
+        height: 0.85em !important;
+      }
+
+      /* --- Fix 3: Stats card image-2 (iPhones) covers the "19+" text in RTL
+         Original positioning: { left: 0; right: 334px; top: 0; bottom: -40px }
+         — image pinned to LEFT side of card. In RTL `align-end` puts the
+         counter on the LEFT too, so they collide. Mirror image-2 to the
+         RIGHT side (so counter on left, image on right — matches the
+         flip pattern already applied to image-3 and image-4). */
+      [dir="rtl"] .mxd-stats-cards__image.mxd-stats-cards-image-2 {
+        left: auto !important;
+        right: 0 !important;
+      }
+
+      /* --- Fix 4: Service stack card titles — keep on one line and
+         align cleanly with the description in RTL.
+         Titles ship at 70px which forces 2 lines on every card except
+         the first. Reduce to a clamp peaking at ~2.4rem (~38px) and
+         lock them to a single line at desktop widths. */
+      .mxd-services-stack__title h3 {
+        font-size: clamp(2.8rem, 4vw, 5rem) !important;
+        line-height: 1.15 !important;
+      }
+      [dir="rtl"] .mxd-services-stack__title,
+      [dir="rtl"] .mxd-services-stack__title h3,
+      [dir="rtl"] .mxd-services-stack__info,
+      [dir="rtl"] .mxd-services-stack__info p {
+        text-align: right !important;
+      }
+      @media (min-width: 1200px) {
+        .mxd-services-stack__title h3 {
+          white-space: nowrap;
+        }
+      }
+
+      /* --- Fix 6: Sectors We Serve (mxd-awards-list) — hover-reveal arrow
+         The template uses `translateX(-5.4rem)` on the icon and the title <p>
+         to hide the arrow icon off the LEFT edge in LTR; on hover both reset
+         to 0, sliding the icon in from the left while pushing the text right.
+         In RTL the icon naturally sits at the visual RIGHT edge; we mirror
+         the offset to `+5.4rem` so the icon is hidden off the RIGHT edge
+         instead, and on hover slides leftward into view. */
+      [dir="rtl"] .mxd-awards-list__icon,
+      [dir="rtl"] .mxd-awards-list__title p {
+        transform: translateX(5.4rem) !important;
+      }
+      [dir="rtl"] .mxd-awards-list__item:hover .mxd-awards-list__icon,
+      [dir="rtl"] .mxd-awards-list__item:hover .mxd-awards-list__title p {
+        transform: translateX(0) !important;
+      }
+      /* The arrow inside the icon is `ph ph-arrow-right`. In LTR it points
+         rightward = "outgoing" reading-direction arrow. In RTL we need it
+         to point leftward (reading-direction outgoing). */
+      [dir="rtl"] .mxd-awards-list__icon .ph-arrow-right {
+        transform: scaleX(-1);
+      }
+
+      /* --- Fix 5: Promo "حدّثنا عن مشروعك." alignment in RTL
+         Keep the title block-level (icon flows on its own line above the
+         caption, mirroring LTR), but force the whole content cluster
+         right-aligned. The existing rule sets .mxd-promo__icon padding to
+         left side; pair that with text-align:right on the wrapper so the
+         icon ends up at the visual start (right) of the row. */
+      [dir="rtl"] .mxd-promo__content,
+      [dir="rtl"] .mxd-promo__title,
+      [dir="rtl"] .mxd-promo__caption,
+      [dir="rtl"] .mxd-promo__controls {
+        text-align: right !important;
+      }
+      [dir="rtl"] .mxd-promo__controls {
+        display: flex;
+        justify-content: flex-start;
+      }
+
+      /* ============================================================
+         Round 4 review fixes (May 2026)
+         ============================================================ */
+
+      /* --- Fix 1: Hero-08 title should center in AR, not right-align.
+         The RTL pass set `.mxd-container { text-align: right }` globally,
+         which leaks into hero-08 and makes each wrapped line of the H1
+         hug the right edge — visually breaking the centered composition
+         around the 3D sphere. Force center alignment on the hero-08
+         headline cluster in RTL. */
+      [dir="rtl"] .mxd-hero-08 .mxd-container,
+      [dir="rtl"] .mxd-hero-08__headline,
+      [dir="rtl"] .mxd-hero-08__headline .mxd-container,
+      [dir="rtl"] .hero-08-headline__title,
+      [dir="rtl"] .hero-08-headline__title h1 {
+        text-align: center !important;
+      }
+
+      /* --- Fix 2: Hero-01 lead paragraph needs clear bottom margin.
+         The paragraph "نحن هوية، استوديو سعودي للتصميم متخصّص..." sits
+         too tight to the next dark video section. The descr lives in
+         `.mxd-hero-01__bottom`, a flex row with a FIXED height (16rem /
+         20rem), so adding margin to the descr itself does not push the
+         next section down. Apply margin to the bottom block instead. */
+      .mxd-hero-01__bottom {
+        margin-bottom: 12rem !important;
+      }
+      .mxd-hero-01__data-descr {
+        padding-bottom: 1rem !important;
+      }
+      @media (max-width: 768px) {
+        .mxd-hero-01__bottom {
+          margin-bottom: 6rem !important;
+        }
+      }
+
+      /* --- Fix 3: Service-stack card text readability on dark / blue bgs.
+         Cards with `.bg-accent` (cobalt) or `.bg-base-opp` (ink) have
+         titles and descriptions inheriting a near-black color because of
+         a generic `p span { color: var(--t-bright) }` rule that wins
+         specificity over the parent's `t-opposite` (white) class.
+         Force every text node inside accent/ink cards to render light. */
+      .stack-item .mxd-services-stack__inner.bg-accent .mxd-services-stack__title h3,
+      .stack-item .mxd-services-stack__inner.bg-accent .mxd-services-stack__title,
+      .stack-item .mxd-services-stack__inner.bg-accent .mxd-services-stack__info,
+      .stack-item .mxd-services-stack__inner.bg-accent .mxd-services-stack__info p,
+      .stack-item .mxd-services-stack__inner.bg-accent .mxd-services-stack__info p span,
+      .stack-item .mxd-services-stack__inner.bg-accent .mxd-services-stack__info .lang-string,
+      .stack-item .mxd-services-stack__inner.bg-accent p,
+      .stack-item .mxd-services-stack__inner.bg-accent p span,
+      .stack-item .mxd-services-stack__inner.bg-accent p .lang-string,
+      .stack-item .mxd-services-stack__inner.bg-accent h3,
+      .stack-item .mxd-services-stack__inner.bg-accent h3 span,
+      .stack-item .mxd-services-stack__inner.bg-accent h3 .lang-string,
+      .stack-item .mxd-services-stack__inner.bg-base-opp .mxd-services-stack__title h3,
+      .stack-item .mxd-services-stack__inner.bg-base-opp .mxd-services-stack__title,
+      .stack-item .mxd-services-stack__inner.bg-base-opp .mxd-services-stack__info,
+      .stack-item .mxd-services-stack__inner.bg-base-opp .mxd-services-stack__info p,
+      .stack-item .mxd-services-stack__inner.bg-base-opp .mxd-services-stack__info p span,
+      .stack-item .mxd-services-stack__inner.bg-base-opp .mxd-services-stack__info .lang-string,
+      .stack-item .mxd-services-stack__inner.bg-base-opp p,
+      .stack-item .mxd-services-stack__inner.bg-base-opp p span,
+      .stack-item .mxd-services-stack__inner.bg-base-opp p .lang-string,
+      .stack-item .mxd-services-stack__inner.bg-base-opp h3,
+      .stack-item .mxd-services-stack__inner.bg-base-opp h3 span,
+      .stack-item .mxd-services-stack__inner.bg-base-opp h3 .lang-string {
+        color: #ffffff !important;
+      }
+      /* Chip / tag pills on accent / ink cards: ensure visible border + text */
+      .stack-item .mxd-services-stack__inner.bg-accent .tag,
+      .stack-item .mxd-services-stack__inner.bg-accent .tag span,
+      .stack-item .mxd-services-stack__inner.bg-accent .tag .lang-string,
+      .stack-item .mxd-services-stack__inner.bg-base-opp .tag,
+      .stack-item .mxd-services-stack__inner.bg-base-opp .tag span,
+      .stack-item .mxd-services-stack__inner.bg-base-opp .tag .lang-string {
+        color: #ffffff !important;
+        border-color: rgba(255, 255, 255, 0.6) !important;
+      }
+
+      /* --- Fix 4: Marquee image-text captions on cobalt panels.
+         The two-line image marquee uses `.marquee__item.has-caption` for
+         word panels like "Inspiring / ideas", "Real / craft", "From /
+         Riyadh", "حِرفة / حقيقية". These render on a cobalt bg but the
+         child `<span class="lang-string">` inherits the near-black ink
+         color (via `p span` selector). Force the captions light. */
+      .marquee__item.has-caption,
+      .marquee__item.has-caption p,
+      .marquee__item.has-caption p span,
+      .marquee__item.has-caption p .lang-string,
+      .marquee__item.has-caption .lang-string,
+      .marquee__item.has-caption span {
+        color: #ffffff !important;
+      }
+
+      /* --- Fix 5: Off-canvas hamburger menu text contrast.
+         When `.hamburger__base` paints its dark backdrop (rgb(28,28,28))
+         behind the slide-down menu, the promo captions and footer-data
+         text read with near-black color (from `p span` ink) — totally
+         unreadable. Force all caption + footer text to paper/white,
+         and the muted-secondary text to a translucent white. */
+      .mxd-menu__wrapper .menu-promo__caption,
+      .mxd-menu__wrapper .mxd-menu__caption,
+      .mxd-menu__wrapper .menu-promo__caption .lang-string,
+      .mxd-menu__wrapper .mxd-menu__caption .lang-string,
+      .mxd-menu__wrapper .menu-promo__caption span,
+      .mxd-menu__wrapper .mxd-menu__caption span {
+        color: rgba(255, 255, 255, 0.82) !important;
+      }
+      .mxd-menu__wrapper .mxd-menu__data,
+      .mxd-menu__wrapper .mxd-menu__data p,
+      .mxd-menu__wrapper .mxd-menu__data p span,
+      .mxd-menu__wrapper .mxd-menu__data p .lang-string,
+      .mxd-menu__wrapper .mxd-menu__data a,
+      .mxd-menu__wrapper .mxd-menu__data a span,
+      .mxd-menu__wrapper .mxd-menu__data a .lang-string,
+      .mxd-menu__wrapper .mxd-menu__data i {
+        color: rgba(255, 255, 255, 0.85) !important;
+      }
+      .mxd-menu__wrapper .mxd-menu__data a:hover,
+      .mxd-menu__wrapper .mxd-menu__data a:hover span,
+      .mxd-menu__wrapper .mxd-menu__data a:hover .lang-string {
+        color: #ffffff !important;
+      }
+
+      /* Force hero loading-state elements to always be visible — the
+         template's app.min.js animates them in via opacity transitions,
+         but it errors out (missing .mxd-hero-08__tl-trigger and [data-speed]
+         which we removed with the marquee chips + video) and leaves some
+         items at opacity:0. This makes the hero always visible regardless
+         of JS state, and prevents the "text sometimes visible sometimes not"
+         flicker on reload + lang toggle. */
+      .mxd-hero-08 .loading__item,
+      .mxd-hero-08 .loading__fade,
+      .mxd-hero-08 .loading-wrap,
+      .mxd-hero-08__wrap.loading-wrap,
+      .mxd-hero-08__center,
+      .mxd-hero-08__bottom,
+      .hero-08-headline__title,
+      .mxd-hero__mark,
+      .mxd-hero-08__descr {
+        opacity: 1 !important;
+        visibility: visible !important;
+      }
+      /* Lang-string spans inside loading items — same fix, since the
+         language toggle re-writes textContent and can momentarily strip
+         child structure. */
+      .mxd-hero-08 .lang-string {
+        opacity: 1 !important;
+        visibility: visible !important;
+      }
+
+      /* Hero-08 title — caps out at 100px per spec (user-requested) */
+      .hero-08-headline__title h1 {
+        font-size: clamp(2.5rem, 7vw, 100px) !important;
+        line-height: 1.05 !important;
+        font-weight: 500 !important;
+      }
+
+      /* WebGL divider — force WHITE text on every descendant regardless of
+         theme. In light mode the page's ink color cascades through to
+         .lang-string spans, making text render black on the cobalt frame. */
+      .uc-divider-content,
+      .uc-divider-content *,
+      .uc-divider-content p,
+      .uc-divider-content span,
+      .uc-divider-content li,
+      .uc-divider-content .lang-string {
+        color: #fff !important;
+      }
+      .uc-divider-content .uc-divider-descr,
+      .uc-divider-content .uc-divider-descr .lang-string {
+        color: rgba(255, 255, 255, 0.78) !important;
+      }
+      /* The eyebrow gets a slightly softer white for visual hierarchy */
+      .uc-divider-content > div > div:first-child span:last-child,
+      .uc-divider-content > div > div:first-child span:last-child .lang-string {
+        color: rgba(255, 255, 255, 0.85) !important;
+      }
+
+      /* Trim the empty space BELOW the divider section — the template's
+         `padding-hero-08 padding-pre-manifest` classes add a lot of vertical
+         padding above and below; we don't need the bottom padding since we
+         removed the hero's bottom block. */
+      .mxd-section.padding-hero-08.padding-pre-manifest {
+        padding-top: 4rem !important;
+        padding-bottom: 4rem !important;
+      }
+      @media (max-width: 768px) {
+        .mxd-section.padding-hero-08.padding-pre-manifest {
+          padding-top: 2rem !important;
+          padding-bottom: 2rem !important;
+        }
+      }
+
+      /* Reduce the height of the WebGL frame — content only needs ~300px,
+         not 760px. The width stays at template default. We override both
+         the inline min-height AND the GSAP-injected height that the
+         template's parallax script writes onto the divider wrappers. */
+      .mxd-divider,
+      .mxd-divider__image,
+      .uc-divider-content {
+        min-height: 0 !important;
+        max-height: none !important;
+        height: auto !important;
+      }
+      /* In case the parallax-img wrapper script injects an inline height
+         on a generated child element, force its height too. */
+      .mxd-divider > div,
+      .mxd-divider__image > div:not(#webgl-container):not(.uc-divider-content) {
+        height: auto !important;
+        min-height: 0 !important;
+      }
+      /* WebGL canvas mounts absolutely — its parent .mxd-divider__image
+         needs to be positioned and have the frame's actual content height. */
+      .uc-divider-content {
+        padding: 56px 80px !important;
+      }
+      @media (max-width: 900px) {
+        .uc-divider-content {
+          flex-direction: column !important;
+          padding: 40px 32px !important;
+          gap: 32px !important;
+        }
+      }
+
+      /* "Who we are / من نحن" heading on the manifest block — was too
+         small at template default. Bump up to match other section titles. */
+      .mxd-block__name.name-manifest h2.reveal-type,
+      .mxd-block__name.name-manifest h2 {
+        font-size: clamp(2.5rem, 5vw, 5.5rem) !important;
+        line-height: 1.1 !important;
+        font-weight: 500 !important;
+      }
+      html[lang="ar"] .mxd-block__name.name-manifest h2 {
+        line-height: 1.25 !important;
+      }
+      .hero-08-headline__title h1 .lang-string {
+        display: inline !important;
+        font-size: inherit !important;
+        line-height: inherit !important;
+      }
+      html[lang="ar"] .hero-08-headline__title h1 {
+        line-height: 1.2 !important;
+      }
+      /* Keep the eyebrow + descr balanced against the smaller h1 */
+      .mxd-hero-08__descr p {
+        font-size: clamp(0.95rem, 1.2vw, 1.15rem) !important;
+        line-height: 1.55 !important;
+      }
+      .mxd-hero__mark .mark-text {
+        font-size: 0.85rem !important;
+        letter-spacing: 0.02em;
+      }
+
     </style>
-    <!-- HAWIH_HREFLANG_START -->
-    <link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/company-profile">
-    <link rel="alternate" hreflang="en" href="https://hawih.com.sa/en/company-profile">
-    <link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/company-profile">
-    <!-- HAWIH_HREFLANG_END -->
+    <!-- Custom Language Switcher & RTL Styles End -->
+
+    <!-- Custom Browser Color Start -->
+    <meta name="theme-color" media="(prefers-color-scheme: light)" content="#FAF7F6">
+    <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#161616">
+    <meta name="msapplication-navbutton-color" content="#161616">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Custom Browser Color End -->
+    
+  
+  <!-- ============ HAWIH BRAND OVERRIDE — applied to MXD template ============ -->
+  <style>
+    :root,
+    [data-theme="light"],
+    [data-theme="dark"] {
+      /* Cobalt as the single accent across both themes. */
+      --accent: #1F1FFE !important;
+      --accent-rgb: 31, 31, 254 !important;
+      --accent--light: #1F1FFE !important;
+      --accent--dark:  #1F1FFE !important;
+      --accent-rgb--light: 31, 31, 254 !important;
+      --accent-rgb--dark:  31, 31, 254 !important;
+    }
+    /* Hawih typography hooks: keep IBM Plex Sans Arabic available for
+       any Arabic strings the template might render. */
+    body, .body-text-large, .body-text-small, .body-text-regular, h1, h2, h3, h4, h5, h6 {
+      font-family: "Inter", "IBM Plex Sans Arabic", system-ui, sans-serif;
+    }
+    :lang(ar), [dir="rtl"] {
+      font-family: "IBM Plex Sans Arabic", "Inter", sans-serif;
+    }
+  </style>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap">
+    <link rel="stylesheet" href="/assets/css/hawih.css?v=f6741dd784">
+    <!-- Three.js for the cobalt cosmic WebGL hero shader -->
+    <style>
+      /* Scope the WebGL hero so MXD template CSS can't shrink/break it */
+      .uc-webgl-hero, .uc-webgl-hero * { box-sizing: border-box; }
+      .uc-webgl-hero a { text-decoration: none; }
+      .uc-webgl-hero h1 { margin: 0; }
+      .uc-webgl-hero p { margin: 0; }
+      .uc-webgl-hero ul { list-style: none; padding: 0; margin: 0; }
+    </style>
+    <style id="uc-mobile-fixes">
+      .uc-menu-controls{display:flex;flex-direction:column;gap:1rem;align-items:flex-start;margin-top:1.6rem}
+      .uc-menu-controls .btn{width:auto}
+      .mxd-menu__wrapper .uc-menu-controls .btn,
+      .mxd-menu__wrapper .uc-menu-controls .btn:hover,
+      .mxd-menu__wrapper .uc-menu-controls .btn:focus{
+        background:var(--accent,#1F1FFE)!important;border:1px solid var(--accent,#1F1FFE)!important}
+      .mxd-menu__wrapper .uc-menu-controls .btn,
+      .mxd-menu__wrapper .uc-menu-controls .btn .btn-caption,
+      .mxd-menu__wrapper .uc-menu-controls .btn span,
+      .mxd-menu__wrapper .uc-menu-controls .btn .lang-string,
+      .mxd-menu__wrapper .uc-menu-controls .btn i{color:#fff!important}
+      .mxd-menu__wrapper .uc-menu-controls .btn:hover{filter:brightness(1.1)}
+      @media (max-width:991px){
+        .mxd-header__controls [data-lang-toggle],
+        .mxd-header__controls a.btn-mobile-icon{display:none!important}
+      }
+      [data-theme="light"] .mxd-menu__wrapper .menu-promo__caption,
+      [data-theme="light"] .mxd-menu__wrapper .menu-promo__caption span,
+      [data-theme="light"] .mxd-menu__wrapper .menu-promo__caption .lang-string,
+      [data-theme="light"] .mxd-menu__wrapper .mxd-menu__caption,
+      [data-theme="light"] .mxd-menu__wrapper .mxd-menu__caption span,
+      [data-theme="light"] .mxd-menu__wrapper .mxd-menu__data,
+      [data-theme="light"] .mxd-menu__wrapper .mxd-menu__data p,
+      [data-theme="light"] .mxd-menu__wrapper .mxd-menu__data p span,
+      [data-theme="light"] .mxd-menu__wrapper .mxd-menu__data p .lang-string,
+      [data-theme="light"] .mxd-menu__wrapper .mxd-menu__data a,
+      [data-theme="light"] .mxd-menu__wrapper .mxd-menu__data a span,
+      [data-theme="light"] .mxd-menu__wrapper .mxd-menu__data i,
+      body.light-mode .mxd-menu__wrapper .menu-promo__caption,
+      body.light-mode .mxd-menu__wrapper .menu-promo__caption span,
+      body.light-mode .mxd-menu__wrapper .menu-promo__caption .lang-string,
+      body.light-mode .mxd-menu__wrapper .mxd-menu__data,
+      body.light-mode .mxd-menu__wrapper .mxd-menu__data p,
+      body.light-mode .mxd-menu__wrapper .mxd-menu__data p span,
+      body.light-mode .mxd-menu__wrapper .mxd-menu__data a,
+      body.light-mode .mxd-menu__wrapper .mxd-menu__data i,
+      html.light-mode .mxd-menu__wrapper .menu-promo__caption,
+      html.light-mode .mxd-menu__wrapper .menu-promo__caption span,
+      html.light-mode .mxd-menu__wrapper .menu-promo__caption .lang-string,
+      html.light-mode .mxd-menu__wrapper .mxd-menu__data,
+      html.light-mode .mxd-menu__wrapper .mxd-menu__data a,
+      html.light-mode .mxd-menu__wrapper .mxd-menu__data i,
+      :root[color-scheme="light"] .mxd-menu__wrapper .menu-promo__caption,
+      :root[color-scheme="light"] .mxd-menu__wrapper .menu-promo__caption span,
+      :root[color-scheme="light"] .mxd-menu__wrapper .menu-promo__caption .lang-string,
+      :root[color-scheme="light"] .mxd-menu__wrapper .mxd-menu__data,
+      :root[color-scheme="light"] .mxd-menu__wrapper .mxd-menu__data a,
+      :root[color-scheme="light"] .mxd-menu__wrapper .mxd-menu__data i{color:#161616!important}
+      /* To-top button: kill mix-blend-mode (renders black on mobile); stable glass circle */
+      .btn-to-top{mix-blend-mode:normal!important;background-color:rgba(20,20,20,.62)!important;color:#fff!important;border:2px solid rgba(255,255,255,.42)!important;-webkit-backdrop-filter:blur(6px)!important;backdrop-filter:blur(6px)!important}
+      .btn-to-top i,.btn-to-top:hover i{color:#fff!important}
+      /* WhatsApp FAB: same bottom level as the to-top button, on the LEFT */
+      .hawih-whatsapp{left:3rem!important;right:auto!important;inset-inline-start:auto!important;inset-inline-end:auto!important;bottom:3rem!important}
+      @media (min-width:1200px){.hawih-whatsapp{left:6rem!important;bottom:4rem!important}}
+      @media (max-width:480px){.hawih-whatsapp{left:3rem!important;bottom:3rem!important;width:50px;height:50px}}
+      /* Header: show immediately — no fade-in delay / theme flash */
+      .mxd-header,.mxd-header__logo,.mxd-header__controls,.mxd-nav__wrap,.mxd-nav__contain,.mxd-nav__hamburger,.hamburger__base,.hamburger__line{opacity:1!important}
+      :root[color-scheme="dark"] .mxd-logo__dark{display:block!important}
+      :root[color-scheme="dark"] .mxd-logo__light{display:none!important}
+      .loader__count{direction:ltr;unicode-bidi:isolate}
+      /* Header — clean direction-agnostic structure (correct in AR + EN) */
+      .mxd-header{position:fixed!important;inset:0 0 auto 0!important;width:100%!important;display:flex!important;align-items:center!important;justify-content:space-between!important;padding-block:1.5rem!important;padding-inline-start:3rem!important;padding-inline-end:9rem!important;background:transparent!important;-webkit-backdrop-filter:none!important;backdrop-filter:none!important;border-bottom:1px solid transparent!important;box-shadow:none!important;transition:background .3s ease,backdrop-filter .3s ease,box-shadow .3s ease,border-color .3s ease;z-index:101!important}
+      .mxd-header.uc-scrolled{background:rgba(244,241,235,.62)!important;-webkit-backdrop-filter:blur(16px) saturate(1.6)!important;backdrop-filter:blur(16px) saturate(1.6)!important;border-bottom-color:rgba(20,20,20,.08)!important;box-shadow:0 6px 24px rgba(0,0,0,.05)!important}
+      .mxd-header.is-hidden{opacity:1!important;transform:none!important}
+      :root[color-scheme="dark"] .mxd-header.uc-scrolled{background:rgba(18,18,20,.55)!important;border-bottom-color:rgba(255,255,255,.10)!important}
+      .mxd-header__logo,.mxd-header__controls{margin:0!important}
+      .mxd-header__controls{display:flex!important;align-items:center!important;gap:1.4rem!important}
+      .mxd-nav__wrap{position:fixed!important;inset:0 0 auto 0!important;width:100%!important;z-index:130!important;pointer-events:none!important}
+      .mxd-nav__contain{margin:0!important;min-height:0!important;padding-block:1.5rem!important;padding-inline:3rem!important;display:flex!important;align-items:center!important;justify-content:flex-end!important;pointer-events:none!important}
+      .mxd-nav__hamburger,.mxd-nav__contain>*{pointer-events:auto!important}
+      .mxd-menu__wrapper,.mxd-menu__wrapper *{pointer-events:auto!important}
+      @media (max-width:991px){.mxd-header{padding-inline-start:1.5rem!important;padding-inline-end:7rem!important;padding-block:1rem!important}.mxd-nav__contain{padding-inline:1.5rem!important;padding-block:1rem!important}}
+      :root[color-scheme="dark"] .mxd-logo__dark img{display:block!important}
+    </style>
     <!-- HAWIH_JSONLD_START -->
     <!-- SEO: JSON-LD structured data (Phase 1) -->
     <script type="application/ld+json">
@@ -531,6 +1314,49 @@ button{font-family:inherit}
     }
     </script>
     <!-- HAWIH_JSONLD_END -->
+      <!-- hx: scoped styles for generated landing/article content -->
+    <style>
+    .hx-ctarow{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
+    .hx-ctarow .btn{margin:0}
+    .hx-note{margin-top:16px;font-size:.95rem;opacity:.7}
+    .hx-logos{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:26px 40px}
+    .hx-logos img{height:40px;width:auto;opacity:.5;filter:grayscale(1);transition:opacity .25s ease,filter .25s ease}
+    .hx-logos img:hover{opacity:1;filter:grayscale(0)}
+    .hx-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+    .hx-tile{display:flex;align-items:flex-start;gap:.7em;background:var(--hawih-paper-2,#E9E4D7);
+      border:1px solid var(--hawih-paper-line,rgba(11,11,16,.1));border-radius:16px;padding:22px;font-weight:500}
+    .dark .hx-tile{background:var(--hawih-ink-2,#14141C);border-color:var(--hawih-ink-line,rgba(255,255,255,.08))}
+    .hx-tile i{color:var(--hawih-blue,#1F1FFE);font-size:1.5rem;flex:none;line-height:1}
+    .hx-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;counter-reset:hx}
+    .hx-step{position:relative;padding-top:8px}
+    .hx-step__n{display:inline-flex;font-size:1.05rem;font-weight:700;color:var(--hawih-blue,#1F1FFE);
+      background:var(--hawih-blue-soft,rgba(31,31,254,.12));border-radius:10px;padding:.2em .6em;margin-bottom:14px}
+    .hx-step h3{font-size:1.15rem;font-weight:700;margin:0 0 6px}
+    .hx-step p{margin:0;opacity:.72}
+    .hx-faq{display:flex;flex-direction:column;gap:12px;max-width:860px}
+    .hx-faq__item{border:1px solid var(--hawih-paper-line,rgba(11,11,16,.12));border-radius:16px;
+      background:var(--hawih-paper-2,#E9E4D7);overflow:hidden}
+    .dark .hx-faq__item{background:var(--hawih-ink-2,#14141C);border-color:var(--hawih-ink-line,rgba(255,255,255,.08))}
+    .hx-faq__q{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 22px;
+      font-weight:600;font-size:1.05rem;cursor:pointer;list-style:none}
+    .hx-faq__q::-webkit-details-marker{display:none}
+    .hx-faq__q::after{content:"+";font-size:1.5rem;color:var(--hawih-blue,#1F1FFE);line-height:1;flex:none}
+    .hx-faq__item[open] .hx-faq__q::after{content:"\2212"}
+    .hx-faq__a{padding:0 22px 20px;opacity:.78;line-height:1.85}
+    .hx-prose{max-width:820px;font-size:1.12rem;line-height:1.95}
+    .hx-prose h2{font-size:clamp(1.4rem,3vw,1.9rem);font-weight:700;margin:44px 0 14px;line-height:1.3;scroll-margin-top:90px}
+    .hx-prose p{margin:0 0 18px}
+    .hx-toc{max-width:820px;margin:0 0 8px;padding:22px 24px;border-radius:16px;
+      background:var(--hawih-paper-2,#E9E4D7);border:1px solid var(--hawih-paper-line,rgba(11,11,16,.1))}
+    .dark .hx-toc{background:var(--hawih-ink-2,#14141C);border-color:var(--hawih-ink-line,rgba(255,255,255,.08))}
+    .hx-toc p{font-weight:700;margin:0 0 10px}
+    .hx-toc ol{margin:0;padding-inline-start:1.3em;display:flex;flex-direction:column;gap:7px}
+    .hx-toc a{color:var(--hawih-blue,#1F1FFE);font-weight:500}
+    .hx-related{max-width:820px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:8px}
+    .hx-related .btn{margin:0}
+    @media (max-width:991px){.hx-grid{grid-template-columns:repeat(2,1fr)}.hx-steps{grid-template-columns:repeat(2,1fr)}}
+    @media (max-width:575px){.hx-grid,.hx-steps{grid-template-columns:1fr}.hx-ctarow .btn{flex:1 1 100%;justify-content:center}}
+    </style>
   </head>
 
   <body>
@@ -540,188 +1366,627 @@ button{font-family:inherit}
     height="0" width="0" style="display:none;visibility:hidden"></iframe></noscript>
     <!-- End Google Tag Manager (noscript) -->
     <!-- HAWIH_GTM_BODY_END -->
-    <a class="lp-skip" href="#content"><span class="lang-string" data-ar="تخطَّ إلى المحتوى" data-en="Skip to main content">تخطَّ إلى المحتوى</span></a>
-    <header class="lp-header">
-      <div class="lp-wrap lp-header__inner">
-        <a class="lp-logo" href="/" aria-label="Hawih · هوية"><img src="/assets/img/hawih-logo-black.png" alt="Hawih · هوية" width="120" height="34"></a>
-        <div class="lp-header__actions">
-          <button class="lp-langtoggle langToggle" type="button" aria-label="Switch language"><span class="lang-string" data-ar="EN" data-en="ع">EN</span></button>
-          <a class="lp-btn lp-btn--outline lp-header__call" href="tel:+966502185471" dir="ltr"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span class="lang-string" data-ar="اتصل" data-en="Call">اتصل</span></a>
-          <a class="lp-btn lp-btn--wa" href="https://wa.me/966502185471?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%AA%D8%B5%D9%85%D9%8A%D9%85%20%D8%A8%D8%B1%D9%88%D9%81%D8%A7%D9%8A%D9%84/%D9%85%D9%84%D9%81%20%D8%AA%D8%B9%D8%B1%D9%8A%D9%81%D9%8A%20%D9%84%D8%B4%D8%B1%D9%83%D8%AA%D9%8A." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.999-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.886 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.892c0 2.096.549 4.14 1.595 5.945L0 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.582 0 11.94-5.335 11.944-11.893a11.821 11.821 0 0 0-3.487-8.45"/></svg><span class="lang-string" data-ar="واتساب" data-en="WhatsApp">واتساب</span></a>
+
+    <!-- Loader Start -->
+    <div id="loader" class="loader">
+      <div class="loader__wrapper">
+        <div class="loader__content">
+          <div class="loader__count">
+            <span class="count__text">0</span>
+            <span class="count__percent">%</span>
+          </div>
         </div>
+      </div>
+    </div>
+    <!-- Loader End -->
+
+    <!-- Menu & Menu Hamburger Start -->
+    <nav class="mxd-nav__wrap" data-lenis-prevent="">
+
+      <!-- Hamburger Start -->
+      <div class="mxd-nav__contain loading__fade">
+        <a href="#0" class="mxd-nav__hamburger"><span class="sr-only lang-string" data-ar="القائمة" data-en="Menu">القائمة</span>
+          <!-- flip element -->
+          <div class="hamburger__base"></div>
+          <div class="hamburger__line"></div>
+          <div class="hamburger__line"></div>
+        </a>
+      </div>
+      <!-- Hamburger End -->
+
+      <!-- Main Navigation Start -->
+      <div class="mxd-menu__wrapper">
+        <!-- background active layer -->
+        <div class="mxd-menu__base"></div>
+        <!-- menu container -->
+        <div class="mxd-menu__contain">
+          <div class="mxd-menu__inner">
+            <!-- left side -->
+            <div class="mxd-menu__left">
+              <div class="main-menu">
+                <nav class="main-menu__content">
+                  <ul id="main-menu" class="main-menu__accordion">
+                    <li class="main-menu__item">
+                      <div class="main-menu__toggle">
+                        <a class="main-menu__link btn" href="/">
+                          <span class="btn-caption lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span>
+                        </a>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" version="1.1" viewBox="0 0 20 20">
+                          <path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/>
+                        </svg>
+                      </div>
+                    </li>
+                    <li class="main-menu__item">
+                      <div class="main-menu__toggle">
+                        <a class="main-menu__link btn" href="/work">
+                          <span class="btn-caption lang-string" data-ar="أعمالنا" data-en="Work">أعمالنا</span>
+                        </a>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" version="1.1" viewBox="0 0 20 20">
+                          <path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/>
+                        </svg>
+                      </div>
+                    </li>
+                    <li class="main-menu__item">
+                      <div class="main-menu__toggle">
+                        <span class="main-menu__link btn">
+                          <span class="btn-caption lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span>
+                        </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" version="1.1" viewBox="0 0 20 20">
+                          <path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/>
+                        </svg>
+                      </div>
+                      <ul class="submenu">
+                        <li class="submenu__item">
+                          <a href="/services"><span class="lang-string" data-ar="كل الخدمات" data-en="All services">كل الخدمات</span></a>
+                        </li>
+                        <li class="submenu__item">
+                          <a href="/service-brand"><span class="lang-string" data-ar="العلامة التجارية" data-en="Brand">العلامة التجارية</span></a>
+                        </li>
+                        <li class="submenu__item">
+                          <a href="/service-identity"><span class="lang-string" data-ar="الهوية البصرية" data-en="Identity">الهوية البصرية</span></a>
+                        </li>
+                        <li class="submenu__item">
+                          <a href="/service-ui"><span class="lang-string" data-ar="واجهات المستخدم" data-en="UI design">واجهات المستخدم</span></a>
+                        </li>
+                        <li class="submenu__item">
+                          <a href="/service-ux"><span class="lang-string" data-ar="تجربة المستخدم" data-en="UX design">تجربة المستخدم</span></a>
+                        </li>
+                        <li class="submenu__item">
+                          <a href="/service-marketing"><span class="lang-string" data-ar="التسويق البصري" data-en="Marketing visuals">التسويق البصري</span></a>
+                        </li>
+                        <li class="submenu__item">
+                          <a href="/service-consulting"><span class="lang-string" data-ar="الاستشارات الفنّية" data-en="Creative consulting">الاستشارات الفنّية</span></a>
+                        </li>
+                        <li class="submenu__item">
+                          <a href="/service-events"><span class="lang-string" data-ar="الفعاليات والمناسبات" data-en="Events">الفعاليات والمناسبات</span></a>
+                        </li>
+                        <li class="submenu__item">
+                          <a href="/service-refresh"><span class="lang-string" data-ar="إحياء العلامات" data-en="Brand refresh">إحياء العلامات</span></a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="main-menu__item">
+                      <div class="main-menu__toggle">
+                        <span class="main-menu__link btn">
+                          <span class="btn-caption lang-string" data-ar="الوكالة" data-en="Agency">الوكالة</span>
+                        </span>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" version="1.1" viewBox="0 0 20 20">
+                          <path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/>
+                        </svg>
+                      </div>
+                      <ul class="submenu">
+                        <li class="submenu__item">
+                          <a href="/about"><span class="lang-string" data-ar="من نحن" data-en="About us">من نحن</span></a>
+                        </li>
+                        <li class="submenu__item">
+                          <a href="/quality-guarantee"><span class="lang-string" data-ar="ضمان الجودة" data-en="Quality guarantee">ضمان الجودة</span></a>
+                        </li>
+                        <li class="submenu__item">
+                          <a href="/affiliate"><span class="lang-string" data-ar="برنامج العمولة" data-en="Affiliate program">برنامج العمولة</span></a>
+                        </li>
+                        <li class="submenu__item">
+                          <a href="/careers"><span class="lang-string" data-ar="انضمّ إلينا" data-en="Careers">انضمّ إلينا</span></a>
+                        </li>
+                      </ul>
+                    </li>
+                    <li class="main-menu__item">
+                      <a class="main-menu__link btn" href="/articles">
+                        <span class="btn-caption lang-string" data-ar="المقالات" data-en="Articles">المقالات</span>
+                      </a>
+                    </li>
+                    <li class="main-menu__item">
+                      <a class="main-menu__link btn" href="/contact">
+                        <span class="btn-caption lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span>
+                      </a>
+                    </li>
+                  </ul>
+                </nav>
+              </div>
+            </div>
+            <!-- right side -->
+            <div class="mxd-menu__right">
+              <div class="menu-promo">
+                <div class="menu-promo__content">
+                                    <div class="uc-menu-controls menu-fade-in">
+                    <a class="btn btn-default btn-large btn-outline slide-right-up" href="/contact">
+                      <span class="btn-caption lang-string" data-ar="تواصل معنا" data-en="Contact us">تواصل معنا</span>
+                      <i class="ph-bold ph-arrow-up-right"></i>
+                    </a>
+                    <button data-lang-toggle type="button" class="btn btn-default btn-large btn-outline" aria-label="Toggle language">
+                      <span class="btn-caption lang-string" data-ar="EN" data-en="عربي">EN</span>
+                    </button>
+                    <button data-theme-toggle type="button" class="btn btn-default btn-large btn-outline" aria-label="Toggle theme">
+                      <span class="btn-caption lang-string" data-ar="تبديل المظهر" data-en="Toggle theme">تبديل المظهر</span>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- data bottom line -->
+          </div>
+        </div>
+      </div>
+      <!-- Main Navigation End -->
+
+    </nav>
+    <!-- Menu & Menu Hamburger End -->
+
+    <!-- Header Start -->
+    <header id="header" class="mxd-header">
+      <!-- header logo -->
+      <div class="mxd-header__logo loading__fade">
+        <a href="/" class="mxd-logo">
+          <!-- Hawih logo -->
+          <img class="mxd-logo__image mxd-logo__dark" src="/uc-assets/img/hawih-logo-white.png" alt="Hawih · هوية" style="height: 40px; width: auto;">
+          <img class="mxd-logo__image mxd-logo__light" src="/assets/img/hawih-logo-black.png" alt="Hawih · هوية" style="height: 40px; width: auto; display: none;">
+        </a>
+      </div>
+            <!-- Desktop main navigation — visible on >=992px, mirrors the
+           hamburger menu items. Sub-menu cards open on hover/focus. -->
+      <nav class="uc-desktop-nav" aria-label="Main">
+        <ul class="uc-desktop-nav__list">
+        <li class="uc-desktop-nav__item">
+          <a class="uc-desktop-nav__link" href="/">
+            <svg class="uc-desktop-nav__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/></svg>
+            <span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span>
+          </a>
+        </li>
+        <li class="uc-desktop-nav__item">
+          <a class="uc-desktop-nav__link" href="/work">
+            <svg class="uc-desktop-nav__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/></svg>
+            <span class="lang-string" data-ar="أعمالنا" data-en="Work">أعمالنا</span>
+          </a>
+        </li>
+        <li class="uc-desktop-nav__item uc-desktop-nav__item--has-submenu">
+          <button class="uc-desktop-nav__link" type="button" aria-haspopup="true" aria-expanded="false">
+            <svg class="uc-desktop-nav__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/></svg>
+            <span class="lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span>
+          </button>
+          <ul class="uc-desktop-nav__submenu" role="menu">
+            <li><a href="/services"><span class="lang-string" data-ar="كل الخدمات" data-en="All services">كل الخدمات</span></a></li>
+            <li><a href="/service-brand"><span class="lang-string" data-ar="العلامة التجارية" data-en="Brand">العلامة التجارية</span></a></li>
+            <li><a href="/service-identity"><span class="lang-string" data-ar="الهوية البصرية" data-en="Identity">الهوية البصرية</span></a></li>
+            <li><a href="/service-ui"><span class="lang-string" data-ar="واجهات المستخدم" data-en="UI design">واجهات المستخدم</span></a></li>
+            <li><a href="/service-ux"><span class="lang-string" data-ar="تجربة المستخدم" data-en="UX design">تجربة المستخدم</span></a></li>
+            <li><a href="/service-marketing"><span class="lang-string" data-ar="التسويق البصري" data-en="Marketing visuals">التسويق البصري</span></a></li>
+            <li><a href="/service-consulting"><span class="lang-string" data-ar="الاستشارات الفنّية" data-en="Creative consulting">الاستشارات الفنّية</span></a></li>
+            <li><a href="/service-events"><span class="lang-string" data-ar="الفعاليات والمناسبات" data-en="Events">الفعاليات والمناسبات</span></a></li>
+            <li><a href="/service-refresh"><span class="lang-string" data-ar="إحياء العلامات" data-en="Brand refresh">إحياء العلامات</span></a></li>
+          </ul>
+        </li>
+        <li class="uc-desktop-nav__item uc-desktop-nav__item--has-submenu">
+          <button class="uc-desktop-nav__link" type="button" aria-haspopup="true" aria-expanded="false">
+            <svg class="uc-desktop-nav__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/></svg>
+            <span class="lang-string" data-ar="الوكالة" data-en="Agency">الوكالة</span>
+          </button>
+          <ul class="uc-desktop-nav__submenu" role="menu">
+            <li><a href="/about"><span class="lang-string" data-ar="من نحن" data-en="About us">من نحن</span></a></li>
+            <li><a href="/quality-guarantee"><span class="lang-string" data-ar="ضمان الجودة" data-en="Quality guarantee">ضمان الجودة</span></a></li>
+            <li><a href="/affiliate"><span class="lang-string" data-ar="برنامج العمولة" data-en="Affiliate program">برنامج العمولة</span></a></li>
+            <li><a href="/careers"><span class="lang-string" data-ar="انضمّ إلينا" data-en="Careers">انضمّ إلينا</span></a></li>
+          </ul>
+        </li>
+        <li class="uc-desktop-nav__item">
+          <a class="uc-desktop-nav__link" href="/articles">
+            <svg class="uc-desktop-nav__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/></svg>
+            <span class="lang-string" data-ar="المقالات" data-en="Articles">المقالات</span>
+          </a>
+        </li>
+        <li class="uc-desktop-nav__item">
+          <a class="uc-desktop-nav__link" href="/contact">
+            <svg class="uc-desktop-nav__icon" viewBox="0 0 20 20" aria-hidden="true" focusable="false"><path d="M19.6,9.6h-3.9c-.4,0-1.8-.2-1.8-.2-.6,0-1.1-.2-1.6-.6-.5-.3-.9-.8-1.2-1.2-.3-.4-.4-.9-.5-1.4,0,0,0-1.1-.2-1.5V.4c0-.2-.2-.4-.4-.4s-.4.2-.4.4v4.4c0,.4-.2,1.5-.2,1.5,0,.5-.2,1-.5,1.4-.3.5-.7.9-1.2,1.2s-1,.5-1.6.6c0,0-1.2,0-1.7.2H.4c-.2,0-.4.2-.4.4s.2.4.4.4h4.1c.4,0,1.7.2,1.7.2.6,0,1.1.2,1.6.6.4.3.8.7,1.1,1.1.3.5.5,1,.6,1.6,0,0,0,1.3.2,1.7v4.1c0,.2.2.4.4.4s.4-.2.4-.4v-4.1c0-.4.2-1.7.2-1.7,0-.6.2-1.1.6-1.6.3-.4.7-.8,1.1-1.1.5-.3,1-.5,1.6-.6,0,0,1.3,0,1.8-.2h3.9c.2,0,.4-.2.4-.4s-.2-.4-.4-.4h0Z"/></svg>
+            <span class="lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span>
+          </a>
+        </li>
+        </ul>
+      </nav>
+      <!-- header controls -->
+
+      <div class="mxd-header__controls loading__fade">
+        <button id="color-switcher" class="mxd-color-switcher" type="button" role="switch" aria-label="light/dark mode" aria-checked="true"></button>
+        <button data-lang-toggle type="button" class="btn btn-default btn-outline" aria-label="Toggle language">
+          <span class="btn-caption lang-string" data-ar="EN" data-en="عربي">EN</span>
+        </button>
+        <a class="btn btn-default btn-mobile-icon btn-outline slide-right-up" href="/contact">
+          <span class="btn-caption lang-string" data-ar="تواصل معنا" data-en="Contact us">تواصل معنا</span>
+          <i class="ph-bold ph-arrow-up-right"></i>
+        </a>
       </div>
     </header>
+    <!-- Header End -->
 
-    <main id="content">
-      <!-- Hero -->
-      <section class="lp-hero">
-        <div class="lp-wrap lp-hero__grid">
-          <div class="lp-hero__copy">
-            <p class="lp-eyebrow"><span class="lang-string" data-ar="البروفايل والملف التعريفي · الرياض" data-en="Company profile · Riyadh">البروفايل والملف التعريفي · الرياض</span></p>
-            <h1 class="lp-h1"><span class="lang-string" data-ar="بروفايل شركة" data-en="Company Profile">بروفايل شركة</span></h1>
-            <p class="lp-sub"><span class="lang-string" data-ar="ملف تعريفي مصمَّم بعناية يقدّم شركتك وخدماتك بثقة — بتنسيق واضح وثنائي اللغة، جاهز للطباعة والعرض الرقمي." data-en="A carefully designed profile that presents your company and services with confidence — clear, bilingual layout, ready for print and digital.">ملف تعريفي مصمَّم بعناية يقدّم شركتك وخدماتك بثقة — بتنسيق واضح وثنائي اللغة، جاهز للطباعة والعرض الرقمي.</span></p>
-        <ul class="lp-chips">
-          <li class="lp-chip"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 8.5 15 16 5.5"/></svg><span class="lang-string" data-ar="خبرة منذ ٢٠٠٧" data-en="Experience since 2007">خبرة منذ ٢٠٠٧</span></li>
-          <li class="lp-chip"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 8.5 15 16 5.5"/></svg><span class="lang-string" data-ar="أكثر من ٢٤ مشروع علامة" data-en="24+ brand projects">أكثر من ٢٤ مشروع علامة</span></li>
-          <li class="lp-chip"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 8.5 15 16 5.5"/></svg><span class="lang-string" data-ar="ردّ خلال يوم عمل" data-en="Reply within one working day">ردّ خلال يوم عمل</span></li>
-        </ul>
-            <div class="lp-hero__cta">
-              <a class="lp-btn lp-btn--wa lp-btn--lg" href="https://wa.me/966502185471?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%AA%D8%B5%D9%85%D9%8A%D9%85%20%D8%A8%D8%B1%D9%88%D9%81%D8%A7%D9%8A%D9%84/%D9%85%D9%84%D9%81%20%D8%AA%D8%B9%D8%B1%D9%8A%D9%81%D9%8A%20%D9%84%D8%B4%D8%B1%D9%83%D8%AA%D9%8A." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.999-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.886 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.892c0 2.096.549 4.14 1.595 5.945L0 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.582 0 11.94-5.335 11.944-11.893a11.821 11.821 0 0 0-3.487-8.45"/></svg><span class="lang-string" data-ar="تواصل عبر واتساب" data-en="Chat on WhatsApp">تواصل عبر واتساب</span></a>
-              <a class="lp-btn lp-btn--outline lp-btn--lg" href="tel:+966502185471" dir="ltr"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span class="lang-string" data-ar="اتصل الآن" data-en="Call now">اتصل الآن</span></a>
-            </div>
-            <p class="lp-hero__note"><span class="lang-string" data-ar="استشارة أولية مجانية · بدون التزام" data-en="Free first consultation · no obligation">استشارة أولية مجانية · بدون التزام</span></p>
-          </div>
-          <div class="lp-hero__form">
-            <div class="lp-card">
-              <h2 class="lp-card__title"><span class="lang-string" data-ar="اطلب بروفايل شركتك" data-en="Request your company profile">اطلب بروفايل شركتك</span></h2>
-              <p class="lp-card__sub"><span class="lang-string" data-ar="نموذج موجز يصل فريقنا مباشرة." data-en="A short brief that reaches our team directly.">نموذج موجز يصل فريقنا مباشرة.</span></p>
-        <form class="lp-form" id="leadForm" action="/api/lead.php" method="POST" novalidate>
-          <input type="hidden" name="source" value="/company-profile">
-          <input type="hidden" name="lang" id="lang_input" value="ar">
-          <input type="hidden" name="project_type" value="company-profile">
-          <div class="lp-hp" aria-hidden="true"><label>If you are human leave this empty<input type="text" name="company_website" tabindex="-1" autocomplete="off"></label></div>
-          <div class="lp-field">
-            <label class="lp-label" for="f-name"><span class="lang-string" data-ar="الاسم" data-en="Full name">الاسم</span></label>
-            <input class="lp-input lang-input" id="f-name" name="name" type="text" required maxlength="120" autocomplete="name" data-placeholder-ar="اكتب اسمك" data-placeholder-en="Your name" placeholder="اكتب اسمك">
-          </div>
-          <div class="lp-field">
-            <label class="lp-label" for="f-phone"><span class="lang-string" data-ar="رقم الجوّال" data-en="Phone">رقم الجوّال</span></label>
-            <input class="lp-input" id="f-phone" name="phone" type="tel" dir="ltr" maxlength="40" autocomplete="tel" placeholder="+966 5x xxx xxxx">
-          </div>
-          <div class="lp-field">
-            <label class="lp-label" for="f-email"><span class="lang-string" data-ar="البريد الإلكتروني" data-en="Email">البريد الإلكتروني</span></label>
-            <input class="lp-input" id="f-email" name="email" type="email" required dir="ltr" maxlength="200" autocomplete="email" placeholder="you@brand.com">
-          </div>
-          <div class="lp-field">
-            <label class="lp-label" for="f-brief"><span class="lang-string" data-ar="نبذة سريعة عن طلبك" data-en="A quick note about your project">نبذة سريعة عن طلبك</span></label>
-            <textarea class="lp-input lp-textarea" id="f-brief" name="brief" required maxlength="4000" rows="3" placeholder="—"></textarea>
-          </div>
-          <button class="lp-btn lp-btn--primary lp-btn--block" type="submit" id="leadSubmitBtn"><span class="lang-string" data-ar="أرسل الطلب" data-en="Send request">أرسل الطلب</span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lp-arrow"><path d="M7 17 17 7M9 7h8v8"/></svg></button>
-          <p class="lp-form__note"><span class="lang-string" data-ar="بياناتك تصل فريقنا مباشرة، ونرد خلال يوم عمل." data-en="Your details reach our team directly; we reply within one working day.">بياناتك تصل فريقنا مباشرة، ونرد خلال يوم عمل.</span></p>
-          <a class="lp-form__wa" href="https://wa.me/966502185471?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%AA%D8%B5%D9%85%D9%8A%D9%85%20%D8%A8%D8%B1%D9%88%D9%81%D8%A7%D9%8A%D9%84/%D9%85%D9%84%D9%81%20%D8%AA%D8%B9%D8%B1%D9%8A%D9%81%D9%8A%20%D9%84%D8%B4%D8%B1%D9%83%D8%AA%D9%8A." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.999-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.886 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.892c0 2.096.549 4.14 1.595 5.945L0 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.582 0 11.94-5.335 11.944-11.893a11.821 11.821 0 0 0-3.487-8.45"/></svg><span class="lang-string" data-ar="أو تواصل عبر واتساب" data-en="Or message us on WhatsApp">أو تواصل عبر واتساب</span></a>
-        </form>
-        <script>(function(){var f=document.getElementById('leadForm');if(!f)return;f.addEventListener('submit',function(){var b=document.getElementById('leadSubmitBtn');if(b){setTimeout(function(){b.disabled=true;},0);}});})();</script>
-            </div>
-          </div>
-        </div>
-      </section>
-
-    <section class="lp-logos" aria-label="Clients">
-      <div class="lp-wrap">
-        <p class="lp-logos__label"><span class="lang-string" data-ar="علامات وثقت بهوية" data-en="Brands that have trusted Hawih">علامات وثقت بهوية</span></p>
-        <div class="lp-logos__row">
-        <img class="lp-logos__img" src="/assets/img/clients/king-saud-university.webp" alt="King Saud University" loading="lazy" decoding="async" height="38">
-        <img class="lp-logos__img" src="/assets/img/clients/hoshan.png" alt="Hoshan" loading="lazy" decoding="async" height="38">
-        <img class="lp-logos__img" src="/assets/img/clients/makaseb.png" alt="Makaseb" loading="lazy" decoding="async" height="38">
-        <img class="lp-logos__img" src="/assets/img/clients/camel-club.png" alt="Camel Club" loading="lazy" decoding="async" height="38">
-        <img class="lp-logos__img" src="/assets/img/clients/awan-square.png" alt="Awan" loading="lazy" decoding="async" height="38">
-        <img class="lp-logos__img" src="/assets/img/clients/nab.png" alt="NAB" loading="lazy" decoding="async" height="38">
-        <img class="lp-logos__img" src="/assets/img/clients/riwaq.png" alt="Riwaq" loading="lazy" decoding="async" height="38">
-        <img class="lp-logos__img" src="/assets/img/clients/almasar.png" alt="Almasar" loading="lazy" decoding="async" height="38">
-        </div>
-      </div>
-    </section>
-
-    <section class="lp-section">
-      <div class="lp-wrap">
-        <p class="lp-eyebrow lp-center"><span class="lang-string" data-ar="ماذا تستلم" data-en="What you get">ماذا تستلم</span></p>
-        <h2 class="lp-h2 lp-center"><span class="lang-string" data-ar="بروفايل شركة — كل ما تحتاجه" data-en="Company Profile — everything you need">بروفايل شركة — كل ما تحتاجه</span></h2>
-        <ul class="lp-grid">
-          <li class="lp-tile"><span class="lp-tile__ic"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 8.5 15 16 5.5"/></svg></span><span class="lang-string" data-ar="تصميم غلاف وصفحات داخلية متّسقة" data-en="Cover and consistent inner-page design">تصميم غلاف وصفحات داخلية متّسقة</span></li>
-          <li class="lp-tile"><span class="lp-tile__ic"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 8.5 15 16 5.5"/></svg></span><span class="lang-string" data-ar="تنسيق المحتوى والصور باحترافية" data-en="Professional content and image layout">تنسيق المحتوى والصور باحترافية</span></li>
-          <li class="lp-tile"><span class="lp-tile__ic"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 8.5 15 16 5.5"/></svg></span><span class="lang-string" data-ar="نسخة عربية وإنجليزية" data-en="Arabic and English versions">نسخة عربية وإنجليزية</span></li>
-          <li class="lp-tile"><span class="lp-tile__ic"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 8.5 15 16 5.5"/></svg></span><span class="lang-string" data-ar="ملف PDF تفاعلي + نسخة للطباعة" data-en="An interactive PDF + a print-ready version">ملف PDF تفاعلي + نسخة للطباعة</span></li>
-          <li class="lp-tile"><span class="lp-tile__ic"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 8.5 15 16 5.5"/></svg></span><span class="lang-string" data-ar="إنفوجرافيك ورسوم لعرض الأرقام" data-en="Infographics to present key numbers">إنفوجرافيك ورسوم لعرض الأرقام</span></li>
-          <li class="lp-tile"><span class="lp-tile__ic"><svg viewBox="0 0 20 20" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 8.5 15 16 5.5"/></svg></span><span class="lang-string" data-ar="ملفات مفتوحة قابلة للتحديث" data-en="Open, updatable source files">ملفات مفتوحة قابلة للتحديث</span></li>
-        </ul>
-      </div>
-    </section>
-
-    <section class="lp-section lp-section--alt">
-      <div class="lp-wrap">
-        <p class="lp-eyebrow lp-center"><span class="lang-string" data-ar="طريقة العمل" data-en="How we work">طريقة العمل</span></p>
-        <h2 class="lp-h2 lp-center"><span class="lang-string" data-ar="أربع خطوات واضحة من الفكرة إلى التسليم" data-en="Four clear steps from idea to handover">أربع خطوات واضحة من الفكرة إلى التسليم</span></h2>
-        <ol class="lp-steps">
-          <li class="lp-step"><span class="lp-step__n">01</span><div class="lp-step__body"><h3 class="lp-step__title"><span class="lang-string" data-ar="الاكتشاف" data-en="Discovery">الاكتشاف</span></h3><p class="lp-step__txt"><span class="lang-string" data-ar="نفهم نشاطك وجمهورك وأهدافك في جلسة قصيرة." data-en="We learn your business, audience, and goals in a short session.">نفهم نشاطك وجمهورك وأهدافك في جلسة قصيرة.</span></p></div></li>
-          <li class="lp-step"><span class="lp-step__n">02</span><div class="lp-step__body"><h3 class="lp-step__title"><span class="lang-string" data-ar="التوجّه" data-en="Direction">التوجّه</span></h3><p class="lp-step__txt"><span class="lang-string" data-ar="نتّفق على الاتجاه والمراجع قبل أي تنفيذ." data-en="We agree on direction and references before any execution.">نتّفق على الاتجاه والمراجع قبل أي تنفيذ.</span></p></div></li>
-          <li class="lp-step"><span class="lp-step__n">03</span><div class="lp-step__body"><h3 class="lp-step__title"><span class="lang-string" data-ar="التصميم" data-en="Design">التصميم</span></h3><p class="lp-step__txt"><span class="lang-string" data-ar="ننفّذ ونعرض مقترحات واضحة مع جولات مراجعة." data-en="We design and present clear options with review rounds.">ننفّذ ونعرض مقترحات واضحة مع جولات مراجعة.</span></p></div></li>
-          <li class="lp-step"><span class="lp-step__n">04</span><div class="lp-step__body"><h3 class="lp-step__title"><span class="lang-string" data-ar="التسليم" data-en="Delivery">التسليم</span></h3><p class="lp-step__txt"><span class="lang-string" data-ar="نسلّم الملفات المفتوحة ودليل الاستخدام جاهزة للعمل." data-en="We hand off open files and a usage guide, ready to use.">نسلّم الملفات المفتوحة ودليل الاستخدام جاهزة للعمل.</span></p></div></li>
-        </ol>
-      </div>
-    </section>
-
-    <section class="lp-section">
-      <div class="lp-wrap">
-        <p class="lp-eyebrow lp-center"><span class="lang-string" data-ar="من أعمالنا" data-en="From our work">من أعمالنا</span></p>
-        <h2 class="lp-h2 lp-center"><span class="lang-string" data-ar="مشاريع نفخر بها" data-en="Projects we are proud of">مشاريع نفخر بها</span></h2>
-        <div class="lp-work">
-          <a class="lp-work__item" href="/work-oversight"><img class="lp-work__img" src="/assets/img/work/oversight/01.jpeg" alt="Oversight — Hawih" loading="lazy" decoding="async"><span class="lp-work__name">Oversight</span></a>
-          <a class="lp-work__item" href="/work-leader"><img class="lp-work__img" src="/assets/img/work/leader/01.jpeg" alt="Leader — Hawih" loading="lazy" decoding="async"><span class="lp-work__name">Leader</span></a>
-          <a class="lp-work__item" href="/work-direct"><img class="lp-work__img" src="/assets/img/work/direct/01.jpeg" alt="Direct — Hawih" loading="lazy" decoding="async"><span class="lp-work__name">Direct</span></a>
-        </div>
-        <div class="lp-center"><a class="lp-textlink" href="/work"><span class="lang-string" data-ar="استعرض كل الأعمال" data-en="View all work">استعرض كل الأعمال</span><svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" class="lp-arrow"><path d="M7 17 17 7M9 7h8v8"/></svg></a></div>
-      </div>
-    </section>
-
-    <section class="lp-section lp-section--alt">
-      <div class="lp-wrap lp-wrap--narrow">
-        <p class="lp-eyebrow lp-center"><span class="lang-string" data-ar="أسئلة شائعة" data-en="Common questions">أسئلة شائعة</span></p>
-        <h2 class="lp-h2 lp-center"><span class="lang-string" data-ar="ربما يدور في ذهنك" data-en="You might be wondering">ربما يدور في ذهنك</span></h2>
-        <div class="lp-faq">
-          <details class="lp-faq__item">
-            <summary class="lp-faq__q"><span class="lang-string" data-ar="هل تكتبون المحتوى أم أوفّره أنا؟" data-en="Do you write the content or do I provide it?">هل تكتبون المحتوى أم أوفّره أنا؟</span><span class="lp-faq__sign" aria-hidden="true"></span></summary>
-            <div class="lp-faq__a"><p><span class="lang-string" data-ar="يمكننا التنسيق على محتواك الجاهز، أو نساعدك في صياغته وترتيبه — أخبرنا بما يناسبك." data-en="We can lay out your ready content, or help you write and structure it — tell us what suits you.">يمكننا التنسيق على محتواك الجاهز، أو نساعدك في صياغته وترتيبه — أخبرنا بما يناسبك.</span></p></div>
-          </details>
-          <details class="lp-faq__item">
-            <summary class="lp-faq__q"><span class="lang-string" data-ar="كم صفحة يتضمّن البروفايل؟" data-en="How many pages does a profile include?">كم صفحة يتضمّن البروفايل؟</span><span class="lp-faq__sign" aria-hidden="true"></span></summary>
-            <div class="lp-faq__a"><p><span class="lang-string" data-ar="يعتمد على نشاطك ومحتواك؛ نتّفق على عدد الصفحات والأقسام في بداية المشروع." data-en="It depends on your business and content; we agree on page count and sections at the start.">يعتمد على نشاطك ومحتواك؛ نتّفق على عدد الصفحات والأقسام في بداية المشروع.</span></p></div>
-          </details>
-          <details class="lp-faq__item">
-            <summary class="lp-faq__q"><span class="lang-string" data-ar="هل التصميم ثنائي اللغة فعلاً؟" data-en="Is the design truly bilingual?">هل التصميم ثنائي اللغة فعلاً؟</span><span class="lp-faq__sign" aria-hidden="true"></span></summary>
-            <div class="lp-faq__a"><p><span class="lang-string" data-ar="نعم، نصمّم العربية والإنجليزية معاً منذ البداية — وليست ترجمة لاحقة مقحَمة على التصميم." data-en="Yes — we design Arabic and English together from the start, not a translation bolted on afterward.">نعم، نصمّم العربية والإنجليزية معاً منذ البداية — وليست ترجمة لاحقة مقحَمة على التصميم.</span></p></div>
-          </details>
-          <details class="lp-faq__item">
-            <summary class="lp-faq__q"><span class="lang-string" data-ar="هل أستطيع تحديث البروفايل لاحقاً؟" data-en="Can I update the profile later?">هل أستطيع تحديث البروفايل لاحقاً؟</span><span class="lp-faq__sign" aria-hidden="true"></span></summary>
-            <div class="lp-faq__a"><p><span class="lang-string" data-ar="نعم، نسلّمك الملفات المفتوحة لتحدّث الأرقام والمحتوى عند الحاجة." data-en="Yes — we hand off the open files so you can update numbers and content whenever you need.">نعم، نسلّمك الملفات المفتوحة لتحدّث الأرقام والمحتوى عند الحاجة.</span></p></div>
-          </details>
-        </div>
-      </div>
-    </section>
-
-      <!-- Final CTA -->
-      <section class="lp-cta">
-        <div class="lp-wrap">
-          <h2 class="lp-cta__title"><span class="lang-string" data-ar="جاهز نبدأ مشروعك؟" data-en="Ready to start your project?">جاهز نبدأ مشروعك؟</span></h2>
-          <p class="lp-cta__sub"><span class="lang-string" data-ar="أرسل لنا رسالة قصيرة الآن، وسنرد عليك خلال يوم عمل بخطوات واضحة." data-en="Send us a short message now and we&#x27;ll reply within one working day with clear next steps.">أرسل لنا رسالة قصيرة الآن، وسنرد عليك خلال يوم عمل بخطوات واضحة.</span></p>
-          <div class="lp-hero__cta lp-center">
-            <a class="lp-btn lp-btn--wa lp-btn--lg" href="https://wa.me/966502185471?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%AA%D8%B5%D9%85%D9%8A%D9%85%20%D8%A8%D8%B1%D9%88%D9%81%D8%A7%D9%8A%D9%84/%D9%85%D9%84%D9%81%20%D8%AA%D8%B9%D8%B1%D9%8A%D9%81%D9%8A%20%D9%84%D8%B4%D8%B1%D9%83%D8%AA%D9%8A." target="_blank" rel="noopener"><svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51l-.57-.01c-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.999-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.885-9.886 9.885M20.52 3.449C18.24 1.245 15.24 0 12.045 0 5.463 0 .104 5.334.101 11.892c0 2.096.549 4.14 1.595 5.945L0 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.582 0 11.94-5.335 11.944-11.893a11.821 11.821 0 0 0-3.487-8.45"/></svg><span class="lang-string" data-ar="تواصل عبر واتساب" data-en="Chat on WhatsApp">تواصل عبر واتساب</span></a>
-            <a class="lp-btn lp-btn--outline lp-btn--lg" href="tel:+966502185471" dir="ltr"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.127.96.36 1.9.7 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.34 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg><span class="lang-string" data-ar="اتصل الآن" data-en="Call now">اتصل الآن</span></a>
-            <a class="lp-btn lp-btn--ghost lp-btn--lg" href="#leadForm"><span class="lang-string" data-ar="أو املأ النموذج" data-en="Or fill the form">أو املأ النموذج</span></a>
-          </div>
-        </div>
-      </section>
+    <!-- Page Content Start -->
+    
+<main id="mxd-page-content" class="mxd-page-content inner-page-content">
+      <div class="mxd-section mxd-section-inner-headline padding-default"><div class="mxd-container grid-container"><div class="mxd-block loading-wrap"><div class="container-fluid px-0"><div class="row gx-0"><div class="col-12 col-xl-2 mxd-grid-item no-margin"><div class="mxd-block__name name-inner-headline loading__item"><p class="mxd-point-subtitle"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 20 20" fill="currentColor"><path fill="currentColor" d="M19.6,9.6c0,0-3,0-4,0c-0.4,0-1.8-0.2-1.8-0.2c-0.6-0.1-1.1-0.2-1.6-0.6c-0.5-0.3-0.9-0.8-1.2-1.2c-0.3-0.4-0.4-0.9-0.5-1.4c0,0-0.1-1.1-0.2-1.5c-0.1-1.1,0-4.4,0-4.4C10.4,0.2,10.2,0,10,0S9.6,0.2,9.6,0.4c0,0,0.1,3.3,0,4.4c0,0.4-0.2,1.5-0.2,1.5C9.4,6.7,9.2,7.2,9,7.6C8.7,8.1,8.2,8.5,7.8,8.9c-0.5,0.3-1,0.5-1.6,0.6c0,0-1.2,0.1-1.7,0.2c-1,0.1-4.2,0-4.2,0C0.2,9.6,0,9.8,0,10c0,0.2,0.2,0.4,0.4,0.4c0,0,3.1-0.1,4.2,0c0.4,0,1.7,0.2,1.7,0.2c0.6,0.1,1.1,0.2,1.6,0.6c0.4,0.3,0.8,0.7,1.1,1.1c0.3,0.5,0.5,1,0.6,1.6c0,0,0.1,1.3,0.2,1.7c0,1,0,4.1,0,4.1c0,0.2,0.2,0.4,0.4,0.4s0.4-0.2,0.4-0.4c0,0,0-3.1,0-4.1c0-0.4,0.2-1.7,0.2-1.7c0.1-0.6,0.2-1.1,0.6-1.6c0.3-0.4,0.7-0.8,1.1-1.1c0.5-0.3,1-0.5,1.6-0.6c0,0,1.3-0.1,1.8-0.2c1,0,4,0,4,0c0.2,0,0.4-0.2,0.4-0.4C20,9.8,19.8,9.6,19.6,9.6L19.6,9.6z"/></svg> <span><span class="lang-string" data-ar="البروفايل والملف التعريفي · الرياض" data-en="Company profile · Riyadh">البروفايل والملف التعريفي · الرياض</span></span></p></div></div><div class="col-12 col-xl-10 mxd-grid-item no-margin"><div class="mxd-block__content"><div class="mxd-block__inner-headline loading__item"><h1 class="inner-headline__title"><span class="lang-string" data-ar="بروفايل شركة" data-en="Company Profile">بروفايل شركة</span></h1><p class="inner-headline__text t-large t-bright"><span class="lang-string" data-ar="ملف تعريفي مصمَّم بعناية يقدّم شركتك وخدماتك بثقة — بتنسيق واضح وثنائي اللغة، جاهز للطباعة والعرض الرقمي." data-en="A carefully designed profile that presents your company and services with confidence — clear, bilingual layout, ready for print and digital.">ملف تعريفي مصمَّم بعناية يقدّم شركتك وخدماتك بثقة — بتنسيق واضح وثنائي اللغة، جاهز للطباعة والعرض الرقمي.</span></p><div class="hx-ctarow"><a class="btn btn-anim btn-opposite btn-large slide-right-up" href="https://wa.me/966502185471?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%AA%D8%B5%D9%85%D9%8A%D9%85%20%D8%A8%D8%B1%D9%88%D9%81%D8%A7%D9%8A%D9%84/%D9%85%D9%84%D9%81%20%D8%AA%D8%B9%D8%B1%D9%8A%D9%81%D9%8A%20%D9%84%D8%B4%D8%B1%D9%83%D8%AA%D9%8A." target="_blank" rel="noopener"><span class="lang-string btn-caption" data-ar="تواصل عبر واتساب" data-en="Chat on WhatsApp">تواصل عبر واتساب</span><i class="ph-bold ph-whatsapp-logo"></i></a><a class="btn btn-anim btn-outline btn-large slide-right-up" href="tel:+966502185471"><span class="lang-string btn-caption" data-ar="اتصل الآن" data-en="Call now">اتصل الآن</span><i class="ph-bold ph-phone"></i></a><a class="btn btn-anim btn-outline btn-large slide-right-up" href="/assets/files/Hawih-Profile.pdf" target="_blank" rel="noopener"><span class="lang-string btn-caption" data-ar="ملف الأعمال (PDF)" data-en="Portfolio (PDF)">ملف الأعمال (PDF)</span><i class="ph-bold ph-file-pdf"></i></a></div></div></div></div></div></div></div></div></div>      <div class="mxd-section mxd-section-inner-form overflow-hidden padding-default"><div class="mxd-container grid-container"><div class="mxd-block"><div class="mxd-section-title"><div class="container-fluid p-0"><div class="row g-0"><div class="col-12 col-xl-6 mxd-grid-item no-margin"><div class="mxd-section-title__hrtitle anim-uni-in-up"><h2 class="reveal-type"><span class="lang-string" data-ar="اطلب بروفايل شركتك" data-en="Request your company profile">اطلب بروفايل شركتك</span></h2></div></div><div class="col-12 col-xl-6 mxd-grid-item no-margin"><div class="mxd-section-title__hrdescr"><p class="anim-uni-in-up"><span class="lang-string" data-ar="نموذج موجز يصل فريقنا مباشرة، ونرد خلال يوم عمل." data-en="A short brief reaches our team directly; we reply within one working day.">نموذج موجز يصل فريقنا مباشرة، ونرد خلال يوم عمل.</span></p></div></div></div></div></div></div><div class="mxd-block"><div class="mxd-block__inner-form"><div class="form-container"><form class="form contact-form" id="leadForm" action="/api/lead.php" method="POST" novalidate><input type="hidden" name="source" value="/company-profile"><input type="hidden" name="lang" id="lang_input" value="ar"><input type="hidden" name="project_type" value="company-profile"><div aria-hidden="true" style="position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;"><label>If you are human leave this empty<input type="text" name="company_website" tabindex="-1" autocomplete="off"></label></div><div class="container-fluid p-0"><div class="row gx-0"><div class="col-12 col-md-6 mxd-grid-item anim-uni-in-up"><label class="uc-field-label" for="f-name"><span class="lang-string" data-ar="الاسم" data-en="Full name">الاسم</span></label><input type="text" id="f-name" name="name" required maxlength="120" autocomplete="name" placeholder="—"></div><div class="col-12 col-md-6 mxd-grid-item anim-uni-in-up"><label class="uc-field-label" for="f-phone"><span class="lang-string" data-ar="رقم الجوّال" data-en="Phone">رقم الجوّال</span></label><input type="tel" id="f-phone" name="phone" maxlength="40" dir="ltr" autocomplete="tel" placeholder="+966 5x xxx xxxx"></div><div class="col-12 col-md-6 mxd-grid-item anim-uni-in-up"><label class="uc-field-label" for="f-email"><span class="lang-string" data-ar="البريد الإلكتروني" data-en="Email">البريد الإلكتروني</span></label><input type="email" id="f-email" name="email" required maxlength="200" dir="ltr" autocomplete="email" placeholder="you@brand.com"></div><div class="col-12 col-md-6 mxd-grid-item anim-uni-in-up"><label class="uc-field-label" for="f-company"><span class="lang-string" data-ar="الجهة / الشركة" data-en="Company / Entity">الجهة / الشركة</span></label><input type="text" id="f-company" name="company" maxlength="200" autocomplete="organization" placeholder="—"></div><div class="col-12 mxd-grid-item anim-uni-in-up"><label class="uc-field-label" for="f-msg"><span class="lang-string" data-ar="نبذة سريعة عن طلبك" data-en="A quick note about your project">نبذة سريعة عن طلبك</span></label><textarea id="f-msg" name="brief" required maxlength="4000" placeholder="—"></textarea></div><div class="col-12 mxd-grid-item anim-uni-in-up uc-form-submit"><button class="btn btn-anim btn-default btn-large btn-opposite slide-right-up" type="submit" id="leadSubmitBtn"><span class="lang-string btn-caption" data-ar="أرسل الطلب" data-en="Send request">أرسل الطلب</span><i class="ph-bold ph-arrow-up-right"></i></button><a class="btn btn-anim btn-default btn-large btn-additional slide-right-up" href="https://wa.me/966502185471?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%AA%D8%B5%D9%85%D9%8A%D9%85%20%D8%A8%D8%B1%D9%88%D9%81%D8%A7%D9%8A%D9%84/%D9%85%D9%84%D9%81%20%D8%AA%D8%B9%D8%B1%D9%8A%D9%81%D9%8A%20%D9%84%D8%B4%D8%B1%D9%83%D8%AA%D9%8A." target="_blank" rel="noopener"><span class="lang-string btn-caption" data-ar="أو عبر واتساب" data-en="Or via WhatsApp">أو عبر واتساب</span><i class="ph-bold ph-whatsapp-logo"></i></a></div></div></div></form><script>(function(){var f=document.getElementById('leadForm');if(!f)return;f.addEventListener('submit',function(){var b=document.getElementById('leadSubmitBtn');if(b){setTimeout(function(){b.disabled=true;},0);}});})();</script></div></div></div></div></div>      <div class="mxd-section padding-default "><div class="mxd-container grid-container"><div class="mxd-block"><p class="mxd-point-subtitle anim-uni-in-up" style="justify-content:center;text-align:center;margin-bottom:28px"><svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 20 20" fill="currentColor"><path fill="currentColor" d="M19.6,9.6c0,0-3,0-4,0c-0.4,0-1.8-0.2-1.8-0.2c-0.6-0.1-1.1-0.2-1.6-0.6c-0.5-0.3-0.9-0.8-1.2-1.2c-0.3-0.4-0.4-0.9-0.5-1.4c0,0-0.1-1.1-0.2-1.5c-0.1-1.1,0-4.4,0-4.4C10.4,0.2,10.2,0,10,0S9.6,0.2,9.6,0.4c0,0,0.1,3.3,0,4.4c0,0.4-0.2,1.5-0.2,1.5C9.4,6.7,9.2,7.2,9,7.6C8.7,8.1,8.2,8.5,7.8,8.9c-0.5,0.3-1,0.5-1.6,0.6c0,0-1.2,0.1-1.7,0.2c-1,0.1-4.2,0-4.2,0C0.2,9.6,0,9.8,0,10c0,0.2,0.2,0.4,0.4,0.4c0,0,3.1-0.1,4.2,0c0.4,0,1.7,0.2,1.7,0.2c0.6,0.1,1.1,0.2,1.6,0.6c0.4,0.3,0.8,0.7,1.1,1.1c0.3,0.5,0.5,1,0.6,1.6c0,0,0.1,1.3,0.2,1.7c0,1,0,4.1,0,4.1c0,0.2,0.2,0.4,0.4,0.4s0.4-0.2,0.4-0.4c0,0,0-3.1,0-4.1c0-0.4,0.2-1.7,0.2-1.7c0.1-0.6,0.2-1.1,0.6-1.6c0.3-0.4,0.7-0.8,1.1-1.1c0.5-0.3,1-0.5,1.6-0.6c0,0,1.3-0.1,1.8-0.2c1,0,4,0,4,0c0.2,0,0.4-0.2,0.4-0.4C20,9.8,19.8,9.6,19.6,9.6L19.6,9.6z"/></svg> <span><span class="lang-string" data-ar="علامات وثقت بهوية" data-en="Brands that have trusted Hawih">علامات وثقت بهوية</span></span></p><div class="hx-logos"><img class="anim-uni-in-up" src="/assets/img/clients/king-saud-university.webp" alt="King Saud University" loading="lazy" decoding="async" height="40"><img class="anim-uni-in-up" src="/assets/img/clients/hoshan.png" alt="Hoshan" loading="lazy" decoding="async" height="40"><img class="anim-uni-in-up" src="/assets/img/clients/makaseb.png" alt="Makaseb" loading="lazy" decoding="async" height="40"><img class="anim-uni-in-up" src="/assets/img/clients/camel-club.png" alt="Camel Club" loading="lazy" decoding="async" height="40"><img class="anim-uni-in-up" src="/assets/img/clients/awan-square.png" alt="Awan" loading="lazy" decoding="async" height="40"><img class="anim-uni-in-up" src="/assets/img/clients/nab.png" alt="NAB" loading="lazy" decoding="async" height="40"><img class="anim-uni-in-up" src="/assets/img/clients/riwaq.png" alt="Riwaq" loading="lazy" decoding="async" height="40"><img class="anim-uni-in-up" src="/assets/img/clients/almasar.png" alt="Almasar" loading="lazy" decoding="async" height="40"></div></div></div></div>      <div class="mxd-section padding-default "><div class="mxd-container grid-container"><div class="mxd-block"><div class="mxd-section-title"><div class="container-fluid p-0"><div class="row g-0"><div class="col-12 col-xl-6 mxd-grid-item no-margin"><div class="mxd-section-title__hrtitle anim-uni-in-up"><h2 class="reveal-type"><span class="lang-string" data-ar="أعمال نفخر بها" data-en="Work we are proud of">أعمال نفخر بها</span></h2></div></div><div class="col-12 col-xl-6 mxd-grid-item no-margin"><div class="mxd-section-title__hrdescr"><p class="anim-uni-in-up"><span class="lang-string" data-ar="نماذج حقيقية من مشاريعنا" data-en="Real samples from our projects">نماذج حقيقية من مشاريعنا</span></p></div></div></div></div></div></div><div class="mxd-block"><div class="container-fluid px-0"><div class="row g-4 mxd-works-grid"><div class="col-12 col-sm-6 col-lg-4 mxd-project-item anim-uni-in-up"><a class="mxd-project-item__media" href="/work-oversight"><div class="mxd-project-item__preview"><img loading="lazy" decoding="async" src="/assets/img/work/oversight/01.jpeg" alt="Oversight — Hawih"></div><div class="mxd-project-item__tags"><span class="tag tag-default tag-permanent"><span class="lang-string" data-ar="البروفايل والملف التعريفي" data-en="Company profile">البروفايل والملف التعريفي</span></span></div></a><div class="mxd-project-item__promo"><div class="mxd-project-item__name"><a href="/work-oversight"><span>Oversight</span></a></div></div></div><div class="col-12 col-sm-6 col-lg-4 mxd-project-item anim-uni-in-up"><a class="mxd-project-item__media" href="/work-leader"><div class="mxd-project-item__preview"><img loading="lazy" decoding="async" src="/assets/img/work/leader/01.jpeg" alt="Leader — Hawih"></div><div class="mxd-project-item__tags"><span class="tag tag-default tag-permanent"><span class="lang-string" data-ar="البروفايل والملف التعريفي" data-en="Company profile">البروفايل والملف التعريفي</span></span></div></a><div class="mxd-project-item__promo"><div class="mxd-project-item__name"><a href="/work-leader"><span>Leader</span></a></div></div></div><div class="col-12 col-sm-6 col-lg-4 mxd-project-item anim-uni-in-up"><a class="mxd-project-item__media" href="/work-direct"><div class="mxd-project-item__preview"><img loading="lazy" decoding="async" src="/assets/img/work/direct/01.jpeg" alt="Direct — Hawih"></div><div class="mxd-project-item__tags"><span class="tag tag-default tag-permanent"><span class="lang-string" data-ar="البروفايل والملف التعريفي" data-en="Company profile">البروفايل والملف التعريفي</span></span></div></a><div class="mxd-project-item__promo"><div class="mxd-project-item__name"><a href="/work-direct"><span>Direct</span></a></div></div></div></div></div><div class="mxd-block__cta anim-uni-in-up" style="margin-top:28px;display:flex;gap:14px;flex-wrap:wrap"><a class="btn btn-anim btn-default btn-large slide-right-up" href="/work"><span class="lang-string btn-caption" data-ar="استعرض كل الأعمال" data-en="View all work">استعرض كل الأعمال</span><i class="ph-bold ph-arrow-up-right"></i></a><a class="btn btn-anim btn-outline btn-large slide-right-up" href="/assets/files/Hawih-Profile.pdf" target="_blank" rel="noopener"><span class="lang-string btn-caption" data-ar="حمّل ملف الأعمال (PDF)" data-en="Download portfolio (PDF)">حمّل ملف الأعمال (PDF)</span><i class="ph-bold ph-file-pdf"></i></a></div></div></div></div>      <div class="mxd-section padding-default "><div class="mxd-container grid-container"><div class="mxd-block"><div class="mxd-section-title"><div class="container-fluid p-0"><div class="row g-0"><div class="col-12 col-xl-6 mxd-grid-item no-margin"><div class="mxd-section-title__hrtitle anim-uni-in-up"><h2 class="reveal-type"><span class="lang-string" data-ar="ماذا تستلم" data-en="What you get">ماذا تستلم</span></h2></div></div><div class="col-12 col-xl-6 mxd-grid-item no-margin"><div class="mxd-section-title__hrdescr"><p class="anim-uni-in-up"><span class="lang-string" data-ar="بروفايل شركة — كل ما تحتاجه" data-en="Company Profile — everything you need">بروفايل شركة — كل ما تحتاجه</span></p></div></div></div></div></div></div><div class="mxd-block"><div class="hx-grid"><div class="hx-tile anim-uni-in-up"><i class="ph-bold ph-check-circle"></i><span><span class="lang-string" data-ar="تصميم غلاف وصفحات داخلية متّسقة" data-en="Cover and consistent inner-page design">تصميم غلاف وصفحات داخلية متّسقة</span></span></div><div class="hx-tile anim-uni-in-up"><i class="ph-bold ph-check-circle"></i><span><span class="lang-string" data-ar="تنسيق المحتوى والصور باحترافية" data-en="Professional content and image layout">تنسيق المحتوى والصور باحترافية</span></span></div><div class="hx-tile anim-uni-in-up"><i class="ph-bold ph-check-circle"></i><span><span class="lang-string" data-ar="نسخة عربية وإنجليزية" data-en="Arabic and English versions">نسخة عربية وإنجليزية</span></span></div><div class="hx-tile anim-uni-in-up"><i class="ph-bold ph-check-circle"></i><span><span class="lang-string" data-ar="ملف PDF تفاعلي + نسخة للطباعة" data-en="An interactive PDF + a print-ready version">ملف PDF تفاعلي + نسخة للطباعة</span></span></div><div class="hx-tile anim-uni-in-up"><i class="ph-bold ph-check-circle"></i><span><span class="lang-string" data-ar="إنفوجرافيك ورسوم لعرض الأرقام" data-en="Infographics to present key numbers">إنفوجرافيك ورسوم لعرض الأرقام</span></span></div><div class="hx-tile anim-uni-in-up"><i class="ph-bold ph-check-circle"></i><span><span class="lang-string" data-ar="ملفات مفتوحة قابلة للتحديث" data-en="Open, updatable source files">ملفات مفتوحة قابلة للتحديث</span></span></div></div></div></div></div>      <div class="mxd-section padding-default "><div class="mxd-container grid-container"><div class="mxd-block"><div class="mxd-section-title"><div class="container-fluid p-0"><div class="row g-0"><div class="col-12 col-xl-6 mxd-grid-item no-margin"><div class="mxd-section-title__hrtitle anim-uni-in-up"><h2 class="reveal-type"><span class="lang-string" data-ar="طريقة العمل" data-en="How we work">طريقة العمل</span></h2></div></div><div class="col-12 col-xl-6 mxd-grid-item no-margin"><div class="mxd-section-title__hrdescr"><p class="anim-uni-in-up"><span class="lang-string" data-ar="أربع خطوات واضحة من الفكرة إلى التسليم" data-en="Four clear steps from idea to handover">أربع خطوات واضحة من الفكرة إلى التسليم</span></p></div></div></div></div></div></div><div class="mxd-block"><div class="hx-steps"><div class="hx-step anim-uni-in-up"><span class="hx-step__n">01</span><h3><span class="lang-string" data-ar="الاكتشاف" data-en="Discovery">الاكتشاف</span></h3><p><span class="lang-string" data-ar="نفهم نشاطك وجمهورك وأهدافك في جلسة قصيرة." data-en="We learn your business, audience, and goals in a short session.">نفهم نشاطك وجمهورك وأهدافك في جلسة قصيرة.</span></p></div><div class="hx-step anim-uni-in-up"><span class="hx-step__n">02</span><h3><span class="lang-string" data-ar="التوجّه" data-en="Direction">التوجّه</span></h3><p><span class="lang-string" data-ar="نتّفق على الاتجاه والمراجع قبل أي تنفيذ." data-en="We agree on direction and references before any execution.">نتّفق على الاتجاه والمراجع قبل أي تنفيذ.</span></p></div><div class="hx-step anim-uni-in-up"><span class="hx-step__n">03</span><h3><span class="lang-string" data-ar="التصميم" data-en="Design">التصميم</span></h3><p><span class="lang-string" data-ar="ننفّذ ونعرض مقترحات واضحة مع جولات مراجعة." data-en="We design and present clear options with review rounds.">ننفّذ ونعرض مقترحات واضحة مع جولات مراجعة.</span></p></div><div class="hx-step anim-uni-in-up"><span class="hx-step__n">04</span><h3><span class="lang-string" data-ar="التسليم" data-en="Delivery">التسليم</span></h3><p><span class="lang-string" data-ar="نسلّم الملفات المفتوحة ودليل الاستخدام جاهزة للعمل." data-en="We hand off open files and a usage guide, ready to use.">نسلّم الملفات المفتوحة ودليل الاستخدام جاهزة للعمل.</span></p></div></div></div></div></div>      <div class="mxd-section padding-default "><div class="mxd-container grid-container"><div class="mxd-block"><div class="mxd-section-title"><div class="container-fluid p-0"><div class="row g-0"><div class="col-12 col-xl-6 mxd-grid-item no-margin"><div class="mxd-section-title__hrtitle anim-uni-in-up"><h2 class="reveal-type"><span class="lang-string" data-ar="أسئلة شائعة" data-en="Common questions">أسئلة شائعة</span></h2></div></div><div class="col-12 col-xl-6 mxd-grid-item no-margin"><div class="mxd-section-title__hrdescr"><p class="anim-uni-in-up"><span class="lang-string" data-ar="ربما يدور في ذهنك" data-en="You might be wondering">ربما يدور في ذهنك</span></p></div></div></div></div></div></div><div class="mxd-block"><div class="hx-faq"><details class="hx-faq__item anim-uni-in-up"><summary class="hx-faq__q"><span class="lang-string" data-ar="هل تكتبون المحتوى أم أوفّره أنا؟" data-en="Do you write the content or do I provide it?">هل تكتبون المحتوى أم أوفّره أنا؟</span></summary><div class="hx-faq__a"><p><span class="lang-string" data-ar="يمكننا التنسيق على محتواك الجاهز، أو نساعدك في صياغته وترتيبه — أخبرنا بما يناسبك." data-en="We can lay out your ready content, or help you write and structure it — tell us what suits you.">يمكننا التنسيق على محتواك الجاهز، أو نساعدك في صياغته وترتيبه — أخبرنا بما يناسبك.</span></p></div></details><details class="hx-faq__item anim-uni-in-up"><summary class="hx-faq__q"><span class="lang-string" data-ar="كم صفحة يتضمّن البروفايل؟" data-en="How many pages does a profile include?">كم صفحة يتضمّن البروفايل؟</span></summary><div class="hx-faq__a"><p><span class="lang-string" data-ar="يعتمد على نشاطك ومحتواك؛ نتّفق على عدد الصفحات والأقسام في بداية المشروع." data-en="It depends on your business and content; we agree on page count and sections at the start.">يعتمد على نشاطك ومحتواك؛ نتّفق على عدد الصفحات والأقسام في بداية المشروع.</span></p></div></details><details class="hx-faq__item anim-uni-in-up"><summary class="hx-faq__q"><span class="lang-string" data-ar="هل التصميم ثنائي اللغة فعلاً؟" data-en="Is the design truly bilingual?">هل التصميم ثنائي اللغة فعلاً؟</span></summary><div class="hx-faq__a"><p><span class="lang-string" data-ar="نعم، نصمّم العربية والإنجليزية معاً منذ البداية — وليست ترجمة لاحقة مقحَمة على التصميم." data-en="Yes — we design Arabic and English together from the start, not a translation bolted on afterward.">نعم، نصمّم العربية والإنجليزية معاً منذ البداية — وليست ترجمة لاحقة مقحَمة على التصميم.</span></p></div></details><details class="hx-faq__item anim-uni-in-up"><summary class="hx-faq__q"><span class="lang-string" data-ar="هل أستطيع تحديث البروفايل لاحقاً؟" data-en="Can I update the profile later?">هل أستطيع تحديث البروفايل لاحقاً؟</span></summary><div class="hx-faq__a"><p><span class="lang-string" data-ar="نعم، نسلّمك الملفات المفتوحة لتحدّث الأرقام والمحتوى عند الحاجة." data-en="Yes — we hand off the open files so you can update numbers and content whenever you need.">نعم، نسلّمك الملفات المفتوحة لتحدّث الأرقام والمحتوى عند الحاجة.</span></p></div></details></div></div></div></div>      <div class="mxd-section padding-default"><div class="mxd-container grid-container"><div class="mxd-block"><div class="mxd-promo"><div class="mxd-promo__inner anim-zoom-out-container"><div class="mxd-promo__bg"></div><div class="mxd-promo__content"><p class="mxd-promo__title anim-uni-in-up"><span class="mxd-promo__icon"><img width="300" height="300" loading="lazy" decoding="async" alt="" src="/uc-assets/img/icons/300x300_obj-cta-01.webp"></span><span class="mxd-promo__caption"><span class="lang-string" data-ar="جاهز نبدأ مشروعك؟" data-en="Ready to start your project?">جاهز نبدأ مشروعك؟</span></span></p><div class="mxd-promo__controls anim-uni-in-up" style="display:flex;gap:14px;flex-wrap:wrap"><a class="btn btn-default btn-large btn-additional slide-right-up" href="https://wa.me/966502185471?text=%D9%85%D8%B1%D8%AD%D8%A8%D8%A7%D9%8B%D8%8C%20%D8%A3%D8%B1%D8%BA%D8%A8%20%D8%A8%D8%AA%D8%B5%D9%85%D9%8A%D9%85%20%D8%A8%D8%B1%D9%88%D9%81%D8%A7%D9%8A%D9%84/%D9%85%D9%84%D9%81%20%D8%AA%D8%B9%D8%B1%D9%8A%D9%81%D9%8A%20%D9%84%D8%B4%D8%B1%D9%83%D8%AA%D9%8A." target="_blank" rel="noopener"><span class="lang-string btn-caption" data-ar="تواصل عبر واتساب" data-en="Chat on WhatsApp">تواصل عبر واتساب</span><i class="ph-bold ph-whatsapp-logo"></i></a><a class="btn btn-default btn-large btn-outline slide-right-up" href="tel:+966502185471" dir="ltr"><span class="lang-string btn-caption" data-ar="اتصل الآن" data-en="Call now">اتصل الآن</span><i class="ph-bold ph-phone"></i></a></div></div><div class="mxd-promo__images"><img loading="lazy" decoding="async" alt="" class="promo-image promo-image-1" src="/uc-assets/img/illustrations/cta-img-01.webp"><img loading="lazy" decoding="async" alt="" class="promo-image promo-image-2" src="/uc-assets/img/illustrations/cta-img-02.webp"></div></div></div></div></div></div>
     </main>
 
-    <footer class="lp-footer">
-      <div class="lp-wrap lp-footer__inner">
-        <div class="lp-footer__brand">
-          <img src="/assets/img/logo/hawih-logo-white.png" alt="Hawih · هوية">
-          <p><span class="lang-string" data-ar="استوديو تصميم سعودي · منذ ٢٠٠٧" data-en="Saudi design studio · since 2007">استوديو تصميم سعودي · منذ ٢٠٠٧</span></p>
+    <!-- Page Content End -->
+
+    <!-- Footer Start -->
+    <footer id="mxd-footer" class="mxd-footer">
+
+      <!-- Spacer -->
+      <div style="height: 30px;"></div>
+
+      <!-- Footer Block - Info Columns Start -->
+      <div class="mxd-footer__footer-blocks">
+        <!-- single column -->
+        <div class="footer-blocks__column animate-card-3">
+          <!-- inner card -->
+          <div class="footer-blocks__card fullheight-card">
+            <!-- footer navigation -->
+            <div class="footer-blocks__nav">
+              <ul class="footer-nav">
+                <li class="footer-nav__item anim-uni-in-up">
+                  <a href="/" class="footer-nav__link">
+                    <span class="btn-caption lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span>
+                  </a>
+                </li>
+                <li class="footer-nav__item anim-uni-in-up">
+                  <a href="/work" class="footer-nav__link">
+                    <span class="btn-caption lang-string" data-ar="أعمالنا" data-en="Work">أعمالنا</span>
+                  </a>
+                  <p class="footer-nav__counter">
+                    <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 20 20" fill="currentColor">
+                      <path fill="currentColor" d="M19.6,9.6c0,0-3,0-4,0c-0.4,0-1.8-0.2-1.8-0.2c-0.6-0.1-1.1-0.2-1.6-0.6c-0.5-0.3-0.9-0.8-1.2-1.2
+                        c-0.3-0.4-0.4-0.9-0.5-1.4c0,0-0.1-1.1-0.2-1.5c-0.1-1.1,0-4.4,0-4.4C10.4,0.2,10.2,0,10,0S9.6,0.2,9.6,0.4c0,0,0.1,3.3,0,4.4
+                        c0,0.4-0.2,1.5-0.2,1.5C9.4,6.7,9.2,7.2,9,7.6C8.7,8.1,8.2,8.5,7.8,8.9c-0.5,0.3-1,0.5-1.6,0.6c0,0-1.2,0.1-1.7,0.2
+                        c-1,0.1-4.2,0-4.2,0C0.2,9.6,0,9.8,0,10c0,0.2,0.2,0.4,0.4,0.4c0,0,3.1-0.1,4.2,0c0.4,0,1.7,0.2,1.7,0.2c0.6,0.1,1.1,0.2,1.6,0.6
+                        c0.4,0.3,0.8,0.7,1.1,1.1c0.3,0.5,0.5,1,0.6,1.6c0,0,0.1,1.3,0.2,1.7c0,1,0,4.1,0,4.1c0,0.2,0.2,0.4,0.4,0.4s0.4-0.2,0.4-0.4
+                        c0,0,0-3.1,0-4.1c0-0.4,0.2-1.7,0.2-1.7c0.1-0.6,0.2-1.1,0.6-1.6c0.3-0.4,0.7-0.8,1.1-1.1c0.5-0.3,1-0.5,1.6-0.6
+                        c0,0,1.3-0.1,1.8-0.2c1,0,4,0,4,0c0.2,0,0.4-0.2,0.4-0.4C20,9.8,19.8,9.6,19.6,9.6L19.6,9.6z"></path>
+                    </svg>
+                    <span>24</span>
+                  </p>
+                </li>
+                <li class="footer-nav__item anim-uni-in-up">
+                  <a href="/services" class="footer-nav__link">
+                    <span class="btn-caption lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span>
+                  </a>
+                </li>
+                <li class="footer-nav__item anim-uni-in-up">
+                  <a href="/about" class="footer-nav__link">
+                    <span class="btn-caption lang-string" data-ar="من نحن" data-en="About">من نحن</span>
+                  </a>
+                </li>
+                <li class="footer-nav__item anim-uni-in-up">
+                  <a href="/articles" class="footer-nav__link">
+                    <span class="btn-caption lang-string" data-ar="المقالات" data-en="Articles">المقالات</span>
+                  </a>
+                </li>
+                <li class="footer-nav__item anim-uni-in-up">
+                  <a href="/contact" class="footer-nav__link">
+                    <span class="btn-caption lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+            <!-- links -->
+            <!-- Shfrah — sister studio -->
+            <div class="uc-shfrah-footer anim-uni-in-up">
+              <a class="uc-shfrah-footer__link" href="https://www.shfrah.com/?utm_source=hawih&amp;utm_medium=referral&amp;utm_campaign=family-footer" target="_blank" rel="noopener" aria-label="Shfrah">
+                <img loading="lazy" decoding="async" class="uc-shfrah-footer__logo uc-shfrah-logo--light" src="/assets/img/shfrah/logo-ar-light.png" alt="شفرة · Shfrah">
+                <img loading="lazy" decoding="async" class="uc-shfrah-footer__logo uc-shfrah-logo--dark" src="/assets/img/shfrah/logo-ar-dark.png" alt="شفرة · Shfrah">
+              </a>
+              <div class="uc-shfrah-footer__text">
+                <p class="uc-shfrah-footer__line"><span class="lang-string" data-ar="شفرة — استوديونا الشقيق: هندسة برمجيات، تطبيقات جوال وويب، وحلول ذكاء اصطناعي للسوق السعودي." data-en="Shfrah — our sister studio: software engineering, mobile &amp; web apps, and AI solutions for the Saudi market.">شفرة — استوديونا الشقيق: هندسة برمجيات، تطبيقات جوال وويب، وحلول ذكاء اصطناعي للسوق السعودي.</span></p>
+                <a class="uc-shfrah-footer__cta" href="https://www.shfrah.com/?utm_source=hawih&amp;utm_medium=referral&amp;utm_campaign=family-footer" target="_blank" rel="noopener">
+                  <span class="lang-string" data-ar="ابدأ مشروعك التقني مع شفرة" data-en="Start your tech project with Shfrah">ابدأ مشروعك التقني مع شفرة</span>
+                  <i class="ph-bold ph-arrow-up-right" aria-hidden="true"></i>
+                </a>
+              </div>
+            </div>
+            <div class="footer-blocks__links anim-uni-in-up">
+              <a class="btn btn-line-xsmall btn-muted slide-right anim-no-delay" href="/privacy-policy">
+                <span class="btn-caption lang-string" data-ar="سياسة الخصوصية" data-en="Privacy Policy">سياسة الخصوصية</span>
+                <i class="ph ph-arrow-right"></i>
+              </a>
+              <a class="btn btn-line-xsmall btn-muted slide-right anim-no-delay" href="/terms-conditions">
+                <span class="btn-caption lang-string" data-ar="الشروط والأحكام" data-en="Terms & Conditions">الشروط والأحكام</span>
+                <i class="ph ph-arrow-right"></i>
+              </a>
+            </div>
+          </div>
         </div>
-        <nav class="lp-footer__nav" aria-label="Footer">
-          <a href="/"><span class="lang-string" data-ar="الرئيسية" data-en="Home">الرئيسية</span></a>
-          <a href="/work"><span class="lang-string" data-ar="أعمالنا" data-en="Work">أعمالنا</span></a>
-          <a href="/services"><span class="lang-string" data-ar="خدماتنا" data-en="Services">خدماتنا</span></a>
-          <a href="/contact"><span class="lang-string" data-ar="تواصل معنا" data-en="Contact">تواصل معنا</span></a>
-        </nav>
-        <div class="lp-footer__contact">
-          <a href="tel:+966502185471" dir="ltr">+966 50 218 5471</a>
-          <a href="mailto:admin@hawih.com.sa" dir="ltr">admin@hawih.com.sa</a>
+        <!-- single column -->
+        <div class="footer-blocks__column animate-card-3">
+          <!-- inner card -->
+          <div class="footer-blocks__card">
+            <p class="mxd-point-subtitle anim-uni-in-up">
+              <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 20 20" fill="currentColor">
+                <path fill="currentColor" d="M19.6,9.6c0,0-3,0-4,0c-0.4,0-1.8-0.2-1.8-0.2c-0.6-0.1-1.1-0.2-1.6-0.6c-0.5-0.3-0.9-0.8-1.2-1.2
+                  c-0.3-0.4-0.4-0.9-0.5-1.4c0,0-0.1-1.1-0.2-1.5c-0.1-1.1,0-4.4,0-4.4C10.4,0.2,10.2,0,10,0S9.6,0.2,9.6,0.4c0,0,0.1,3.3,0,4.4
+                  c0,0.4-0.2,1.5-0.2,1.5C9.4,6.7,9.2,7.2,9,7.6C8.7,8.1,8.2,8.5,7.8,8.9c-0.5,0.3-1,0.5-1.6,0.6c0,0-1.2,0.1-1.7,0.2
+                  c-1,0.1-4.2,0-4.2,0C0.2,9.6,0,9.8,0,10c0,0.2,0.2,0.4,0.4,0.4c0,0,3.1-0.1,4.2,0c0.4,0,1.7,0.2,1.7,0.2c0.6,0.1,1.1,0.2,1.6,0.6
+                  c0.4,0.3,0.8,0.7,1.1,1.1c0.3,0.5,0.5,1,0.6,1.6c0,0,0.1,1.3,0.2,1.7c0,1,0,4.1,0,4.1c0,0.2,0.2,0.4,0.4,0.4s0.4-0.2,0.4-0.4
+                  c0,0,0-3.1,0-4.1c0-0.4,0.2-1.7,0.2-1.7c0.1-0.6,0.2-1.1,0.6-1.6c0.3-0.4,0.7-0.8,1.1-1.1c0.5-0.3,1-0.5,1.6-0.6
+                  c0,0,1.3-0.1,1.8-0.2c1,0,4,0,4,0c0.2,0,0.4-0.2,0.4-0.4C20,9.8,19.8,9.6,19.6,9.6L19.6,9.6z"></path>
+              </svg>
+              <span><span class="lang-string" data-ar="٤١٧٨ خالد بن بندر بن عبدالعزيز، العارض، الرياض ١٣٣٣٧" data-en="4178 Khalid bin Bandar bin Abdulaziz, Al-Aared, Riyadh 13337">٤١٧٨ خالد بن بندر بن عبدالعزيز، العارض، الرياض ١٣٣٣٧</span></span>
+            </p>
+          </div>
+          <!-- inner card - Contact Us (merged) -->
+          <div class="footer-blocks__card fill-card">
+            <!-- card title -->
+            <div class="footer-blocks__title anim-uni-in-up">
+              <p class="footer-blocks__title-m"><span class="lang-string" data-ar="تواصل معنا:" data-en="Contact Us:">تواصل معنا:</span></p>
+            </div>
+            <!-- contact info -->
+            <div class="anim-uni-in-up" style="margin-bottom: 1.5rem;">
+              <p class="mxd-point-subtitle" style="margin-bottom: 0.75rem;">
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill="currentColor" d="M19.6,9.6c0,0-3,0-4,0c-0.4,0-1.8-0.2-1.8-0.2c-0.6-0.1-1.1-0.2-1.6-0.6c-0.5-0.3-0.9-0.8-1.2-1.2
+                    c-0.3-0.4-0.4-0.9-0.5-1.4c0,0-0.1-1.1-0.2-1.5c-0.1-1.1,0-4.4,0-4.4C10.4,0.2,10.2,0,10,0S9.6,0.2,9.6,0.4c0,0,0.1,3.3,0,4.4
+                    c0,0.4-0.2,1.5-0.2,1.5C9.4,6.7,9.2,7.2,9,7.6C8.7,8.1,8.2,8.5,7.8,8.9c-0.5,0.3-1,0.5-1.6,0.6c0,0-1.2,0.1-1.7,0.2
+                    c-1,0.1-4.2,0-4.2,0C0.2,9.6,0,9.8,0,10c0,0.2,0.2,0.4,0.4,0.4c0,0,3.1-0.1,4.2,0c0.4,0,1.7,0.2,1.7,0.2c0.6,0.1,1.1,0.2,1.6,0.6
+                    c0.4,0.3,0.8,0.7,1.1,1.1c0.3,0.5,0.5,1,0.6,1.6c0,0,0.1,1.3,0.2,1.7c0,1,0,4.1,0,4.1c0,0.2,0.2,0.4,0.4,0.4s0.4-0.2,0.4-0.4
+                    c0,0,0-3.1,0-4.1c0-0.4,0.2-1.7,0.2-1.7c0.1-0.6,0.2-1.1,0.6-1.6c0.3-0.4,0.7-0.8,1.1-1.1c0.5-0.3,1-0.5,1.6-0.6
+                    c0,0,1.3-0.1,1.8-0.2c1,0,4,0,4,0c0.2,0,0.4-0.2,0.4-0.4C20,9.8,19.8,9.6,19.6,9.6L19.6,9.6z"></path>
+                </svg>
+                <a href="mailto:admin@hawih.com.sa?subject=Message%20from%20your%20site">admin@hawih.com.sa</a>
+              </p>
+              <p class="mxd-point-subtitle">
+                <svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 20 20" fill="currentColor">
+                  <path fill="currentColor" d="M19.6,9.6c0,0-3,0-4,0c-0.4,0-1.8-0.2-1.8-0.2c-0.6-0.1-1.1-0.2-1.6-0.6c-0.5-0.3-0.9-0.8-1.2-1.2
+                    c-0.3-0.4-0.4-0.9-0.5-1.4c0,0-0.1-1.1-0.2-1.5c-0.1-1.1,0-4.4,0-4.4C10.4,0.2,10.2,0,10,0S9.6,0.2,9.6,0.4c0,0,0.1,3.3,0,4.4
+                    c0,0.4-0.2,1.5-0.2,1.5C9.4,6.7,9.2,7.2,9,7.6C8.7,8.1,8.2,8.5,7.8,8.9c-0.5,0.3-1,0.5-1.6,0.6c0,0-1.2,0.1-1.7,0.2
+                    c-1,0.1-4.2,0-4.2,0C0.2,9.6,0,9.8,0,10c0,0.2,0.2,0.4,0.4,0.4c0,0,3.1-0.1,4.2,0c0.4,0,1.7,0.2,1.7,0.2c0.6,0.1,1.1,0.2,1.6,0.6
+                    c0.4,0.3,0.8,0.7,1.1,1.1c0.3,0.5,0.5,1,0.6,1.6c0,0,0.1,1.3,0.2,1.7c0,1,0,4.1,0,4.1c0,0.2,0.2,0.4,0.4,0.4s0.4-0.2,0.4-0.4
+                    c0,0,0-3.1,0-4.1c0-0.4,0.2-1.7,0.2-1.7c0.1-0.6,0.2-1.1,0.6-1.6c0.3-0.4,0.7-0.8,1.1-1.1c0.5-0.3,1-0.5,1.6-0.6
+                    c0,0,1.3-0.1,1.8-0.2c1,0,4,0,4,0c0.2,0,0.4-0.2,0.4-0.4C20,9.8,19.8,9.6,19.6,9.6L19.6,9.6z"></path>
+                </svg>
+                <a href="tel:+966502185471" dir="ltr">+966 50 218 5471</a>
+              </p>
+            </div>
+            <!-- social media links -->
+            <div class="footer-blocks__socials anim-uni-in-up">
+              <ul class="footer-socials">
+                <li class="footer-socials__item anim-uni-in-up">
+                  <a href="https://twitter.com/hawihcom" class="footer-socials__link" target="_blank">
+                    <i class="ph ph-x-logo"></i> <span class="lang-string" data-ar="تويتر / إكس" data-en="Twitter/X">تويتر / إكس</span>
+                  </a>
+                </li>
+                <li class="footer-socials__item anim-uni-in-up">
+                  <a href="https://www.linkedin.com/company/hawihcom" class="footer-socials__link" target="_blank">
+                    <i class="ph ph-linkedin-logo"></i> <span class="lang-string" data-ar="لينكدإن" data-en="LinkedIn">لينكدإن</span>
+                  </a>
+                </li>
+                <li class="footer-socials__item anim-uni-in-up">
+                  <a href="https://www.instagram.com/hawihcom" class="footer-socials__link" target="_blank">
+                    <i class="ph ph-instagram-logo"></i> <span class="lang-string" data-ar="إنستغرام" data-en="Instagram">إنستغرام</span>
+                  </a>
+                </li>
+                <li class="footer-socials__item anim-uni-in-up">
+                  <a href="https://wa.me/966502185471" class="footer-socials__link" target="_blank">
+                    <i class="ph ph-whatsapp-logo"></i> <span class="lang-string" data-ar="واتساب" data-en="WhatsApp">واتساب</span>
+                  </a>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <!-- single column -->
+        <div class="footer-blocks__column animate-card-3">
+          <!-- inner card -->
+          <div class="footer-blocks__card fullheight-card">
+            <!-- nav block -->
+            <div class="footer-blocks__block">
+              <!-- card title -->
+              <div class="footer-blocks__title anim-uni-in-up">
+                <p class="footer-blocks__title-l"><span class="lang-string" data-ar="مشاريع مختارة" data-en="Selected work">مشاريع مختارة</span></p>
+              </div>
+              <!-- footer links -->
+              <div class="footer-blocks__socials">
+                <ul class="footer-socials">
+                  <li class="footer-socials__item anim-uni-in-up"><a href="/work-toma" class="footer-socials__link"><span class="lang-string" data-ar="توما — ضيافة" data-en="Toma — Hospitality">توما — ضيافة</span></a></li>
+                  <li class="footer-socials__item anim-uni-in-up"><a href="/work-al-gharbi" class="footer-socials__link"><span class="lang-string" data-ar="بهارات الغربي — تغليف" data-en="Al-Gharbi — Packaging">بهارات الغربي — تغليف</span></a></li>
+                  <li class="footer-socials__item anim-uni-in-up"><a href="/work-leader" class="footer-socials__link"><span class="lang-string" data-ar="ليدار — هوية" data-en="Leader — Identity">ليدار — هوية</span></a></li>
+                  <li class="footer-socials__item anim-uni-in-up"><a href="/work-riwaq" class="footer-socials__link"><span class="lang-string" data-ar="رِواق — علامة" data-en="Riwaq — Brand">رِواق — علامة</span></a></li>
+                  <li class="footer-socials__item anim-uni-in-up"><a href="/work-almasar" class="footer-socials__link"><span class="lang-string" data-ar="المسار — هوية بصرية" data-en="Almasar — Visual identity">المسار — هوية بصرية</span></a></li>
+                  <li class="footer-socials__item anim-uni-in-up"><a href="/work-talga" class="footer-socials__link"><span class="lang-string" data-ar="تلقا — علامة" data-en="Talga — Brand">تلقا — علامة</span></a></li>
+                  <li class="footer-socials__item anim-uni-in-up"><a href="/work" class="footer-socials__link"><span class="lang-string" data-ar="كل الأعمال" data-en="All work">كل الأعمال</span></a></li>
+                </ul>
+              </div>
+            </div>
+            <!-- links -->
+            <div class="footer-blocks__links anim-uni-in-up">
+              <p class="t-xsmall t-muted">
+                <a class="no-effect" href="/"><span class="lang-string" data-ar="هوية" data-en="Hawih">هوية</span></a>
+                <i class="ph-bold ph-copyright"></i>
+                2026
+              </p>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="lp-wrap lp-footer__legal"><span class="lang-string" data-ar="© ٢٠٠٧–٢٠٢٦ هوية · Hawih. جميع الحقوق محفوظة." data-en="© 2007–2026 Hawih · هوية. All rights reserved.">© ٢٠٠٧–٢٠٢٦ هوية · Hawih. جميع الحقوق محفوظة.</span></div>
-    </footer>
+      <!-- Footer Block - Info Columns End -->
 
+    </footer>
+    <!-- Footer End -->
+
+    <!-- To Top Button Start -->
+    <a href="#0" id="to-top" class="btn btn-to-top slide-up anim-no-delay">
+      <i class="ph ph-arrow-up"></i>
+    </a>
+    <!-- To Top Button End -->
+
+    <!-- Load Scripts Start -->
+    <script src="/uc-assets/js/libs.min.js"></script>
+    <script src="/uc-assets/js/app.min.js"></script>
+    <!-- Preloader auto-hide: the template's preloader counter reaches 100% but
+         the built-in hide handler doesn't always fire on our build (extra deps).
+         Let the 0→100 animation play, then fade it out after a safety delay or
+         as soon as the page's load event fires — whichever comes first. -->
+    <script>
+      (function () {
+        var hidden = false;
+        function hidePreloader() {
+          if (hidden) return; hidden = true;
+          var loader = document.getElementById('loader') || document.querySelector('.loader, .preloader, .mxd-preloader');
+          if (!loader) return;
+          loader.style.transition = 'opacity 0.4s ease';
+          loader.style.opacity = '0';
+          setTimeout(function () {
+            loader.style.display = 'none';
+            loader.style.pointerEvents = 'none';
+          }, 450);
+        }
+        // Fire on window.load (full page + assets done)
+        if (document.readyState === 'complete') {
+          setTimeout(hidePreloader, 600);
+        } else {
+          window.addEventListener('load', function () { setTimeout(hidePreloader, 600); });
+        }
+        // Safety net — hide no later than 3.5s regardless
+        setTimeout(hidePreloader, 3500);
+      })();
+    </script>
+
+    <!-- Theme toggle bridge: the template's #color-switcher only writes data-theme,
+         but Hawih's CSS keys off the .dark class on <html>. Forward clicks so the
+         visible theme actually flips. Runs after DOMContentLoaded + app.min.js. -->
+    <script>
+      (function () {
+        function bridge() {
+          var btn = document.getElementById('color-switcher');
+          if (!btn) return;
+          btn.addEventListener('click', function () {
+            if (typeof window.toggleTheme === 'function') {
+              window.toggleTheme();
+            } else {
+              document.documentElement.classList.toggle('dark');
+              try { localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); } catch (e) {}
+            }
+          });
+          // Forward clicks from any [data-theme-toggle] (e.g. the popup
+          // menu's pill on mobile) to the main #color-switcher so the
+          // template's own click handler + this bridge both fire.
+          document.querySelectorAll('[data-theme-toggle]').forEach(function (b) {
+            b.addEventListener('click', function (e) {
+              e.preventDefault();
+              btn.click();
+            });
+          });
+        }
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', bridge);
+        } else {
+          bridge();
+        }
+      })();
+    </script>
+
+
+    <!-- Menu navigation fix -->
+    <script>
+      document.addEventListener('DOMContentLoaded', function() {
+        // Get all menu toggles that contain links (Home and Works)
+        const menuItems = document.querySelectorAll('.main-menu__item');
+
+        menuItems.forEach(function(item) {
+          const toggle = item.querySelector('.main-menu__toggle');
+          const link = toggle ? toggle.querySelector('a.main-menu__link') : null;
+
+          if (link) {
+            // Make entire toggle area clickable, navigate directly to link
+            toggle.addEventListener('click', function(e) {
+              // Navigate to the link's href
+              window.location.href = link.getAttribute('href');
+            });
+
+            // Change cursor to pointer for the entire toggle area
+            toggle.style.cursor = 'pointer';
+          }
+        });
+      });
+    </script>
+
+    <!-- Hawih language toggle (self-contained for this template page) -->
+    <script>
+      (function () {
+        function applyLang(lang) {
+          var html = document.documentElement;
+          html.lang = lang;
+          html.dir = (lang === 'ar') ? 'rtl' : 'ltr';
+          try { localStorage.setItem('lang', lang); } catch (e) {}
+          document.querySelectorAll('.lang-string').forEach(function (el) {
+            var v = el.getAttribute('data-' + lang);
+            if (v != null) el.textContent = v;
+          });
+          // Refresh ScrollTrigger and layout-dependent plugins after dir change
+          if (window.ScrollTrigger && typeof window.ScrollTrigger.refresh === 'function') {
+            setTimeout(function () { window.ScrollTrigger.refresh(); }, 60);
+          }
+        }
+        window.__toggleLang = function () {
+          var current = document.documentElement.lang === 'ar' ? 'ar' : 'en';
+          applyLang(current === 'ar' ? 'en' : 'ar');
+        };
+        document.addEventListener('DOMContentLoaded', function () {
+          // Bind by data-attribute so the template's app.min.js can't hijack via class/id
+          document.querySelectorAll('[data-lang-toggle]').forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
+              e.preventDefault();
+              e.stopPropagation();
+              window.__toggleLang();
+            });
+          });
+          // Sync .lang-string nodes with the persisted choice (or English default)
+          var saved = (function () { try { return localStorage.getItem('lang'); } catch (e) { return null; } })();
+          applyLang(saved === 'en' ? 'en' : 'ar');
+        });
+      })();
+    </script>
+
+    <!-- Hawih shared JS — theme toggle, copy-to-clipboard, WhatsApp button, scroll reveals, etc. -->
     <script src="/assets/js/hawih.js?v=9981cf06d7"></script>
+
+    <!-- Hawih page fixes -->
+    <style>
+      .inner-page-content .inner-headline__title{font-family:var(--_font-accent);font-weight:var(--fw-medium);font-size:clamp(4.4rem,7vw,8rem);line-height:1.08;letter-spacing:-.05rem;color:var(--t-bright)}
+      .mxd-section-title__hrtitle h2,.mxd-section-title__hrtitle h2 .lang-string,.mxd-section-title__title h2,.mxd-section-title__title h2 .lang-string{font-size:clamp(2.8rem,5vw,5rem)!important;line-height:1.1!important;font-weight:600!important}
+      .mxd-section-title__hrdescr p,.mxd-section-title__hrdescr p .lang-string{font-weight:600}
+      .mxd-stats-cards__inner.bg-accent .mxd-counter__number,.mxd-stats-cards__inner.bg-accent .mxd-counter__descr,.mxd-stats-cards__inner.bg-accent .mxd-counter__descr span,.mxd-stats-cards__inner.bg-accent .mxd-counter__descr .lang-string{color:#fff!important}
+      .mxd-awards-list__tagslist p{margin:0}
+      .mxd-approach-list__title h6,.mxd-approach-list__title h6 .lang-string{font-size:clamp(2.2rem,3.6vw,3.4rem)!important;line-height:1.05!important;font-weight:600!important;color:var(--t-bright)!important;letter-spacing:-.02em}
+      .mxd-awards-list__date{display:flex;align-items:center;height:100%}
+      .mxd-awards-list__date p .lang-string{font-family:var(--_font-accent);font-weight:600;opacity:.5}
+      .btn-caption{unicode-bidi:plaintext}
+      .btn-caption .btn-anim__block:nth-child(n+2){display:none}
+      .btn-caption .btn-anim__block{direction:ltr}
+      .mxd-blog-preview__image{background-size:cover!important;background-position:center!important;background-repeat:no-repeat!important}
+      .hw-founder-portrait{margin:0 0 1.6rem;border-radius:28px;overflow:hidden;aspect-ratio:1/1;max-width:420px;background:rgba(20,20,20,.06)}
+      .hw-founder-portrait img{width:100%;height:100%;object-fit:cover;display:block}
+      .hw-founder-lead{font-size:clamp(2.8rem,5vw,5rem)!important;line-height:1.12!important;font-weight:600;letter-spacing:-.02em;margin:0 0 1.4rem}
+      .hw-founder-kicker{margin:0 0 1.5rem!important;opacity:.7}
+      .mxd-block__paragraph .hw-founder-p{margin:0 0 1.3rem;font-size:clamp(1.75rem,2.5vw,2.6rem)!important;line-height:1.5;color:var(--t-bright);opacity:1}
+      .mxd-paragraph__lists{margin-top:.6rem}
+      .mxd-paragraph__lists-item ul li{margin:.15rem 0}
+      [dir="rtl"] .mxd-block__paragraph,[dir="rtl"] .mxd-paragraph__lists-item{text-align:right}
+    </style>
+    <!--uc-lang-default--><script>(function(){try{var l=localStorage.getItem("lang");if(l!=="en"){document.querySelectorAll(".lang-string").forEach(function(n){var t=n.getAttribute("data-ar");if(t!=null)n.textContent=t;});document.querySelectorAll(".lang-input").forEach(function(n){var p=n.getAttribute("data-placeholder-ar");if(p!=null)n.placeholder=p;});}}catch(_){}})();</script>
+    <!--uc-hdr-scroll--><script>(function(){var h=document.getElementById("header");if(!h)return;function f(){h.classList.toggle("uc-scrolled",(window.scrollY||document.documentElement.scrollTop||0)>10);}window.addEventListener("scroll",f,{passive:true});window.addEventListener("resize",f);document.addEventListener("DOMContentLoaded",f);f();})();</script>
   </body>
+
 </html>
