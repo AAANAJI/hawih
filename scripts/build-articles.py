@@ -48,17 +48,16 @@ def render_hub() -> str:
         desc_en="Practical guides on logo design, brand identity, company "
                 "profiles, websites, and content — from Hawih studio, Riyadh.",
         og_title_en="Design & Branding Guides | Hawih",
-        og_desc_en="Practical design & branding guides from Hawih studio.",
-        extra_style=_shell.HX_STYLE)
+        og_desc_en="Practical design & branding guides from Hawih studio.")
     cards = []
     for a in ARTICLES:
         cards.append(
-            '<div class="col-12 col-md-6 mxd-grid-item anim-uni-in-up">'
-            f'<a class="hx-tile" href="/article-{a["slug"]}" style="flex-direction:column;align-items:flex-start;gap:10px;height:100%">'
-            f'<i class="ph-bold ph-article"></i>'
-            f'<span style="font-size:1.15rem;font-weight:700;line-height:1.4">{_shell.ls(*a["kw"])}</span>'
-            f'<span style="opacity:.72">{_shell.ls(*a["excerpt"])}</span>'
-            f'<span style="color:var(--hawih-blue,#1F1FFE);font-weight:600;margin-top:auto">{_shell.ls("اقرأ الدليل", "Read the guide")} {_shell.ARROW}</span>'
+            '<div class="col-12 col-xl-6 mxd-grid-item anim-uni-in-up">'
+            f'<a class="hx-card" href="/article-{a["slug"]}">'
+            f'<i class="ph-bold ph-article" style="color:var(--hawih-blue,#1F1FFE);font-size:1.7rem"></i>'
+            f'<h4>{_shell.ls(*a["kw"])}</h4>'
+            f'<p>{_shell.ls(*a["excerpt"])}</p>'
+            f'<span class="hx-card__more">{_shell.ls("اقرأ الدليل", "Read the guide")} {_shell.ARROW}</span>'
             '</a></div>'
         )
     body = (
@@ -67,9 +66,10 @@ def render_hub() -> str:
                     "Practical guides on design & brand identity",
                     "مقالات تساعدك على اتخاذ قرارات أوضح حول علامتك التجارية — من فريق هوية.",
                     "Articles to help you make clearer decisions about your brand — from the Hawih team.",
-                    _shell.btn("https://wa.me/966502185471", "تواصل عبر واتساب", "Chat on WhatsApp", style="btn-opposite", blank=True, icon="ph-whatsapp-logo"))
-        + _shell.section('<div class="mxd-block"><div class="container-fluid px-0"><div class="row g-4">'
-                         + "".join(cards) + "</div></div></div>")
+                    _shell.btn("https://wa.me/966502185471", "تواصل عبر واتساب", "Chat on WhatsApp", "btn-opposite", blank=True, icon="ph-whatsapp-logo"))
+        + _shell.open_section("padding-default")
+        + '<div class="mxd-block"><div class="container-fluid px-0"><div class="row g-4">'
+        + "".join(cards) + "</div></div></div>" + _shell.CLOSE_SECTION
         + _shell.promo_band("عندك مشروع في ذهنك؟", "Got a project in mind?",
                             "مرحباً، أرغب باستشارة حول مشروعي.")
     )

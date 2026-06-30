@@ -1,20 +1,24 @@
 #!/usr/bin/env python3
 """
 _shell.py — shared renderer that builds landing pages and articles ON the
-official Hawih template shell.
+official Hawih template, using the template's NATIVE section patterns so
+the pages look identical to the real service pages (e.g. service-brand).
 
-Why: the lean self-contained landing/article pages didn't match the site
-theme. This module clones the real shell from a donor page (about.html) —
-the exact head CSS chain (plugins.min.css + main.min.css + hawih.css +
-fonts + perf), the loader, the hamburger + mobile menu, the mxd-header,
-the mxd-footer, and the template scripts — and injects page content into
-<main>. So every generated page is visually native and gets the real
-nav/footer. Only the meta (title/description/og + EN helper tags) is
-swapped, and a small scoped <style> (hx-*) is added for the few custom
-components (deliverables grid, process, FAQ, article prose). The normal
-SEO pipeline then fixes canonical/hreflang/JSON-LD per filename.
+It clones the real shell from a donor page (about.html) — head CSS chain,
+loader, hamburger + mobile menu, mxd-header, mxd-footer, scripts — and
+injects content into <main> built from the template's own components:
 
-Used by build-landing-pages.py and build-articles.py.
+  - hero:        mxd-section-inner-headline, col-xl-7 H1 + col-xl-5 descr
+  - section head: mxd-section-title (col-6 title + col-6 descr)
+  - text block:  col-xl-5 h2 + col-xl-6 body (t-large t-bright)
+  - process:     mxd-approach-list (image col-2 + title col-4 + descr col-6)
+  - work grid:   mxd-project-item cards (as on work.html)
+  - CTA band:    mxd-promo
+  - lead form:   the native contact-form markup (project_type pre-filled)
+
+Almost no custom CSS — the template's typography/spacing do the work, so
+sizes and alignment match the rest of the site. Used by
+build-landing-pages.py and build-articles.py.
 """
 from __future__ import annotations
 
@@ -32,15 +36,12 @@ WA_NUMBER = "966502185471"
 EMAIL = "admin@hawih.com.sa"
 PORTFOLIO_PDF = "/assets/files/Hawih-Profile.pdf"
 
-# Client logos for the trust strip (files in assets/img/clients/).
 LOGOS = [
     ("king-saud-university.webp", "King Saud University"),
     ("hoshan.png", "Hoshan"), ("makaseb.png", "Makaseb"),
     ("camel-club.png", "Camel Club"), ("awan-square.png", "Awan"),
     ("nab.png", "NAB"), ("riwaq.png", "Riwaq"), ("almasar.png", "Almasar"),
 ]
-
-ARROW = '<i class="ph-bold ph-arrow-up-right" aria-hidden="true"></i>'
 
 
 def e(s: str) -> str:
@@ -57,13 +58,15 @@ def wa_url(msg: str) -> str:
     return f"https://wa.me/{WA_NUMBER}?text={quote(msg)}"
 
 
+ARROW = '<i class="ph-bold ph-arrow-up-right" aria-hidden="true"></i>'
+
+
 # ---- shell load / head swap -------------------------------------------
 
 _SHELL = None
 
 
 def load_shell() -> tuple[str, str, str]:
-    """Return (prefix, main_open_tag, suffix) from the donor page."""
     global _SHELL
     if _SHELL is not None:
         return _SHELL
@@ -82,12 +85,27 @@ def _sub_attr(p: str, pattern: str, value: str) -> str:
                   p, count=1, flags=re.IGNORECASE)
 
 
+# Minimal scoped CSS — ONLY for things the template doesn't already style.
+HX_STYLE = """    <!-- hx: minimal scoped styles (layout helpers only, no type sizes) -->
+    <style>
+    .hx-cta{display:flex;flex-wrap:wrap;gap:14px;margin-top:30px}
+    .hx-logos{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:26px 46px}
+    .hx-logos img{height:42px;width:auto;opacity:.5;filter:grayscale(1);transition:opacity .25s ease,filter .25s ease}
+    .hx-logos img:hover{opacity:1;filter:grayscale(0)}
+    .hx-deliver li{display:flex;align-items:flex-start;gap:.6em;margin:0 0 .85em}
+    .hx-deliver i{color:var(--hawih-blue,#1F1FFE);font-size:1.4rem;line-height:1.4;flex:none}
+    .hx-deliver ul{list-style:none;margin:0;padding:0}
+    .hx-card{display:flex;flex-direction:column;gap:10px;height:100%;padding:30px;border:1px solid var(--hawih-paper-line,rgba(11,11,16,.12));border-radius:20px;background:var(--hawih-paper-2,#E9E4D7);text-decoration:none;color:inherit;transition:transform .2s ease}
+    .hx-card:hover{transform:translateY(-4px)}
+    .dark .hx-card{background:var(--hawih-ink-2,#14141C);border-color:var(--hawih-ink-line,rgba(255,255,255,.08))}
+    .hx-card__more{color:var(--hawih-blue,#1F1FFE);font-weight:600;margin-top:auto}
+    @media (max-width:575px){.hx-cta .btn{flex:1 1 100%;justify-content:center}}
+    </style>"""
+
+
 def swap_head(prefix: str, *, title: str, desc: str, keywords: str,
               og_title: str, og_desc: str, title_en: str, desc_en: str,
-              og_title_en: str, og_desc_en: str, extra_style: str = "") -> str:
-    """Swap the donor's meta for this page's, add the EN helper tags, and
-    inject a scoped <style>. canonical/hreflang/JSON-LD are left to the
-    pipeline (rebuilt per filename)."""
+              og_title_en: str, og_desc_en: str) -> str:
     p = re.sub(r"<title>.*?</title>", f"<title>{e(title)}</title>",
                prefix, count=1, flags=re.DOTALL)
     p = _sub_attr(p, r'(<meta name="description" content=")[^"]*(">)', desc)
@@ -104,60 +122,11 @@ def swap_head(prefix: str, *, title: str, desc: str, keywords: str,
     )
     p = p.replace("<!-- Facebook Metadata End -->",
                   "<!-- Facebook Metadata End -->" + helpers, 1)
-    if extra_style:
-        p = p.replace("</head>", extra_style + "\n  </head>", 1)
+    p = p.replace("</head>", HX_STYLE + "\n  </head>", 1)
     return p
 
 
-# ---- scoped styles for the few custom components ----------------------
-# Uses hawih.css custom properties (loaded by the shell) for brand colours.
-
-HX_STYLE = """    <!-- hx: scoped styles for generated landing/article content -->
-    <style>
-    .hx-ctarow{display:flex;flex-wrap:wrap;gap:14px;margin-top:34px}
-    .hx-ctarow .btn{margin:0}
-    .hx-note{margin-top:16px;font-size:.95rem;opacity:.7}
-    .hx-logos{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:26px 40px}
-    .hx-logos img{height:40px;width:auto;opacity:.5;filter:grayscale(1);transition:opacity .25s ease,filter .25s ease}
-    .hx-logos img:hover{opacity:1;filter:grayscale(0)}
-    .hx-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
-    .hx-tile{display:flex;align-items:flex-start;gap:.7em;background:var(--hawih-paper-2,#E9E4D7);
-      border:1px solid var(--hawih-paper-line,rgba(11,11,16,.1));border-radius:16px;padding:22px;font-weight:500}
-    .dark .hx-tile{background:var(--hawih-ink-2,#14141C);border-color:var(--hawih-ink-line,rgba(255,255,255,.08))}
-    .hx-tile i{color:var(--hawih-blue,#1F1FFE);font-size:1.5rem;flex:none;line-height:1}
-    .hx-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;counter-reset:hx}
-    .hx-step{position:relative;padding-top:8px}
-    .hx-step__n{display:inline-flex;font-size:1.05rem;font-weight:700;color:var(--hawih-blue,#1F1FFE);
-      background:var(--hawih-blue-soft,rgba(31,31,254,.12));border-radius:10px;padding:.2em .6em;margin-bottom:14px}
-    .hx-step h3{font-size:1.15rem;font-weight:700;margin:0 0 6px}
-    .hx-step p{margin:0;opacity:.72}
-    .hx-faq{display:flex;flex-direction:column;gap:12px;max-width:860px}
-    .hx-faq__item{border:1px solid var(--hawih-paper-line,rgba(11,11,16,.12));border-radius:16px;
-      background:var(--hawih-paper-2,#E9E4D7);overflow:hidden}
-    .dark .hx-faq__item{background:var(--hawih-ink-2,#14141C);border-color:var(--hawih-ink-line,rgba(255,255,255,.08))}
-    .hx-faq__q{display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 22px;
-      font-weight:600;font-size:1.05rem;cursor:pointer;list-style:none}
-    .hx-faq__q::-webkit-details-marker{display:none}
-    .hx-faq__q::after{content:"+";font-size:1.5rem;color:var(--hawih-blue,#1F1FFE);line-height:1;flex:none}
-    .hx-faq__item[open] .hx-faq__q::after{content:"\\2212"}
-    .hx-faq__a{padding:0 22px 20px;opacity:.78;line-height:1.85}
-    .hx-prose{max-width:820px;font-size:1.12rem;line-height:1.95}
-    .hx-prose h2{font-size:clamp(1.4rem,3vw,1.9rem);font-weight:700;margin:44px 0 14px;line-height:1.3;scroll-margin-top:90px}
-    .hx-prose p{margin:0 0 18px}
-    .hx-toc{max-width:820px;margin:0 0 8px;padding:22px 24px;border-radius:16px;
-      background:var(--hawih-paper-2,#E9E4D7);border:1px solid var(--hawih-paper-line,rgba(11,11,16,.1))}
-    .dark .hx-toc{background:var(--hawih-ink-2,#14141C);border-color:var(--hawih-ink-line,rgba(255,255,255,.08))}
-    .hx-toc p{font-weight:700;margin:0 0 10px}
-    .hx-toc ol{margin:0;padding-inline-start:1.3em;display:flex;flex-direction:column;gap:7px}
-    .hx-toc a{color:var(--hawih-blue,#1F1FFE);font-weight:500}
-    .hx-related{max-width:820px;display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin-top:8px}
-    .hx-related .btn{margin:0}
-    @media (max-width:991px){.hx-grid{grid-template-columns:repeat(2,1fr)}.hx-steps{grid-template-columns:repeat(2,1fr)}}
-    @media (max-width:575px){.hx-grid,.hx-steps{grid-template-columns:1fr}.hx-ctarow .btn{flex:1 1 100%;justify-content:center}}
-    </style>"""
-
-
-# ---- native section builders ------------------------------------------
+# ---- native components ------------------------------------------------
 
 POINT_SVG = ('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" '
              'y="0px" width="20px" height="20px" viewBox="0 0 20 20" '
@@ -176,63 +145,78 @@ POINT_SVG = ('<svg version="1.1" xmlns="http://www.w3.org/2000/svg" x="0px" '
              '8,19.8,9.6,19.6,9.6L19.6,9.6z"/></svg>')
 
 
-def section(inner: str, extra: str = "") -> str:
-    return (f'      <div class="mxd-section padding-default {extra}">'
-            f'<div class="mxd-container grid-container">{inner}'
-            '</div></div>')
+def btn(href: str, label_ar: str, label_en: str, variant: str = "btn-default",
+        blank: bool = False, icon: str = "ph-arrow-up-right",
+        extra: str = "") -> str:
+    tgt = ' target="_blank" rel="noopener"' if blank else ""
+    ic = f'<i class="ph-bold {icon}"></i>' if icon else ""
+    # caption = single span with both classes (nested span breaks btn-anim).
+    return (f'<a class="btn btn-anim btn-default {variant} btn-large '
+            f'slide-right-up" href="{href}"{tgt}{extra}>'
+            f'{ls(label_ar, label_en, "btn-caption")}{ic}</a>')
 
 
-def section_title(title_ar: str, title_en: str, sub_ar: str, sub_en: str) -> str:
+def open_section(pad: str = "padding-default", extra: str = "") -> str:
+    return (f'      <div class="mxd-section {extra} {pad}">'
+            '<div class="mxd-container grid-container">')
+
+
+CLOSE_SECTION = "</div></div>"
+
+
+def section_title(t_ar: str, t_en: str, d_ar: str, d_en: str) -> str:
     return (
-        '<div class="mxd-block"><div class="mxd-section-title"><div class="container-fluid p-0"><div class="row g-0">'
-        '<div class="col-12 col-xl-6 mxd-grid-item no-margin"><div class="mxd-section-title__hrtitle anim-uni-in-up">'
-        f'<h2 class="reveal-type">{ls(title_ar, title_en)}</h2></div></div>'
-        '<div class="col-12 col-xl-6 mxd-grid-item no-margin"><div class="mxd-section-title__hrdescr">'
-        f'<p class="anim-uni-in-up">{ls(sub_ar, sub_en)}</p></div></div>'
+        '<div class="mxd-block"><div class="mxd-section-title">'
+        '<div class="container-fluid p-0"><div class="row g-0">'
+        '<div class="col-12 col-xl-6 mxd-grid-item no-margin">'
+        f'<div class="mxd-section-title__hrtitle"><h2>{ls(t_ar, t_en)}</h2></div></div>'
+        '<div class="col-12 col-xl-6 mxd-grid-item no-margin">'
+        f'<div class="mxd-section-title__hrdescr"><p class="anim-uni-in-up">{ls(d_ar, d_en)}</p></div></div>'
         '</div></div></div></div>'
     )
 
 
-def btn(href: str, label_ar: str, label_en: str, style: str = "btn-default",
-        blank: bool = False, icon: str = "ph-arrow-up-right",
-        extra_attr: str = "") -> str:
-    tgt = ' target="_blank" rel="noopener"' if blank else ""
-    ic = f'<i class="ph-bold {icon}"></i>' if icon else ""
-    # caption MUST be a single span carrying both btn-caption + lang-string
-    # (a nested span breaks the template's btn-anim text effect on Arabic).
-    return (f'<a class="btn btn-anim {style} btn-large slide-right-up" '
-            f'href="{href}"{tgt}{extra_attr}>'
-            f'{ls(label_ar, label_en, "btn-caption")}{ic}</a>')
-
-
-def hero(eyebrow_ar, eyebrow_en, h1_ar, h1_en, sub_ar, sub_en, ctas_html) -> str:
+def hero(eyebrow_ar, eyebrow_en, h1_ar, h1_en, descr_ar, descr_en,
+         ctas_html) -> str:
     return (
-        '      <div class="mxd-section mxd-section-inner-headline padding-default">'
+        '      <div class="mxd-section mxd-section-inner-headline padding-headline-pre-block">'
         '<div class="mxd-container grid-container"><div class="mxd-block loading-wrap">'
         '<div class="container-fluid px-0"><div class="row gx-0">'
-        '<div class="col-12 col-xl-2 mxd-grid-item no-margin"><div class="mxd-block__name name-inner-headline loading__item">'
-        f'<p class="mxd-point-subtitle">{POINT_SVG} <span>{ls(eyebrow_ar, eyebrow_en)}</span></p></div></div>'
-        '<div class="col-12 col-xl-10 mxd-grid-item no-margin"><div class="mxd-block__content">'
+        '<div class="col-12"></div>'
+        '<div class="col-12 col-xl-7 mxd-grid-item no-margin"><div class="mxd-block__content">'
         '<div class="mxd-block__inner-headline loading__item">'
+        f'<p class="mxd-point-subtitle">{POINT_SVG} <span>{ls(eyebrow_ar, eyebrow_en)}</span></p>'
         f'<h1 class="inner-headline__title">{ls(h1_ar, h1_en)}</h1>'
-        f'<p class="inner-headline__text t-large t-bright">{ls(sub_ar, sub_en)}</p>'
-        f'<div class="hx-ctarow">{ctas_html}</div>'
+        '</div></div></div>'
+        '<div class="col-12 col-xl-5 mxd-grid-item no-margin"><div class="mxd-block__content">'
+        '<div class="inner-headline__descr loading__item">'
+        f'<p>{ls(descr_ar, descr_en)}</p>'
+        f'<div class="hx-cta loading__item">{ctas_html}</div>'
         '</div></div></div>'
         '</div></div></div></div></div>'
     )
 
 
-def lead_form(slug: str, pt: str, head_ar: str, head_en: str,
-              wa_msg: str) -> str:
-    """The native contact-form markup, focused for a landing page, with
-    project_type pre-filled and an RTL-safe (clip) honeypot."""
+def text_block(title_ar, title_en, body_html, pad="padding-default") -> str:
     return (
-        '      <div class="mxd-section mxd-section-inner-form overflow-hidden padding-default">'
-        '<div class="mxd-container grid-container">'
-        + section_title(head_ar, head_en, "نموذج موجز يصل فريقنا مباشرة، ونرد خلال يوم عمل.",
-                        "A short brief reaches our team directly; we reply within one working day.") +
-        '<div class="mxd-block"><div class="mxd-block__inner-form"><div class="form-container">'
-        f'<form class="form contact-form" id="leadForm" action="/api/lead.php" method="POST" novalidate>'
+        open_section(pad)
+        + '<div class="mxd-block"><div class="container-fluid px-0"><div class="row gx-0">'
+        '<div class="col-12 col-xl-5 mxd-grid-item no-margin"><div class="mxd-block__name">'
+        f'<h2 class="anim-uni-in-up">{ls(title_ar, title_en)}</h2></div></div>'
+        '<div class="col-12 col-xl-6 mxd-grid-item no-margin"><div class="mxd-block__content">'
+        f'<div class="mxd-block__paragraph">{body_html}</div></div></div>'
+        '</div></div></div>' + CLOSE_SECTION
+    )
+
+
+def lead_form(slug, pt, head_ar, head_en, wa_msg) -> str:
+    return (
+        open_section("padding-default", "mxd-section-inner-form overflow-hidden")
+        + section_title(head_ar, head_en,
+                        "نموذج موجز يصل فريقنا مباشرة، ونرد خلال يوم عمل.",
+                        "A short brief reaches our team directly; we reply within one working day.")
+        + '<div class="mxd-block"><div class="mxd-block__inner-form"><div class="form-container">'
+        '<form class="form contact-form" id="leadForm" action="/api/lead.php" method="POST" novalidate>'
         f'<input type="hidden" name="source" value="/{slug}">'
         '<input type="hidden" name="lang" id="lang_input" value="ar">'
         f'<input type="hidden" name="project_type" value="{pt}">'
@@ -252,26 +236,25 @@ def lead_form(slug: str, pt: str, head_ar: str, head_en: str,
         '<div class="col-12 mxd-grid-item anim-uni-in-up uc-form-submit">'
         f'<button class="btn btn-anim btn-default btn-large btn-opposite slide-right-up" type="submit" id="leadSubmitBtn">{ls("أرسل الطلب", "Send request", "btn-caption")}<i class="ph-bold ph-arrow-up-right"></i></button>'
         f'<a class="btn btn-anim btn-default btn-large btn-additional slide-right-up" href="{wa_url(wa_msg)}" target="_blank" rel="noopener">{ls("أو عبر واتساب", "Or via WhatsApp", "btn-caption")}<i class="ph-bold ph-whatsapp-logo"></i></a>'
-        '</div>'
-        '</div></div></form>'
+        '</div></div></div></form>'
         "<script>(function(){var f=document.getElementById('leadForm');if(!f)return;f.addEventListener('submit',function(){var b=document.getElementById('leadSubmitBtn');if(b){setTimeout(function(){b.disabled=true;},0);}});})();</script>"
-        '</div></div></div></div></div>'
+        '</div></div></div>' + CLOSE_SECTION
     )
 
 
 def trust_logos() -> str:
     imgs = "".join(
-        f'<img class="anim-uni-in-up" src="/assets/img/clients/{f}" alt="{e(n)}" loading="lazy" decoding="async" height="40">'
-        for f, n in LOGOS
-    )
-    return section(
-        '<div class="mxd-block"><p class="mxd-point-subtitle anim-uni-in-up" style="justify-content:center;text-align:center;margin-bottom:28px">'
+        f'<img class="anim-uni-in-up" src="/assets/img/clients/{f}" alt="{e(n)}" loading="lazy" decoding="async" height="42">'
+        for f, n in LOGOS)
+    return (
+        open_section("padding-default")
+        + '<div class="mxd-block"><p class="mxd-point-subtitle anim-uni-in-up" style="justify-content:center;text-align:center;margin-bottom:30px">'
         + POINT_SVG + " <span>" + ls("علامات وثقت بهوية", "Brands that have trusted Hawih") + "</span></p>"
-        f'<div class="hx-logos">{imgs}</div></div>'
+        f'<div class="hx-logos">{imgs}</div></div>' + CLOSE_SECTION
     )
 
 
-def work_grid(projects: list, tag_ar: str, tag_en: str) -> str:
+def work_grid(projects, tag_ar, tag_en) -> str:
     cards = []
     for slug, name in projects:
         cards.append(
@@ -282,73 +265,94 @@ def work_grid(projects: list, tag_ar: str, tag_en: str) -> str:
             f'<div class="mxd-project-item__promo"><div class="mxd-project-item__name">'
             f'<a href="/work-{slug}"><span>{e(name)}</span></a></div></div></div>'
         )
-    return section(
-        section_title("أعمال نفخر بها", "Work we are proud of",
-                      "نماذج حقيقية من مشاريعنا", "Real samples from our projects")
+    return (
+        open_section("padding-default", "overflow-hidden")
+        + section_title("أعمال نفخر بها", "Work we are proud of",
+                        "نماذج حقيقية من مشاريعنا", "Real samples from our projects")
         + '<div class="mxd-block"><div class="container-fluid px-0"><div class="row g-4 mxd-works-grid">'
         + "".join(cards) + "</div></div>"
-        '<div class="mxd-block__cta anim-uni-in-up" style="margin-top:28px;display:flex;gap:14px;flex-wrap:wrap">'
-        + btn("/work", "استعرض كل الأعمال", "View all work")
-        + btn(PORTFOLIO_PDF, "حمّل ملف الأعمال (PDF)", "Download portfolio (PDF)", style="btn-outline", blank=True, icon="ph-file-pdf")
-        + "</div></div>"
+        + '<div class="anim-uni-in-up" style="margin-top:30px;display:flex;gap:14px;flex-wrap:wrap">'
+        + btn("/work", "استعرض كل الأعمال", "View all work", "btn-outline")
+        + btn(PORTFOLIO_PDF, "حمّل ملف الأعمال (PDF)", "Download portfolio (PDF)", "btn-outline", blank=True, icon="ph-file-pdf")
+        + "</div></div>" + CLOSE_SECTION
     )
 
 
-def deliverables(items: list, h1_ar: str, h1_en: str) -> str:
-    tiles = "".join(
-        f'<div class="hx-tile anim-uni-in-up"><i class="ph-bold ph-check-circle"></i><span>{ls(a, b)}</span></div>'
-        for a, b in items
-    )
-    return section(
-        section_title("ماذا تستلم", "What you get",
-                      h1_ar + " — كل ما تحتاجه", h1_en + " — everything you need")
-        + f'<div class="mxd-block"><div class="hx-grid">{tiles}</div></div>'
-    )
-
-
-def process(steps: list) -> str:
-    cells = []
-    for i, (t_ar, t_en, d_ar, d_en) in enumerate(steps, 1):
-        cells.append(
-            f'<div class="hx-step anim-uni-in-up"><span class="hx-step__n">{i:02d}</span>'
-            f'<h3>{ls(t_ar, t_en)}</h3><p>{ls(d_ar, d_en)}</p></div>'
-        )
-    return section(
-        section_title("طريقة العمل", "How we work",
-                      "أربع خطوات واضحة من الفكرة إلى التسليم",
-                      "Four clear steps from idea to handover")
-        + f'<div class="mxd-block"><div class="hx-steps">{"".join(cells)}</div></div>'
-    )
-
-
-def faq_section(items: list) -> str:
-    rows = "".join(
-        f'<details class="hx-faq__item anim-uni-in-up"><summary class="hx-faq__q">{ls(q_ar, q_en)}</summary>'
-        f'<div class="hx-faq__a"><p>{ls(a_ar, a_en)}</p></div></details>'
-        for (q_ar, q_en, a_ar, a_en) in items
-    )
-    return section(
-        section_title("أسئلة شائعة", "Common questions",
-                      "ربما يدور في ذهنك", "You might be wondering")
-        + f'<div class="mxd-block"><div class="hx-faq">{rows}</div></div>'
-    )
-
-
-def promo_band(caption_ar: str, caption_en: str, wa_msg: str) -> str:
-    """The native mxd-promo CTA band, with WhatsApp + portfolio actions."""
+def deliverables(items, kw_ar, kw_en) -> str:
+    lis = "".join(
+        f'<li class="anim-uni-in-up"><i class="ph-bold ph-check-circle"></i>'
+        f'<span class="t-large">{ls(a, b)}</span></li>'
+        for a, b in items)
+    body = f'<ul>{lis}</ul>'
     return (
-        '      <div class="mxd-section padding-default"><div class="mxd-container grid-container"><div class="mxd-block">'
-        '<div class="mxd-promo"><div class="mxd-promo__inner anim-zoom-out-container"><div class="mxd-promo__bg"></div>'
-        '<div class="mxd-promo__content"><p class="mxd-promo__title anim-uni-in-up">'
-        '<span class="mxd-promo__icon"><img width="300" height="300" loading="lazy" decoding="async" alt="" src="/uc-assets/img/icons/300x300_obj-cta-01.webp"></span>'
+        open_section("padding-default", "hx-deliver")
+        + '<div class="mxd-block"><div class="container-fluid px-0"><div class="row gx-0">'
+        '<div class="col-12 col-xl-5 mxd-grid-item no-margin"><div class="mxd-block__name">'
+        f'<h2 class="anim-uni-in-up">{ls("ماذا تستلم", "What you get")}</h2>'
+        f'<p class="anim-uni-in-up" style="margin-top:14px">{ls(kw_ar + " — كل ما تحتاجه.", kw_en + " — everything you need.")}</p></div></div>'
+        '<div class="col-12 col-xl-6 mxd-grid-item no-margin"><div class="mxd-block__content">'
+        f'{body}</div></div>'
+        '</div></div></div>' + CLOSE_SECTION
+    )
+
+
+def process(steps) -> str:
+    items = []
+    for i, (t_ar, t_en, d_ar, d_en) in enumerate(steps, 1):
+        items.append(
+            '<div class="mxd-approach-list__item">'
+            + ('<div class="mxd-approach-list__border anim-uni-in-up"></div>' if i == 1 else '')
+            + '<div class="mxd-approach-list__inner"><div class="container-fluid px-0"><div class="row gx-0">'
+            f'<div class="col-12 col-xl-2 mxd-grid-item no-margin"><div class="mxd-approach-list__image anim-uni-in-up">'
+            f'<img loading="lazy" decoding="async" alt="" src="/uc-assets/img/icons/h70_appr-0{i}.webp"></div></div>'
+            f'<div class="col-12 col-xl-4 mxd-grid-item no-margin"><div class="mxd-approach-list__title anim-uni-in-up"><h6>{ls(t_ar, t_en)}</h6></div></div>'
+            f'<div class="col-12 col-xl-6 mxd-grid-item no-margin"><div class="mxd-approach-list__descr anim-uni-in-up"><p>{ls(d_ar, d_en)}</p></div></div>'
+            '</div></div></div>'
+            '<div class="mxd-approach-list__border anim-uni-in-up"></div></div>'
+        )
+    return (
+        open_section("padding-default")
+        + section_title("طريقة العمل", "How we work",
+                        "أربع خطوات واضحة من الفكرة إلى التسليم",
+                        "Four clear steps from idea to handover")
+        + '<div class="mxd-block"><div class="mxd-approach-list">'
+        + "".join(items) + "</div></div>" + CLOSE_SECTION
+    )
+
+
+def faq(items) -> str:
+    rows = []
+    for q_ar, q_en, a_ar, a_en in items:
+        rows.append(
+            '<div class="mxd-block" style="margin-top:8px"><div class="container-fluid px-0"><div class="row gx-0">'
+            f'<div class="col-12 col-xl-5 mxd-grid-item no-margin"><div class="mxd-block__name"><h4 class="anim-uni-in-up">{ls(q_ar, q_en)}</h4></div></div>'
+            f'<div class="col-12 col-xl-6 mxd-grid-item no-margin"><div class="mxd-block__content"><div class="mxd-block__paragraph"><p class="anim-uni-in-up">{ls(a_ar, a_en)}</p></div></div></div>'
+            '</div></div></div>'
+        )
+    return (
+        open_section("padding-default")
+        + section_title("أسئلة شائعة", "Common questions",
+                        "إجابات سريعة عمّا قد يدور في ذهنك",
+                        "Quick answers to what you might be wondering")
+        + "".join(rows) + CLOSE_SECTION
+    )
+
+
+def promo_band(caption_ar, caption_en, wa_msg) -> str:
+    return (
+        open_section("padding-pre-footer", "overflow-hidden")
+        + '<div class="mxd-block"><div class="mxd-promo"><div class="mxd-promo__inner anim-zoom-out-container">'
+        '<div class="mxd-promo__bg"></div><div class="mxd-promo__content">'
+        '<p class="mxd-promo__title anim-uni-in-up"><span class="mxd-promo__icon">'
+        '<img width="300" height="300" loading="lazy" decoding="async" alt="" src="/uc-assets/img/icons/300x300_obj-cta-01.webp"></span>'
         f'<span class="mxd-promo__caption">{ls(caption_ar, caption_en)}</span></p>'
-        '<div class="mxd-promo__controls anim-uni-in-up" style="display:flex;gap:14px;flex-wrap:wrap">'
+        '<div class="mxd-promo__controls anim-uni-in-up">'
         f'<a class="btn btn-default btn-large btn-additional slide-right-up" href="{wa_url(wa_msg)}" target="_blank" rel="noopener">{ls("تواصل عبر واتساب", "Chat on WhatsApp", "btn-caption")}<i class="ph-bold ph-whatsapp-logo"></i></a>'
         f'<a class="btn btn-default btn-large btn-outline slide-right-up" href="tel:{PHONE}" dir="ltr">{ls("اتصل الآن", "Call now", "btn-caption")}<i class="ph-bold ph-phone"></i></a>'
         '</div></div>'
         '<div class="mxd-promo__images"><img loading="lazy" decoding="async" alt="" class="promo-image promo-image-1" src="/uc-assets/img/illustrations/cta-img-01.webp">'
         '<img loading="lazy" decoding="async" alt="" class="promo-image promo-image-2" src="/uc-assets/img/illustrations/cta-img-02.webp"></div>'
-        '</div></div></div></div></div>'
+        '</div></div></div>' + CLOSE_SECTION
     )
 
 
@@ -361,25 +365,25 @@ def render_landing(page: dict, process_steps: list) -> str:
         keywords=page["keywords"], og_title=page["og_title"],
         og_desc=page["og_desc"], title_en=page["title_en"],
         desc_en=page["description_en"], og_title_en=page["og_title_en"],
-        og_desc_en=page["og_desc_en"], extra_style=HX_STYLE)
+        og_desc_en=page["og_desc_en"])
     wa = page["wa_msg"]
     h1_ar, h1_en = page["h1"]
     ctas = (
-        btn(wa_url(wa), "تواصل عبر واتساب", "Chat on WhatsApp", style="btn-opposite", blank=True, icon="ph-whatsapp-logo")
-        + btn(f"tel:{PHONE}", "اتصل الآن", "Call now", style="btn-outline", icon="ph-phone")
-        + btn(PORTFOLIO_PDF, "ملف الأعمال (PDF)", "Portfolio (PDF)", style="btn-outline", blank=True, icon="ph-file-pdf")
+        btn(wa_url(wa), "تواصل عبر واتساب", "Chat on WhatsApp", "btn-opposite", blank=True, icon="ph-whatsapp-logo")
+        + btn(f"tel:{PHONE}", "اتصل الآن", "Call now", "btn-outline", icon="ph-phone", extra=' dir="ltr"')
+        + btn(PORTFOLIO_PDF, "ملف الأعمال (PDF)", "Portfolio (PDF)", "btn-outline", blank=True, icon="ph-file-pdf")
     )
+    tag_ar = page["eyebrow"][0].split(" · ")[0]
+    tag_en = page["eyebrow"][1].split(" · ")[0]
     body = (
         hero(page["eyebrow"][0], page["eyebrow"][1], h1_ar, h1_en,
              page["sub"][0], page["sub"][1], ctas)
-        + lead_form(page["slug"], page["pt"], page["form_head"][0],
-                    page["form_head"][1], wa)
+        + lead_form(page["slug"], page["pt"], page["form_head"][0], page["form_head"][1], wa)
         + trust_logos()
-        + work_grid(page["work"], page["eyebrow"][0].split(" · ")[0],
-                    page["eyebrow"][1].split(" · ")[0])
+        + work_grid(page["work"], tag_ar, tag_en)
         + deliverables(page["deliverables"], h1_ar, h1_en)
         + process(process_steps)
-        + faq_section(page["faq"])
+        + faq(page["faq"])
         + promo_band("جاهز نبدأ مشروعك؟", "Ready to start your project?", wa)
     )
     return head + "\n" + main_open + "\n" + body + "\n    </main>\n" + suffix
@@ -392,44 +396,29 @@ def render_article(article: dict, link_targets: dict, publish_date: str) -> str:
         keywords=article["keywords"], og_title=article["kw"][0],
         og_desc=article["description"], title_en=article["title_en"],
         desc_en=article["description_en"], og_title_en=article["kw"][1],
-        og_desc_en=article["description_en"], extra_style=HX_STYLE)
-    secs = article["sections"]
-    toc = "".join(
-        f'<li><a href="#s{i}">{ls(s[0], s[1])}</a></li>'
-        for i, s in enumerate(secs))
-    prose = []
-    for i, (h_ar, h_en, paras) in enumerate(secs):
-        prose.append(f'<h2 id="s{i}">{ls(h_ar, h_en)}</h2>')
-        for p_ar, p_en in paras:
-            prose.append(f'<p>{ls(p_ar, p_en)}</p>')
-    related = "".join(
-        btn(f"/{s}", link_targets[s][0], link_targets[s][1], style="btn-outline")
+        og_desc_en=article["description_en"])
+    first = article["related"][0]
+    cta = btn(f"/{first}", link_targets[first][0], link_targets[first][1],
+              "btn-opposite")
+    body = [hero("مقال · دليل", "Article · Guide", article["kw"][0], article["kw"][1],
+                 article["excerpt"][0], article["excerpt"][1], cta)]
+    for h_ar, h_en, paras in article["sections"]:
+        para_html = "".join(
+            f'<p class="t-large t-bright anim-uni-in-up">{ls(p_ar, p_en)}</p>'
+            for p_ar, p_en in paras)
+        body.append(text_block(h_ar, h_en, para_html))
+    # related services
+    related_btns = "".join(
+        btn(f"/{s}", link_targets[s][0], link_targets[s][1], "btn-outline")
         for s in article["related"])
-    faq = "".join(
-        f'<details class="hx-faq__item"><summary class="hx-faq__q">{ls(q_ar, q_en)}</summary>'
-        f'<div class="hx-faq__a"><p>{ls(a_ar, a_en)}</p></div></details>'
-        for (q_ar, q_en, a_ar, a_en) in article["faq"])
-    body = (
-        hero("مقال · دليل", "Article · Guide", article["kw"][0], article["kw"][1],
-             article["excerpt"][0], article["excerpt"][1],
-             btn(f"/{article['related'][0]}", link_targets[article['related'][0]][0],
-                 link_targets[article['related'][0]][1], style="btn-opposite"))
-        + section(
-            '<div class="mxd-block">'
-            f'<nav class="hx-toc anim-uni-in-up" aria-label="Contents"><p>{ls("محتويات المقال", "In this article")}</p><ol>{toc}</ol></nav>'
-            f'<div class="hx-prose">{"".join(prose)}</div>'
-            f'<div class="hx-related">{ls("خدمات ذات صلة:", "Related services:")} {related}</div>'
-            '</div>')
-        + faq_section_from(faq)
-        + promo_band("عندك مشروع في ذهنك؟", "Got a project in mind?",
-                     "مرحباً، قرأت مقالكم وأرغب باستشارة حول مشروعي.")
-    )
-    return head + "\n" + main_open + "\n" + body + "\n    </main>\n" + suffix
-
-
-def faq_section_from(rows_html: str) -> str:
-    return section(
-        section_title("أسئلة شائعة", "Frequently asked questions",
-                      "إجابات سريعة", "Quick answers")
-        + f'<div class="mxd-block"><div class="hx-faq">{rows_html}</div></div>'
-    )
+    body.append(
+        open_section("padding-default")
+        + '<div class="mxd-block"><div class="container-fluid px-0"><div class="row gx-0">'
+        f'<div class="col-12 col-xl-5 mxd-grid-item no-margin"><div class="mxd-block__name"><h2 class="anim-uni-in-up">{ls("خدمات ذات صلة", "Related services")}</h2></div></div>'
+        '<div class="col-12 col-xl-6 mxd-grid-item no-margin"><div class="mxd-block__content">'
+        f'<div class="hx-cta">{related_btns}</div></div></div>'
+        '</div></div></div>' + CLOSE_SECTION)
+    body.append(faq(article["faq"]))
+    body.append(promo_band("عندك مشروع في ذهنك؟", "Got a project in mind?",
+                           "مرحباً، قرأت مقالكم وأرغب باستشارة حول مشروعي."))
+    return head + "\n" + main_open + "\n" + "".join(body) + "\n    </main>\n" + suffix
