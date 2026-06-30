@@ -105,7 +105,8 @@ HX_STYLE = """    <!-- hx: minimal scoped styles (layout helpers only, no type s
 
 def swap_head(prefix: str, *, title: str, desc: str, keywords: str,
               og_title: str, og_desc: str, title_en: str, desc_en: str,
-              og_title_en: str, og_desc_en: str) -> str:
+              og_title_en: str, og_desc_en: str,
+              extra_style: str = HX_STYLE) -> str:
     p = re.sub(r"<title>.*?</title>", f"<title>{e(title)}</title>",
                prefix, count=1, flags=re.DOTALL)
     p = _sub_attr(p, r'(<meta name="description" content=")[^"]*(">)', desc)
@@ -122,7 +123,7 @@ def swap_head(prefix: str, *, title: str, desc: str, keywords: str,
     )
     p = p.replace("<!-- Facebook Metadata End -->",
                   "<!-- Facebook Metadata End -->" + helpers, 1)
-    p = p.replace("</head>", HX_STYLE + "\n  </head>", 1)
+    p = p.replace("</head>", extra_style + "\n  </head>", 1)
     return p
 
 

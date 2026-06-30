@@ -44,8 +44,12 @@ from __future__ import annotations
 
 import html
 import json
+import sys
 from pathlib import Path
 from urllib.parse import quote
+
+sys.path.insert(0, str(Path(__file__).resolve().parent))
+import _shell  # noqa: E402
 
 REPO_ROOT = Path(__file__).resolve().parent.parent
 
@@ -902,81 +906,18 @@ def render(page: dict) -> str:
     sub = ls(*page["sub"])
     form_head = ls(*page["form_head"])
 
-    head = f'''<!DOCTYPE html>
-<html lang="ar" dir="rtl">
+    # Official site shell (floating mxd-header navbar + mobile menu + footer
+    # + template CSS/JS) with the lean lp-* body injected into <main>.
+    prefix, main_open, suffix = _shell.load_shell()
+    head = _shell.swap_head(
+        prefix, title=page['title'], desc=page['description'],
+        keywords=page['keywords'], og_title=page['og_title'],
+        og_desc=page['og_desc'], title_en=page['title_en'],
+        desc_en=page['description_en'], og_title_en=page['og_title_en'],
+        og_desc_en=page['og_desc_en'],
+        extra_style=f"    <style>\n{CSS}    </style>")
 
-  <head>
-    <script>(function(){{try{{var e=document.documentElement;e.setAttribute("data-theme","light");e.classList.add("light-mode");e.style.colorScheme="light";}}catch(_){{}}}})();</script>
-    <meta charset="UTF-8">
-
-    <!-- Page Title -->
-    <title>{e(page['title'])}</title>
-
-    <!-- Meta Tags -->
-    <meta name="description" content="{e(page['description'])}">
-    <meta name="keywords" content="{e(page['keywords'])}">
-    <meta name="author" content="Hawih">
-
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-
-    <!-- FOUC guard: pick lang before paint -->
-    <script>
-      (function () {{
-        try {{
-          var p = location.pathname;
-          var lang = (p === '/en' || p.indexOf('/en/') === 0) ? 'en' : 'ar';
-          document.documentElement.lang = lang;
-          document.documentElement.dir = lang === 'en' ? 'ltr' : 'rtl';
-        }} catch (e) {{}}
-      }})();
-    </script>
-
-    <!-- Template Favicon & Icons Start -->
-    <link rel="icon" type="image/png" href="/assets/img/favicon.png" sizes="any">
-    <link rel="apple-touch-icon" href="/assets/img/favicon.png">
-    <!-- Template Favicon & Icons End -->
-
-    <!-- Facebook Metadata Start -->
-    <meta property="og:image:height" content="1200">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:title" content="{e(page['og_title'])}">
-    <meta property="og:description" content="{e(page['og_desc'])}">
-    <meta property="og:url" content="https://hawih.com.sa/{page['slug']}">
-    <meta property="og:image" content="https://hawih.com.sa/assets/img/hawih-og.jpg">
-    <!-- Facebook Metadata End -->
-
-    <!-- EN locale metadata (consumed by scripts/build-en-mirror.py to localise
-         title / description / og:* on the /en mirror; ignored by crawlers) -->
-    <meta name="hawih:title-en" content="{e(page['title_en'])}">
-    <meta name="hawih:description-en" content="{e(page['description_en'])}">
-    <meta name="hawih:og-title-en" content="{e(page['og_title_en'])}">
-    <meta name="hawih:og-description-en" content="{e(page['og_desc_en'])}">
-
-    <!-- Template Styles Start -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Inter:wght@400;500;600;700&display=swap">
-    <!-- Template Styles End -->
-
-    <style>
-{CSS}    </style>
-  </head>
-
-  <body>
-    <a class="lp-skip" href="#content">{ls("تخطَّ إلى المحتوى", "Skip to main content")}</a>
-    <header class="lp-header">
-      <div class="lp-wrap lp-header__inner">
-        <a class="lp-logo" href="/" aria-label="Hawih · هوية"><img src="/assets/img/hawih-logo-black.png" alt="Hawih · هوية" width="120" height="34"></a>
-        <div class="lp-header__actions">
-          <button class="lp-langtoggle langToggle" type="button" aria-label="Switch language">{ls("EN", "ع")}</button>
-          <a class="lp-btn lp-btn--outline lp-header__call" href="tel:{PHONE}" dir="ltr">{PHONE_SVG}<span class="lang-string" data-ar="اتصل" data-en="Call">اتصل</span></a>
-          <a class="lp-btn lp-btn--wa" href="{wa_header}" target="_blank" rel="noopener">{WA_SVG}{ls("واتساب", "WhatsApp")}</a>
-        </div>
-      </div>
-    </header>
-
-    <main id="content">
+    body = f'''
       <!-- Hero -->
       <section class="lp-hero">
         <div class="lp-wrap lp-hero__grid">
@@ -1024,33 +965,8 @@ def render(page: dict) -> str:
           </div>
         </div>
       </section>
-    </main>
-
-    <footer class="lp-footer">
-      <div class="lp-wrap lp-footer__inner">
-        <div class="lp-footer__brand">
-          <img src="/assets/img/logo/hawih-logo-white.png" alt="Hawih · هوية">
-          <p>{ls("استوديو تصميم سعودي · منذ ٢٠٠٧", "Saudi design studio · since 2007")}</p>
-        </div>
-        <nav class="lp-footer__nav" aria-label="Footer">
-          <a href="/">{ls("الرئيسية", "Home")}</a>
-          <a href="/work">{ls("أعمالنا", "Work")}</a>
-          <a href="/services">{ls("خدماتنا", "Services")}</a>
-          <a href="/contact">{ls("تواصل معنا", "Contact")}</a>
-        </nav>
-        <div class="lp-footer__contact">
-          <a href="tel:{PHONE}" dir="ltr">{PHONE_DISPLAY}</a>
-          <a href="mailto:{EMAIL}" dir="ltr">{EMAIL}</a>
-        </div>
-      </div>
-      <div class="lp-wrap lp-footer__legal">{ls("© ٢٠٠٧–٢٠٢٦ هوية · Hawih. جميع الحقوق محفوظة.", "© 2007–2026 Hawih · هوية. All rights reserved.")}</div>
-    </footer>
-
-    <script src="/assets/js/hawih.js"></script>
-  </body>
-</html>
 '''
-    return head
+    return head + "\n" + main_open + "\n" + body + "\n    </main>\n" + suffix
 
 
 def main() -> int:
