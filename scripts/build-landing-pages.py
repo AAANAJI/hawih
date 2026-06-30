@@ -653,7 +653,8 @@ CSS = r""":root{
   --font-ar:"IBM Plex Sans Arabic","Inter",system-ui,Segoe UI,Tahoma,sans-serif;
 }
 *,*::before,*::after{box-sizing:border-box}
-html{-webkit-text-size-adjust:100%;scroll-behavior:smooth}
+html{-webkit-text-size-adjust:100%;scroll-behavior:smooth;overflow-x:clip}
+body{overflow-x:clip;max-width:100%}
 body{margin:0;background:var(--paper);color:var(--ink);
   font-family:var(--font-ar);font-size:17px;line-height:1.7;
   -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility}
@@ -750,7 +751,7 @@ button{font-family:inherit}
 .lp-form__note{font-size:.82rem;color:var(--muted);margin-top:2px}
 .lp-form__wa{display:inline-flex;align-items:center;justify-content:center;
   gap:.5em;color:var(--wa);font-weight:600;font-size:.95rem;margin-top:2px}
-.lp-hp{position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden}
+.lp-hp{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
 
 /* logos */
 .lp-logos{padding:22px 0 6px}
