@@ -1,0 +1,58 @@
+---
+/**
+ * Button — cobalt-filled by default. Renders <a> when `href` is set,
+ * otherwise <button>.
+ * Props:
+ *   variant?: 'primary' | 'outline' | 'ghost'  (default 'primary')
+ *   size?: 'sm' | 'md' | 'lg'                   (default 'md')
+ *   href?: string     -> anchor
+ *   type?: string     -> button type (default 'button')
+ *   block?: boolean   -> full width
+ *   disabled?: boolean
+ *   id / class / data-* pass through via ...rest
+ * Slot: button label.
+ */
+interface Props {
+  variant?: 'primary' | 'outline' | 'ghost';
+  size?: 'sm' | 'md' | 'lg';
+  href?: string;
+  type?: 'button' | 'submit' | 'reset';
+  block?: boolean;
+  disabled?: boolean;
+  class?: string;
+  [key: string]: unknown;
+}
+const {
+  variant = 'primary',
+  size = 'md',
+  href,
+  type = 'button',
+  block = false,
+  disabled = false,
+  class: className = '',
+  ...rest
+} = Astro.props;
+
+const classes = [
+  'pk-btn',
+  variant === 'outline' && 'pk-btn--outline',
+  variant === 'ghost' && 'pk-btn--ghost',
+  size === 'lg' && 'pk-btn--lg',
+  size === 'sm' && 'pk-btn--sm',
+  block && 'pk-btn--block',
+  className,
+]
+  .filter(Boolean)
+  .join(' ');
+---
+{
+  href ? (
+    <a href={href} class={classes} aria-disabled={disabled ? 'true' : undefined} {...rest}>
+      <slot />
+    </a>
+  ) : (
+    <button type={type} class={classes} disabled={disabled} {...rest}>
+      <slot />
+    </button>
+  )
+}

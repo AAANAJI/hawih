@@ -1,0 +1,49 @@
+---
+/**
+ * ProductCard — square image, tag, title, "starting from" price.
+ * Whole card links to the product page. Price uses <bdi> LTR.
+ * Props:
+ *   href: string
+ *   title: string
+ *   image: string
+ *   rate: number
+ *   categoryLabel?: string
+ *   locale: 'ar' | 'en'
+ *   eager?: boolean
+ */
+import { formatSAR } from '@lib/format';
+import { t } from '@lib/strings';
+import type { Locale } from '@lib/format';
+
+interface Props {
+  href: string;
+  title: string;
+  image: string;
+  rate: number;
+  categoryLabel?: string;
+  locale: Locale;
+  eager?: boolean;
+}
+const { href, title, image, rate, categoryLabel, locale, eager = false } = Astro.props;
+const price = formatSAR(rate, locale);
+---
+<a class="pk-prodcard" href={href}>
+  <div class="pk-prodcard__media">
+    <img
+      src={image}
+      alt={title}
+      loading={eager ? 'eager' : 'lazy'}
+      decoding="async"
+      width="1200"
+      height="1200"
+    />
+  </div>
+  <div class="pk-prodcard__body">
+    {categoryLabel && <span class="pk-prodcard__tag">{categoryLabel}</span>}
+    <h3 class="pk-prodcard__title">{title}</h3>
+    <div class="pk-prodcard__price pk-price">
+      <span class="pk-from">{t('product.startingFrom', locale)}</span>
+      <bdi>{price}</bdi>
+    </div>
+  </div>
+</a>

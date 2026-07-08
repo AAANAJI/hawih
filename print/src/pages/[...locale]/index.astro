@@ -1,0 +1,185 @@
+---
+/**
+ * Home page — Arabic at /, English at /en/.
+ * Hero, category grid, featured products, how-to steps, trust strip.
+ */
+import Base from '@layouts/Base.astro';
+import Button from '@components/Button.astro';
+import CategoryTile from '@components/CategoryTile.astro';
+import ProductCard from '@components/ProductCard.astro';
+import JsonLd from '@components/JsonLd.astro';
+import { localeStaticPaths } from '@lib/i18n';
+import { href } from '@lib/i18n';
+import { t } from '@lib/strings';
+import { categories, items, categoryTitle, itemTitle, getCategory } from '@lib/catalog';
+import { HAWIH_ORG_ID, SITE_URL } from '@lib/config';
+import type { Locale } from '@lib/format';
+
+export const getStaticPaths = localeStaticPaths;
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+
+const featured = items.slice(0, 4);
+const steps = [
+  { n: '1', title: t('step.1.title', locale), body: t('step.1.body', locale) },
+  { n: '2', title: t('step.2.title', locale), body: t('step.2.body', locale) },
+  { n: '3', title: t('step.3.title', locale), body: t('step.3.body', locale) },
+];
+const trust = [
+  { icon: '🧾', label: t('trust.tax', locale) },
+  { icon: '🏦', label: t('trust.bank', locale) },
+  { icon: '💬', label: t('trust.whatsapp', locale) },
+  { icon: '⚡', label: t('trust.turnaround', locale) },
+];
+
+// Structured data: Organization (store) linked to the main brand org.
+const orgLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Organization',
+  '@id': `${SITE_URL}/#store`,
+  name: t('brand.name', locale),
+  url: SITE_URL,
+  logo: `${SITE_URL}/img/logo/hawih-logo-dark.png`,
+  parentOrganization: { '@id': HAWIH_ORG_ID },
+  brand: { '@id': HAWIH_ORG_ID },
+};
+const websiteLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: t('brand.name', locale),
+  url: SITE_URL,
+  inLanguage: locale === 'ar' ? 'ar-SA' : 'en',
+};
+---
+<Base
+  locale={locale}
+  title={`${t('brand.name', locale)} — ${t('brand.tagline', locale)}`}
+  description={t('hero.subtitle', locale)}
+  path="/"
+  image="/img/og/default.svg"
+>
+  <Fragment slot="head">
+    <JsonLd data={[orgLd, websiteLd]} />
+  </Fragment>
+
+  <!-- Hero -->
+  <section class="pk-hero">
+    <div class="pk-container">
+      <div class="pk-hero__inner">
+        <div class="pk-hero__copy pk-reveal">
+          <span class="pk-eyebrow">{t('hero.eyebrow', locale)}</span>
+          <h1 class="pk-display">{t('hero.title', locale)}</h1>
+          <p class="pk-muted" style="font-size:1.1rem;max-width:52ch">{t('hero.subtitle', locale)}</p>
+          <div class="pk-hero__actions">
+            <Button href={href(locale, '/#categories')} size="lg">{t('hero.ctaPrimary', locale)}</Button>
+            <Button href={href(locale, '/#how')} size="lg" variant="outline">{t('hero.ctaSecondary', locale)}</Button>
+          </div>
+        </div>
+        <div class="pk-hero__media pk-reveal">
+          <img src="/img/home/hero.svg" alt={t('hero.title', locale)} width="2400" height="1200" fetchpriority="high" />
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="pk-section" id="categories">
+    <div class="pk-container">
+      <div class="pk-section-head">
+        <div>
+          <h2 class="pk-h2">{t('home.categoriesTitle', locale)}</h2>
+          <p>{t('home.categoriesSub', locale)}</p>
+        </div>
+      </div>
+      <div class="pk-grid-cats">
+        {categories.map((c, i) => (
+          <div class="pk-reveal">
+            <CategoryTile
+              title={categoryTitle(c, locale)}
+              href={href(locale, `/category/${c.slug}`)}
+              image={`/img/categories/${c.slug}.svg`}
+              eager={i < 4}
+            />
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured products -->
+  <section class="pk-section" style="background:var(--pk-bg-2)">
+    <div class="pk-container">
+      <div class="pk-section-head">
+        <div>
+          <h2 class="pk-h2">{t('home.featuredTitle', locale)}</h2>
+          <p>{t('home.featuredSub', locale)}</p>
+        </div>
+        <a class="pk-btn pk-btn--ghost pk-btn--sm" href={href(locale, '/#categories')}>{t('home.viewAll', locale)} →</a>
+      </div>
+      <div class="pk-grid-products" data-featured-grid>
+        {featured.map((it) => {
+          const cat = getCategory(it.category_slug);
+          return (
+            <div class="pk-reveal" data-product-id={it.id} data-product-name={itemTitle(it, locale)} data-product-price={it.rate} data-product-cat={it.category_slug}>
+              <ProductCard
+                href={href(locale, `/product/${it.slug}`)}
+                title={itemTitle(it, locale)}
+                image={it.images?.square ?? ''}
+                rate={it.rate}
+                categoryLabel={cat ? categoryTitle(cat, locale) : undefined}
+                locale={locale}
+              />
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </section>
+
+  <!-- How to order -->
+  <section class="pk-section" id="how">
+    <div class="pk-container">
+      <div class="pk-section-head">
+        <div>
+          <h2 class="pk-h2">{t('home.stepsTitle', locale)}</h2>
+          <p>{t('home.stepsSub', locale)}</p>
+        </div>
+      </div>
+      <div class="pk-steps">
+        {steps.map((s) => (
+          <div class="pk-card pk-step pk-reveal">
+            <span class="pk-step__num">{s.n}</span>
+            <h3>{s.title}</h3>
+            <p>{s.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Trust strip -->
+  <section class="pk-container" style="margin-bottom:var(--sp-10)">
+    <div class="pk-card pk-trust">
+      {trust.map((x) => (
+        <div class="pk-trust__item">
+          <span aria-hidden="true">{x.icon}</span>
+          <span>{x.label}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <script>
+    import { viewItemList } from '@lib/gtm';
+    const grid = document.querySelector('[data-featured-grid]');
+    if (grid) {
+      const items = Array.from(grid.querySelectorAll<HTMLElement>('[data-product-id]')).map((el) => ({
+        item_id: el.dataset.productId!,
+        item_name: el.dataset.productName!,
+        price: Number(el.dataset.productPrice),
+        item_category: el.dataset.productCat!,
+      }));
+      viewItemList('featured', items);
+    }
+  </script>
+</Base>

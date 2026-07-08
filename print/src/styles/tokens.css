@@ -1,0 +1,96 @@
+/* ============================================================
+   tokens.css — Hawih Print Store design tokens
+   Light-first, warm-paper premium surface. Brand DNA shared
+   with hawih.com.sa (cobalt accent, ink text) on a light canvas.
+   Do not hardcode colors in components — reference these tokens.
+   ============================================================ */
+
+:root {
+  /* ---- Brand (canonical, copied from hawih.css) ---- */
+  --hawih-blue:        #1F1FFE;
+  --hawih-blue-hover:  #1414D6;
+  --hawih-blue-soft:   rgba(31, 31, 254, 0.12);
+  --hawih-blue-glow:   rgba(31, 31, 254, 0.45);
+
+  --hawih-ink:         #0B0B10;
+  --hawih-ink-2:       #14141C;
+  --hawih-ink-line:    rgba(255, 255, 255, 0.08);
+  --hawih-paper:       #F4F1EB;
+  --hawih-paper-2:     #E9E4D7;
+  --hawih-paper-line:  rgba(11, 11, 16, 0.10);
+
+  /* ---- Store semantic surface ---- */
+  --pk-bg:            var(--hawih-paper);        /* page background */
+  --pk-bg-2:          var(--hawih-paper-2);      /* alt sections */
+  --pk-surface:       #FFFFFF;                    /* card surface */
+  --pk-surface-2:     #FBFAF6;                    /* subtle inset */
+  --pk-ink:           var(--hawih-ink);          /* primary text */
+  --pk-ink-muted:     #6B6B72;                    /* muted text */
+  --pk-line:          var(--hawih-paper-line);   /* hairline border */
+  --pk-line-strong:   rgba(11, 11, 16, 0.16);
+
+  --pk-accent:        var(--hawih-blue);
+  --pk-accent-hover:  var(--hawih-blue-hover);
+  --pk-accent-soft:   var(--hawih-blue-soft);
+  --pk-accent-glow:   var(--hawih-blue-glow);
+  --pk-on-accent:     #FFFFFF;
+
+  /* ---- Status semantics (status chips only) ---- */
+  --pk-success:       #27ae60;
+  --pk-warning:       #E67E22;
+  --pk-danger:        #E74C3C;
+  --pk-success-soft:  rgba(39, 174, 96, 0.12);
+  --pk-warning-soft:  rgba(230, 126, 34, 0.12);
+  --pk-danger-soft:   rgba(231, 76, 60, 0.12);
+
+  /* ---- Spacing scale (4px base) ---- */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-7:  32px;
+  --sp-8:  40px;
+  --sp-9:  48px;
+  --sp-10: 64px;
+  --sp-11: 80px;
+  --sp-12: 112px;
+
+  /* ---- Radii ---- */
+  --r-sm:   8px;
+  --r-md:   12px;
+  --r-lg:   16px;
+  --r-xl:   24px;
+  --r-pill: 999px;
+
+  /* ---- Shadows (soft, low-opacity, layered) ---- */
+  --sh-1: 0 1px 2px rgba(11, 11, 16, 0.04), 0 2px 8px rgba(11, 11, 16, 0.05);
+  --sh-2: 0 2px 6px rgba(11, 11, 16, 0.06), 0 10px 24px rgba(11, 11, 16, 0.09);
+  --sh-3: 0 8px 24px rgba(11, 11, 16, 0.10), 0 24px 60px rgba(11, 11, 16, 0.14);
+
+  /* ---- Layout ---- */
+  --container: 1200px;
+  --header-h: 68px;
+
+  /* ---- Type ---- */
+  --font-ar: 'IBM Plex Sans Arabic', 'Segoe UI', system-ui, sans-serif;
+  --font-en: 'Inter', system-ui, -apple-system, sans-serif;
+  --font-base: var(--font-ar);
+
+  /* ---- Transitions ---- */
+  --t-fast: 120ms ease;
+  --t-base: 150ms cubic-bezier(0.2, 0.6, 0.2, 1);
+  --t-slow: 260ms cubic-bezier(0.2, 0.6, 0.2, 1);
+
+  /* ---- z-index ---- */
+  --z-header: 100;
+  --z-drawer: 200;
+  --z-strip: 90;
+}
+
+/* English pages use Inter as the base family. */
+:root[lang='en'],
+[dir='ltr'] {
+  --font-base: var(--font-en);
+}

@@ -1,0 +1,116 @@
+---
+/**
+ * Cart page — /cart and /en/cart. Client-side rendered from cart.ts.
+ * Line items with option summary + note, qty edit, remove, subtotal.
+ * "متابعة الدفع" links to /checkout. EmptyState when empty.
+ */
+import Base from '@layouts/Base.astro';
+import { localeStaticPaths, href } from '@lib/i18n';
+import { t } from '@lib/strings';
+import type { Locale } from '@lib/format';
+
+export const getStaticPaths = localeStaticPaths;
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+const checkoutHref = href(locale, '/checkout');
+const shopHref = href(locale, '/');
+---
+<Base
+  locale={locale}
+  title={`${t('cart.title', locale)} — ${t('brand.name', locale)}`}
+  description={t('cart.title', locale)}
+  path="/cart"
+  noindex={true}
+>
+  <div class="pk-container" style="min-height:52vh">
+    <div class="pk-pagehead"><h1 class="pk-h1">{t('cart.title', locale)}</h1></div>
+
+    <!-- Empty -->
+    <div data-cart-empty hidden>
+      <div class="pk-empty">
+        <div class="pk-empty__icon" aria-hidden="true">🛒</div>
+        <h2 class="pk-h2">{t('cart.empty.title', locale)}</h2>
+        <p>{t('cart.empty.body', locale)}</p>
+        <a class="pk-btn" href={shopHref}>{t('cart.empty.cta', locale)}</a>
+      </div>
+    </div>
+
+    <!-- Filled -->
+    <div class="pk-cart" data-cart-filled hidden style="margin-bottom:var(--sp-10)">
+      <div>
+        <div data-cart-lines></div>
+        <a class="pk-btn pk-btn--ghost pk-btn--sm" href={shopHref} style="margin-top:var(--sp-4)">← {t('cart.continue', locale)}</a>
+      </div>
+      <aside class="pk-card pk-summary">
+        <div class="pk-summary__row">
+          <span class="pk-muted">{t('cart.subtotal', locale)}</span>
+          <span class="pk-summary__total pk-price"><bdi data-cart-subtotal>—</bdi></span>
+        </div>
+        <p class="pk-small pk-muted">{t('cart.taxNote', locale)}</p>
+        <a class="pk-btn pk-btn--block pk-btn--lg" href={checkoutHref} data-checkout-link>{t('cart.checkout', locale)}</a>
+      </aside>
+    </div>
+  </div>
+
+  <script define:vars={{ locale, removeLabel: t('cart.remove', locale), noteLabel: t('cart.note', locale) }}>
+    window.__cartLocale = locale;
+    window.__cartLabels = { remove: removeLabel, note: noteLabel };
+  </script>
+  <script>
+    import { getCart, updateQty, removeLine, subtotal } from '@lib/cart';
+    import { formatSAR } from '@lib/format';
+
+    const locale = (window as any).__cartLocale === 'en' ? 'en' : 'ar';
+    const labels = (window as any).__cartLabels || { remove: 'Remove', note: 'Note' };
+    const emptyEl = document.querySelector<HTMLElement>('[data-cart-empty]');
+    const filledEl = document.querySelector<HTMLElement>('[data-cart-filled]');
+    const linesEl = document.querySelector<HTMLElement>('[data-cart-lines]');
+    const subtotalEl = document.querySelector<HTMLElement>('[data-cart-subtotal]');
+
+    function optSummary(options: Record<string, string>): string {
+      return Object.entries(options).map(([k, v]) => `${k}: ${v}`).join(' · ');
+    }
+
+    function render() {
+      const cart = getCart();
+      const empty = cart.length === 0;
+      if (emptyEl) emptyEl.hidden = !empty;
+      if (filledEl) filledEl.hidden = empty;
+      if (empty || !linesEl) return;
+
+      linesEl.innerHTML = '';
+      cart.forEach((line, idx) => {
+        const row = document.createElement('div');
+        row.className = 'pk-cartline';
+        row.innerHTML = `
+          <div class="pk-cartline__media">${line.image ? `<img src="${line.image}" alt="" width="88" height="88" />` : ''}</div>
+          <div>
+            <div style="font-weight:600">${line.title}</div>
+            <div class="pk-cartline__opts">${optSummary(line.options)}</div>
+            ${line.note ? `<div class="pk-cartline__note">${labels.note}: ${line.note}</div>` : ''}
+          </div>
+          <div class="pk-cartline__side">
+            <div class="pk-price" style="font-weight:700"><bdi>${formatSAR(line.rate * line.qty, locale)}</bdi></div>
+            <div class="pk-qty" data-line-qty>
+              <button type="button" data-dec aria-label="−">−</button>
+              <input type="number" value="${line.qty}" min="1" data-qty aria-label="qty" />
+              <button type="button" data-inc aria-label="+">＋</button>
+            </div>
+            <button type="button" class="pk-filechip__remove" data-remove aria-label="${labels.remove}">${labels.remove}</button>
+          </div>`;
+
+        const input = row.querySelector<HTMLInputElement>('[data-qty]')!;
+        row.querySelector('[data-dec]')!.addEventListener('click', () => { updateQty(idx, Number(input.value) - 1); render(); });
+        row.querySelector('[data-inc]')!.addEventListener('click', () => { updateQty(idx, Number(input.value) + 1); render(); });
+        input.addEventListener('change', () => { updateQty(idx, Number(input.value) || 1); render(); });
+        row.querySelector('[data-remove]')!.addEventListener('click', () => { removeLine(idx); render(); });
+        linesEl.appendChild(row);
+      });
+
+      if (subtotalEl) subtotalEl.textContent = formatSAR(subtotal(cart), locale);
+    }
+
+    render();
+    window.addEventListener('cart:change', render);
+  </script>
+</Base>

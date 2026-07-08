@@ -1,0 +1,66 @@
+---
+/**
+ * SEOHead — <title>, meta description, canonical, reciprocal hreflang,
+ * and Open Graph / Twitter tags. Rendered inside <head> by Base.astro.
+ *
+ * hreflang: ar-SA (Arabic), en, x-default -> Arabic.
+ * Props:
+ *   title: string
+ *   description: string
+ *   locale: 'ar' | 'en'
+ *   path: string          -> canonical root-relative path (Arabic form, leading slash)
+ *   image?: string        -> og:image (absolute or root-relative)
+ *   type?: string         -> og:type (default 'website')
+ *   noindex?: boolean
+ */
+import { SITE_URL } from '@lib/config';
+import { href } from '@lib/i18n';
+import type { Locale } from '@lib/format';
+
+interface Props {
+  title: string;
+  description: string;
+  locale: Locale;
+  path: string;
+  image?: string;
+  type?: string;
+  noindex?: boolean;
+}
+const {
+  title,
+  description,
+  locale,
+  path,
+  image = '/img/og/default.svg',
+  type = 'website',
+  noindex = false,
+} = Astro.props;
+
+const abs = (p: string) => (p.startsWith('http') ? p : SITE_URL + p);
+const canonical = abs(href(locale, path));
+const arUrl = abs(href('ar', path));
+const enUrl = abs(href('en', path));
+const ogImage = abs(image);
+const siteName = locale === 'ar' ? 'مطبعة هوية' : 'Hawih Print';
+---
+<title>{title}</title>
+<meta name="description" content={description} />
+{noindex && <meta name="robots" content="noindex,nofollow" />}
+<link rel="canonical" href={canonical} />
+
+<link rel="alternate" hreflang="ar-SA" href={arUrl} />
+<link rel="alternate" hreflang="en" href={enUrl} />
+<link rel="alternate" hreflang="x-default" href={arUrl} />
+
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={siteName} />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:locale" content={locale === 'ar' ? 'ar_SA' : 'en_US'} />
+
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content={title} />
+<meta name="twitter:description" content={description} />
+<meta name="twitter:image" content={ogImage} />

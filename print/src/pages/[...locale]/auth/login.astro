@@ -1,0 +1,139 @@
+---
+/**
+ * Login — /auth/login and /en/auth/login.
+ * Email + password → api.login → store token → redirect (?redirect= or account).
+ * Inline validation + error display. GTM login event on success.
+ */
+import Base from '@layouts/Base.astro';
+import Button from '@components/Button.astro';
+import { localeStaticPaths, href } from '@lib/i18n';
+import { t } from '@lib/strings';
+import type { Locale } from '@lib/format';
+
+export const getStaticPaths = localeStaticPaths;
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+const title = t('auth.login', locale);
+const signupHref = href(locale, '/auth/signup');
+const accountHref = href(locale, '/account');
+---
+<Base
+  locale={locale}
+  title={`${title} — ${t('brand.name', locale)}`}
+  description={t('auth.loginSub', locale)}
+  path="/auth/login"
+  noindex={true}
+>
+  <div class="pk-container">
+    <div class="pk-auth">
+      <div class="pk-card pk-auth__card">
+        <div class="pk-auth__head">
+          <h1>{title}</h1>
+          <p>{t('auth.loginSub', locale)}</p>
+        </div>
+
+        <div class="pk-form-alert pk-form-alert--error" data-auth-error hidden></div>
+
+        <form class="pk-form" data-login-form novalidate>
+          <div class="pk-field">
+            <label class="pk-label" for="login-email">{t('field.email', locale)}<span class="pk-req">*</span></label>
+            <input class="pk-input" id="login-email" name="email" type="email" inputmode="email" dir="ltr" autocomplete="email" required />
+            <p class="pk-field__error" data-error-for="email" hidden></p>
+          </div>
+          <div class="pk-field">
+            <label class="pk-label" for="login-password">{t('field.password', locale)}<span class="pk-req">*</span></label>
+            <input class="pk-input" id="login-password" name="password" type="password" autocomplete="current-password" required />
+            <p class="pk-field__error" data-error-for="password" hidden></p>
+          </div>
+          <Button type="submit" size="lg" block data-submit>{t('auth.submitLogin', locale)}</Button>
+        </form>
+
+        <p class="pk-auth__alt">
+          {t('auth.noAccount', locale)} <a href={signupHref} data-signup-link>{t('auth.signup', locale)}</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script define:vars={{
+    locale,
+    accountHref,
+    signupHref,
+    labels: {
+      required: t('field.required', locale),
+      emailInvalid: t('field.emailInvalid', locale),
+      error: t('auth.loginError', locale),
+      submit: t('auth.submitLogin', locale),
+      loading: t('auth.loading', locale),
+    },
+  }}>
+    window.__loginCfg = { locale, accountHref, signupHref, labels };
+  </script>
+  <script>
+    import { api, setToken, isAuthed } from '@lib/api';
+    import { loginEvent } from '@lib/gtm';
+
+    const cfg = (window as any).__loginCfg;
+    const L = cfg.labels;
+
+    // Preserve ?redirect= across the login/signup pair; validate same-site.
+    const params = new URLSearchParams(location.search);
+    let redirect = params.get('redirect') || '';
+    if (!/^\/(?!\/)/.test(redirect)) redirect = cfg.accountHref;
+
+    // Already logged in? Skip straight to the destination.
+    if (isAuthed()) location.replace(redirect);
+
+    // Carry redirect onto the sign-up link.
+    const signupLink = document.querySelector<HTMLAnchorElement>('[data-signup-link]');
+    if (signupLink) signupLink.href = cfg.signupHref + '?redirect=' + encodeURIComponent(redirect);
+
+    const form = document.querySelector<HTMLFormElement>('[data-login-form]')!;
+    const alertEl = document.querySelector<HTMLElement>('[data-auth-error]')!;
+    const submit = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+
+    function fieldError(name: string, msg: string | null) {
+      const el = form.querySelector<HTMLElement>(`[data-error-for="${name}"]`);
+      const input = form.querySelector<HTMLInputElement>(`[name="${name}"]`);
+      if (el) { el.textContent = msg || ''; el.hidden = !msg; }
+      if (input) input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+    }
+
+    function validate(data: Record<string, string>): boolean {
+      let ok = true;
+      if (!data.email) { fieldError('email', L.required); ok = false; }
+      else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(data.email)) { fieldError('email', L.emailInvalid); ok = false; }
+      else fieldError('email', null);
+      if (!data.password) { fieldError('password', L.required); ok = false; }
+      else fieldError('password', null);
+      return ok;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alertEl.hidden = true;
+      const fd = new FormData(form);
+      const data = { email: String(fd.get('email') || '').trim(), password: String(fd.get('password') || '') };
+      if (!validate(data)) return;
+
+      submit.disabled = true;
+      submit.textContent = L.loading;
+      try {
+        const res: any = await api.login(data);
+        if (res && res.success && res.token) {
+          setToken(res.token, res.expires_at);
+          loginEvent('store');
+          location.href = redirect;
+          return;
+        }
+        alertEl.textContent = res?.message || L.error;
+        alertEl.hidden = false;
+      } catch {
+        alertEl.textContent = L.error;
+        alertEl.hidden = false;
+      }
+      submit.disabled = false;
+      submit.textContent = L.submit;
+    });
+  </script>
+</Base>

@@ -1,0 +1,180 @@
+---
+/**
+ * Header — sticky translucent header with logo, category dropdown, nav,
+ * cart button (live badge), locale switch, and a mobile drawer.
+ * Props:
+ *   locale: 'ar' | 'en'
+ * Reads the current path from Astro.url for the locale switch + aria-current.
+ * Behaviour (scroll border, drawer open/close + focus trap, cart badge) is
+ * wired by the inline script at the bottom.
+ */
+import { t } from '@lib/strings';
+import { href, switchLocalePath } from '@lib/i18n';
+import { categories, categoryTitle } from '@lib/catalog';
+import type { Locale } from '@lib/format';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const path = Astro.url.pathname;
+
+const logo = '/img/logo/hawih-logo-dark.png';
+const cats = categories.map((c) => ({
+  title: categoryTitle(c, locale),
+  href: href(locale, `/category/${c.slug}`),
+}));
+
+const nav = [
+  { label: t('nav.track', locale), href: href(locale, '/account') },
+  { label: t('nav.account', locale), href: href(locale, '/account') },
+];
+
+const arHref = switchLocalePath(path, 'ar');
+const enHref = switchLocalePath(path, 'en');
+const homeHref = href(locale, '/');
+const cartHref = href(locale, '/cart');
+const productsHref = href(locale, '/#categories');
+---
+<header class="pk-header" data-header>
+  <div class="pk-container pk-header__inner">
+    <a class="pk-header__logo" href={homeHref} aria-label={t('brand.name', locale)}>
+      <img src={logo} alt={t('brand.name', locale)} width="1080" height="390" />
+    </a>
+
+    <nav class="pk-header__nav" aria-label="primary">
+      <div class="pk-dropdown">
+        <button class="pk-navlink" aria-haspopup="true" aria-expanded="false" data-dropdown-btn>
+          {t('nav.products', locale)}
+          <span aria-hidden="true" style="font-size:.7em">▾</span>
+        </button>
+        <div class="pk-dropdown__menu" data-dropdown-menu>
+          <a href={productsHref}>{t('nav.allCategories', locale)}</a>
+          {cats.map((c) => <a href={c.href}>{c.title}</a>)}
+        </div>
+      </div>
+      {nav.map((n) => (
+        <a class="pk-navlink" href={n.href} aria-current={path === new URL(n.href, Astro.url).pathname ? 'page' : undefined}>{n.label}</a>
+      ))}
+    </nav>
+
+    <div class="pk-header__spacer"></div>
+
+    <div class="pk-header__actions">
+      <div class="pk-locale pk-desktop-only" role="group" aria-label="language">
+        <a href={arHref} aria-current={locale === 'ar' ? 'true' : undefined} lang="ar">ع</a>
+        <a href={enHref} aria-current={locale === 'en' ? 'true' : undefined} lang="en">EN</a>
+      </div>
+
+      <a class="pk-navlink pk-cartbtn" href={cartHref} aria-label={t('nav.cart', locale)}>
+        <span aria-hidden="true" style="font-size:1.1rem">🛒</span>
+        <span class="pk-cartbtn__badge" data-cart-badge aria-hidden="true">0</span>
+      </a>
+
+      <button class="pk-hamburger" data-drawer-open aria-label={t('nav.menu', locale)} aria-expanded="false" aria-controls="pk-drawer">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+          <line x1="3" y1="6" x2="21" y2="6" /><line x1="3" y1="12" x2="21" y2="12" /><line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile drawer -->
+<div class="pk-drawer" id="pk-drawer" data-drawer>
+  <div class="pk-drawer__scrim" data-drawer-close></div>
+  <div class="pk-drawer__panel" role="dialog" aria-modal="true" aria-label={t('nav.menu', locale)}>
+    <div class="pk-drawer__head">
+      <img src={logo} alt={t('brand.name', locale)} width="1080" height="390" style="height:26px;width:auto" />
+      <button class="pk-strip__close" data-drawer-close aria-label={t('nav.close', locale)} style="position:static;transform:none;color:var(--pk-ink)">✕</button>
+    </div>
+    <a href={homeHref}>{t('nav.home', locale)}</a>
+    <div class="pk-drawer__section">{t('nav.products', locale)}</div>
+    {cats.map((c) => <a href={c.href}>{c.title}</a>)}
+    <div class="pk-drawer__section">{t('nav.account', locale)}</div>
+    <a href={href(locale, '/account')}>{t('nav.account', locale)}</a>
+    <a href={cartHref}>{t('nav.cart', locale)}</a>
+    <div class="pk-drawer__section">Language</div>
+    <div class="pk-locale" style="align-self:flex-start;margin:8px 12px">
+      <a href={arHref} aria-current={locale === 'ar' ? 'true' : undefined} lang="ar">العربية</a>
+      <a href={enHref} aria-current={locale === 'en' ? 'true' : undefined} lang="en">EN</a>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { getCart, countItems } from '@lib/cart';
+
+  // Scroll border
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const onScroll = () => header?.classList.toggle('is-scrolled', window.scrollY > 4);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  // Cart badge
+  const badge = document.querySelector<HTMLElement>('[data-cart-badge]');
+  function renderBadge(count: number) {
+    if (!badge) return;
+    badge.textContent = String(count);
+    badge.classList.toggle('is-active', count > 0);
+  }
+  renderBadge(countItems(getCart()));
+  window.addEventListener('cart:change', (e) => {
+    const detail = (e as CustomEvent).detail;
+    renderBadge(detail?.count ?? countItems(getCart()));
+  });
+  window.addEventListener('storage', (e) => {
+    if (e.key === 'hawih_print_cart') renderBadge(countItems(getCart()));
+  });
+
+  // Dropdown (click for touch/keyboard; hover handled by CSS)
+  const ddBtn = document.querySelector<HTMLButtonElement>('[data-dropdown-btn]');
+  const ddMenu = document.querySelector<HTMLElement>('[data-dropdown-menu]');
+  ddBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    const open = ddMenu?.classList.toggle('is-open');
+    ddBtn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  });
+  document.addEventListener('click', (e) => {
+    if (!ddBtn?.parentElement?.contains(e.target as Node)) {
+      ddMenu?.classList.remove('is-open');
+      ddBtn?.setAttribute('aria-expanded', 'false');
+    }
+  });
+
+  // Drawer with focus trap
+  const drawer = document.querySelector<HTMLElement>('[data-drawer]');
+  const openBtn = document.querySelector<HTMLElement>('[data-drawer-open]');
+  const panel = drawer?.querySelector<HTMLElement>('.pk-drawer__panel');
+  let lastFocused: HTMLElement | null = null;
+
+  function focusables(): HTMLElement[] {
+    if (!panel) return [];
+    return Array.from(panel.querySelectorAll<HTMLElement>('a[href], button:not([disabled])'));
+  }
+  function openDrawer() {
+    lastFocused = document.activeElement as HTMLElement;
+    drawer?.classList.add('is-open');
+    openBtn?.setAttribute('aria-expanded', 'true');
+    document.body.style.overflow = 'hidden';
+    focusables()[0]?.focus();
+  }
+  function closeDrawer() {
+    drawer?.classList.remove('is-open');
+    openBtn?.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    lastFocused?.focus();
+  }
+  openBtn?.addEventListener('click', openDrawer);
+  drawer?.querySelectorAll('[data-drawer-close]').forEach((el) => el.addEventListener('click', closeDrawer));
+  document.addEventListener('keydown', (e) => {
+    if (!drawer?.classList.contains('is-open')) return;
+    if (e.key === 'Escape') closeDrawer();
+    if (e.key === 'Tab') {
+      const f = focusables();
+      if (f.length === 0) return;
+      const first = f[0];
+      const last = f[f.length - 1];
+      if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+      else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+    }
+  });
+</script>

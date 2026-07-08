@@ -1,0 +1,409 @@
+---
+/**
+ * Checkout — /checkout and /en/checkout.
+ * Order summary from cart.ts; guest form OR logged-in identity from /me;
+ * per-line ArtworkUpload for items requiring artwork; order note; bank +
+ * WhatsApp reassurance. Submits multipart via checkout.ts → thank-you.
+ * GTM begin_checkout on load. Fully client-rendered (cart lives in the browser).
+ */
+import Base from '@layouts/Base.astro';
+import Button from '@components/Button.astro';
+import { localeStaticPaths, href } from '@lib/i18n';
+import { t } from '@lib/strings';
+import { BANK_TRANSFER, WHATSAPP } from '@lib/config';
+import type { Locale } from '@lib/format';
+
+export const getStaticPaths = localeStaticPaths;
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+
+const loginHref = href(locale, '/auth/login') + '?redirect=' + encodeURIComponent(href(locale, '/checkout'));
+const thankyouHref = href(locale, '/thank-you');
+const shopHref = href(locale, '/');
+const privacyHref = href(locale, '/policies/privacy');
+const termsHref = href(locale, '/policies/terms');
+const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.bank_name_en;
+---
+<Base
+  locale={locale}
+  title={`${t('page.checkout', locale)} — ${t('brand.name', locale)}`}
+  description={t('page.checkout', locale)}
+  path="/checkout"
+  noindex={true}
+>
+  <div class="pk-container" style="min-height:56vh">
+    <div class="pk-pagehead"><h1 class="pk-h1">{t('page.checkout', locale)}</h1></div>
+
+    <!-- Empty -->
+    <div data-checkout-empty hidden>
+      <div class="pk-empty">
+        <div class="pk-empty__icon" aria-hidden="true">🧾</div>
+        <h2 class="pk-h2">{t('checkout.emptyTitle', locale)}</h2>
+        <p>{t('checkout.emptyBody', locale)}</p>
+        <a class="pk-btn" href={shopHref}>{t('cart.empty.cta', locale)}</a>
+      </div>
+    </div>
+
+    <!-- Loading -->
+    <p class="pk-muted" data-checkout-loading style="padding-block:var(--sp-8)">{t('common.loading', locale)}</p>
+
+    <!-- Form -->
+    <form class="pk-checkout" data-checkout-form hidden>
+      <div class="pk-checkout__main">
+        <!-- Customer -->
+        <section class="pk-card pk-block">
+          <h2 class="pk-h3">{t('checkout.customerInfo', locale)}</h2>
+
+          <div data-auth-known hidden>
+            <p style="font-weight:600" data-welcome></p>
+            <p class="pk-small pk-muted">{t('checkout.loggedInNote', locale)}</p>
+          </div>
+
+          <div data-guest-fields>
+            <p class="pk-block__lead">
+              {t('checkout.guestNote', locale)}
+              <br />
+              {t('checkout.loginPrompt', locale)} <a href={loginHref}>{t('auth.login', locale)}</a>
+            </p>
+            <div class="pk-form" data-guest-form>
+              <div class="pk-form-grid">
+                <div class="pk-field">
+                  <label class="pk-label" for="co-first">{t('field.firstName', locale)}<span class="pk-req">*</span></label>
+                  <input class="pk-input" id="co-first" name="first_name" type="text" autocomplete="given-name" />
+                  <p class="pk-field__error" data-error-for="first_name" hidden></p>
+                </div>
+                <div class="pk-field">
+                  <label class="pk-label" for="co-last">{t('field.lastName', locale)}<span class="pk-req">*</span></label>
+                  <input class="pk-input" id="co-last" name="last_name" type="text" autocomplete="family-name" />
+                  <p class="pk-field__error" data-error-for="last_name" hidden></p>
+                </div>
+              </div>
+              <div class="pk-field">
+                <label class="pk-label" for="co-email">{t('field.email', locale)}<span class="pk-req">*</span></label>
+                <input class="pk-input" id="co-email" name="email" type="email" inputmode="email" dir="ltr" autocomplete="email" />
+                <p class="pk-field__error" data-error-for="email" hidden></p>
+              </div>
+              <div class="pk-form-grid">
+                <div class="pk-field">
+                  <label class="pk-label" for="co-phone">{t('field.phone', locale)}<span class="pk-req">*</span></label>
+                  <input class="pk-input" id="co-phone" name="phone" type="tel" inputmode="tel" dir="ltr" autocomplete="tel" placeholder="05XXXXXXXX" />
+                  <p class="pk-field__error" data-error-for="phone" hidden></p>
+                </div>
+                <div class="pk-field">
+                  <label class="pk-label" for="co-password">{t('field.password', locale)}<span class="pk-req">*</span></label>
+                  <input class="pk-input" id="co-password" name="password" type="password" autocomplete="new-password" />
+                  <p class="pk-field__error" data-error-for="password" hidden></p>
+                </div>
+              </div>
+              <div class="pk-field">
+                <label class="pk-label" for="co-company">{t('field.company', locale)}<span class="pk-opt">({t('common.optional', locale)})</span></label>
+                <input class="pk-input" id="co-company" name="company_name" type="text" autocomplete="organization" />
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Items + artwork -->
+        <section class="pk-card pk-block">
+          <h2 class="pk-h3">{t('checkout.reviewFiles', locale)}</h2>
+          <div data-checkout-lines></div>
+        </section>
+
+        <!-- Order note -->
+        <section class="pk-card pk-block">
+          <h2 class="pk-h3">{t('checkout.orderNote', locale)}</h2>
+          <textarea class="pk-textarea" data-order-note placeholder={t('checkout.orderNotePlaceholder', locale)} aria-label={t('checkout.orderNote', locale)}></textarea>
+        </section>
+
+        <!-- Reassurance -->
+        <section class="pk-card pk-block pk-reassure" style="margin-bottom:0">
+          <h2 class="pk-h3">{t('checkout.reassureTitle', locale)}</h2>
+          <p class="pk-reassure__body">{t('checkout.reassureBody', locale)}</p>
+          <div class="pk-bank">
+            <h3>{t('bank.title', locale)}</h3>
+            <dl class="pk-bank__rows">
+              <div class="pk-bank__row"><dt>{t('bank.bank', locale)}</dt><dd>{bankName}</dd></div>
+              <div class="pk-bank__row"><dt>{t('bank.accountName', locale)}</dt><dd>{BANK_TRANSFER.account_name}</dd></div>
+              <div class="pk-bank__row"><dt>{t('bank.iban', locale)}</dt><dd>{BANK_TRANSFER.iban}</dd></div>
+            </dl>
+            <p class="pk-bank__note">{t('bank.note', locale)}</p>
+          </div>
+        </section>
+      </div>
+
+      <!-- Summary -->
+      <aside class="pk-card pk-summary">
+        <h2 class="pk-h3">{t('checkout.summary', locale)}</h2>
+        <div class="pk-summary__lines" data-summary-lines></div>
+        <div class="pk-summary__row">
+          <span class="pk-muted">{t('cart.subtotal', locale)}</span>
+          <span class="pk-summary__total pk-price"><bdi data-checkout-subtotal>—</bdi></span>
+        </div>
+        <p class="pk-small pk-muted">{t('cart.taxNote', locale)}</p>
+        <div class="pk-form-alert pk-form-alert--error" data-checkout-error hidden></div>
+        <Button type="submit" size="lg" block data-checkout-submit>{t('checkout.submit', locale)}</Button>
+        <p class="pk-summary__terms">
+          <Fragment set:html={t('checkout.terms', locale)
+            .replace(locale === 'ar' ? 'شروط الخدمة' : 'terms', `<a href="${termsHref}">${locale === 'ar' ? 'شروط الخدمة' : 'terms'}</a>`)
+            .replace(locale === 'ar' ? 'سياسة الخصوصية' : 'privacy policy', `<a href="${privacyHref}">${locale === 'ar' ? 'سياسة الخصوصية' : 'privacy policy'}</a>`)} />
+        </p>
+      </aside>
+    </form>
+  </div>
+
+  <script define:vars={{
+    locale,
+    thankyouHref,
+    whatsapp: WHATSAPP,
+    labels: {
+      required: t('field.required', locale),
+      emailInvalid: t('field.emailInvalid', locale),
+      phoneInvalid: t('field.phoneInvalid', locale),
+      passwordShort: t('field.passwordShort', locale),
+      artworkFor: t('checkout.artworkFor', locale),
+      submit: t('checkout.submit', locale),
+      submitting: t('checkout.submitting', locale),
+      error: t('checkout.error', locale),
+      qty: t('product.quantity', locale),
+    },
+  }}>
+    window.__checkoutCfg = { locale, thankyouHref, whatsapp, labels };
+  </script>
+  <script>
+    import { getCart, subtotal } from '@lib/cart';
+    import { getItem } from '@lib/catalog';
+    import { isAuthed, api } from '@lib/api';
+    import { submitCheckout } from '@lib/checkout';
+    import { formatSAR } from '@lib/format';
+    import { beginCheckout } from '@lib/gtm';
+    import { UPLOAD } from '@lib/config';
+
+    const cfg = (window as any).__checkoutCfg;
+    const L = cfg.labels;
+    const locale = cfg.locale === 'en' ? 'en' : 'ar';
+
+    const loadingEl = document.querySelector<HTMLElement>('[data-checkout-loading]')!;
+    const emptyEl = document.querySelector<HTMLElement>('[data-checkout-empty]')!;
+    const formEl = document.querySelector<HTMLFormElement>('[data-checkout-form]')!;
+    const linesEl = document.querySelector<HTMLElement>('[data-checkout-lines]')!;
+    const sumLinesEl = document.querySelector<HTMLElement>('[data-summary-lines]')!;
+    const subtotalEl = document.querySelector<HTMLElement>('[data-checkout-subtotal]')!;
+    const guestFields = document.querySelector<HTMLElement>('[data-guest-fields]')!;
+    const authKnown = document.querySelector<HTMLElement>('[data-auth-known]')!;
+    const welcomeEl = document.querySelector<HTMLElement>('[data-welcome]')!;
+    const noteEl = document.querySelector<HTMLTextAreaElement>('[data-order-note]')!;
+    const alertEl = document.querySelector<HTMLElement>('[data-checkout-error]')!;
+    const submitBtn = document.querySelector<HTMLButtonElement>('[data-checkout-submit]')!;
+
+    const cart = getCart();
+
+    // ---- Empty guard ----
+    if (cart.length === 0) {
+      loadingEl.hidden = true;
+      emptyEl.hidden = false;
+    } else {
+      loadingEl.hidden = true;
+      formEl.hidden = false;
+      init();
+    }
+
+    // Per-line artwork stores: index -> File[]
+    const artworkByLine: Record<number, File[]> = {};
+
+    function optSummary(options: Record<string, string>): string {
+      return Object.entries(options).map(([k, v]) => `${k}: ${v}`).join(' · ');
+    }
+    function esc(s: string): string {
+      return s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
+    }
+    function human(bytes: number): string {
+      if (bytes < 1024) return bytes + ' B';
+      if (bytes < 1048576) return Math.round(bytes / 1024) + ' KB';
+      return (bytes / 1048576).toFixed(1) + ' MB';
+    }
+
+    // Build a reusable dropzone that mirrors ArtworkUpload validation.
+    function buildUploader(lineIdx: number): HTMLElement {
+      artworkByLine[lineIdx] = [];
+      const wrap = document.createElement('div');
+      wrap.className = 'pk-coline__art';
+      wrap.innerHTML = `
+        <div class="pk-coline__artlabel"><span aria-hidden="true">🎨</span> ${esc(L.artworkFor)}</div>
+        <div class="pk-upload">
+          <label class="pk-upload__zone" tabindex="0" role="button">
+            <span aria-hidden="true" style="font-size:1.4rem;color:var(--pk-accent)">⬆</span>
+            <strong>${esc(uploadDrop())}</strong>
+            <span class="pk-upload__hint">${esc(uploadHint())}</span>
+            <input type="file" accept="${UPLOAD.accept.map((e) => '.' + e).join(',')}" multiple class="pk-visually-hidden" />
+          </label>
+          <p class="pk-upload__error" hidden></p>
+          <ul class="pk-upload__list"></ul>
+        </div>`;
+      const input = wrap.querySelector<HTMLInputElement>('input[type=file]')!;
+      const zone = wrap.querySelector<HTMLElement>('.pk-upload__zone')!;
+      const list = wrap.querySelector<HTMLUListElement>('.pk-upload__list')!;
+      const err = wrap.querySelector<HTMLElement>('.pk-upload__error')!;
+      const files = artworkByLine[lineIdx];
+
+      function showErr(msg: string) { err.textContent = msg; err.hidden = false; setTimeout(() => (err.hidden = true), 4000); }
+      function validate(f: File): boolean {
+        const ext = f.name.split('.').pop()?.toLowerCase() || '';
+        if (!UPLOAD.accept.includes(ext)) { showErr(`${errType()}: ${f.name}`); return false; }
+        if (f.size > UPLOAD.maxBytes) { showErr(`${errSize()}: ${f.name}`); return false; }
+        return true;
+      }
+      function render() {
+        list.innerHTML = '';
+        files.forEach((f, i) => {
+          const li = document.createElement('li');
+          li.className = 'pk-filechip';
+          li.innerHTML = `<div class="pk-filechip__meta"><span class="pk-filechip__name">${esc(f.name)}</span><span class="pk-filechip__size">${human(f.size)}</span></div>`;
+          const rm = document.createElement('button');
+          rm.type = 'button'; rm.className = 'pk-filechip__remove'; rm.textContent = '✕';
+          rm.setAttribute('aria-label', 'x');
+          rm.addEventListener('click', () => { files.splice(i, 1); render(); });
+          li.appendChild(rm);
+          list.appendChild(li);
+        });
+      }
+      function accept(fl: FileList | File[]) {
+        Array.from(fl).forEach((f) => { if (validate(f)) files.push(f); });
+        render();
+      }
+      input.addEventListener('change', () => { if (input.files) accept(input.files); input.value = ''; });
+      zone.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); } });
+      ['dragover', 'dragenter'].forEach((ev) => zone.addEventListener(ev, (e) => { e.preventDefault(); zone.classList.add('is-drag'); }));
+      ['dragleave', 'dragend', 'drop'].forEach((ev) => zone.addEventListener(ev, () => zone.classList.remove('is-drag')));
+      zone.addEventListener('drop', (e) => { e.preventDefault(); const dt = (e as DragEvent).dataTransfer; if (dt?.files) accept(dt.files); });
+      return wrap;
+    }
+
+    // Localized upload chrome (mirrors strings so we don't re-import t here).
+    function uploadDrop() { return locale === 'ar' ? 'اسحب الملفات هنا أو اضغط للاختيار' : 'Drag files here or click to browse'; }
+    function uploadHint() { return locale === 'ar' ? 'JPG, PNG, PDF, ZIP, AI, EPS — حتى 25 ميجابايت' : 'JPG, PNG, PDF, ZIP, AI, EPS — up to 25MB'; }
+    function errType() { return locale === 'ar' ? 'صيغة الملف غير مدعومة' : 'Unsupported file type'; }
+    function errSize() { return locale === 'ar' ? 'حجم الملف يتجاوز 25 ميجابايت' : 'File exceeds 25MB'; }
+
+    function init() {
+      // Lines + per-line artwork
+      cart.forEach((line, idx) => {
+        const item = getItem(line.slug);
+        const requiresArtwork = item ? item.requires_artwork : true;
+        const row = document.createElement('div');
+        row.className = 'pk-coline';
+        row.innerHTML = `
+          <div class="pk-coline__media">${line.image ? `<img src="${esc(line.image)}" alt="" width="64" height="64" />` : ''}</div>
+          <div>
+            <div class="pk-coline__title">${esc(line.title)}</div>
+            ${Object.keys(line.options).length ? `<div class="pk-coline__opts">${esc(optSummary(line.options))}</div>` : ''}
+            <div class="pk-coline__qty">${esc(L.qty)}: ${line.qty} × <bdi>${esc(formatSAR(line.rate, locale))}</bdi></div>
+          </div>
+          <div class="pk-coline__price pk-price"><bdi>${esc(formatSAR(line.rate * line.qty, locale))}</bdi></div>`;
+        if (requiresArtwork) row.appendChild(buildUploader(idx));
+        linesEl.appendChild(row);
+
+        // Summary line
+        const sl = document.createElement('div');
+        sl.className = 'pk-summary__line';
+        sl.innerHTML = `<span class="pk-summary__line-name">${esc(line.title)} ×${line.qty}</span><span class="pk-summary__line-price pk-price"><bdi>${esc(formatSAR(line.rate * line.qty, locale))}</bdi></span>`;
+        sumLinesEl.appendChild(sl);
+      });
+      subtotalEl.textContent = formatSAR(subtotal(cart), locale);
+
+      // Auth state
+      if (isAuthed()) {
+        guestFields.hidden = true;
+        api.me().then((res: any) => {
+          if (res && res.success && res.contact) {
+            authKnown.hidden = false;
+            const c = res.contact;
+            const hi = locale === 'ar' ? 'مرحباً' : 'Welcome';
+            welcomeEl.textContent = `${hi} ${c.first_name || ''} ${c.last_name || ''}`.trim();
+          } else {
+            guestFields.hidden = false;
+          }
+        }).catch(() => { guestFields.hidden = false; });
+      }
+
+      // GTM begin_checkout
+      beginCheckout(
+        cart.map((l) => ({ item_id: l.item_id, item_name: l.title, price: l.rate, quantity: l.qty, item_category: l.slug })),
+        subtotal(cart),
+      );
+    }
+
+    // ---- Guest validation ----
+    function guestFieldError(name: string, msg: string | null) {
+      const el = document.querySelector<HTMLElement>(`[data-error-for="${name}"]`);
+      const input = document.querySelector<HTMLInputElement>(`[data-guest-form] [name="${name}"]`);
+      if (el) { el.textContent = msg || ''; el.hidden = !msg; }
+      if (input) input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+    }
+
+    function collectGuest(): { valid: boolean; data?: any } {
+      const get = (n: string) => String((document.querySelector<HTMLInputElement>(`[data-guest-form] [name="${n}"]`)?.value || '')).trim();
+      const d = {
+        first_name: get('first_name'), last_name: get('last_name'), email: get('email'),
+        phone: get('phone'), password: get('password'), company_name: get('company_name'),
+      };
+      let ok = true;
+      for (const f of ['first_name', 'last_name']) { if (!d[f as keyof typeof d]) { guestFieldError(f, L.required); ok = false; } else guestFieldError(f, null); }
+      if (!d.email) { guestFieldError('email', L.required); ok = false; }
+      else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email)) { guestFieldError('email', L.emailInvalid); ok = false; }
+      else guestFieldError('email', null);
+      if (!d.phone) { guestFieldError('phone', L.required); ok = false; }
+      else if (d.phone.replace(/\D/g, '').length < 8) { guestFieldError('phone', L.phoneInvalid); ok = false; }
+      else guestFieldError('phone', null);
+      if (!d.password) { guestFieldError('password', L.required); ok = false; }
+      else if (d.password.length < 6) { guestFieldError('password', L.passwordShort); ok = false; }
+      else guestFieldError('password', null);
+      if (!d.company_name) delete (d as any).company_name;
+      return { valid: ok, data: d };
+    }
+
+    // ---- Submit ----
+    formEl.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alertEl.hidden = true;
+
+      let guest: any = undefined;
+      if (!isAuthed() && !guestFields.hidden) {
+        const g = collectGuest();
+        if (!g.valid) return;
+        guest = g.data;
+      }
+
+      // Flatten per-line files + build name mapping
+      const files: File[] = [];
+      const artworkNamesByLine: Record<number, string[]> = {};
+      Object.entries(artworkByLine).forEach(([idx, fl]) => {
+        if (fl.length) {
+          artworkNamesByLine[Number(idx)] = fl.map((f) => f.name);
+          fl.forEach((f) => files.push(f));
+        }
+      });
+
+      submitBtn.disabled = true;
+      submitBtn.textContent = L.submitting;
+      try {
+        const res = await submitCheckout({
+          orderNote: noteEl.value.trim(),
+          guest,
+          files,
+          artworkNamesByLine,
+        });
+        if (res && res.success) {
+          location.href = cfg.thankyouHref;
+          return;
+        }
+        alertEl.textContent = res?.message || L.error;
+        alertEl.hidden = false;
+      } catch {
+        alertEl.textContent = L.error;
+        alertEl.hidden = false;
+      }
+      submitBtn.disabled = false;
+      submitBtn.textContent = L.submit;
+    });
+  </script>
+</Base>

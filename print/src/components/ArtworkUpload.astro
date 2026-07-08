@@ -1,0 +1,129 @@
+---
+/**
+ * ArtworkUpload — dropzone + file input with client-side validation
+ * (type + size) mirroring the server. Shows file chips with remove.
+ *
+ * The selected File objects are held on the root element as `el.files`
+ * (a live getter returning File[]) and every change dispatches an
+ * 'artwork:change' CustomEvent { detail: { files: File[] } } on the element.
+ * The checkout page collects files via:
+ *   const el = document.querySelector('[data-artwork]');
+ *   el.addEventListener('artwork:change', e => ...e.detail.files);
+ *   // or read el.selectedFiles at submit time.
+ *
+ * Props:
+ *   id?: string
+ *   locale: 'ar' | 'en'
+ *   name?: string   -> reserved for future native form use
+ */
+import { t } from '@lib/strings';
+import { UPLOAD } from '@lib/config';
+import type { Locale } from '@lib/format';
+
+interface Props { id?: string; locale: Locale; name?: string }
+const { id = 'artwork', locale } = Astro.props;
+const accept = UPLOAD.accept.map((e) => '.' + e).join(',');
+---
+<div
+  class="pk-upload"
+  data-artwork
+  id={id}
+  data-max-bytes={UPLOAD.maxBytes}
+  data-accept={UPLOAD.accept.join(',')}
+  data-msg-type={t('upload.errType', locale)}
+  data-msg-size={t('upload.errSize', locale)}
+>
+  <label class="pk-upload__zone" data-artwork-zone tabindex="0" role="button">
+    <span aria-hidden="true" style="font-size:1.6rem;color:var(--pk-accent)">⬆</span>
+    <strong>{t('upload.drop', locale)}</strong>
+    <span class="pk-upload__hint">{t('upload.hint', locale)}</span>
+    <input type="file" accept={accept} multiple class="pk-visually-hidden" data-artwork-input />
+  </label>
+  <p class="pk-upload__error" data-artwork-error hidden></p>
+  <ul class="pk-upload__list" data-artwork-list></ul>
+</div>
+
+<script>
+  function human(bytes: number): string {
+    if (bytes < 1024) return bytes + ' B';
+    if (bytes < 1048576) return Math.round(bytes / 1024) + ' KB';
+    return (bytes / 1048576).toFixed(1) + ' MB';
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-artwork]').forEach((root) => {
+    const input = root.querySelector<HTMLInputElement>('[data-artwork-input]');
+    const zone = root.querySelector<HTMLElement>('[data-artwork-zone]');
+    const list = root.querySelector<HTMLUListElement>('[data-artwork-list]');
+    const err = root.querySelector<HTMLElement>('[data-artwork-error]');
+    if (!input || !zone || !list || !err) return;
+
+    const maxBytes = Number(root.dataset.maxBytes || '26214400');
+    const accept = (root.dataset.accept || '').split(',');
+    const msgType = root.dataset.msgType || 'Unsupported file type';
+    const msgSize = root.dataset.msgSize || 'File too large';
+    const removeLabel = 'حذف';
+
+    const files: File[] = [];
+    // Expose a stable accessor for the checkout page.
+    Object.defineProperty(root, 'selectedFiles', { get: () => files.slice(), configurable: true });
+
+    function emit() {
+      root.dispatchEvent(new CustomEvent('artwork:change', { detail: { files: files.slice() } }));
+    }
+    function showErr(msg: string) {
+      err!.textContent = msg;
+      err!.hidden = false;
+      setTimeout(() => { err!.hidden = true; }, 4000);
+    }
+    function validate(f: File): boolean {
+      const ext = f.name.split('.').pop()?.toLowerCase() || '';
+      if (!accept.includes(ext)) { showErr(`${msgType}: ${f.name}`); return false; }
+      if (f.size > maxBytes) { showErr(`${msgSize}: ${f.name}`); return false; }
+      return true;
+    }
+    function render() {
+      list!.innerHTML = '';
+      files.forEach((f, i) => {
+        const li = document.createElement('li');
+        li.className = 'pk-filechip';
+        const meta = document.createElement('div');
+        meta.className = 'pk-filechip__meta';
+        const name = document.createElement('span');
+        name.className = 'pk-filechip__name';
+        name.textContent = f.name;
+        const size = document.createElement('span');
+        size.className = 'pk-filechip__size';
+        size.textContent = human(f.size);
+        meta.append(name, size);
+        const rm = document.createElement('button');
+        rm.type = 'button';
+        rm.className = 'pk-filechip__remove';
+        rm.setAttribute('aria-label', removeLabel);
+        rm.textContent = '✕';
+        rm.addEventListener('click', () => { files.splice(i, 1); render(); emit(); });
+        li.append(meta, rm);
+        list!.appendChild(li);
+      });
+    }
+    function accept_files(fl: FileList | File[]) {
+      Array.from(fl).forEach((f) => { if (validate(f)) files.push(f); });
+      render();
+      emit();
+    }
+
+    input.addEventListener('change', () => { if (input.files) accept_files(input.files); input.value = ''; });
+    zone.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); }
+    });
+    ['dragover', 'dragenter'].forEach((ev) =>
+      zone.addEventListener(ev, (e) => { e.preventDefault(); zone.classList.add('is-drag'); }),
+    );
+    ['dragleave', 'dragend', 'drop'].forEach((ev) =>
+      zone.addEventListener(ev, () => zone.classList.remove('is-drag')),
+    );
+    zone.addEventListener('drop', (e) => {
+      e.preventDefault();
+      if ((e as DragEvent).dataTransfer?.files) accept_files((e as DragEvent).dataTransfer!.files);
+    });
+  });
+</script>

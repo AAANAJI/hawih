@@ -1,0 +1,97 @@
+---
+/**
+ * Privacy policy — /policies/privacy and /en/policies/privacy.
+ * Real, sensible copy for a Saudi print shop. Indexed (public).
+ */
+import Base from '@layouts/Base.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import { localeStaticPaths, href } from '@lib/i18n';
+import { t } from '@lib/strings';
+import type { Locale } from '@lib/format';
+
+export const getStaticPaths = localeStaticPaths;
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+const title = t('footer.privacy', locale);
+const crumbs = [
+  { label: t('nav.home', locale), href: href(locale, '/') },
+  { label: title },
+];
+---
+<Base
+  locale={locale}
+  title={`${title} — ${t('brand.name', locale)}`}
+  description={locale === 'ar'
+    ? 'سياسة الخصوصية لمطبعة هوية: كيف نجمع بياناتك ونستخدمها ونحميها.'
+    : 'Hawih Print privacy policy: how we collect, use and protect your data.'}
+  path="/policies/privacy"
+>
+  <div class="pk-container">
+    <Breadcrumbs items={crumbs} />
+    <div class="pk-pagehead"><h1 class="pk-h1">{title}</h1></div>
+    <div class="pk-prose">
+      <p class="pk-prose__updated">{t('policy.updated', locale)}</p>
+      {locale === 'ar' ? (
+        <>
+          <p>تحرص مطبعة هوية على حماية خصوصيتك. توضّح هذه السياسة أنواع البيانات التي نجمعها عند استخدامك لمتجرنا الإلكتروني وطريقة استخدامها وحمايتها، وهي جزء من منظومة هوية للأعمال.</p>
+
+          <h2>البيانات التي نجمعها</h2>
+          <ul>
+            <li><strong>بيانات الحساب:</strong> الاسم والبريد الإلكتروني ورقم الجوال واسم المنشأة عند إنشاء حساب أو إتمام طلب.</li>
+            <li><strong>بيانات الطلب:</strong> تفاصيل المنتجات والكميات والمواصفات وملفات التصميم التي ترفعها.</li>
+            <li><strong>بيانات الاستخدام:</strong> معلومات تقنية عن جهازك وتصفّحك تُجمع عبر أدوات التحليل (Google Analytics) لتحسين تجربتك.</li>
+          </ul>
+
+          <h2>كيف نستخدم بياناتك</h2>
+          <ul>
+            <li>تنفيذ طلباتك وطباعتها وتوصيلها.</li>
+            <li>إصدار الفواتير الضريبية والتواصل معك بخصوص طلبك عبر الهاتف أو واتساب أو البريد الإلكتروني.</li>
+            <li>تحسين منتجاتنا وخدماتنا وتجربة المتجر.</li>
+          </ul>
+
+          <h2>ملفات التصميم</h2>
+          <p>تُستخدم ملفات التصميم التي ترفعها لغرض تنفيذ طلبك فقط، ولا نشاركها مع أي طرف ثالث لأغراض تسويقية. يمكنك طلب حذفها بعد اكتمال الطلب.</p>
+
+          <h2>حماية البيانات</h2>
+          <p>نطبّق إجراءات تقنية وتنظيمية معقولة لحماية بياناتك من الوصول غير المصرّح به. تتم معالجة المدفوعات عبر التحويل البنكي المباشر ولا نخزّن بيانات بطاقات ائتمانية.</p>
+
+          <h2>ملفات تعريف الارتباط (Cookies)</h2>
+          <p>نستخدم ملفات تعريف الارتباط لحفظ سلة التسوّق وتفضيلات اللغة وقياس أداء الموقع. يمكنك التحكم بها من إعدادات متصفحك.</p>
+
+          <h2>حقوقك</h2>
+          <p>يحق لك الاطّلاع على بياناتك أو تصحيحها أو طلب حذفها. للتواصل بخصوص الخصوصية، راسلنا عبر واتساب أو البريد الإلكتروني الموضّح في تذييل الصفحة.</p>
+        </>
+      ) : (
+        <>
+          <p>Hawih Print is committed to protecting your privacy. This policy explains what data we collect when you use our online store, and how we use and protect it. Hawih Print is part of Hawih Business.</p>
+
+          <h2>Data we collect</h2>
+          <ul>
+            <li><strong>Account data:</strong> your name, email, mobile number and company name when you create an account or place an order.</li>
+            <li><strong>Order data:</strong> product details, quantities, specifications and the artwork files you upload.</li>
+            <li><strong>Usage data:</strong> technical information about your device and browsing, collected via analytics (Google Analytics) to improve your experience.</li>
+          </ul>
+
+          <h2>How we use your data</h2>
+          <ul>
+            <li>To produce, print and deliver your orders.</li>
+            <li>To issue tax invoices and contact you about your order by phone, WhatsApp or email.</li>
+            <li>To improve our products, services and store experience.</li>
+          </ul>
+
+          <h2>Artwork files</h2>
+          <p>Artwork you upload is used solely to fulfil your order and is never shared with third parties for marketing. You may request its deletion after your order is complete.</p>
+
+          <h2>Data protection</h2>
+          <p>We apply reasonable technical and organisational measures to protect your data from unauthorised access. Payments are handled by direct bank transfer; we do not store credit-card details.</p>
+
+          <h2>Cookies</h2>
+          <p>We use cookies to keep your cart, remember your language preference and measure site performance. You can control cookies from your browser settings.</p>
+
+          <h2>Your rights</h2>
+          <p>You have the right to access, correct or request deletion of your data. For privacy enquiries, reach us via the WhatsApp or email shown in the footer.</p>
+        </>
+      )}
+    </div>
+  </div>
+</Base>

@@ -1,0 +1,124 @@
+---
+/**
+ * Category page — /category/{slug} and /en/category/{slug}.
+ * Breadcrumbs, header, product grid, EmptyState, JSON-LD (CollectionPage +
+ * ItemList + BreadcrumbList), GTM view_item_list.
+ */
+import Base from '@layouts/Base.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import ProductCard from '@components/ProductCard.astro';
+import EmptyState from '@components/EmptyState.astro';
+import Button from '@components/Button.astro';
+import JsonLd from '@components/JsonLd.astro';
+import { href } from '@lib/i18n';
+import { t } from '@lib/strings';
+import { formatNumber } from '@lib/format';
+import { categories, itemsInCategory, getCategory, categoryTitle, itemTitle } from '@lib/catalog';
+import { SITE_URL } from '@lib/config';
+import type { Locale } from '@lib/format';
+
+export function getStaticPaths() {
+  const out: { params: { locale: string | undefined; slug: string }; props: { locale: Locale } }[] = [];
+  for (const l of [undefined, 'en'] as const) {
+    for (const c of categories) {
+      out.push({ params: { locale: l, slug: c.slug }, props: { locale: l === 'en' ? 'en' : 'ar' } });
+    }
+  }
+  return out;
+}
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+const { slug } = Astro.params;
+const category = getCategory(slug!)!;
+const products = itemsInCategory(slug!);
+const title = categoryTitle(category, locale);
+
+const crumbs = [
+  { label: t('nav.home', locale), href: href(locale, '/') },
+  { label: t('nav.products', locale), href: href(locale, '/#categories') },
+  { label: title },
+];
+
+const collectionLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: title,
+  url: SITE_URL + href(locale, `/category/${slug}`),
+  inLanguage: locale === 'ar' ? 'ar-SA' : 'en',
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: products.length,
+    itemListElement: products.map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: SITE_URL + href(locale, `/product/${p.slug}`),
+      name: itemTitle(p, locale),
+    })),
+  },
+};
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: crumbs.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: c.label,
+    ...(c.href ? { item: SITE_URL + c.href } : {}),
+  })),
+};
+---
+<Base
+  locale={locale}
+  title={`${title} — ${t('brand.name', locale)}`}
+  description={`${title} · ${t('brand.tagline', locale)}`}
+  path={`/category/${slug}`}
+  image={`/img/categories/${slug}.svg`}
+>
+  <Fragment slot="head">
+    <JsonLd data={[collectionLd, breadcrumbLd]} />
+  </Fragment>
+
+  <div class="pk-container">
+    <Breadcrumbs items={crumbs} />
+    <div class="pk-pagehead">
+      <h1 class="pk-h1">{title}</h1>
+      <p>{formatNumber(products.length, locale)} {t('category.productsCount', locale)}</p>
+    </div>
+
+    {products.length > 0 ? (
+      <div class="pk-grid-products" data-cat-grid style="margin-bottom:var(--sp-10)">
+        {products.map((p) => (
+          <div data-product-id={p.id} data-product-name={itemTitle(p, locale)} data-product-price={p.rate}>
+            <ProductCard
+              href={href(locale, `/product/${p.slug}`)}
+              title={itemTitle(p, locale)}
+              image={p.images?.square ?? ''}
+              rate={p.rate}
+              categoryLabel={title}
+              locale={locale}
+            />
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div style="margin-bottom:var(--sp-10)">
+        <EmptyState icon="🗂️" title={t('category.empty.title', locale)} body={t('category.empty.body', locale)}>
+          <Button href={href(locale, '/')}>{t('common.backHome', locale)}</Button>
+        </EmptyState>
+      </div>
+    )}
+  </div>
+
+  <script>
+    import { viewItemList } from '@lib/gtm';
+    const grid = document.querySelector('[data-cat-grid]');
+    if (grid) {
+      const list = Array.from(grid.querySelectorAll('[data-product-id]')).map((el) => ({
+        item_id: el.dataset.productId,
+        item_name: el.dataset.productName,
+        price: Number(el.dataset.productPrice),
+      }));
+      viewItemList(location.pathname, list);
+    }
+  </script>
+</Base>

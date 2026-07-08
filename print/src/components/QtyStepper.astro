@@ -1,0 +1,55 @@
+---
+/**
+ * QtyStepper — accessible −/＋ numeric stepper.
+ * Self-contained: an inline script wires the buttons to the input and
+ * dispatches a native 'change'/'input' event so parent scripts can react.
+ * Props:
+ *   min?: number   (default 1)
+ *   max?: number
+ *   value?: number (default = min)
+ *   id?: string    -> id of the inner <input> (parent scripts read its value)
+ *   label?: string -> accessible label
+ */
+interface Props { min?: number; max?: number; value?: number; id?: string; label?: string }
+const { min = 1, max, value, id = 'qty', label = 'Quantity' } = Astro.props;
+const start = value ?? min;
+---
+<div class="pk-qty" data-qty>
+  <button type="button" data-qty-dec aria-label="−">−</button>
+  <input
+    type="number"
+    id={id}
+    inputmode="numeric"
+    value={start}
+    min={min}
+    max={max}
+    step="1"
+    aria-label={label}
+    data-qty-input
+  />
+  <button type="button" data-qty-inc aria-label="+">＋</button>
+</div>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-qty]').forEach((wrap) => {
+    const input = wrap.querySelector<HTMLInputElement>('[data-qty-input]');
+    const dec = wrap.querySelector<HTMLButtonElement>('[data-qty-dec]');
+    const inc = wrap.querySelector<HTMLButtonElement>('[data-qty-inc]');
+    if (!input || !dec || !inc) return;
+    const min = Number(input.min || '1');
+    const max = input.max ? Number(input.max) : Infinity;
+    const clamp = (n: number) => Math.max(min, Math.min(max, n));
+    const fire = () => {
+      input.dispatchEvent(new Event('input', { bubbles: true }));
+      input.dispatchEvent(new Event('change', { bubbles: true }));
+    };
+    const set = (n: number) => {
+      input.value = String(clamp(n));
+      dec.disabled = clamp(n) <= min;
+    };
+    dec.addEventListener('click', () => { set(Number(input.value) - 1); fire(); });
+    inc.addEventListener('click', () => { set(Number(input.value) + 1); fire(); });
+    input.addEventListener('change', () => set(Number(input.value) || min));
+    set(Number(input.value) || min);
+  });
+</script>

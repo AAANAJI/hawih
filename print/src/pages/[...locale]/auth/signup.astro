@@ -1,0 +1,175 @@
+---
+/**
+ * Signup — /auth/signup and /en/auth/signup.
+ * Creates a client account → api.signup → store token → redirect. GTM sign_up.
+ */
+import Base from '@layouts/Base.astro';
+import Button from '@components/Button.astro';
+import { localeStaticPaths, href } from '@lib/i18n';
+import { t } from '@lib/strings';
+import type { Locale } from '@lib/format';
+
+export const getStaticPaths = localeStaticPaths;
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+const title = t('auth.signup', locale);
+const loginHref = href(locale, '/auth/login');
+const accountHref = href(locale, '/account');
+---
+<Base
+  locale={locale}
+  title={`${title} — ${t('brand.name', locale)}`}
+  description={t('auth.signupSub', locale)}
+  path="/auth/signup"
+  noindex={true}
+>
+  <div class="pk-container">
+    <div class="pk-auth">
+      <div class="pk-card pk-auth__card">
+        <div class="pk-auth__head">
+          <h1>{title}</h1>
+          <p>{t('auth.signupSub', locale)}</p>
+        </div>
+
+        <div class="pk-form-alert pk-form-alert--error" data-auth-error hidden></div>
+
+        <form class="pk-form" data-signup-form novalidate>
+          <div class="pk-form-grid">
+            <div class="pk-field">
+              <label class="pk-label" for="su-first">{t('field.firstName', locale)}<span class="pk-req">*</span></label>
+              <input class="pk-input" id="su-first" name="first_name" type="text" autocomplete="given-name" required />
+              <p class="pk-field__error" data-error-for="first_name" hidden></p>
+            </div>
+            <div class="pk-field">
+              <label class="pk-label" for="su-last">{t('field.lastName', locale)}<span class="pk-req">*</span></label>
+              <input class="pk-input" id="su-last" name="last_name" type="text" autocomplete="family-name" required />
+              <p class="pk-field__error" data-error-for="last_name" hidden></p>
+            </div>
+          </div>
+          <div class="pk-field">
+            <label class="pk-label" for="su-email">{t('field.email', locale)}<span class="pk-req">*</span></label>
+            <input class="pk-input" id="su-email" name="email" type="email" inputmode="email" dir="ltr" autocomplete="email" required />
+            <p class="pk-field__error" data-error-for="email" hidden></p>
+          </div>
+          <div class="pk-field">
+            <label class="pk-label" for="su-phone">{t('field.phone', locale)}<span class="pk-req">*</span></label>
+            <input class="pk-input" id="su-phone" name="phone" type="tel" inputmode="tel" dir="ltr" autocomplete="tel" placeholder="05XXXXXXXX" required />
+            <p class="pk-field__error" data-error-for="phone" hidden></p>
+          </div>
+          <div class="pk-field">
+            <label class="pk-label" for="su-password">{t('field.password', locale)}<span class="pk-req">*</span></label>
+            <input class="pk-input" id="su-password" name="password" type="password" autocomplete="new-password" required />
+            <p class="pk-field__error" data-error-for="password" hidden></p>
+          </div>
+          <div class="pk-field">
+            <label class="pk-label" for="su-company">{t('field.company', locale)}<span class="pk-opt">({t('common.optional', locale)})</span></label>
+            <input class="pk-input" id="su-company" name="company_name" type="text" autocomplete="organization" />
+          </div>
+          <Button type="submit" size="lg" block data-submit>{t('auth.submitSignup', locale)}</Button>
+        </form>
+
+        <p class="pk-auth__alt">
+          {t('auth.haveAccount', locale)} <a href={loginHref} data-login-link>{t('auth.login', locale)}</a>
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <script define:vars={{
+    locale,
+    accountHref,
+    loginHref,
+    labels: {
+      required: t('field.required', locale),
+      emailInvalid: t('field.emailInvalid', locale),
+      phoneInvalid: t('field.phoneInvalid', locale),
+      passwordShort: t('field.passwordShort', locale),
+      error: t('auth.signupError', locale),
+      submit: t('auth.submitSignup', locale),
+      loading: t('auth.loading', locale),
+    },
+  }}>
+    window.__signupCfg = { locale, accountHref, loginHref, labels };
+  </script>
+  <script>
+    import { api, setToken, isAuthed } from '@lib/api';
+    import { signUpEvent } from '@lib/gtm';
+
+    const cfg = (window as any).__signupCfg;
+    const L = cfg.labels;
+
+    const params = new URLSearchParams(location.search);
+    let redirect = params.get('redirect') || '';
+    if (!/^\/(?!\/)/.test(redirect)) redirect = cfg.accountHref;
+
+    if (isAuthed()) location.replace(redirect);
+
+    const loginLink = document.querySelector<HTMLAnchorElement>('[data-login-link]');
+    if (loginLink) loginLink.href = cfg.loginHref + '?redirect=' + encodeURIComponent(redirect);
+
+    const form = document.querySelector<HTMLFormElement>('[data-signup-form]')!;
+    const alertEl = document.querySelector<HTMLElement>('[data-auth-error]')!;
+    const submit = form.querySelector<HTMLButtonElement>('[data-submit]')!;
+
+    function fieldError(name: string, msg: string | null) {
+      const el = form.querySelector<HTMLElement>(`[data-error-for="${name}"]`);
+      const input = form.querySelector<HTMLInputElement>(`[name="${name}"]`);
+      if (el) { el.textContent = msg || ''; el.hidden = !msg; }
+      if (input) input.setAttribute('aria-invalid', msg ? 'true' : 'false');
+    }
+
+    function validate(d: Record<string, string>): boolean {
+      let ok = true;
+      for (const f of ['first_name', 'last_name']) {
+        if (!d[f]) { fieldError(f, L.required); ok = false; } else fieldError(f, null);
+      }
+      if (!d.email) { fieldError('email', L.required); ok = false; }
+      else if (!/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(d.email)) { fieldError('email', L.emailInvalid); ok = false; }
+      else fieldError('email', null);
+      const phoneDigits = d.phone.replace(/\D/g, '');
+      if (!d.phone) { fieldError('phone', L.required); ok = false; }
+      else if (phoneDigits.length < 8) { fieldError('phone', L.phoneInvalid); ok = false; }
+      else fieldError('phone', null);
+      if (!d.password) { fieldError('password', L.required); ok = false; }
+      else if (d.password.length < 6) { fieldError('password', L.passwordShort); ok = false; }
+      else fieldError('password', null);
+      return ok;
+    }
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      alertEl.hidden = true;
+      const fd = new FormData(form);
+      const d = {
+        first_name: String(fd.get('first_name') || '').trim(),
+        last_name: String(fd.get('last_name') || '').trim(),
+        email: String(fd.get('email') || '').trim(),
+        phone: String(fd.get('phone') || '').trim(),
+        password: String(fd.get('password') || ''),
+        company_name: String(fd.get('company_name') || '').trim(),
+      };
+      if (!validate(d)) return;
+
+      submit.disabled = true;
+      submit.textContent = L.loading;
+      try {
+        const payload: any = { ...d };
+        if (!payload.company_name) delete payload.company_name;
+        const res: any = await api.signup(payload);
+        if (res && res.success && res.token) {
+          setToken(res.token, res.expires_at);
+          signUpEvent('store');
+          location.href = redirect;
+          return;
+        }
+        alertEl.textContent = res?.message || L.error;
+        alertEl.hidden = false;
+      } catch {
+        alertEl.textContent = L.error;
+        alertEl.hidden = false;
+      }
+      submit.disabled = false;
+      submit.textContent = L.submit;
+    });
+  </script>
+</Base>

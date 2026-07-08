@@ -1,0 +1,138 @@
+---
+/**
+ * Thank-you — /thank-you and /en/thank-you.
+ * Reads the last order from sessionStorage, shows the order number, next
+ * steps, bank-transfer details + WhatsApp CTA. Fires GTM purchase, clears cart.
+ */
+import Base from '@layouts/Base.astro';
+import Button from '@components/Button.astro';
+import { localeStaticPaths, href } from '@lib/i18n';
+import { t } from '@lib/strings';
+import { BANK_TRANSFER, WHATSAPP } from '@lib/config';
+import type { Locale } from '@lib/format';
+
+export const getStaticPaths = localeStaticPaths;
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+const title = t('page.thankyou', locale);
+const accountHref = href(locale, '/account');
+const shopHref = href(locale, '/');
+const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.bank_name_en;
+
+const steps = [
+  { icon: '🎨', title: t('thanks.next1.title', locale), body: t('thanks.next1.body', locale) },
+  { icon: '💬', title: t('thanks.next2.title', locale), body: t('thanks.next2.body', locale) },
+  { icon: '🧾', title: t('thanks.next3.title', locale), body: t('thanks.next3.body', locale) },
+];
+---
+<Base
+  locale={locale}
+  title={`${title} — ${t('brand.name', locale)}`}
+  description={t('thanks.sub', locale)}
+  path="/thank-you"
+  noindex={true}
+>
+  <div class="pk-container">
+    <div class="pk-thanks">
+      <div class="pk-thanks__icon" aria-hidden="true">✓</div>
+      <h1 class="pk-h1">{t('thanks.title', locale)}</h1>
+      <p class="pk-thanks__sub">{t('thanks.sub', locale)}</p>
+      <div class="pk-thanks__numwrap" data-order-numwrap hidden>
+        <span class="pk-thanks__numlabel">{t('thanks.orderNum', locale)}</span>
+        <span class="pk-thanks__num" data-order-num></span>
+      </div>
+      <p class="pk-muted" data-no-order hidden style="margin-top:var(--sp-4)">{t('thanks.noOrder', locale)}</p>
+      <div class="pk-thanks__actions">
+        <Button href={accountHref}>{t('thanks.viewAccount', locale)}</Button>
+        <Button href={shopHref} variant="outline">{t('thanks.continue', locale)}</Button>
+      </div>
+    </div>
+
+    <section class="pk-section" style="padding-top:0">
+      <div class="pk-section-head" style="justify-content:center;text-align:center">
+        <h2 class="pk-h2">{t('thanks.next', locale)}</h2>
+      </div>
+      <div class="pk-steps">
+        {steps.map((s, i) => (
+          <div class="pk-card pk-step">
+            <div class="pk-step__num" aria-hidden="true">{s.icon}</div>
+            <h3>{s.title}</h3>
+            <p>{s.body}</p>
+          </div>
+        ))}
+      </div>
+    </section>
+
+    <section class="pk-section" style="padding-top:0;max-width:640px;margin-inline:auto">
+      <div class="pk-bank">
+        <h3>{t('bank.title', locale)}</h3>
+        <dl class="pk-bank__rows">
+          <div class="pk-bank__row"><dt>{t('bank.bank', locale)}</dt><dd>{bankName}</dd></div>
+          <div class="pk-bank__row"><dt>{t('bank.accountName', locale)}</dt><dd>{BANK_TRANSFER.account_name}</dd></div>
+          <div class="pk-bank__row">
+            <dt>{t('bank.iban', locale)}</dt>
+            <dd class="pk-bank__val"><span>{BANK_TRANSFER.iban}</span><button type="button" class="pk-bank__copy" data-copy-iban data-copy-label={t('bank.copy', locale)} data-copied-label={t('bank.copied', locale)}>{t('bank.copy', locale)}</button></dd>
+          </div>
+        </dl>
+        <p class="pk-bank__note">{t('bank.note', locale)}</p>
+      </div>
+      <div style="text-align:center;margin-top:var(--sp-5)">
+        <a class="pk-btn pk-btn--outline" data-whatsapp target="_blank" rel="noopener">
+          <span aria-hidden="true">💬</span> {t('whatsapp.cta', locale)}
+        </a>
+      </div>
+    </section>
+  </div>
+
+  <script define:vars={{
+    locale,
+    whatsapp: WHATSAPP,
+    waPrefix: locale === 'ar' ? 'مرحباً هوية، أرغب بمتابعة طلبي رقم ' : 'Hello Hawih, I would like to follow up on my order ',
+    ibanRaw: BANK_TRANSFER.iban,
+  }}>
+    window.__thanksCfg = { locale, whatsapp, waPrefix, ibanRaw };
+  </script>
+  <script>
+    import { getLastOrder } from '@lib/checkout';
+    import { clearCart } from '@lib/cart';
+    import { purchase } from '@lib/gtm';
+
+    const cfg = (window as any).__thanksCfg;
+    const order = getLastOrder();
+
+    const numWrap = document.querySelector<HTMLElement>('[data-order-numwrap]');
+    const numEl = document.querySelector<HTMLElement>('[data-order-num]');
+    const noOrder = document.querySelector<HTMLElement>('[data-no-order]');
+    const waLink = document.querySelector<HTMLAnchorElement>('[data-whatsapp]');
+
+    const display = order ? (order.order_display || (order.order_id != null ? String(order.order_id) : '')) : '';
+
+    if (order && display) {
+      if (numWrap) numWrap.hidden = false;
+      if (numEl) numEl.textContent = display;
+      // GTM purchase (revenue tracking; cart already cleared at checkout time)
+      purchase(String(order.order_id ?? display), Number(order.total ?? 0), []);
+    } else {
+      if (noOrder) noOrder.hidden = false;
+    }
+
+    // WhatsApp CTA prefilled with order number
+    const msg = cfg.waPrefix + (display || '');
+    if (waLink) waLink.href = `https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent(msg)}`;
+
+    // Copy IBAN
+    const copyBtn = document.querySelector<HTMLButtonElement>('[data-copy-iban]');
+    copyBtn?.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(cfg.ibanRaw.replace(/\s/g, ''));
+        const done = copyBtn.dataset.copiedLabel || 'Copied';
+        const orig = copyBtn.dataset.copyLabel || 'Copy';
+        copyBtn.textContent = done;
+        setTimeout(() => { copyBtn.textContent = orig; }, 1800);
+      } catch { /* clipboard unavailable */ }
+    });
+
+    // Ensure cart is empty + header badge updates.
+    clearCart();
+  </script>
+</Base>

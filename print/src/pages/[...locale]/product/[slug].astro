@@ -1,0 +1,244 @@
+---
+/**
+ * Product page — /product/{slug} and /en/product/{slug}.
+ * Gallery, title, description, OptionPicker (drives PriceBox), QtyStepper,
+ * add-to-cart, specs, related products. JSON-LD Product+Offer+Breadcrumb.
+ */
+import Base from '@layouts/Base.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import OptionPicker from '@components/OptionPicker.astro';
+import PriceBox from '@components/PriceBox.astro';
+import QtyStepper from '@components/QtyStepper.astro';
+import ProductCard from '@components/ProductCard.astro';
+import Button from '@components/Button.astro';
+import JsonLd from '@components/JsonLd.astro';
+import { href } from '@lib/i18n';
+import { t } from '@lib/strings';
+import {
+  items,
+  getItem,
+  getCategory,
+  relatedItems,
+  categoryTitle,
+  itemTitle,
+  itemDescription,
+} from '@lib/catalog';
+import { SITE_URL, HAWIH_ORG_ID } from '@lib/config';
+import type { Locale } from '@lib/format';
+
+export function getStaticPaths() {
+  const out: { params: { locale: string | undefined; slug: string }; props: { locale: Locale } }[] = [];
+  for (const l of [undefined, 'en'] as const) {
+    for (const it of items) {
+      out.push({ params: { locale: l, slug: it.slug }, props: { locale: l === 'en' ? 'en' : 'ar' } });
+    }
+  }
+  return out;
+}
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+const { slug } = Astro.params;
+const item = getItem(slug!)!;
+const category = getCategory(item.category_slug)!;
+const title = itemTitle(item, locale);
+const desc = itemDescription(item, locale);
+const catTitle = categoryTitle(category, locale);
+const related = relatedItems(item);
+const unit = locale === 'ar' ? item.unit_type : item.unit_type_en ?? item.unit_type;
+
+const crumbs = [
+  { label: t('nav.home', locale), href: href(locale, '/') },
+  { label: catTitle, href: href(locale, `/category/${category.slug}`) },
+  { label: title },
+];
+
+const productLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Product',
+  name: title,
+  description: desc,
+  image: SITE_URL + (item.images?.hero ?? ''),
+  category: catTitle,
+  brand: { '@id': HAWIH_ORG_ID },
+  offers: {
+    '@type': 'Offer',
+    price: item.rate,
+    priceCurrency: 'SAR',
+    availability: 'https://schema.org/InStock',
+    url: SITE_URL + href(locale, `/product/${slug}`),
+    seller: { '@id': HAWIH_ORG_ID },
+  },
+};
+const breadcrumbLd = {
+  '@context': 'https://schema.org',
+  '@type': 'BreadcrumbList',
+  itemListElement: crumbs.map((c, i) => ({
+    '@type': 'ListItem',
+    position: i + 1,
+    name: c.label,
+    ...(c.href ? { item: SITE_URL + c.href } : {}),
+  })),
+};
+---
+<Base
+  locale={locale}
+  title={`${title} — ${t('brand.name', locale)}`}
+  description={desc}
+  path={`/product/${slug}`}
+  image={item.images?.hero}
+  type="product"
+>
+  <Fragment slot="head">
+    <JsonLd data={[productLd, breadcrumbLd]} />
+  </Fragment>
+
+  <div class="pk-container">
+    <Breadcrumbs items={crumbs} />
+
+    <div class="pk-pdp" style="margin-block:var(--sp-4) var(--sp-10)">
+      <!-- Gallery -->
+      <div class="pk-pdp__gallery">
+        <div class="pk-pdp__hero">
+          <img id="pdp-hero" src={item.images?.hero} alt={title} width="1600" height="1200" fetchpriority="high" />
+        </div>
+        <div class="pk-pdp__thumbs">
+          <button class="pk-pdp__thumb" type="button" data-thumb={item.images?.hero} aria-label={title}>
+            <img src={item.images?.hero} alt="" width="200" height="200" loading="lazy" />
+          </button>
+          <button class="pk-pdp__thumb" type="button" data-thumb={item.images?.square} aria-label={title}>
+            <img src={item.images?.square} alt="" width="200" height="200" loading="lazy" />
+          </button>
+        </div>
+      </div>
+
+      <!-- Buy box -->
+      <div class="pk-pdp__buy"
+        data-product
+        data-item-id={item.id}
+        data-slug={item.slug}
+        data-title={title}
+        data-base={item.rate}
+        data-image={item.images?.square}
+        data-min-qty={item.min_qty ?? 1}
+        data-locale={locale}
+      >
+        <span class="pk-prodcard__tag" style="align-self:flex-start">{catTitle}</span>
+        <h1 class="pk-h1" style="margin-top:var(--sp-1)">{title}</h1>
+        <PriceBox amount={item.rate} locale={locale} id="pdp-price" />
+        <p class="pk-muted">{desc}</p>
+
+        <OptionPicker options={item.options} locale={locale} />
+
+        <div class="pk-pdp__qtyrow">
+          <div>
+            <span class="pk-optgroup__label" style="display:block;margin-bottom:var(--sp-2)">{t('product.quantity', locale)}</span>
+            <QtyStepper id="pdp-qty" min={item.min_qty ?? 1} label={t('product.quantity', locale)} />
+          </div>
+          <Button size="lg" data-add-to-cart style="flex:1;min-width:180px">{t('product.addToCart', locale)}</Button>
+        </div>
+
+        {item.requires_artwork && (
+          <p class="pk-small pk-muted" style="display:flex;gap:8px;align-items:center">
+            <span aria-hidden="true">🎨</span> {t('product.artworkNote', locale)}
+          </p>
+        )}
+
+        <!-- Specs -->
+        <div class="pk-card" style="padding:var(--sp-5);margin-top:var(--sp-2)">
+          <h2 class="pk-h3" style="margin-bottom:var(--sp-4)">{t('product.specs', locale)}</h2>
+          <dl class="pk-specs">
+            <div><dt>{t('product.spec.category', locale)}</dt><dd>{catTitle}</dd></div>
+            <div><dt>{t('product.spec.unit', locale)}</dt><dd>{unit}</dd></div>
+            <div><dt>{t('product.spec.turnaround', locale)}</dt><dd>{t('product.turnaroundValue', locale)}</dd></div>
+            <div><dt>{t('product.spec.artwork', locale)}</dt><dd>{item.requires_artwork ? t('product.yes', locale) : '—'}</dd></div>
+          </dl>
+        </div>
+      </div>
+    </div>
+
+    <!-- Related -->
+    {related.length > 0 && (
+      <section class="pk-section" style="padding-top:0">
+        <div class="pk-section-head">
+          <h2 class="pk-h2">{t('product.related', locale)}</h2>
+        </div>
+        <div class="pk-grid-products">
+          {related.map((r) => (
+            <ProductCard
+              href={href(locale, `/product/${r.slug}`)}
+              title={itemTitle(r, locale)}
+              image={r.images?.square ?? ''}
+              rate={r.rate}
+              categoryLabel={catTitle}
+              locale={locale}
+            />
+          ))}
+        </div>
+      </section>
+    )}
+  </div>
+
+  <script>
+    import { addToCart } from '@lib/cart';
+    import { addToCartEvent, viewItem } from '@lib/gtm';
+    import { formatSAR } from '@lib/format';
+
+    const root = document.querySelector<HTMLElement>('[data-product]');
+    if (root) {
+      const locale = (root.dataset.locale === 'en' ? 'en' : 'ar') as 'ar' | 'en';
+      const base = Number(root.dataset.base);
+      const itemId = root.dataset.itemId!;
+      const slug = root.dataset.slug!;
+      const title = root.dataset.title!;
+      const image = root.dataset.image!;
+      const priceEl = root.querySelector<HTMLElement>('[data-pricebox-amount]');
+      const qtyInput = document.querySelector<HTMLInputElement>('#pdp-qty');
+      const addBtn = root.querySelector<HTMLElement>('[data-add-to-cart]');
+
+      function currentSelections() {
+        const groups = root!.querySelectorAll<HTMLElement>('fieldset[data-option-name]');
+        let delta = 0;
+        const options: Record<string, string> = {};
+        groups.forEach((g) => {
+          const checked = g.querySelector<HTMLInputElement>('input:checked');
+          if (checked) {
+            options[g.dataset.optionName!] = checked.value;
+            delta += Number(checked.dataset.delta || '0');
+          }
+        });
+        return { options, rate: base + delta };
+      }
+
+      function refreshPrice() {
+        const { rate } = currentSelections();
+        if (priceEl) priceEl.textContent = formatSAR(rate, locale);
+      }
+
+      root.querySelectorAll('input[type=radio]').forEach((r) =>
+        r.addEventListener('change', refreshPrice),
+      );
+      refreshPrice();
+
+      // view_item
+      viewItem({ item_id: itemId, item_name: title, price: base, item_category: root.dataset.slug });
+
+      addBtn?.addEventListener('click', () => {
+        const { options, rate } = currentSelections();
+        const qty = Math.max(Number(root!.dataset.minQty || '1'), Number(qtyInput?.value || '1'));
+        addToCart({ item_id: itemId, slug, title, qty, rate, options, image });
+        addToCartEvent({ item_id: itemId, item_name: title, price: rate, quantity: qty, item_category: slug });
+        const original = addBtn.textContent;
+        addBtn.textContent = locale === 'ar' ? 'تمت الإضافة ✓' : 'Added ✓';
+        setTimeout(() => { addBtn.textContent = original; }, 1600);
+      });
+
+      // Thumbnail swap
+      const hero = document.querySelector<HTMLImageElement>('#pdp-hero');
+      document.querySelectorAll<HTMLElement>('[data-thumb]').forEach((btn) => {
+        btn.addEventListener('click', () => {
+          if (hero && btn.dataset.thumb) hero.src = btn.dataset.thumb;
+        });
+      });
+    }
+  </script>
+</Base>

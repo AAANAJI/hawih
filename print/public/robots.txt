@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+Disallow: /account/
+Disallow: /cart/
+Disallow: /checkout/
+Disallow: /thank-you/
+Disallow: /auth/
+Disallow: /en/account/
+Disallow: /en/cart/
+Disallow: /en/checkout/
+Disallow: /en/thank-you/
+Disallow: /en/auth/
+
+Sitemap: https://print.hawih.com.sa/sitemap-index.xml

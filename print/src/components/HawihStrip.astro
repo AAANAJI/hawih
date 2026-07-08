@@ -1,0 +1,32 @@
+---
+/**
+ * HawihStrip — slim dismissible top strip linking back to hawih.com.sa
+ * with UTM attribution. Dismissal is remembered in sessionStorage.
+ * Props:
+ *   locale: 'ar' | 'en'
+ */
+import { t } from '@lib/strings';
+import { HAWIH_MAIN_URL } from '@lib/config';
+import type { Locale } from '@lib/format';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+---
+<div class="pk-strip" data-hawih-strip>
+  <div class="pk-strip__inner">
+    <span>{t('strip.text', locale)}</span>
+    <a href={HAWIH_MAIN_URL} target="_blank" rel="noopener">{t('strip.cta', locale)} ↗</a>
+  </div>
+  <button type="button" class="pk-strip__close" data-strip-close aria-label={t('strip.dismiss', locale)}>✕</button>
+</div>
+
+<script>
+  const KEY = 'hawih_strip_dismissed';
+  document.querySelectorAll<HTMLElement>('[data-hawih-strip]').forEach((strip) => {
+    if (sessionStorage.getItem(KEY) === '1') { strip.hidden = true; return; }
+    strip.querySelector('[data-strip-close]')?.addEventListener('click', () => {
+      strip.hidden = true;
+      sessionStorage.setItem(KEY, '1');
+    });
+  });
+</script>
