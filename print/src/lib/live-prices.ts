@@ -32,6 +32,7 @@ export interface LiveItem {
   slug: string;
   rate: number;
   currency?: string;
+  image?: string;
   options?: LiveOption[];
 }
 
@@ -127,5 +128,14 @@ export async function hydrateCardPrices(): Promise<void> {
     if (it && Number.isFinite(Number(it.rate))) {
       el.textContent = formatSAR(Number(it.rate), locale);
     }
+  }
+
+  // Refresh card images from the CRM-managed image (when the item has one).
+  const imgEls = Array.from(document.querySelectorAll<HTMLImageElement>('[data-live-image]'));
+  for (const img of imgEls) {
+    const slug = img.dataset.slug || slugFromLink(img.closest('a'));
+    if (!slug) continue;
+    const it = map.get(slug);
+    if (it && it.image) img.src = it.image;
   }
 }
