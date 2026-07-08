@@ -152,8 +152,8 @@ WHERE NOT EXISTS (
 -- ---------------------------------------------------------------------------
 
 -- print_slug :: ملصقات دائرية
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'round-stickers', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'round-stickers', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'ملصقات دائرية' AND it.deleted = 0
 WHERE cf.title = 'print_slug' AND cf.related_to = 'items'
@@ -164,8 +164,8 @@ WHERE cf.title = 'print_slug' AND cf.related_to = 'items'
   );
 
 -- print_options :: ملصقات دائرية
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, '[{"name_ar":"المقاس","name_en":"Size","type":"select","values":[{"label_ar":"4 سم","label_en":"4 cm"},{"label_ar":"6 سم","label_en":"6 cm"},{"label_ar":"8 سم","label_en":"8 cm"}]},{"name_ar":"الخامة","name_en":"Material","type":"select","values":[{"label_ar":"لامع","label_en":"Glossy"},{"label_ar":"مطفي","label_en":"Matte"},{"label_ar":"شفاف","label_en":"Clear"}]},{"name_ar":"الكمية","name_en":"Quantity","type":"tier","values":[{"label":"100","price_delta":0},{"label":"250","price_delta":35},{"label":"500","price_delta":80}]}]', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, '[{"name_ar":"المقاس","name_en":"Size","type":"select","values":[{"label_ar":"4 سم","label_en":"4 cm"},{"label_ar":"6 سم","label_en":"6 cm"},{"label_ar":"8 سم","label_en":"8 cm"}]},{"name_ar":"الخامة","name_en":"Material","type":"select","values":[{"label_ar":"لامع","label_en":"Glossy"},{"label_ar":"مطفي","label_en":"Matte"},{"label_ar":"شفاف","label_en":"Clear"}]},{"name_ar":"الكمية","name_en":"Quantity","type":"tier","values":[{"label":"100","price_delta":0},{"label":"250","price_delta":35},{"label":"500","price_delta":80}]}]', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'ملصقات دائرية' AND it.deleted = 0
 WHERE cf.title = 'print_options' AND cf.related_to = 'items'
@@ -176,8 +176,8 @@ WHERE cf.title = 'print_options' AND cf.related_to = 'items'
   );
 
 -- name_en :: ملصقات دائرية
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'Round Stickers', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'Round Stickers', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'ملصقات دائرية' AND it.deleted = 0
 WHERE cf.title = 'name_en' AND cf.related_to = 'items'
@@ -188,8 +188,8 @@ WHERE cf.title = 'name_en' AND cf.related_to = 'items'
   );
 
 -- description_en :: ملصقات دائرية
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'Precision die-cut round stickers ideal for product packaging, box seals, and brand touches. Vivid print on glossy, matte, or clear stock. Production in 3-7 business days, delivery in 2-5 days.', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'Precision die-cut round stickers ideal for product packaging, box seals, and brand touches. Vivid print on glossy, matte, or clear stock. Production in 3-7 business days, delivery in 2-5 days.', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'ملصقات دائرية' AND it.deleted = 0
 WHERE cf.title = 'description_en' AND cf.related_to = 'items'
@@ -200,8 +200,8 @@ WHERE cf.title = 'description_en' AND cf.related_to = 'items'
   );
 
 -- requires_artwork :: ملصقات دائرية
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, '1', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, '1', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'ملصقات دائرية' AND it.deleted = 0
 WHERE cf.title = 'requires_artwork' AND cf.related_to = 'items'
@@ -212,8 +212,8 @@ WHERE cf.title = 'requires_artwork' AND cf.related_to = 'items'
   );
 
 -- print_slug :: كروت أعمال مطفية
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'matte-business-cards', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'matte-business-cards', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'كروت أعمال مطفية' AND it.deleted = 0
 WHERE cf.title = 'print_slug' AND cf.related_to = 'items'
@@ -224,8 +224,8 @@ WHERE cf.title = 'print_slug' AND cf.related_to = 'items'
   );
 
 -- print_options :: كروت أعمال مطفية
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, '[{"name_ar":"الطباعة","name_en":"Printing","type":"select","values":[{"label_ar":"وجه واحد","label_en":"Single-sided"},{"label_ar":"وجهين","label_en":"Double-sided"}]},{"name_ar":"الخامة","name_en":"Material","type":"select","values":[{"label_ar":"300 جم","label_en":"300gsm"},{"label_ar":"350 جم فاخر","label_en":"350gsm Premium"}]},{"name_ar":"الكمية","name_en":"Quantity","type":"tier","values":[{"label":"100","price_delta":0},{"label":"250","price_delta":40},{"label":"500","price_delta":90}]}]', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, '[{"name_ar":"الطباعة","name_en":"Printing","type":"select","values":[{"label_ar":"وجه واحد","label_en":"Single-sided"},{"label_ar":"وجهين","label_en":"Double-sided"}]},{"name_ar":"الخامة","name_en":"Material","type":"select","values":[{"label_ar":"300 جم","label_en":"300gsm"},{"label_ar":"350 جم فاخر","label_en":"350gsm Premium"}]},{"name_ar":"الكمية","name_en":"Quantity","type":"tier","values":[{"label":"100","price_delta":0},{"label":"250","price_delta":40},{"label":"500","price_delta":90}]}]', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'كروت أعمال مطفية' AND it.deleted = 0
 WHERE cf.title = 'print_options' AND cf.related_to = 'items'
@@ -236,8 +236,8 @@ WHERE cf.title = 'print_options' AND cf.related_to = 'items'
   );
 
 -- name_en :: كروت أعمال مطفية
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'Matte Business Cards', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'Matte Business Cards', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'كروت أعمال مطفية' AND it.deleted = 0
 WHERE cf.title = 'name_en' AND cf.related_to = 'items'
@@ -248,8 +248,8 @@ WHERE cf.title = 'name_en' AND cf.related_to = 'items'
   );
 
 -- description_en :: كروت أعمال مطفية
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'Business cards with an elegant matte finish that feels premium and cuts glare. Single- or double-sided on 300gsm or luxe 350gsm stock. Production in 3-7 business days, delivery in 2-5 days.', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'Business cards with an elegant matte finish that feels premium and cuts glare. Single- or double-sided on 300gsm or luxe 350gsm stock. Production in 3-7 business days, delivery in 2-5 days.', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'كروت أعمال مطفية' AND it.deleted = 0
 WHERE cf.title = 'description_en' AND cf.related_to = 'items'
@@ -260,8 +260,8 @@ WHERE cf.title = 'description_en' AND cf.related_to = 'items'
   );
 
 -- requires_artwork :: كروت أعمال مطفية
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, '1', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, '1', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'كروت أعمال مطفية' AND it.deleted = 0
 WHERE cf.title = 'requires_artwork' AND cf.related_to = 'items'
@@ -272,8 +272,8 @@ WHERE cf.title = 'requires_artwork' AND cf.related_to = 'items'
   );
 
 -- print_slug :: كروت أعمال فاخرة (طبقة مخملية)
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'velvet-business-cards', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'velvet-business-cards', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'كروت أعمال فاخرة (طبقة مخملية)' AND it.deleted = 0
 WHERE cf.title = 'print_slug' AND cf.related_to = 'items'
@@ -284,8 +284,8 @@ WHERE cf.title = 'print_slug' AND cf.related_to = 'items'
   );
 
 -- print_options :: كروت أعمال فاخرة (طبقة مخملية)
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, '[{"name_ar":"الطباعة","name_en":"Printing","type":"select","values":[{"label_ar":"وجه واحد","label_en":"Single-sided"},{"label_ar":"وجهين","label_en":"Double-sided"}]},{"name_ar":"التشطيب","name_en":"Finish","type":"select","values":[{"label_ar":"مخملي","label_en":"Velvet"},{"label_ar":"بريق ذهبي","label_en":"Gold Foil"}]},{"name_ar":"الكمية","name_en":"Quantity","type":"tier","values":[{"label":"100","price_delta":0},{"label":"250","price_delta":60}]}]', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, '[{"name_ar":"الطباعة","name_en":"Printing","type":"select","values":[{"label_ar":"وجه واحد","label_en":"Single-sided"},{"label_ar":"وجهين","label_en":"Double-sided"}]},{"name_ar":"التشطيب","name_en":"Finish","type":"select","values":[{"label_ar":"مخملي","label_en":"Velvet"},{"label_ar":"بريق ذهبي","label_en":"Gold Foil"}]},{"name_ar":"الكمية","name_en":"Quantity","type":"tier","values":[{"label":"100","price_delta":0},{"label":"250","price_delta":60}]}]', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'كروت أعمال فاخرة (طبقة مخملية)' AND it.deleted = 0
 WHERE cf.title = 'print_options' AND cf.related_to = 'items'
@@ -296,8 +296,8 @@ WHERE cf.title = 'print_options' AND cf.related_to = 'items'
   );
 
 -- name_en :: كروت أعمال فاخرة (طبقة مخملية)
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'Velvet Business Cards', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'Velvet Business Cards', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'كروت أعمال فاخرة (طبقة مخملية)' AND it.deleted = 0
 WHERE cf.title = 'name_en' AND cf.related_to = 'items'
@@ -308,8 +308,8 @@ WHERE cf.title = 'name_en' AND cf.related_to = 'items'
   );
 
 -- description_en :: كروت أعمال فاخرة (طبقة مخملية)
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'Business cards wrapped in a soft velvet-touch laminate for an unforgettable premium feel, with an optional gold foil accent. Perfect for brands that want to stand out. Production in 3-7 business days, delivery in 2-5 days.', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'Business cards wrapped in a soft velvet-touch laminate for an unforgettable premium feel, with an optional gold foil accent. Perfect for brands that want to stand out. Production in 3-7 business days, delivery in 2-5 days.', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'كروت أعمال فاخرة (طبقة مخملية)' AND it.deleted = 0
 WHERE cf.title = 'description_en' AND cf.related_to = 'items'
@@ -320,8 +320,8 @@ WHERE cf.title = 'description_en' AND cf.related_to = 'items'
   );
 
 -- requires_artwork :: كروت أعمال فاخرة (طبقة مخملية)
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, '1', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, '1', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'كروت أعمال فاخرة (طبقة مخملية)' AND it.deleted = 0
 WHERE cf.title = 'requires_artwork' AND cf.related_to = 'items'
@@ -332,8 +332,8 @@ WHERE cf.title = 'requires_artwork' AND cf.related_to = 'items'
   );
 
 -- print_slug :: ورق مراسلات رسمي
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'letterhead-a4', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'letterhead-a4', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'ورق مراسلات رسمي' AND it.deleted = 0
 WHERE cf.title = 'print_slug' AND cf.related_to = 'items'
@@ -344,8 +344,8 @@ WHERE cf.title = 'print_slug' AND cf.related_to = 'items'
   );
 
 -- print_options :: ورق مراسلات رسمي
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, '[{"name_ar":"المقاس","name_en":"Size","type":"select","values":[{"label_ar":"A4","label_en":"A4"},{"label_ar":"A5","label_en":"A5"}]},{"name_ar":"الكمية","name_en":"Quantity","type":"tier","values":[{"label":"100","price_delta":0},{"label":"250","price_delta":55},{"label":"500","price_delta":110}]}]', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, '[{"name_ar":"المقاس","name_en":"Size","type":"select","values":[{"label_ar":"A4","label_en":"A4"},{"label_ar":"A5","label_en":"A5"}]},{"name_ar":"الكمية","name_en":"Quantity","type":"tier","values":[{"label":"100","price_delta":0},{"label":"250","price_delta":55},{"label":"500","price_delta":110}]}]', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'ورق مراسلات رسمي' AND it.deleted = 0
 WHERE cf.title = 'print_options' AND cf.related_to = 'items'
@@ -356,8 +356,8 @@ WHERE cf.title = 'print_options' AND cf.related_to = 'items'
   );
 
 -- name_en :: ورق مراسلات رسمي
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'Letterhead Paper', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'Letterhead Paper', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'ورق مراسلات رسمي' AND it.deleted = 0
 WHERE cf.title = 'name_en' AND cf.related_to = 'items'
@@ -368,8 +368,8 @@ WHERE cf.title = 'name_en' AND cf.related_to = 'items'
   );
 
 -- description_en :: ورق مراسلات رسمي
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'Official letterhead carrying your brand identity for contracts, letters, and invoices. Clean print on premium stock in A4 or A5. Production in 3-7 business days, delivery in 2-5 days.', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'Official letterhead carrying your brand identity for contracts, letters, and invoices. Clean print on premium stock in A4 or A5. Production in 3-7 business days, delivery in 2-5 days.', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'ورق مراسلات رسمي' AND it.deleted = 0
 WHERE cf.title = 'description_en' AND cf.related_to = 'items'
@@ -380,8 +380,8 @@ WHERE cf.title = 'description_en' AND cf.related_to = 'items'
   );
 
 -- requires_artwork :: ورق مراسلات رسمي
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, '1', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, '1', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'ورق مراسلات رسمي' AND it.deleted = 0
 WHERE cf.title = 'requires_artwork' AND cf.related_to = 'items'
@@ -392,8 +392,8 @@ WHERE cf.title = 'requires_artwork' AND cf.related_to = 'items'
   );
 
 -- print_slug :: علب كرافت مخصصة
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'kraft-boxes', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'kraft-boxes', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'علب كرافت مخصصة' AND it.deleted = 0
 WHERE cf.title = 'print_slug' AND cf.related_to = 'items'
@@ -404,8 +404,8 @@ WHERE cf.title = 'print_slug' AND cf.related_to = 'items'
   );
 
 -- print_options :: علب كرافت مخصصة
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, '[{"name_ar":"المقاس","name_en":"Size","type":"select","values":[{"label_ar":"صغير","label_en":"Small"},{"label_ar":"وسط","label_en":"Medium"},{"label_ar":"كبير","label_en":"Large"}]},{"name_ar":"الخامة","name_en":"Material","type":"select","values":[{"label_ar":"كرافت","label_en":"Kraft"},{"label_ar":"أبيض مطلي","label_en":"Coated White"}]},{"name_ar":"الكمية","name_en":"Quantity","type":"tier","values":[{"label":"50","price_delta":0},{"label":"100","price_delta":90}]}]', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, '[{"name_ar":"المقاس","name_en":"Size","type":"select","values":[{"label_ar":"صغير","label_en":"Small"},{"label_ar":"وسط","label_en":"Medium"},{"label_ar":"كبير","label_en":"Large"}]},{"name_ar":"الخامة","name_en":"Material","type":"select","values":[{"label_ar":"كرافت","label_en":"Kraft"},{"label_ar":"أبيض مطلي","label_en":"Coated White"}]},{"name_ar":"الكمية","name_en":"Quantity","type":"tier","values":[{"label":"50","price_delta":0},{"label":"100","price_delta":90}]}]', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'علب كرافت مخصصة' AND it.deleted = 0
 WHERE cf.title = 'print_options' AND cf.related_to = 'items'
@@ -416,8 +416,8 @@ WHERE cf.title = 'print_options' AND cf.related_to = 'items'
   );
 
 -- name_en :: علب كرافت مخصصة
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'Custom Kraft Boxes', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'Custom Kraft Boxes', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'علب كرافت مخصصة' AND it.deleted = 0
 WHERE cf.title = 'name_en' AND cf.related_to = 'items'
@@ -428,8 +428,8 @@ WHERE cf.title = 'name_en' AND cf.related_to = 'items'
   );
 
 -- description_en :: علب كرافت مخصصة
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'Sturdy customizable kraft boxes for product packaging and e-commerce orders. Choose natural kraft or coated white in several sizes. Production in 3-7 business days, delivery in 2-5 days.', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'Sturdy customizable kraft boxes for product packaging and e-commerce orders. Choose natural kraft or coated white in several sizes. Production in 3-7 business days, delivery in 2-5 days.', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'علب كرافت مخصصة' AND it.deleted = 0
 WHERE cf.title = 'description_en' AND cf.related_to = 'items'
@@ -440,8 +440,8 @@ WHERE cf.title = 'description_en' AND cf.related_to = 'items'
   );
 
 -- requires_artwork :: علب كرافت مخصصة
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, '1', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, '1', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'علب كرافت مخصصة' AND it.deleted = 0
 WHERE cf.title = 'requires_artwork' AND cf.related_to = 'items'
@@ -452,8 +452,8 @@ WHERE cf.title = 'requires_artwork' AND cf.related_to = 'items'
   );
 
 -- print_slug :: أكياس ورقية بمقبض
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'paper-bags', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'paper-bags', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'أكياس ورقية بمقبض' AND it.deleted = 0
 WHERE cf.title = 'print_slug' AND cf.related_to = 'items'
@@ -464,8 +464,8 @@ WHERE cf.title = 'print_slug' AND cf.related_to = 'items'
   );
 
 -- print_options :: أكياس ورقية بمقبض
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, '[{"name_ar":"المقاس","name_en":"Size","type":"select","values":[{"label_ar":"صغير","label_en":"Small"},{"label_ar":"وسط","label_en":"Medium"},{"label_ar":"كبير","label_en":"Large"}]},{"name_ar":"الطباعة","name_en":"Printing","type":"select","values":[{"label_ar":"لون واحد","label_en":"One Color"},{"label_ar":"ألوان كاملة","label_en":"Full Color"}]},{"name_ar":"الكمية","name_en":"Quantity","type":"tier","values":[{"label":"100","price_delta":0},{"label":"250","price_delta":120}]}]', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, '[{"name_ar":"المقاس","name_en":"Size","type":"select","values":[{"label_ar":"صغير","label_en":"Small"},{"label_ar":"وسط","label_en":"Medium"},{"label_ar":"كبير","label_en":"Large"}]},{"name_ar":"الطباعة","name_en":"Printing","type":"select","values":[{"label_ar":"لون واحد","label_en":"One Color"},{"label_ar":"ألوان كاملة","label_en":"Full Color"}]},{"name_ar":"الكمية","name_en":"Quantity","type":"tier","values":[{"label":"100","price_delta":0},{"label":"250","price_delta":120}]}]', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'أكياس ورقية بمقبض' AND it.deleted = 0
 WHERE cf.title = 'print_options' AND cf.related_to = 'items'
@@ -476,8 +476,8 @@ WHERE cf.title = 'print_options' AND cf.related_to = 'items'
   );
 
 -- name_en :: أكياس ورقية بمقبض
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'Handled Paper Bags', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'Handled Paper Bags', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'أكياس ورقية بمقبض' AND it.deleted = 0
 WHERE cf.title = 'name_en' AND cf.related_to = 'items'
@@ -488,8 +488,8 @@ WHERE cf.title = 'name_en' AND cf.related_to = 'items'
   );
 
 -- description_en :: أكياس ورقية بمقبض
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'Elegant handled paper bags carrying your store logo for a premium customer impression. Available in several sizes with one-color or full-color printing. Production in 3-7 business days, delivery in 2-5 days.', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'Elegant handled paper bags carrying your store logo for a premium customer impression. Available in several sizes with one-color or full-color printing. Production in 3-7 business days, delivery in 2-5 days.', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'أكياس ورقية بمقبض' AND it.deleted = 0
 WHERE cf.title = 'description_en' AND cf.related_to = 'items'
@@ -500,8 +500,8 @@ WHERE cf.title = 'description_en' AND cf.related_to = 'items'
   );
 
 -- requires_artwork :: أكياس ورقية بمقبض
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, '1', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, '1', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'أكياس ورقية بمقبض' AND it.deleted = 0
 WHERE cf.title = 'requires_artwork' AND cf.related_to = 'items'
@@ -512,8 +512,8 @@ WHERE cf.title = 'requires_artwork' AND cf.related_to = 'items'
   );
 
 -- print_slug :: ورق تغليف مخصص
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'wrapping-paper', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'wrapping-paper', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'ورق تغليف مخصص' AND it.deleted = 0
 WHERE cf.title = 'print_slug' AND cf.related_to = 'items'
@@ -524,8 +524,8 @@ WHERE cf.title = 'print_slug' AND cf.related_to = 'items'
   );
 
 -- print_options :: ورق تغليف مخصص
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, '[{"name_ar":"المقاس","name_en":"Size","type":"select","values":[{"label_ar":"50×70","label_en":"50×70"},{"label_ar":"70×100","label_en":"70×100"}]},{"name_ar":"الكمية","name_en":"Quantity","type":"tier","values":[{"label":"50","price_delta":0},{"label":"100","price_delta":70}]}]', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, '[{"name_ar":"المقاس","name_en":"Size","type":"select","values":[{"label_ar":"50×70","label_en":"50×70"},{"label_ar":"70×100","label_en":"70×100"}]},{"name_ar":"الكمية","name_en":"Quantity","type":"tier","values":[{"label":"50","price_delta":0},{"label":"100","price_delta":70}]}]', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'ورق تغليف مخصص' AND it.deleted = 0
 WHERE cf.title = 'print_options' AND cf.related_to = 'items'
@@ -536,8 +536,8 @@ WHERE cf.title = 'print_options' AND cf.related_to = 'items'
   );
 
 -- name_en :: ورق تغليف مخصص
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'Custom Wrapping Paper', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'Custom Wrapping Paper', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'ورق تغليف مخصص' AND it.deleted = 0
 WHERE cf.title = 'name_en' AND cf.related_to = 'items'
@@ -548,8 +548,8 @@ WHERE cf.title = 'name_en' AND cf.related_to = 'items'
   );
 
 -- description_en :: ورق تغليف مخصص
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'Custom-printed wrapping paper with your pattern or logo to elevate store gifts and events. Available in 50×70 and 70×100 sheets. Production in 3-7 business days, delivery in 2-5 days.', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'Custom-printed wrapping paper with your pattern or logo to elevate store gifts and events. Available in 50×70 and 70×100 sheets. Production in 3-7 business days, delivery in 2-5 days.', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'ورق تغليف مخصص' AND it.deleted = 0
 WHERE cf.title = 'description_en' AND cf.related_to = 'items'
@@ -560,8 +560,8 @@ WHERE cf.title = 'description_en' AND cf.related_to = 'items'
   );
 
 -- requires_artwork :: ورق تغليف مخصص
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, '1', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, '1', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'ورق تغليف مخصص' AND it.deleted = 0
 WHERE cf.title = 'requires_artwork' AND cf.related_to = 'items'
@@ -572,8 +572,8 @@ WHERE cf.title = 'requires_artwork' AND cf.related_to = 'items'
   );
 
 -- print_slug :: دعوات مناسبات
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'event-invitations', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'event-invitations', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'دعوات مناسبات' AND it.deleted = 0
 WHERE cf.title = 'print_slug' AND cf.related_to = 'items'
@@ -584,8 +584,8 @@ WHERE cf.title = 'print_slug' AND cf.related_to = 'items'
   );
 
 -- print_options :: دعوات مناسبات
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, '[{"name_ar":"الخامة","name_en":"Material","type":"select","values":[{"label_ar":"كوشيه","label_en":"Coated"},{"label_ar":"فاخر","label_en":"Premium"}]},{"name_ar":"الطباعة","name_en":"Printing","type":"select","values":[{"label_ar":"وجه واحد","label_en":"Single-sided"},{"label_ar":"وجهين","label_en":"Double-sided"}]},{"name_ar":"الكمية","name_en":"Quantity","type":"tier","values":[{"label":"50","price_delta":0},{"label":"100","price_delta":70}]}]', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, '[{"name_ar":"الخامة","name_en":"Material","type":"select","values":[{"label_ar":"كوشيه","label_en":"Coated"},{"label_ar":"فاخر","label_en":"Premium"}]},{"name_ar":"الطباعة","name_en":"Printing","type":"select","values":[{"label_ar":"وجه واحد","label_en":"Single-sided"},{"label_ar":"وجهين","label_en":"Double-sided"}]},{"name_ar":"الكمية","name_en":"Quantity","type":"tier","values":[{"label":"50","price_delta":0},{"label":"100","price_delta":70}]}]', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'دعوات مناسبات' AND it.deleted = 0
 WHERE cf.title = 'print_options' AND cf.related_to = 'items'
@@ -596,8 +596,8 @@ WHERE cf.title = 'print_options' AND cf.related_to = 'items'
   );
 
 -- name_en :: دعوات مناسبات
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'Event Invitations', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'Event Invitations', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'دعوات مناسبات' AND it.deleted = 0
 WHERE cf.title = 'name_en' AND cf.related_to = 'items'
@@ -608,8 +608,8 @@ WHERE cf.title = 'name_en' AND cf.related_to = 'items'
   );
 
 -- description_en :: دعوات مناسبات
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'Elegantly printed invitations for weddings, conferences, and celebrations. Available on coated or premium stock, single- or double-sided. Production in 3-7 business days, delivery in 2-5 days.', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'Elegantly printed invitations for weddings, conferences, and celebrations. Available on coated or premium stock, single- or double-sided. Production in 3-7 business days, delivery in 2-5 days.', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'دعوات مناسبات' AND it.deleted = 0
 WHERE cf.title = 'description_en' AND cf.related_to = 'items'
@@ -620,8 +620,8 @@ WHERE cf.title = 'description_en' AND cf.related_to = 'items'
   );
 
 -- requires_artwork :: دعوات مناسبات
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, '1', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, '1', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'دعوات مناسبات' AND it.deleted = 0
 WHERE cf.title = 'requires_artwork' AND cf.related_to = 'items'
@@ -632,8 +632,8 @@ WHERE cf.title = 'requires_artwork' AND cf.related_to = 'items'
   );
 
 -- print_slug :: أظرف مطبوعة
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'printed-envelopes', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'printed-envelopes', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'أظرف مطبوعة' AND it.deleted = 0
 WHERE cf.title = 'print_slug' AND cf.related_to = 'items'
@@ -644,8 +644,8 @@ WHERE cf.title = 'print_slug' AND cf.related_to = 'items'
   );
 
 -- print_options :: أظرف مطبوعة
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, '[{"name_ar":"المقاس","name_en":"Size","type":"select","values":[{"label_ar":"DL","label_en":"DL"},{"label_ar":"A5","label_en":"A5"}]},{"name_ar":"الطباعة","name_en":"Printing","type":"select","values":[{"label_ar":"لون واحد","label_en":"One Color"},{"label_ar":"ألوان كاملة","label_en":"Full Color"}]},{"name_ar":"الكمية","name_en":"Quantity","type":"tier","values":[{"label":"100","price_delta":0},{"label":"250","price_delta":45}]}]', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, '[{"name_ar":"المقاس","name_en":"Size","type":"select","values":[{"label_ar":"DL","label_en":"DL"},{"label_ar":"A5","label_en":"A5"}]},{"name_ar":"الطباعة","name_en":"Printing","type":"select","values":[{"label_ar":"لون واحد","label_en":"One Color"},{"label_ar":"ألوان كاملة","label_en":"Full Color"}]},{"name_ar":"الكمية","name_en":"Quantity","type":"tier","values":[{"label":"100","price_delta":0},{"label":"250","price_delta":45}]}]', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'أظرف مطبوعة' AND it.deleted = 0
 WHERE cf.title = 'print_options' AND cf.related_to = 'items'
@@ -656,8 +656,8 @@ WHERE cf.title = 'print_options' AND cf.related_to = 'items'
   );
 
 -- name_en :: أظرف مطبوعة
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'Printed Envelopes', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'Printed Envelopes', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'أظرف مطبوعة' AND it.deleted = 0
 WHERE cf.title = 'name_en' AND cf.related_to = 'items'
@@ -668,8 +668,8 @@ WHERE cf.title = 'name_en' AND cf.related_to = 'items'
   );
 
 -- description_en :: أظرف مطبوعة
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, 'Envelopes printed with your brand identity for official correspondence and invitations. Available in DL or A5 with one-color or full-color printing. Production in 3-7 business days, delivery in 2-5 days.', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, 'Envelopes printed with your brand identity for official correspondence and invitations. Available in DL or A5 with one-color or full-color printing. Production in 3-7 business days, delivery in 2-5 days.', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'أظرف مطبوعة' AND it.deleted = 0
 WHERE cf.title = 'description_en' AND cf.related_to = 'items'
@@ -680,8 +680,8 @@ WHERE cf.title = 'description_en' AND cf.related_to = 'items'
   );
 
 -- requires_artwork :: أظرف مطبوعة
-INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)
-SELECT cf.id, 'items', it.id, '1', NOW(), 0
+INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)
+SELECT cf.id, 'items', it.id, '1', 0
 FROM rise_custom_fields cf
 JOIN rise_items it ON it.title = 'أظرف مطبوعة' AND it.deleted = 0
 WHERE cf.title = 'requires_artwork' AND cf.related_to = 'items'

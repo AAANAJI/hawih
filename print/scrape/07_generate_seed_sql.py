@@ -104,8 +104,8 @@ def main():
         val = q(value)
         return (
             f"-- {field_title} :: {item_title_ar}\n"
-            "INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, created_at, deleted)\n"
-            f"SELECT cf.id, 'items', it.id, '{val}', NOW(), 0\n"
+            "INSERT INTO rise_custom_field_values (custom_field_id, related_to_type, related_to_id, value, deleted)\n"
+            f"SELECT cf.id, 'items', it.id, '{val}', 0\n"
             "FROM rise_custom_fields cf\n"
             f"JOIN rise_items it ON it.title = '{it_t}' AND it.deleted = 0\n"
             f"WHERE cf.title = '{ft}' AND cf.related_to = 'items'\n"
