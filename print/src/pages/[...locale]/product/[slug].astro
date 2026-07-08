@@ -245,6 +245,19 @@ const breadcrumbLd = {
           root!.dataset.base = String(base);
           if (priceEl) priceEl.dataset.base = String(base);
         }
+        // Live sync the CRM-managed product image onto the hero + thumbnails.
+        if (live.image) {
+          const hero = document.querySelector<HTMLImageElement>('#pdp-hero');
+          if (hero) hero.src = live.image;
+          document.querySelectorAll<HTMLElement>('[data-thumb]').forEach((btn, i) => {
+            if (i === 0) {
+              btn.dataset.thumb = live.image;
+              const timg = btn.querySelector('img');
+              if (timg) (timg as HTMLImageElement).src = live.image!;
+            }
+          });
+          root!.dataset.image = live.image;
+        }
         if (Array.isArray(live.options)) {
           root!.querySelectorAll<HTMLElement>('fieldset[data-option-name-ar]').forEach((g) => {
             const nameAr = g.getAttribute('data-option-name-ar');
