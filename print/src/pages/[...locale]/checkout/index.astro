@@ -284,6 +284,35 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
     function errType() { return locale === 'ar' ? 'صيغة الملف غير مدعومة' : 'Unsupported file type'; }
     function errSize() { return locale === 'ar' ? 'حجم الملف يتجاوز 25 ميجابايت' : 'File exceeds 25MB'; }
 
+    // Read-only list of files already uploaded on the product page.
+    function renderAttached(refs: { orig_name: string; file_size: number }[]): HTMLElement {
+      const wrap = document.createElement('div');
+      wrap.className = 'pk-coline__art';
+      const lbl = document.createElement('div');
+      lbl.className = 'pk-coline__artlabel';
+      lbl.textContent = locale === 'ar' ? '🎨 ملفات مرفقة' : '🎨 Attached files';
+      wrap.appendChild(lbl);
+      const ul = document.createElement('ul');
+      ul.className = 'pk-upload__list';
+      refs.forEach((a) => {
+        const li = document.createElement('li');
+        li.className = 'pk-filechip';
+        const meta = document.createElement('div');
+        meta.className = 'pk-filechip__meta';
+        const nm = document.createElement('span');
+        nm.className = 'pk-filechip__name';
+        nm.textContent = a.orig_name;
+        const sz = document.createElement('span');
+        sz.className = 'pk-filechip__size';
+        sz.textContent = human(a.file_size);
+        meta.append(nm, sz);
+        li.appendChild(meta);
+        ul.appendChild(li);
+      });
+      wrap.appendChild(ul);
+      return wrap;
+    }
+
     function init() {
       // Lines + per-line artwork
       cart.forEach((line, idx) => {
@@ -299,7 +328,13 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
             <div class="pk-coline__qty">${esc(L.qty)}: ${line.qty} × <bdi>${esc(formatSAR(line.rate, locale))}</bdi></div>
           </div>
           <div class="pk-coline__price pk-price"><bdi>${esc(formatSAR(line.rate * line.qty, locale))}</bdi></div>`;
-        if (requiresArtwork) row.appendChild(buildUploader(idx));
+        // Prefer files uploaded on the product page (read-only); otherwise
+        // fall back to a checkout dropzone for required-artwork lines.
+        if (line.artwork && line.artwork.length) {
+          row.appendChild(renderAttached(line.artwork));
+        } else if (requiresArtwork) {
+          row.appendChild(buildUploader(idx));
+        }
         linesEl.appendChild(row);
 
         // Summary line
