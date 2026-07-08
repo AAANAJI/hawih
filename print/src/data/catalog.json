@@ -648,14 +648,14 @@
       "title_en": "Letterhead Paper",
       "description": "أوراق مراسلات رسمية تحمل هوية منشأتك للعقود والخطابات والفواتير. طباعة نظيفة على ورق فاخر بمقاس A4 أو A5. التنفيذ 3-7 أيام عمل والتوصيل 2-5 أيام.",
       "description_en": "Official letterhead carrying your brand identity for contracts, letters, and invoices. Clean print on premium stock in A4 or A5. Production in 3-7 business days, delivery in 2-5 days.",
-      "rate": 1200,
+      "rate": 120,
       "currency": "SAR",
       "unit_type": "الطلب",
       "unit_type_en": "الطلب",
       "requires_artwork": true,
       "images": {
-        "hero": "/img/products/letterhead-a4/hero.svg",
-        "square": "/img/products/letterhead-a4/square.svg"
+        "hero": "https://crm.hawih.com.sa/files/timeline_files/item_file6a4ebdfcafa8d-Screenshot-2026-05-30-at-2.59.13%E2%80%AFPM.png",
+        "square": "https://crm.hawih.com.sa/files/timeline_files/item_file6a4ebdfcafa8d-Screenshot-2026-05-30-at-2.59.13%E2%80%AFPM.png"
       },
       "options": [
         {

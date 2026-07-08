@@ -55,7 +55,10 @@ export function buildCartJson(
     quantity: l.qty,
     options: l.options,
     note: l.note ?? '',
-    artwork_file_names: artworkNamesByLine[idx] ?? [],
+    // Each line carries the temp names of the design files uploaded for it on
+    // the product page; the server links those files to this exact order_item.
+    // An explicit override (artworkNamesByLine) still wins when provided.
+    artwork_file_names: artworkNamesByLine[idx] ?? (l.artwork ?? []).map((a) => a.file_name),
   }));
   return JSON.stringify(payload);
 }
