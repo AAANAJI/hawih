@@ -597,3 +597,14 @@
 .pk-prose li::marker { color: var(--pk-accent); }
 .pk-prose strong { font-weight: 600; }
 .pk-prose__updated { color: var(--pk-ink-muted); font-size: 0.85rem; margin-bottom: var(--sp-6); }
+
+/* Order status: on-hold / rejected banner (replaces the linear timeline) */
+.pk-order-exception {
+  margin: 0;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-md);
+  background: color-mix(in srgb, var(--pk-warning, #E67E22) 12%, transparent);
+  border: 1px solid color-mix(in srgb, var(--pk-warning, #E67E22) 35%, transparent);
+  color: var(--pk-ink);
+  font-weight: 600;
+}

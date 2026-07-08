@@ -51,6 +51,7 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
       <!-- Status timeline -->
       <section class="pk-card pk-block">
         <h2 class="pk-h3">{t('order.status', locale)}</h2>
+        <p class="pk-order-exception" data-order-exception hidden></p>
         <ol class="pk-timeline" data-order-timeline aria-label={t('order.status', locale)}></ol>
       </section>
 
@@ -195,22 +196,46 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
           : `<span class="pk-badge pk-badge--muted">${esc(status.title)}</span>`;
       }
 
-      // Timeline from the full ordered status set
+      // Clean linear print pipeline (curated) — not the raw 11-status list.
+      // Display labels are decoupled from CRM titles; the current status is
+      // matched by title. Exception states (on-hold / rejected) show as a
+      // banner instead of a timeline step. `statuses` is unused now on purpose.
+      void statuses;
+      const PIPELINE = [
+        { keys: ['new', 'جديد', 'processing', 'confirmed', 'تم استلام الطلب'], ar: 'تم استلام الطلب', en: 'Order received' },
+        { keys: ['مراجعة التصميم'], ar: 'مراجعة التصميم', en: 'Design review' },
+        { keys: ['معتمد'], ar: 'معتمد', en: 'Approved' },
+        { keys: ['قيد الطباعة'], ar: 'قيد الطباعة', en: 'In production' },
+        { keys: ['جاهز للاستلام'], ar: 'جاهز للاستلام', en: 'Ready for pickup' },
+        { keys: ['تم الشحن'], ar: 'تم الشحن', en: 'Shipped' },
+        { keys: ['تم التسليم'], ar: 'تم التسليم', en: 'Delivered' },
+      ];
+      const EXCEPTIONS: Record<string, { ar: string; en: string }> = {
+        'معلق': { ar: 'طلبك معلّق مؤقتاً — سنتواصل معك قريباً.', en: 'Your order is on hold — we will contact you shortly.' },
+        'مرفوض': { ar: 'عذراً، تم رفض هذا الطلب. يرجى التواصل معنا.', en: 'This order was rejected. Please contact us.' },
+      };
+
       const timeline = document.querySelector('[data-order-timeline]') as HTMLElement;
-      const ordered = [...statuses].sort((a, b) => (a.sort || 0) - (b.sort || 0));
-      let currentIdx = ordered.findIndex((s) => String(s.id) === String(status.id));
-      if (currentIdx < 0) currentIdx = 0;
-      if (ordered.length) {
-        ordered.forEach((s, i) => {
+      const exEl = document.querySelector('[data-order-exception]') as HTMLElement;
+      const curTitle = String(status.title || '').trim();
+      const curKey = curTitle.toLowerCase();
+
+      if (EXCEPTIONS[curTitle]) {
+        // Interrupted flow — show a banner, hide the step list.
+        exEl.textContent = EXCEPTIONS[curTitle][locale];
+        exEl.hidden = false;
+        timeline.hidden = true;
+      } else {
+        let currentIdx = PIPELINE.findIndex((step) => step.keys.some((k) => k.toLowerCase() === curKey));
+        if (currentIdx < 0) currentIdx = 0; // unknown/stock → treat as "received"
+        PIPELINE.forEach((step, i) => {
           const state = i < currentIdx ? 'is-done' : i === currentIdx ? 'is-current' : 'is-future';
           const li = document.createElement('li');
           li.className = `pk-timeline__step ${state}`;
           if (i === currentIdx) li.setAttribute('aria-current', 'step');
-          li.innerHTML = `<span class="pk-timeline__dot" aria-hidden="true">${i < currentIdx ? '✓' : i + 1}</span><span class="pk-timeline__label">${esc(s.title)}</span>`;
+          li.innerHTML = `<span class="pk-timeline__dot" aria-hidden="true">${i < currentIdx ? '✓' : i + 1}</span><span class="pk-timeline__label">${esc(step[locale])}</span>`;
           timeline.appendChild(li);
         });
-      } else {
-        (timeline.closest('.pk-block') as HTMLElement).hidden = true;
       }
 
       // Items
