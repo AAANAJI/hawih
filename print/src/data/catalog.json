@@ -1,231 +1,702 @@
 {
   "success": true,
   "categories": [
-    { "id": "cat-stickers", "slug": "stickers", "title": "ملصقات", "title_en": "Stickers", "sort": 1 },
-    { "id": "cat-business-cards", "slug": "business-cards", "title": "كروت الأعمال", "title_en": "Business Cards", "sort": 2 },
-    { "id": "cat-letterhead", "slug": "letterhead", "title": "أوراق رسمية", "title_en": "Letterhead", "sort": 3 },
-    { "id": "cat-boxes", "slug": "boxes", "title": "علب وصناديق", "title_en": "Boxes", "sort": 4 },
-    { "id": "cat-bags", "slug": "bags", "title": "أكياس", "title_en": "Bags", "sort": 5 },
-    { "id": "cat-wrapping", "slug": "wrapping", "title": "ورق تغليف", "title_en": "Wrapping Paper", "sort": 6 },
-    { "id": "cat-occasions", "slug": "occasions", "title": "مطبوعات المناسبات", "title_en": "Occasion Prints", "sort": 7 },
-    { "id": "cat-envelopes", "slug": "envelopes", "title": "أظرف", "title_en": "Envelopes", "sort": 8 }
+    {
+      "id": 2,
+      "slug": "stickers",
+      "title": "ملصقات",
+      "title_en": "Stickers",
+      "sort": 0
+    },
+    {
+      "id": 3,
+      "slug": "business-cards",
+      "title": "كروت الأعمال",
+      "title_en": "Business Cards",
+      "sort": 1
+    },
+    {
+      "id": 4,
+      "slug": "letterhead",
+      "title": "أوراق رسمية",
+      "title_en": "Letterhead",
+      "sort": 2
+    },
+    {
+      "id": 5,
+      "slug": "boxes",
+      "title": "علب وصناديق",
+      "title_en": "Boxes",
+      "sort": 3
+    },
+    {
+      "id": 6,
+      "slug": "bags",
+      "title": "أكياس",
+      "title_en": "Bags",
+      "sort": 4
+    },
+    {
+      "id": 7,
+      "slug": "wrapping",
+      "title": "ورق تغليف",
+      "title_en": "Wrapping Paper",
+      "sort": 5
+    },
+    {
+      "id": 8,
+      "slug": "occasions",
+      "title": "مطبوعات المناسبات",
+      "title_en": "Occasion Prints",
+      "sort": 6
+    },
+    {
+      "id": 9,
+      "slug": "envelopes",
+      "title": "أظرف",
+      "title_en": "Envelopes",
+      "sort": 7
+    }
   ],
   "items": [
     {
-      "id": "item-round-stickers",
-      "slug": "round-stickers",
-      "category_slug": "stickers",
-      "title": "ملصقات دائرية",
-      "title_en": "Round Stickers",
-      "description": "ملصقات دائرية مخصصة بطباعة عالية الوضوح تناسب تغليف المنتجات وهدايا العلامة التجارية. التنفيذ 3-7 أيام عمل، والتوصيل 2-5 أيام داخل المملكة.",
-      "description_en": "Custom round stickers with crisp, high-resolution printing — perfect for product packaging and branded giveaways. Production 3-7 business days, delivery 2-5 days across the Kingdom.",
-      "rate": 49,
-      "currency": "SAR",
-      "unit_type": "الطلب",
-      "unit_type_en": "order",
-      "min_qty": 1,
-      "requires_artwork": true,
-      "images": { "hero": "/img/products/round-stickers/hero.svg", "square": "/img/products/round-stickers/square.svg" },
-      "options": [
-        { "name_ar": "المقاس", "name_en": "Size", "type": "select", "values": ["4سم", "6سم", "8سم"] },
-        { "name_ar": "الخامة", "name_en": "Material", "type": "select", "values": ["لامع", "مطفي", "شفاف"] },
-        { "name_ar": "الكمية", "name_en": "Quantity", "type": "tier", "values": [
-          { "label": "100", "price_delta": 0 },
-          { "label": "250", "price_delta": 35 },
-          { "label": "500", "price_delta": 80 }
-        ] }
-      ]
-    },
-    {
-      "id": "item-matte-business-cards",
-      "slug": "matte-business-cards",
-      "category_slug": "business-cards",
-      "title": "كروت أعمال مطفية",
-      "title_en": "Matte Business Cards",
-      "description": "كروت أعمال بلمسة مطفية أنيقة تمنح علامتك حضوراً راقياً وملمساً مميزاً. التنفيذ 3-7 أيام عمل، والتوصيل 2-5 أيام داخل المملكة.",
-      "description_en": "Business cards with an elegant matte finish that give your brand a refined presence and a distinctive feel. Production 3-7 business days, delivery 2-5 days across the Kingdom.",
-      "rate": 89,
-      "currency": "SAR",
-      "unit_type": "الطلب",
-      "unit_type_en": "order",
-      "min_qty": 1,
-      "requires_artwork": true,
-      "images": { "hero": "/img/products/matte-business-cards/hero.svg", "square": "/img/products/matte-business-cards/square.svg" },
-      "options": [
-        { "name_ar": "الطباعة", "name_en": "Printing", "type": "select", "values": ["وجه واحد", "وجهين"] },
-        { "name_ar": "الخامة", "name_en": "Material", "type": "select", "values": ["300جم", "350جم فاخر"] },
-        { "name_ar": "الكمية", "name_en": "Quantity", "type": "tier", "values": [
-          { "label": "100", "price_delta": 0 },
-          { "label": "250", "price_delta": 40 },
-          { "label": "500", "price_delta": 90 }
-        ] }
-      ]
-    },
-    {
-      "id": "item-velvet-business-cards",
-      "slug": "velvet-business-cards",
-      "category_slug": "business-cards",
-      "title": "كروت أعمال فاخرة (طبقة مخملية)",
-      "title_en": "Velvet Business Cards",
-      "description": "كروت أعمال فاخرة بطبقة مخملية ناعمة وخيار البريق الذهبي لعلامة لا تُنسى. التنفيذ 3-7 أيام عمل، والتوصيل 2-5 أيام داخل المملكة.",
-      "description_en": "Premium business cards with a soft velvet coating and an optional gold foil accent for a brand that stays memorable. Production 3-7 business days, delivery 2-5 days across the Kingdom.",
-      "rate": 149,
-      "currency": "SAR",
-      "unit_type": "الطلب",
-      "unit_type_en": "order",
-      "min_qty": 1,
-      "requires_artwork": true,
-      "images": { "hero": "/img/products/velvet-business-cards/hero.svg", "square": "/img/products/velvet-business-cards/square.svg" },
-      "options": [
-        { "name_ar": "الطباعة", "name_en": "Printing", "type": "select", "values": ["وجه واحد", "وجهين"] },
-        { "name_ar": "التشطيب", "name_en": "Finish", "type": "select", "values": ["مخملي", "بريق ذهبي"] },
-        { "name_ar": "الكمية", "name_en": "Quantity", "type": "tier", "values": [
-          { "label": "100", "price_delta": 0 },
-          { "label": "250", "price_delta": 60 }
-        ] }
-      ]
-    },
-    {
-      "id": "item-letterhead-a4",
-      "slug": "letterhead-a4",
-      "category_slug": "letterhead",
-      "title": "ورق مراسلات رسمي",
-      "title_en": "Letterhead Paper",
-      "description": "أوراق مراسلات رسمية تحمل هوية شركتك بأناقة على خامات ورقية عالية الجودة. التنفيذ 3-7 أيام عمل، والتوصيل 2-5 أيام داخل المملكة.",
-      "description_en": "Official letterhead that carries your company identity elegantly on high-quality paper stock. Production 3-7 business days, delivery 2-5 days across the Kingdom.",
-      "rate": 120,
-      "currency": "SAR",
-      "unit_type": "الطلب",
-      "unit_type_en": "order",
-      "min_qty": 1,
-      "requires_artwork": true,
-      "images": { "hero": "/img/products/letterhead-a4/hero.svg", "square": "/img/products/letterhead-a4/square.svg" },
-      "options": [
-        { "name_ar": "المقاس", "name_en": "Size", "type": "select", "values": ["A4", "A5"] },
-        { "name_ar": "الكمية", "name_en": "Quantity", "type": "tier", "values": [
-          { "label": "100", "price_delta": 0 },
-          { "label": "250", "price_delta": 55 },
-          { "label": "500", "price_delta": 110 }
-        ] }
-      ]
-    },
-    {
-      "id": "item-kraft-boxes",
-      "slug": "kraft-boxes",
-      "category_slug": "boxes",
-      "title": "علب كرافت مخصصة",
-      "title_en": "Custom Kraft Boxes",
-      "description": "علب كرافت مخصصة بمقاسات متعددة وخيار الطلاء الأبيض لتغليف يعكس جودة منتجك. التنفيذ 3-7 أيام عمل، والتوصيل 2-5 أيام داخل المملكة.",
-      "description_en": "Custom kraft boxes in multiple sizes with a white-coated option for packaging that reflects your product's quality. Production 3-7 business days, delivery 2-5 days across the Kingdom.",
-      "rate": 210,
-      "currency": "SAR",
-      "unit_type": "الطلب",
-      "unit_type_en": "order",
-      "min_qty": 1,
-      "requires_artwork": true,
-      "images": { "hero": "/img/products/kraft-boxes/hero.svg", "square": "/img/products/kraft-boxes/square.svg" },
-      "options": [
-        { "name_ar": "المقاس", "name_en": "Size", "type": "select", "values": ["صغير", "وسط", "كبير"] },
-        { "name_ar": "الخامة", "name_en": "Material", "type": "select", "values": ["كرافت", "أبيض مطلي"] },
-        { "name_ar": "الكمية", "name_en": "Quantity", "type": "tier", "values": [
-          { "label": "50", "price_delta": 0 },
-          { "label": "100", "price_delta": 90 }
-        ] }
-      ]
-    },
-    {
-      "id": "item-paper-bags",
-      "slug": "paper-bags",
-      "category_slug": "bags",
-      "title": "أكياس ورقية بمقبض",
-      "title_en": "Handled Paper Bags",
-      "description": "أكياس ورقية متينة بمقبض مريح وطباعة بألوان كاملة ترتقي بتجربة عملائك. التنفيذ 3-7 أيام عمل، والتوصيل 2-5 أيام داخل المملكة.",
-      "description_en": "Sturdy handled paper bags with a comfortable grip and full-color printing that elevates your customers' experience. Production 3-7 business days, delivery 2-5 days across the Kingdom.",
-      "rate": 180,
-      "currency": "SAR",
-      "unit_type": "الطلب",
-      "unit_type_en": "order",
-      "min_qty": 1,
-      "requires_artwork": true,
-      "images": { "hero": "/img/products/paper-bags/hero.svg", "square": "/img/products/paper-bags/square.svg" },
-      "options": [
-        { "name_ar": "المقاس", "name_en": "Size", "type": "select", "values": ["صغير", "وسط", "كبير"] },
-        { "name_ar": "الطباعة", "name_en": "Printing", "type": "select", "values": ["لون واحد", "ألوان كاملة"] },
-        { "name_ar": "الكمية", "name_en": "Quantity", "type": "tier", "values": [
-          { "label": "100", "price_delta": 0 },
-          { "label": "250", "price_delta": 120 }
-        ] }
-      ]
-    },
-    {
-      "id": "item-wrapping-paper",
-      "slug": "wrapping-paper",
-      "category_slug": "wrapping",
-      "title": "ورق تغليف مخصص",
-      "title_en": "Custom Wrapping Paper",
-      "description": "ورق تغليف مخصص بتصميمك الخاص يمنح منتجاتك وهداياك لمسة مميزة. التنفيذ 3-7 أيام عمل، والتوصيل 2-5 أيام داخل المملكة.",
-      "description_en": "Custom wrapping paper printed with your own design to give your products and gifts a distinctive touch. Production 3-7 business days, delivery 2-5 days across the Kingdom.",
-      "rate": 95,
-      "currency": "SAR",
-      "unit_type": "الطلب",
-      "unit_type_en": "order",
-      "min_qty": 1,
-      "requires_artwork": true,
-      "images": { "hero": "/img/products/wrapping-paper/hero.svg", "square": "/img/products/wrapping-paper/square.svg" },
-      "options": [
-        { "name_ar": "المقاس", "name_en": "Size", "type": "select", "values": ["50×70", "70×100"] },
-        { "name_ar": "الكمية", "name_en": "Quantity", "type": "tier", "values": [
-          { "label": "50", "price_delta": 0 },
-          { "label": "100", "price_delta": 70 }
-        ] }
-      ]
-    },
-    {
-      "id": "item-event-invitations",
-      "slug": "event-invitations",
-      "category_slug": "occasions",
-      "title": "دعوات مناسبات",
-      "title_en": "Event Invitations",
-      "description": "دعوات مناسبات أنيقة على خامات كوشيه وفاخرة تليق بأجمل لحظاتك. التنفيذ 3-7 أيام عمل، والتوصيل 2-5 أيام داخل المملكة.",
-      "description_en": "Elegant event invitations on coated and premium stock that suit your most special moments. Production 3-7 business days, delivery 2-5 days across the Kingdom.",
-      "rate": 130,
-      "currency": "SAR",
-      "unit_type": "الطلب",
-      "unit_type_en": "order",
-      "min_qty": 1,
-      "requires_artwork": true,
-      "images": { "hero": "/img/products/event-invitations/hero.svg", "square": "/img/products/event-invitations/square.svg" },
-      "options": [
-        { "name_ar": "الخامة", "name_en": "Material", "type": "select", "values": ["كوشيه", "فاخر"] },
-        { "name_ar": "الطباعة", "name_en": "Printing", "type": "select", "values": ["وجه واحد", "وجهين"] },
-        { "name_ar": "الكمية", "name_en": "Quantity", "type": "tier", "values": [
-          { "label": "50", "price_delta": 0 },
-          { "label": "100", "price_delta": 70 }
-        ] }
-      ]
-    },
-    {
-      "id": "item-printed-envelopes",
+      "id": 12,
       "slug": "printed-envelopes",
       "category_slug": "envelopes",
       "title": "أظرف مطبوعة",
       "title_en": "Printed Envelopes",
-      "description": "أظرف مطبوعة بهوية علامتك بمقاسات DL وA5 تكمل مراسلاتك الرسمية. التنفيذ 3-7 أيام عمل، والتوصيل 2-5 أيام داخل المملكة.",
-      "description_en": "Printed envelopes carrying your brand identity in DL and A5 sizes to complete your official correspondence. Production 3-7 business days, delivery 2-5 days across the Kingdom.",
+      "description": "أظرف مطبوعة بهوية منشأتك للمراسلات الرسمية والدعوات. متوفرة بمقاس DL أو A5 وبطباعة لون واحد أو ألوان كاملة. التنفيذ 3-7 أيام عمل والتوصيل 2-5 أيام.",
+      "description_en": "Envelopes printed with your brand identity for official correspondence and invitations. Available in DL or A5 with one-color or full-color printing. Production in 3-7 business days, delivery in 2-5 days.",
       "rate": 75,
       "currency": "SAR",
       "unit_type": "الطلب",
-      "unit_type_en": "order",
-      "min_qty": 1,
+      "unit_type_en": "الطلب",
       "requires_artwork": true,
-      "images": { "hero": "/img/products/printed-envelopes/hero.svg", "square": "/img/products/printed-envelopes/square.svg" },
+      "images": {
+        "hero": "/img/products/printed-envelopes/hero.svg",
+        "square": "/img/products/printed-envelopes/square.svg"
+      },
       "options": [
-        { "name_ar": "المقاس", "name_en": "Size", "type": "select", "values": ["DL", "A5"] },
-        { "name_ar": "الطباعة", "name_en": "Printing", "type": "select", "values": ["لون واحد", "ألوان كاملة"] },
-        { "name_ar": "الكمية", "name_en": "Quantity", "type": "tier", "values": [
-          { "label": "100", "price_delta": 0 },
-          { "label": "250", "price_delta": 45 }
-        ] }
+        {
+          "name_ar": "المقاس",
+          "name_en": "Size",
+          "type": "select",
+          "values": [
+            {
+              "label_ar": "DL",
+              "label_en": "DL",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "A5",
+              "label_en": "A5",
+              "price_delta": 0
+            }
+          ]
+        },
+        {
+          "name_ar": "الطباعة",
+          "name_en": "Printing",
+          "type": "select",
+          "values": [
+            {
+              "label_ar": "لون واحد",
+              "label_en": "One Color",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "ألوان كاملة",
+              "label_en": "Full Color",
+              "price_delta": 0
+            }
+          ]
+        },
+        {
+          "name_ar": "الكمية",
+          "name_en": "Quantity",
+          "type": "tier",
+          "values": [
+            {
+              "label_ar": "100",
+              "label_en": "100",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "250",
+              "label_en": "250",
+              "price_delta": 45
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "slug": "paper-bags",
+      "category_slug": "bags",
+      "title": "أكياس ورقية بمقبض",
+      "title_en": "Handled Paper Bags",
+      "description": "أكياس ورقية أنيقة بمقبض تحمل شعار متجرك وتترك انطباعاً راقياً لدى العملاء. متوفرة بعدة مقاسات وبطباعة لون واحد أو ألوان كاملة. التنفيذ 3-7 أيام عمل والتوصيل 2-5 أيام.",
+      "description_en": "Elegant handled paper bags carrying your store logo for a premium customer impression. Available in several sizes with one-color or full-color printing. Production in 3-7 business days, delivery in 2-5 days.",
+      "rate": 180,
+      "currency": "SAR",
+      "unit_type": "الطلب",
+      "unit_type_en": "الطلب",
+      "requires_artwork": true,
+      "images": {
+        "hero": "/img/products/paper-bags/hero.svg",
+        "square": "/img/products/paper-bags/square.svg"
+      },
+      "options": [
+        {
+          "name_ar": "المقاس",
+          "name_en": "Size",
+          "type": "select",
+          "values": [
+            {
+              "label_ar": "صغير",
+              "label_en": "Small",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "وسط",
+              "label_en": "Medium",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "كبير",
+              "label_en": "Large",
+              "price_delta": 0
+            }
+          ]
+        },
+        {
+          "name_ar": "الطباعة",
+          "name_en": "Printing",
+          "type": "select",
+          "values": [
+            {
+              "label_ar": "لون واحد",
+              "label_en": "One Color",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "ألوان كاملة",
+              "label_en": "Full Color",
+              "price_delta": 0
+            }
+          ]
+        },
+        {
+          "name_ar": "الكمية",
+          "name_en": "Quantity",
+          "type": "tier",
+          "values": [
+            {
+              "label_ar": "100",
+              "label_en": "100",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "250",
+              "label_en": "250",
+              "price_delta": 120
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "slug": "event-invitations",
+      "category_slug": "occasions",
+      "title": "دعوات مناسبات",
+      "title_en": "Event Invitations",
+      "description": "دعوات مطبوعة بتصاميم راقية لمناسباتك من أعراس ومؤتمرات وحفلات. متوفرة على ورق كوشيه أو فاخر وبطباعة وجه واحد أو وجهين. التنفيذ 3-7 أيام عمل والتوصيل 2-5 أيام.",
+      "description_en": "Elegantly printed invitations for weddings, conferences, and celebrations. Available on coated or premium stock, single- or double-sided. Production in 3-7 business days, delivery in 2-5 days.",
+      "rate": 130,
+      "currency": "SAR",
+      "unit_type": "الطلب",
+      "unit_type_en": "الطلب",
+      "requires_artwork": true,
+      "images": {
+        "hero": "/img/products/event-invitations/hero.svg",
+        "square": "/img/products/event-invitations/square.svg"
+      },
+      "options": [
+        {
+          "name_ar": "الخامة",
+          "name_en": "Material",
+          "type": "select",
+          "values": [
+            {
+              "label_ar": "كوشيه",
+              "label_en": "Coated",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "فاخر",
+              "label_en": "Premium",
+              "price_delta": 0
+            }
+          ]
+        },
+        {
+          "name_ar": "الطباعة",
+          "name_en": "Printing",
+          "type": "select",
+          "values": [
+            {
+              "label_ar": "وجه واحد",
+              "label_en": "Single-sided",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "وجهين",
+              "label_en": "Double-sided",
+              "price_delta": 0
+            }
+          ]
+        },
+        {
+          "name_ar": "الكمية",
+          "name_en": "Quantity",
+          "type": "tier",
+          "values": [
+            {
+              "label_ar": "50",
+              "label_en": "50",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "100",
+              "label_en": "100",
+              "price_delta": 70
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "slug": "kraft-boxes",
+      "category_slug": "boxes",
+      "title": "علب كرافت مخصصة",
+      "title_en": "Custom Kraft Boxes",
+      "description": "علب كرافت متينة قابلة للتخصيص تناسب تغليف منتجاتك وطلبات المتاجر الإلكترونية. متوفرة بخامة كرافت طبيعية أو بيضاء مطلية وبعدة مقاسات. التنفيذ 3-7 أيام عمل والتوصيل 2-5 أيام.",
+      "description_en": "Sturdy customizable kraft boxes for product packaging and e-commerce orders. Choose natural kraft or coated white in several sizes. Production in 3-7 business days, delivery in 2-5 days.",
+      "rate": 210,
+      "currency": "SAR",
+      "unit_type": "الطلب",
+      "unit_type_en": "الطلب",
+      "requires_artwork": true,
+      "images": {
+        "hero": "/img/products/kraft-boxes/hero.svg",
+        "square": "/img/products/kraft-boxes/square.svg"
+      },
+      "options": [
+        {
+          "name_ar": "المقاس",
+          "name_en": "Size",
+          "type": "select",
+          "values": [
+            {
+              "label_ar": "صغير",
+              "label_en": "Small",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "وسط",
+              "label_en": "Medium",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "كبير",
+              "label_en": "Large",
+              "price_delta": 0
+            }
+          ]
+        },
+        {
+          "name_ar": "الخامة",
+          "name_en": "Material",
+          "type": "select",
+          "values": [
+            {
+              "label_ar": "كرافت",
+              "label_en": "Kraft",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "أبيض مطلي",
+              "label_en": "Coated White",
+              "price_delta": 0
+            }
+          ]
+        },
+        {
+          "name_ar": "الكمية",
+          "name_en": "Quantity",
+          "type": "tier",
+          "values": [
+            {
+              "label_ar": "50",
+              "label_en": "50",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "100",
+              "label_en": "100",
+              "price_delta": 90
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "slug": "velvet-business-cards",
+      "category_slug": "business-cards",
+      "title": "كروت أعمال فاخرة (طبقة مخملية)",
+      "title_en": "Velvet Business Cards",
+      "description": "كروت أعمال بطبقة مخملية ناعمة الملمس تعطي انطباعاً فاخراً لا يُنسى، مع خيار بريق ذهبي للتفاصيل. مثالية للعلامات التي تريد التميّز. التنفيذ 3-7 أيام عمل والتوصيل 2-5 أيام.",
+      "description_en": "Business cards wrapped in a soft velvet-touch laminate for an unforgettable premium feel, with an optional gold foil accent. Perfect for brands that want to stand out. Production in 3-7 business days, delivery in 2-5 days.",
+      "rate": 149,
+      "currency": "SAR",
+      "unit_type": "الطلب",
+      "unit_type_en": "الطلب",
+      "requires_artwork": true,
+      "images": {
+        "hero": "/img/products/velvet-business-cards/hero.svg",
+        "square": "/img/products/velvet-business-cards/square.svg"
+      },
+      "options": [
+        {
+          "name_ar": "الطباعة",
+          "name_en": "Printing",
+          "type": "select",
+          "values": [
+            {
+              "label_ar": "وجه واحد",
+              "label_en": "Single-sided",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "وجهين",
+              "label_en": "Double-sided",
+              "price_delta": 0
+            }
+          ]
+        },
+        {
+          "name_ar": "التشطيب",
+          "name_en": "Finish",
+          "type": "select",
+          "values": [
+            {
+              "label_ar": "مخملي",
+              "label_en": "Velvet",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "بريق ذهبي",
+              "label_en": "Gold Foil",
+              "price_delta": 0
+            }
+          ]
+        },
+        {
+          "name_ar": "الكمية",
+          "name_en": "Quantity",
+          "type": "tier",
+          "values": [
+            {
+              "label_ar": "100",
+              "label_en": "100",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "250",
+              "label_en": "250",
+              "price_delta": 60
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "slug": "matte-business-cards",
+      "category_slug": "business-cards",
+      "title": "كروت أعمال مطفية",
+      "title_en": "Matte Business Cards",
+      "description": "كروت أعمال بتشطيب مطفي أنيق يمنح ملمساً راقياً ويقلل الانعكاس. متوفرة بوجه واحد أو وجهين على ورق مقوى 300 أو 350 جرام. التنفيذ 3-7 أيام عمل والتوصيل 2-5 أيام.",
+      "description_en": "Business cards with an elegant matte finish that feels premium and cuts glare. Single- or double-sided on 300gsm or luxe 350gsm stock. Production in 3-7 business days, delivery in 2-5 days.",
+      "rate": 89,
+      "currency": "SAR",
+      "unit_type": "الطلب",
+      "unit_type_en": "الطلب",
+      "requires_artwork": true,
+      "images": {
+        "hero": "/img/products/matte-business-cards/hero.svg",
+        "square": "/img/products/matte-business-cards/square.svg"
+      },
+      "options": [
+        {
+          "name_ar": "الطباعة",
+          "name_en": "Printing",
+          "type": "select",
+          "values": [
+            {
+              "label_ar": "وجه واحد",
+              "label_en": "Single-sided",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "وجهين",
+              "label_en": "Double-sided",
+              "price_delta": 0
+            }
+          ]
+        },
+        {
+          "name_ar": "الخامة",
+          "name_en": "Material",
+          "type": "select",
+          "values": [
+            {
+              "label_ar": "300 جم",
+              "label_en": "300gsm",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "350 جم فاخر",
+              "label_en": "350gsm Premium",
+              "price_delta": 0
+            }
+          ]
+        },
+        {
+          "name_ar": "الكمية",
+          "name_en": "Quantity",
+          "type": "tier",
+          "values": [
+            {
+              "label_ar": "100",
+              "label_en": "100",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "250",
+              "label_en": "250",
+              "price_delta": 40
+            },
+            {
+              "label_ar": "500",
+              "label_en": "500",
+              "price_delta": 90
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "slug": "round-stickers",
+      "category_slug": "stickers",
+      "title": "ملصقات دائرية",
+      "title_en": "Round Stickers",
+      "description": "ملصقات دائرية مقصوصة بدقة تناسب تغليف المنتجات وإغلاق العلب وهوية متجرك. اطبعها بألوان زاهية على خامة لامعة أو مطفية أو شفافة. التنفيذ 3-7 أيام عمل والتوصيل 2-5 أيام.",
+      "description_en": "Precision die-cut round stickers ideal for product packaging, box seals, and brand touches. Vivid print on glossy, matte, or clear stock. Production in 3-7 business days, delivery in 2-5 days.",
+      "rate": 49,
+      "currency": "SAR",
+      "unit_type": "الطلب",
+      "unit_type_en": "الطلب",
+      "requires_artwork": true,
+      "images": {
+        "hero": "/img/products/round-stickers/hero.svg",
+        "square": "/img/products/round-stickers/square.svg"
+      },
+      "options": [
+        {
+          "name_ar": "المقاس",
+          "name_en": "Size",
+          "type": "select",
+          "values": [
+            {
+              "label_ar": "4 سم",
+              "label_en": "4 cm",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "6 سم",
+              "label_en": "6 cm",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "8 سم",
+              "label_en": "8 cm",
+              "price_delta": 0
+            }
+          ]
+        },
+        {
+          "name_ar": "الخامة",
+          "name_en": "Material",
+          "type": "select",
+          "values": [
+            {
+              "label_ar": "لامع",
+              "label_en": "Glossy",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "مطفي",
+              "label_en": "Matte",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "شفاف",
+              "label_en": "Clear",
+              "price_delta": 0
+            }
+          ]
+        },
+        {
+          "name_ar": "الكمية",
+          "name_en": "Quantity",
+          "type": "tier",
+          "values": [
+            {
+              "label_ar": "100",
+              "label_en": "100",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "250",
+              "label_en": "250",
+              "price_delta": 35
+            },
+            {
+              "label_ar": "500",
+              "label_en": "500",
+              "price_delta": 80
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "slug": "wrapping-paper",
+      "category_slug": "wrapping",
+      "title": "ورق تغليف مخصص",
+      "title_en": "Custom Wrapping Paper",
+      "description": "ورق تغليف مطبوع بنقشتك أو شعارك يضيف لمسة مميزة لهدايا متجرك ومناسباتك. متوفر بمقاسات 50×70 و70×100. التنفيذ 3-7 أيام عمل والتوصيل 2-5 أيام.",
+      "description_en": "Custom-printed wrapping paper with your pattern or logo to elevate store gifts and events. Available in 50×70 and 70×100 sheets. Production in 3-7 business days, delivery in 2-5 days.",
+      "rate": 95,
+      "currency": "SAR",
+      "unit_type": "الطلب",
+      "unit_type_en": "الطلب",
+      "requires_artwork": true,
+      "images": {
+        "hero": "/img/products/wrapping-paper/hero.svg",
+        "square": "/img/products/wrapping-paper/square.svg"
+      },
+      "options": [
+        {
+          "name_ar": "المقاس",
+          "name_en": "Size",
+          "type": "select",
+          "values": [
+            {
+              "label_ar": "50×70",
+              "label_en": "50×70",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "70×100",
+              "label_en": "70×100",
+              "price_delta": 0
+            }
+          ]
+        },
+        {
+          "name_ar": "الكمية",
+          "name_en": "Quantity",
+          "type": "tier",
+          "values": [
+            {
+              "label_ar": "50",
+              "label_en": "50",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "100",
+              "label_en": "100",
+              "price_delta": 70
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "slug": "letterhead-a4",
+      "category_slug": "letterhead",
+      "title": "ورق مراسلات رسمي",
+      "title_en": "Letterhead Paper",
+      "description": "أوراق مراسلات رسمية تحمل هوية منشأتك للعقود والخطابات والفواتير. طباعة نظيفة على ورق فاخر بمقاس A4 أو A5. التنفيذ 3-7 أيام عمل والتوصيل 2-5 أيام.",
+      "description_en": "Official letterhead carrying your brand identity for contracts, letters, and invoices. Clean print on premium stock in A4 or A5. Production in 3-7 business days, delivery in 2-5 days.",
+      "rate": 1200,
+      "currency": "SAR",
+      "unit_type": "الطلب",
+      "unit_type_en": "الطلب",
+      "requires_artwork": true,
+      "images": {
+        "hero": "/img/products/letterhead-a4/hero.svg",
+        "square": "/img/products/letterhead-a4/square.svg"
+      },
+      "options": [
+        {
+          "name_ar": "المقاس",
+          "name_en": "Size",
+          "type": "select",
+          "values": [
+            {
+              "label_ar": "A4",
+              "label_en": "A4",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "A5",
+              "label_en": "A5",
+              "price_delta": 0
+            }
+          ]
+        },
+        {
+          "name_ar": "الكمية",
+          "name_en": "Quantity",
+          "type": "tier",
+          "values": [
+            {
+              "label_ar": "100",
+              "label_en": "100",
+              "price_delta": 0
+            },
+            {
+              "label_ar": "250",
+              "label_en": "250",
+              "price_delta": 55
+            },
+            {
+              "label_ar": "500",
+              "label_en": "500",
+              "price_delta": 110
+            }
+          ]
+        }
       ]
     }
   ]

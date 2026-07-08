@@ -6,15 +6,16 @@
 import raw from '../data/catalog.json';
 import type { Locale } from './format';
 
-export interface OptionValueTier {
-  label: string;
+export interface OptionValue {
+  label_ar: string;
+  label_en: string;
   price_delta: number;
 }
 export interface CatalogOption {
   name_ar: string;
   name_en: string;
   type: 'select' | 'tier';
-  values: string[] | OptionValueTier[];
+  values: OptionValue[];
 }
 export interface CatalogCategory {
   id: string;
@@ -79,5 +80,9 @@ export function itemDescription(i: CatalogItem, locale: Locale): string {
   return locale === 'ar' ? i.description : i.description_en;
 }
 export function optionName(o: CatalogOption, locale: Locale): string {
-  return locale === 'ar' ? o.name_ar : o.name_en;
+  return locale === 'ar' ? o.name_ar || o.name_en : o.name_en || o.name_ar;
+}
+/** Localized label for an option value (falls back across locales). */
+export function valueLabel(v: OptionValue, locale: Locale): string {
+  return locale === 'ar' ? v.label_ar || v.label_en : v.label_en || v.label_ar;
 }

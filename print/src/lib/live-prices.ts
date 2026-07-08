@@ -15,15 +15,17 @@
 import { API_BASE } from './config';
 import { formatSAR, type Locale } from './format';
 
-export interface LiveOptionValueTier {
-  label: string;
+export interface LiveOptionValue {
+  label?: string;
+  label_ar?: string;
+  label_en?: string;
   price_delta: number;
 }
 export interface LiveOption {
   name_ar: string;
   name_en?: string;
   type: string;
-  values: Array<string | LiveOptionValueTier>;
+  values: Array<string | LiveOptionValue>;
 }
 export interface LiveItem {
   id: number | string;

@@ -52,12 +52,13 @@ const crumbs = [
   { label: title },
 ];
 
+const absImg = (p: string | undefined) => (!p ? '' : p.startsWith('http') ? p : SITE_URL + p);
 const productLd = {
   '@context': 'https://schema.org',
   '@type': 'Product',
   name: title,
   description: desc,
-  image: SITE_URL + (item.images?.hero ?? ''),
+  image: absImg(item.images?.hero),
   category: catTitle,
   brand: { '@id': HAWIH_ORG_ID },
   offers: {
@@ -235,9 +236,11 @@ const breadcrumbLd = {
             const lo = live.options!.find((o) => o.name_ar === nameAr);
             if (!lo || !Array.isArray(lo.values)) return;
             g.querySelectorAll<HTMLInputElement>('input[type=radio]').forEach((inp) => {
-              const lv = lo.values.find(
-                (v) => (typeof v === 'object' ? v.label : v) === inp.value,
-              );
+              const lv = lo.values.find((v) => {
+                if (typeof v === 'string') return v === inp.value;
+                const la = v.label_ar != null ? v.label_ar : v.label;
+                return la === inp.value;
+              });
               if (lv && typeof lv === 'object' && typeof lv.price_delta === 'number') {
                 inp.dataset.delta = String(lv.price_delta);
                 const deltaSpan = inp.parentElement?.querySelector('.pk-pill__delta');
