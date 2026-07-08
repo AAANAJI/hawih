@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="900" viewBox="0 0 1200 900" role="img" aria-label="أكياس">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#F4F1EB"/>
+      <stop offset="1" stop-color="#E9E4D7"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="900" fill="url(#bg)"/>
+  <g>
+    <circle cx="910" cy="336" r="331" fill="#1F1FFE" opacity="0.10"/>
+    <circle cx="910" cy="336" r="205" fill="none" stroke="#1F1FFE" stroke-width="2" opacity="0.5"/>
+    <rect x="96" y="149" width="380" height="6" rx="3" fill="#1F1FFE" opacity="0.50"/>
+    <rect x="96" y="208" width="348" height="6" rx="3" fill="#1F1FFE" opacity="0.38"/>
+    <rect x="96" y="261" width="281" height="6" rx="3" fill="#1F1FFE" opacity="0.26"/>
+    <rect x="177" y="577" width="162" height="162" rx="10" fill="none" stroke="#0B0B10" stroke-width="2" opacity="0.14" transform="rotate(12 258 658)"/>
+  </g>
+  <g font-family="'IBM Plex Sans Arabic','Inter',sans-serif">
+    <text x="96" y="450" font-size="27" font-weight="600" fill="#1F1FFE" letter-spacing="0.04em">مطبعة هوية</text>
+    <text x="96" y="522" font-size="68" font-weight="700" fill="#0B0B10">أكياس</text>
+  </g>
+  <rect x="0" y="890" width="1200" height="10" fill="#1F1FFE"/>
+</svg>

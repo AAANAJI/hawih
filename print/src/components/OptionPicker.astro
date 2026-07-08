@@ -1,0 +1,79 @@
+---
+/**
+ * OptionPicker — renders every option group of a product.
+ *   type 'select' -> segmented pill radios (accessible radiogroup)
+ *   type 'tier'   -> quantity-tier pills showing label + price delta
+ *
+ * Each group is a fieldset[role=radiogroup] with data attributes the product
+ * script reads to compute price and build the cart line:
+ *   fieldset[data-option-name][data-option-type]
+ *   input[type=radio][data-delta] (delta = price_delta for tiers, 0 for selects)
+ * The picker itself renders no script — the product page owns the listener
+ * (see product/[slug].astro) so it can drive PriceBox + add-to-cart together.
+ *
+ * Props:
+ *   options: CatalogOption[]
+ *   locale: 'ar' | 'en'
+ *   name?: string   -> radio group name prefix (default 'opt')
+ */
+import { optionName, type CatalogOption, type OptionValueTier } from '@lib/catalog';
+import type { Locale } from '@lib/format';
+import { formatNumber } from '@lib/format';
+
+interface Props { options: CatalogOption[]; locale: Locale; name?: string }
+const { options, locale, name = 'opt' } = Astro.props;
+
+function isTier(o: CatalogOption): o is CatalogOption & { values: OptionValueTier[] } {
+  return o.type === 'tier';
+}
+const deltaLabel = (d: number) =>
+  d === 0 ? '' : `+${formatNumber(d, locale)}`;
+---
+<div class="pk-optpicker">
+  {options.map((o, gi) => {
+    const label = optionName(o, locale);
+    const groupName = `${name}-${gi}`;
+    return (
+      <fieldset
+        class="pk-optgroup"
+        role="radiogroup"
+        aria-label={label}
+        data-option-name={locale === 'ar' ? o.name_ar : o.name_en}
+        data-option-name-ar={o.name_ar}
+        data-option-type={o.type}
+      >
+        <legend class="pk-optgroup__label">{label}</legend>
+        <div class="pk-optgroup__pills">
+          {isTier(o)
+            ? o.values.map((v, vi) => (
+                <label class="pk-pill">
+                  <input
+                    type="radio"
+                    name={groupName}
+                    value={v.label}
+                    data-delta={v.price_delta}
+                    checked={vi === 0}
+                  />
+                  <span>{v.label}</span>
+                  {v.price_delta > 0 && (
+                    <span class="pk-pill__delta">{deltaLabel(v.price_delta)}</span>
+                  )}
+                </label>
+              ))
+            : (o.values as string[]).map((v, vi) => (
+                <label class="pk-pill">
+                  <input
+                    type="radio"
+                    name={groupName}
+                    value={v}
+                    data-delta="0"
+                    checked={vi === 0}
+                  />
+                  <span>{v}</span>
+                </label>
+              ))}
+        </div>
+      </fieldset>
+    );
+  })}
+</div>

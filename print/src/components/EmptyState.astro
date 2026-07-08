@@ -1,0 +1,18 @@
+---
+/**
+ * EmptyState — centered empty/placeholder message.
+ * Props:
+ *   icon?: string     -> emoji or short glyph (default 📦)
+ *   title: string
+ *   body?: string
+ * Slot: optional action (e.g. a Button).
+ */
+interface Props { icon?: string; title: string; body?: string }
+const { icon = '📦', title, body } = Astro.props;
+---
+<div class="pk-empty">
+  <div class="pk-empty__icon" aria-hidden="true">{icon}</div>
+  <h2 class="pk-h2">{title}</h2>
+  {body && <p>{body}</p>}
+  <slot />
+</div>

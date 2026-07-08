@@ -1,0 +1,107 @@
+---
+/**
+ * Terms & Conditions — /policies/terms and /en/policies/terms.
+ * Real, sensible copy for a Saudi print shop. Indexed (public).
+ */
+import Base from '@layouts/Base.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import { localeStaticPaths, href } from '@lib/i18n';
+import { t } from '@lib/strings';
+import type { Locale } from '@lib/format';
+
+export const getStaticPaths = localeStaticPaths;
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+const title = t('footer.terms', locale);
+const crumbs = [
+  { label: t('nav.home', locale), href: href(locale, '/') },
+  { label: title },
+];
+---
+<Base
+  locale={locale}
+  title={`${title} — ${t('brand.name', locale)}`}
+  description={locale === 'ar'
+    ? 'الشروط والأحكام لاستخدام متجر مطبعة هوية وتنفيذ الطلبات والدفع.'
+    : 'Terms & conditions for using the Hawih Print store, orders and payment.'}
+  path="/policies/terms"
+>
+  <div class="pk-container">
+    <Breadcrumbs items={crumbs} />
+    <div class="pk-pagehead"><h1 class="pk-h1">{title}</h1></div>
+    <div class="pk-prose">
+      <p class="pk-prose__updated">{t('policy.updated', locale)}</p>
+      {locale === 'ar' ? (
+        <>
+          <p>باستخدامك متجر مطبعة هوية وإتمام طلب، فإنك توافق على الشروط والأحكام التالية. يُرجى قراءتها بعناية قبل تأكيد طلبك.</p>
+
+          <h2>الطلبات والتأكيد</h2>
+          <ul>
+            <li>يُعدّ الطلب مبدئياً حتى نراجع ملفات التصميم ونتواصل معك لتأكيد المواصفات والكمية والسعر النهائي.</li>
+            <li>نحتفظ بحق رفض أو تعديل أي طلب يحتوي على محتوى مخالف للأنظمة أو حقوق الملكية الفكرية.</li>
+          </ul>
+
+          <h2>الأسعار والفوترة</h2>
+          <ul>
+            <li>الأسعار المعروضة تبدأ من الحد الأدنى وتُحتسب النهائية حسب المواصفات والكمية المختارة.</li>
+            <li>تُضاف ضريبة القيمة المضافة (15%) وتُصدر لك <strong>فاتورة ضريبية</strong> نظامية متوافقة مع متطلبات هيئة الزكاة والضريبة والجمارك (ZATCA).</li>
+          </ul>
+
+          <h2>الدفع</h2>
+          <p>يتم الدفع عبر <strong>التحويل البنكي</strong> بعد إصدار الفاتورة الضريبية. يبدأ تنفيذ الطلب بعد تأكيد استلام المبلغ. يُرجى إرسال إيصال التحويل عبر واتساب.</p>
+
+          <h2>ملفات التصميم ومسؤولية العميل</h2>
+          <ul>
+            <li>يتحمّل العميل مسؤولية دقة ملفات التصميم (الألوان، النصوص، القياسات، جودة الملف).</li>
+            <li>يُنصح بإرسال الملفات بصيغة PDF عالية الدقة أو صور بدقة لا تقل عن 300 نقطة/بوصة.</li>
+            <li>لا تتحمّل المطبعة أخطاءً ناتجة عن ملفات غير صحيحة اعتُمدت من العميل.</li>
+          </ul>
+
+          <h2>مدة التنفيذ</h2>
+          <p>مدة التنفيذ المعتادة من <strong>3 إلى 7 أيام عمل</strong> بعد اعتماد التصميم والدفع، وقد تختلف حسب نوع المنتج والكمية. نبلغك بأي تغيّر في المدة.</p>
+
+          <h2>الملكية الفكرية</h2>
+          <p>يقرّ العميل بامتلاكه حقوق استخدام التصاميم والشعارات المرسلة. تبقى جميع حقوق علامة هوية التجارية ومحتوى الموقع مملوكة لمطبعة هوية.</p>
+
+          <h2>حدود المسؤولية</h2>
+          <p>تقتصر مسؤولية المطبعة على قيمة الطلب المتأثر. لا نتحمّل أي أضرار غير مباشرة ناتجة عن تأخير التوصيل من قِبل شركات الشحن.</p>
+        </>
+      ) : (
+        <>
+          <p>By using the Hawih Print store and placing an order, you agree to the following terms and conditions. Please read them carefully before confirming your order.</p>
+
+          <h2>Orders & confirmation</h2>
+          <ul>
+            <li>An order is provisional until we review your artwork and contact you to confirm specifications, quantity and the final price.</li>
+            <li>We reserve the right to decline or amend any order that contains content violating regulations or intellectual-property rights.</li>
+          </ul>
+
+          <h2>Pricing & invoicing</h2>
+          <ul>
+            <li>Displayed prices are "starting from" and are finalised based on the specifications and quantity you choose.</li>
+            <li>VAT (15%) is added and a compliant <strong>tax invoice</strong> is issued in line with ZATCA (Zakat, Tax and Customs Authority) requirements.</li>
+          </ul>
+
+          <h2>Payment</h2>
+          <p>Payment is by <strong>bank transfer</strong> after the tax invoice is issued. Production starts once payment is confirmed. Please send the transfer receipt on WhatsApp.</p>
+
+          <h2>Artwork & customer responsibility</h2>
+          <ul>
+            <li>The customer is responsible for the accuracy of artwork (colours, text, dimensions, file quality).</li>
+            <li>We recommend sending high-resolution PDF files or images at no less than 300 DPI.</li>
+            <li>We are not liable for errors resulting from incorrect files approved by the customer.</li>
+          </ul>
+
+          <h2>Turnaround</h2>
+          <p>Typical turnaround is <strong>3 to 7 business days</strong> after artwork approval and payment, and may vary by product and quantity. We notify you of any change.</p>
+
+          <h2>Intellectual property</h2>
+          <p>The customer confirms they hold the rights to use submitted designs and logos. All rights to the Hawih brand and site content remain owned by Hawih Print.</p>
+
+          <h2>Limitation of liability</h2>
+          <p>Our liability is limited to the value of the affected order. We are not liable for indirect damages arising from delivery delays by shipping carriers.</p>
+        </>
+      )}
+    </div>
+  </div>
+</Base>

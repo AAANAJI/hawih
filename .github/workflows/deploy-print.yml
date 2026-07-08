@@ -1,0 +1,145 @@
+name: Deploy print store
+
+# Builds the Astro store under print/ and deploys the static output
+# (print/dist/) to its OWN docroot (PRINT_DOCROOT, e.g. /var/www/print-hawih)
+# on the production server. Runs on a GitHub-hosted runner, which CAN reach
+# the server over SSH (port 22) — unlike the Claude Code sandbox.
+#
+# Completely separate from the main-site deploy (deploy.yml): different docroot,
+# different trigger path (print/**). A safety gate refuses to write to the main
+# site (/var/www/hawih-site), the CRM docroot (/var/www/hawih), or anything that
+# looks like a CodeIgniter app.
+#
+# Required repo secrets (Settings -> Secrets and variables -> Actions):
+#   SSH_HOST        108.61.89.48
+#   SSH_USER        root
+#   SSH_PASSWORD    server password
+#   PRINT_DOCROOT   /var/www/print-hawih
+#   SSH_PORT        optional, defaults to 22
+#
+# One-time server prerequisites (see print/PLAN.md §Phase 6): create the docroot,
+# add the print.hawih.com.sa nginx vhost, and issue the TLS cert with certbot.
+
+on:
+  push:
+    branches: [ main, "claude/print-hawih-store-plan-557i68" ]
+    paths: [ "print/**" ]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-print
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: .
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Gate on secrets
+        id: gate
+        env:
+          HOST: ${{ secrets.SSH_HOST }}
+          DOCROOT: ${{ secrets.PRINT_DOCROOT }}
+        run: |
+          if [ -z "$HOST" ] || [ -z "$DOCROOT" ]; then
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::notice::Print-store deploy secrets not set yet — skipping. Add SSH_HOST, SSH_USER, SSH_PASSWORD, PRINT_DOCROOT (Settings → Secrets and variables → Actions), then re-run."
+          else
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Setup Node
+        if: steps.gate.outputs.configured == 'true'
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Build the store (catalog refresh + astro build)
+        if: steps.gate.outputs.configured == 'true'
+        working-directory: print
+        run: |
+          npm ci
+          # `npm run build` = `node scripts/build-catalog.mjs && astro build`.
+          # build-catalog fetches the live CRM catalog and falls back to the
+          # committed snapshot on any failure (never fails the build).
+          npm run build
+          test -f dist/index.html || { echo "::error::dist/index.html missing after build"; exit 1; }
+          echo "Built $(find dist -name '*.html' | wc -l) pages."
+
+      - name: Install deploy tools
+        if: steps.gate.outputs.configured == 'true'
+        run: sudo apt-get update -qq && sudo apt-get install -y -qq sshpass rsync
+
+      - name: Safety gate + backup (remote)
+        if: steps.gate.outputs.configured == 'true'
+        env:
+          SSHPASS: ${{ secrets.SSH_PASSWORD }}
+          HOST: ${{ secrets.SSH_HOST }}
+          USER: ${{ secrets.SSH_USER }}
+          PORT: ${{ secrets.SSH_PORT }}
+          DOCROOT: ${{ secrets.PRINT_DOCROOT }}
+        run: |
+          PORT="${PORT:-22}"
+          SSH="sshpass -e ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=25 -p $PORT $USER@$HOST"
+          # Never deploy the store over the main site or the CRM.
+          case "$DOCROOT" in
+            /var/www/hawih|/var/www/hawih-site|/|/var/www|/var/www/)
+              echo "::error::PRINT_DOCROOT='$DOCROOT' is not allowed (main site / CRM / root). Aborting."; exit 1;;
+          esac
+          # Refuse if the target looks like a CodeIgniter app (the CRM).
+          if $SSH "test -d '$DOCROOT/application' || test -f '$DOCROOT/system/core/CodeIgniter.php'"; then
+            echo "::error::PRINT_DOCROOT='$DOCROOT' looks like a CodeIgniter app (the CRM). Aborting — nothing changed."
+            exit 1
+          fi
+          # Ensure the docroot exists (first deploy: create it; empty is fine).
+          $SSH "mkdir -p '$DOCROOT'"
+          # Backup only if the docroot already has content. Keep newest 3.
+          $SSH "if [ -n \"\$(ls -A '$DOCROOT' 2>/dev/null)\" ]; then \
+                  ls -1t /root/print-hawih-backup-*.tgz 2>/dev/null | tail -n +3 | xargs -r rm -f; \
+                  tar czf /root/print-hawih-backup-\$(date +%F-%H%M%S).tgz -C '$DOCROOT' . ; rc=\$?; \
+                  if [ \$rc -gt 1 ]; then echo \"backup tar failed rc=\$rc\"; exit \$rc; fi; \
+                  echo 'backup created'; \
+                else echo 'empty docroot — first deploy, no backup'; fi"
+
+      - name: Deploy (rsync print/dist/ — main site & CRM untouched)
+        if: steps.gate.outputs.configured == 'true'
+        env:
+          SSHPASS: ${{ secrets.SSH_PASSWORD }}
+          HOST: ${{ secrets.SSH_HOST }}
+          USER: ${{ secrets.SSH_USER }}
+          PORT: ${{ secrets.SSH_PORT }}
+          DOCROOT: ${{ secrets.PRINT_DOCROOT }}
+        run: |
+          PORT="${PORT:-22}"
+          rsync -az --delete \
+            -e "sshpass -e ssh -o StrictHostKeyChecking=accept-new -p $PORT" \
+            ./print/dist/ "$USER@$HOST:$DOCROOT/"
+
+      - name: Post-deploy (perms, nginx reload)
+        if: steps.gate.outputs.configured == 'true'
+        env:
+          SSHPASS: ${{ secrets.SSH_PASSWORD }}
+          HOST: ${{ secrets.SSH_HOST }}
+          USER: ${{ secrets.SSH_USER }}
+          PORT: ${{ secrets.SSH_PORT }}
+          DOCROOT: ${{ secrets.PRINT_DOCROOT }}
+        run: |
+          PORT="${PORT:-22}"
+          sshpass -e ssh -o StrictHostKeyChecking=accept-new -o ConnectTimeout=25 -p "$PORT" "$USER@$HOST" bash -s <<EOF
+          set -e
+          chown -R www-data:www-data "$DOCROOT"
+          find "$DOCROOT" -type f -exec chmod 644 {} \;
+          find "$DOCROOT" -type d -exec chmod 755 {} \;
+          nginx -t && systemctl reload nginx
+          EOF
+
+      - name: Verify
+        if: steps.gate.outputs.configured == 'true'
+        run: |
+          code=$(curl -sS -o /dev/null -w '%{http_code}' --max-time 20 https://print.hawih.com.sa/ || true)
+          echo "https://print.hawih.com.sa/ -> $code"
+          [ "$code" = "200" ] || echo "::warning::Store home returned $code — check DNS/vhost/cert (print/PLAN.md §Phase 6)."

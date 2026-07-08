@@ -1,0 +1,40 @@
+---
+/**
+ * 404 — Arabic default (served at /404.html by static hosts).
+ */
+import Base from '@layouts/Base.astro';
+import Button from '@components/Button.astro';
+import { t } from '@lib/strings';
+import { href } from '@lib/i18n';
+import { categories, categoryTitle } from '@lib/catalog';
+
+const locale = 'ar' as const;
+const quickCats = categories.slice(0, 6);
+---
+<Base
+  locale={locale}
+  title={`${t('notFound.title', locale)} — ${t('brand.name', locale)}`}
+  description={t('notFound.body', locale)}
+  path="/404"
+  noindex={true}
+>
+  <div class="pk-container">
+    <div class="pk-wip">
+      <h1 class="pk-display" style="color:var(--pk-accent)">404</h1>
+      <h2 class="pk-h2">{t('notFound.title', locale)}</h2>
+      <p class="pk-muted" style="max-width:48ch">{t('notFound.body', locale)}</p>
+      <div class="pk-thanks__actions">
+        <Button href={href(locale, '/')}>{t('common.backHome', locale)}</Button>
+        <Button href={href(locale, '/account')} variant="outline">{t('nav.track', locale)}</Button>
+      </div>
+      <div style="margin-top:var(--sp-6)">
+        <p class="pk-eyebrow" style="margin-bottom:var(--sp-3)">{t('notFound.browse', locale)}</p>
+        <div class="pk-optgroup__pills" style="justify-content:center">
+          {quickCats.map((c) => (
+            <a class="pk-pill" href={href(locale, `/category/${c.slug}`)}>{categoryTitle(c, locale)}</a>
+          ))}
+        </div>
+      </div>
+    </div>
+  </div>
+</Base>

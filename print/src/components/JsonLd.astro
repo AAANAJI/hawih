@@ -1,0 +1,15 @@
+---
+/**
+ * JsonLd — renders a <script type="application/ld+json"> block.
+ * Props:
+ *   data: object | object[]   -> the structured-data graph.
+ * Emits raw JSON (set:html). Callers build the object (Product, Offer,
+ * BreadcrumbList, CollectionPage, ItemList, Organization, ...).
+ */
+interface Props {
+  data: Record<string, unknown> | Record<string, unknown>[];
+}
+const { data } = Astro.props;
+const json = JSON.stringify(data);
+---
+<script type="application/ld+json" set:html={json} />

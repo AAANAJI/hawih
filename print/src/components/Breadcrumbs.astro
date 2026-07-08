@@ -1,0 +1,26 @@
+---
+/**
+ * Breadcrumbs — accessible breadcrumb trail.
+ * Props:
+ *   items: { label: string; href?: string }[]
+ *     The last item is treated as the current page (no link).
+ * Renders a <nav aria-label>. The RTL separator is a chevron that reads
+ * correctly in both directions (uses the logical › glyph).
+ */
+interface Crumb { label: string; href?: string }
+interface Props { items: Crumb[]; class?: string }
+const { items, class: className = '' } = Astro.props;
+const sep = '›';
+---
+<nav class={`pk-breadcrumbs ${className}`.trim()} aria-label="breadcrumb">
+  {items.map((c, i) => (
+    <>
+      {i > 0 && <span class="pk-breadcrumbs__sep" aria-hidden="true">{sep}</span>}
+      {c.href && i < items.length - 1 ? (
+        <a href={c.href}>{c.label}</a>
+      ) : (
+        <span aria-current="page">{c.label}</span>
+      )}
+    </>
+  ))}
+</nav>

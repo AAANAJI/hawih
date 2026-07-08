@@ -1,0 +1,27 @@
+---
+/**
+ * WipPage — minimal placeholder body for routes the second agent will build.
+ * Wrap in Base.astro at the page level. Shows a heading + "قيد الإنشاء" note.
+ * Props:
+ *   title: string
+ *   locale: 'ar' | 'en'
+ *   note?: string
+ * Slot: optional extra content / actions.
+ */
+import Badge from '@components/Badge.astro';
+import { t } from '@lib/strings';
+import { href } from '@lib/i18n';
+import type { Locale } from '@lib/format';
+
+interface Props { title: string; locale: Locale; note?: string }
+const { title, locale, note } = Astro.props;
+---
+<div class="pk-container">
+  <div class="pk-wip">
+    <Badge variant="muted">{t('wip.badge', locale)}</Badge>
+    <h1 class="pk-h1">{title}</h1>
+    <p class="pk-muted" style="max-width:52ch">{note ?? t('wip.note', locale)}</p>
+    <slot />
+    <a class="pk-btn pk-btn--outline" href={href(locale, '/')}>{t('common.backHome', locale)}</a>
+  </div>
+</div>

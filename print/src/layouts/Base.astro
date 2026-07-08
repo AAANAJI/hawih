@@ -1,0 +1,139 @@
+---
+/**
+ * Base.astro — the single page shell. Locale-aware <html>, Google Fonts,
+ * GTM (head + noscript), favicon, SEOHead, HawihStrip + Header + Footer,
+ * and a default slot for page content.
+ *
+ * USAGE (every page):
+ *   <Base locale={locale} title="…" description="…" path="/canonical/path">
+ *     …page content…
+ *     <Fragment slot="head"> …extra head tags e.g. JsonLd… </Fragment>
+ *   </Base>
+ *
+ * Props:
+ *   locale: 'ar' | 'en'
+ *   title: string
+ *   description: string
+ *   path: string            -> canonical root-relative path (Arabic form)
+ *   image?: string          -> og image
+ *   type?: string           -> og:type
+ *   noindex?: boolean
+ *   bodyClass?: string
+ */
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/components.css';
+import SEOHead from '@components/SEOHead.astro';
+import HawihStrip from '@components/HawihStrip.astro';
+import Header from '@components/Header.astro';
+import Footer from '@components/Footer.astro';
+import { GTM_ID } from '@lib/config';
+import { dirFor } from '@lib/i18n';
+import type { Locale } from '@lib/format';
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  path: string;
+  image?: string;
+  type?: string;
+  noindex?: boolean;
+  bodyClass?: string;
+}
+const {
+  locale,
+  title,
+  description,
+  path,
+  image,
+  type,
+  noindex,
+  bodyClass = '',
+} = Astro.props;
+const dir = dirFor(locale);
+---
+<!doctype html>
+<html lang={locale} dir={dir}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#F4F1EB" />
+    <!-- Mark JS available before first paint so reveal-on-scroll can hide
+         elements only when JS is present to reveal them (no-JS = visible). -->
+    <script is:inline>document.documentElement.classList.add('pk-js');</script>
+    <link rel="icon" href="/favicon.png" type="image/png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap"
+    />
+
+    <!-- Google Tag Manager -->
+    <script is:inline define:vars={{ GTM_ID }}>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != 'dataLayer' ? '&l=' + l : '';
+        j.async = true;
+        j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, 'script', 'dataLayer', GTM_ID);
+    </script>
+    <!-- End Google Tag Manager -->
+
+    <SEOHead
+      title={title}
+      description={description}
+      locale={locale}
+      path={path}
+      image={image}
+      type={type}
+      noindex={noindex}
+    />
+    <slot name="head" />
+  </head>
+  <body class={bodyClass}>
+    <!-- Google Tag Manager (noscript) -->
+    <noscript>
+      <iframe
+        src={`https://www.googletagmanager.com/ns.html?id=${GTM_ID}`}
+        height="0"
+        width="0"
+        style="display:none;visibility:hidden"
+        title="gtm"></iframe>
+    </noscript>
+    <!-- End Google Tag Manager (noscript) -->
+
+    <HawihStrip locale={locale} />
+    <Header locale={locale} />
+    <main>
+      <slot />
+    </main>
+    <Footer locale={locale} />
+
+    <script>
+      // Reveal-on-scroll for .pk-reveal (respects reduced motion via CSS).
+      const els = document.querySelectorAll('.pk-reveal');
+      if (els.length && 'IntersectionObserver' in window) {
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((en) => {
+              if (en.isIntersecting) {
+                en.target.classList.add('is-visible');
+                io.unobserve(en.target);
+              }
+            });
+          },
+          { rootMargin: '0px 0px -8% 0px', threshold: 0.05 },
+        );
+        els.forEach((el) => io.observe(el));
+      } else {
+        els.forEach((el) => el.classList.add('is-visible'));
+      }
+    </script>
+  </body>
+</html>

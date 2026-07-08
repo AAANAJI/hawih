@@ -1,0 +1,24 @@
+---
+/**
+ * CategoryTile — image + scrim + Arabic/English label, hover zoom.
+ * Props:
+ *   title: string
+ *   href: string
+ *   image: string
+ *   eager?: boolean   -> load image eagerly (above-the-fold)
+ */
+interface Props { title: string; href: string; image: string; eager?: boolean }
+const { title, href, image, eager = false } = Astro.props;
+---
+<a class="pk-cattile" href={href} aria-label={title}>
+  <img
+    src={image}
+    alt={title}
+    loading={eager ? 'eager' : 'lazy'}
+    decoding="async"
+    width="1200"
+    height="900"
+  />
+  <span class="pk-cattile__scrim" aria-hidden="true"></span>
+  <span class="pk-cattile__label">{title}</span>
+</a>

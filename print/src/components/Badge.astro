@@ -1,0 +1,36 @@
+---
+/**
+ * Badge / Chip — small status pill.
+ * Props:
+ *   variant?: 'accent' | 'success' | 'warning' | 'danger' | 'muted'
+ *   dot?: boolean   -> show a leading colored dot
+ *   color?: string  -> override background/text with a raw color (status chips
+ *                      whose color comes from the API). When set, `variant` is
+ *                      ignored and inline styles apply.
+ * Slot: label.
+ */
+interface Props {
+  variant?: 'accent' | 'success' | 'warning' | 'danger' | 'muted';
+  dot?: boolean;
+  color?: string;
+  class?: string;
+}
+const { variant = 'accent', dot = false, color, class: className = '' } = Astro.props;
+const variantClass =
+  variant === 'success'
+    ? 'pk-badge--success'
+    : variant === 'warning'
+      ? 'pk-badge--warning'
+      : variant === 'danger'
+        ? 'pk-badge--danger'
+        : variant === 'muted'
+          ? 'pk-badge--muted'
+          : '';
+const style = color
+  ? `background:${color}1f;color:${color};`
+  : undefined;
+---
+<span class={`pk-badge ${variantClass} ${className}`.trim()} style={style}>
+  {dot && <span class="pk-badge__dot" aria-hidden="true"></span>}
+  <slot />
+</span>

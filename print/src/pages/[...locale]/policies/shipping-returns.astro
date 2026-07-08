@@ -1,0 +1,97 @@
+---
+/**
+ * Shipping & Returns — /policies/shipping-returns (+ /en/).
+ * Real, sensible copy for a Saudi print shop. Indexed (public).
+ */
+import Base from '@layouts/Base.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import { localeStaticPaths, href } from '@lib/i18n';
+import { t } from '@lib/strings';
+import type { Locale } from '@lib/format';
+
+export const getStaticPaths = localeStaticPaths;
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+const title = t('footer.shipping', locale);
+const crumbs = [
+  { label: t('nav.home', locale), href: href(locale, '/') },
+  { label: title },
+];
+---
+<Base
+  locale={locale}
+  title={`${title} — ${t('brand.name', locale)}`}
+  description={locale === 'ar'
+    ? 'سياسة الشحن والتوصيل والاسترجاع في مطبعة هوية داخل المملكة العربية السعودية.'
+    : 'Shipping, delivery and returns policy for Hawih Print across Saudi Arabia.'}
+  path="/policies/shipping-returns"
+>
+  <div class="pk-container">
+    <Breadcrumbs items={crumbs} />
+    <div class="pk-pagehead"><h1 class="pk-h1">{title}</h1></div>
+    <div class="pk-prose">
+      <p class="pk-prose__updated">{t('policy.updated', locale)}</p>
+      {locale === 'ar' ? (
+        <>
+          <p>نوصّل مطبوعاتك بعناية إلى جميع مناطق المملكة العربية السعودية. توضّح هذه الصفحة مدد التنفيذ والتوصيل وسياسة الاسترجاع للمنتجات المطبوعة حسب الطلب.</p>
+
+          <h2>مدة التنفيذ</h2>
+          <p>يبدأ تنفيذ الطلب بعد اعتماد ملف التصميم وتأكيد الدفع. المدة المعتادة من <strong>3 إلى 7 أيام عمل</strong> حسب نوع المنتج والكمية والتشطيبات المطلوبة.</p>
+
+          <h2>الشحن والتوصيل</h2>
+          <ul>
+            <li>نشحن إلى جميع مدن ومناطق المملكة عبر شركات شحن موثوقة.</li>
+            <li>مدة التوصيل المتوقّعة من <strong>2 إلى 5 أيام عمل</strong> بعد اكتمال التنفيذ، وتختلف حسب الموقع.</li>
+            <li>تُحتسب رسوم الشحن حسب الوزن والوجهة وتظهر في الفاتورة، مع إمكانية الاستلام من مقرّنا في الرياض.</li>
+          </ul>
+
+          <h2>تتبّع الطلب</h2>
+          <p>يمكنك متابعة حالة طلبك في أي وقت من صفحة <strong>حسابي</strong>، من مرحلة مراجعة التصميم حتى التسليم. نرسل لك تحديثات عبر واتساب عند تغيّر حالة الطلب.</p>
+
+          <h2>سياسة الاسترجاع والاستبدال</h2>
+          <ul>
+            <li>نظراً لأن المنتجات <strong>مطبوعة حسب الطلب وشخصية</strong>، لا يمكن استرجاعها أو استبدالها إلا في حال وجود خطأ في التنفيذ من طرفنا.</li>
+            <li>إذا وصلك المنتج تالفاً أو مخالفاً للمواصفات المعتمدة، تواصل معنا خلال <strong>48 ساعة</strong> من الاستلام مع صور توضيحية.</li>
+            <li>نعيد الطباعة أو نصحّح الطلب مجاناً عند ثبوت الخطأ من المطبعة.</li>
+          </ul>
+
+          <h2>الإلغاء والتعديل</h2>
+          <p>يمكن إلغاء الطلب أو تعديله <strong>قبل بدء التنفيذ</strong> فقط. بعد اعتماد التصميم ودخوله مرحلة الطباعة لا يمكن الإلغاء أو استرداد المبلغ.</p>
+
+          <h2>هل تحتاج مساعدة؟</h2>
+          <p>فريقنا جاهز لمساعدتك عبر واتساب أو الهاتف الموضّح في تذييل الصفحة.</p>
+        </>
+      ) : (
+        <>
+          <p>We deliver your prints with care across Saudi Arabia. This page explains production and delivery times and the returns policy for made-to-order printed products.</p>
+
+          <h2>Production time</h2>
+          <p>Production starts after your artwork is approved and payment is confirmed. Typical turnaround is <strong>3 to 7 business days</strong> depending on product, quantity and finishing.</p>
+
+          <h2>Shipping & delivery</h2>
+          <ul>
+            <li>We ship to all cities and regions of the Kingdom via trusted carriers.</li>
+            <li>Expected delivery is <strong>2 to 5 business days</strong> after production, varying by location.</li>
+            <li>Shipping fees are calculated by weight and destination and shown on the invoice; pickup from our Riyadh premises is also available.</li>
+          </ul>
+
+          <h2>Order tracking</h2>
+          <p>Track your order anytime from your <strong>Account</strong> page, from design review through to delivery. We send WhatsApp updates whenever your order status changes.</p>
+
+          <h2>Returns & exchanges</h2>
+          <ul>
+            <li>Because products are <strong>made to order and personalised</strong>, they cannot be returned or exchanged unless there is a production error on our side.</li>
+            <li>If your product arrives damaged or not matching the approved specifications, contact us within <strong>48 hours</strong> of delivery with photos.</li>
+            <li>We reprint or correct the order free of charge when a printing error is confirmed.</li>
+          </ul>
+
+          <h2>Cancellation & changes</h2>
+          <p>Orders can be cancelled or changed <strong>only before production begins</strong>. Once artwork is approved and printing has started, cancellation and refunds are not possible.</p>
+
+          <h2>Need help?</h2>
+          <p>Our team is happy to help via the WhatsApp or phone shown in the footer.</p>
+        </>
+      )}
+    </div>
+  </div>
+</Base>

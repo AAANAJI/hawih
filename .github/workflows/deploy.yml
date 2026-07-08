@@ -21,7 +21,7 @@ name: Deploy Hawih site
 on:
   push:
     branches: [ main, "claude/hawih-optimal-design-ozqG9" ]
-    paths-ignore: [ "reference/**", "**.md", ".github/**" ]
+    paths-ignore: [ "reference/**", "print/**", "**.md", ".github/**" ]
   workflow_dispatch:
 
 concurrency:
@@ -78,7 +78,7 @@ jobs:
           mkdir -p .deploy
           rsync -a --delete \
             --exclude='.git' --exclude='.github' --exclude='.deploy' \
-            --exclude='reference/' --exclude='*.md' \
+            --exclude='reference/' --exclude='print/' --exclude='*.md' \
             --exclude='CRM_INTEGRATION_PLAYBOOK*' --exclude='DEPLOY*' \
             ./ ./.deploy/
           echo "Files to deploy: $(find .deploy -type f | wc -l)"

@@ -1,0 +1,275 @@
+---
+/**
+ * Order detail — /account/order?id=N and /en/account/order?id=N.
+ * Requires a token. Fetches the order + the full status set (for the
+ * timeline), renders items table, uploaded files, and the invoice block
+ * ("ادفع الآن" when a pay_url exists, otherwise bank transfer + WhatsApp).
+ */
+import Base from '@layouts/Base.astro';
+import { localeStaticPaths, href } from '@lib/i18n';
+import { t } from '@lib/strings';
+import { BANK_TRANSFER, WHATSAPP } from '@lib/config';
+import type { Locale } from '@lib/format';
+
+export const getStaticPaths = localeStaticPaths;
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+const title = t('page.order', locale);
+const loginHref = href(locale, '/auth/login') + '?redirect=' + encodeURIComponent(href(locale, '/account'));
+const accountHref = href(locale, '/account');
+const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.bank_name_en;
+---
+<Base
+  locale={locale}
+  title={`${title} — ${t('brand.name', locale)}`}
+  description={title}
+  path="/account/order"
+  noindex={true}
+>
+  <div class="pk-container" style="min-height:56vh">
+    <a class="pk-btn pk-btn--ghost pk-btn--sm" href={accountHref} style="margin-top:var(--sp-6)">← {t('order.backToOrders', locale)}</a>
+
+    <p class="pk-muted" data-order-loading style="padding-block:var(--sp-6)">{t('order.loading', locale)}</p>
+
+    <div data-order-error hidden>
+      <div class="pk-empty">
+        <div class="pk-empty__icon" aria-hidden="true">🔍</div>
+        <h2 class="pk-h2">{t('order.notFound', locale)}</h2>
+        <a class="pk-btn" href={accountHref}>{t('order.backToOrders', locale)}</a>
+      </div>
+    </div>
+
+    <div data-order-content hidden>
+      <div class="pk-orderhead" style="margin-top:var(--sp-5)">
+        <div>
+          <h1 class="pk-h1" data-order-title></h1>
+          <p class="pk-orderhead__meta" data-order-date></p>
+        </div>
+        <div data-order-statuschip></div>
+      </div>
+
+      <!-- Status timeline -->
+      <section class="pk-card pk-block">
+        <h2 class="pk-h3">{t('order.status', locale)}</h2>
+        <ol class="pk-timeline" data-order-timeline aria-label={t('order.status', locale)}></ol>
+      </section>
+
+      <div class="pk-ordergrid">
+        <div style="min-width:0">
+          <!-- Items -->
+          <section class="pk-card pk-block">
+            <h2 class="pk-h3">{t('order.items', locale)}</h2>
+            <div class="pk-otable__wrap">
+              <table class="pk-otable">
+                <thead>
+                  <tr>
+                    <th>{t('order.item', locale)}</th>
+                    <th class="pk-num">{t('order.qty', locale)}</th>
+                    <th class="pk-num">{t('order.rate', locale)}</th>
+                    <th class="pk-num">{t('order.lineTotal', locale)}</th>
+                  </tr>
+                </thead>
+                <tbody data-order-items></tbody>
+                <tfoot>
+                  <tr>
+                    <td colspan="3">{t('order.subtotal', locale)}</td>
+                    <td class="pk-num pk-price"><bdi data-order-subtotal>—</bdi></td>
+                  </tr>
+                </tfoot>
+              </table>
+            </div>
+          </section>
+
+          <!-- Note -->
+          <section class="pk-card pk-block" data-order-note-wrap hidden>
+            <h2 class="pk-h3">{t('order.note', locale)}</h2>
+            <p class="pk-muted" data-order-note></p>
+          </section>
+
+          <!-- Files -->
+          <section class="pk-card pk-block" style="margin-bottom:0">
+            <h2 class="pk-h3">{t('order.files', locale)}</h2>
+            <div class="pk-files" data-order-files></div>
+            <p class="pk-muted" data-order-nofiles hidden>{t('order.noFiles', locale)}</p>
+          </section>
+        </div>
+
+        <!-- Invoice -->
+        <aside class="pk-card pk-summary">
+          <h2 class="pk-h3">{t('order.invoice', locale)}</h2>
+          <div class="pk-invoice" data-order-invoice>
+            <div class="pk-invoice__row">
+              <span class="pk-muted">{t('order.invoiceTotal', locale)}</span>
+              <span class="pk-price" style="font-weight:700"><bdi data-invoice-total>—</bdi></span>
+            </div>
+            <div class="pk-invoice__row">
+              <span class="pk-muted">{t('order.invoiceDue', locale)}</span>
+              <span class="pk-invoice__due pk-price"><bdi data-invoice-due>—</bdi></span>
+            </div>
+            <div data-invoice-statuschip></div>
+            <a class="pk-btn pk-btn--block" data-invoice-pay hidden target="_blank" rel="noopener">{t('order.pay', locale)}</a>
+          </div>
+
+          <!-- Bank transfer fallback -->
+          <div class="pk-bank" data-bank-block>
+            <h3>{t('bank.title', locale)}</h3>
+            <dl class="pk-bank__rows">
+              <div class="pk-bank__row"><dt>{t('bank.bank', locale)}</dt><dd>{bankName}</dd></div>
+              <div class="pk-bank__row"><dt>{t('bank.accountName', locale)}</dt><dd>{BANK_TRANSFER.account_name}</dd></div>
+              <div class="pk-bank__row"><dt>{t('bank.iban', locale)}</dt><dd>{BANK_TRANSFER.iban}</dd></div>
+            </dl>
+            <p class="pk-bank__note">{t('bank.note', locale)}</p>
+          </div>
+          <a class="pk-btn pk-btn--outline pk-btn--block" data-whatsapp target="_blank" rel="noopener">
+            <span aria-hidden="true">💬</span> {t('whatsapp.cta', locale)}
+          </a>
+        </aside>
+      </div>
+    </div>
+  </div>
+
+  <script define:vars={{
+    locale,
+    loginHref,
+    whatsapp: WHATSAPP,
+    waPrefix: locale === 'ar' ? 'مرحباً هوية، بخصوص طلبي رقم ' : 'Hello Hawih, regarding my order ',
+    labels: {
+      orderTitle: t('account.orderNum', locale),
+      placedOn: t('order.placedOn', locale),
+    },
+  }}>
+    window.__orderCfg = { locale, loginHref, whatsapp, waPrefix, labels };
+  </script>
+  <script>
+    import { isAuthed, api } from '@lib/api';
+    import { formatSAR, arabicDate, formatFileSize } from '@lib/format';
+
+    const cfg = (window as any).__orderCfg;
+    const L = cfg.labels;
+    const locale = cfg.locale === 'en' ? 'en' : 'ar';
+
+    const params = new URLSearchParams(location.search);
+    const id = params.get('id');
+
+    const loadingEl = document.querySelector<HTMLElement>('[data-order-loading]')!;
+    const errorEl = document.querySelector<HTMLElement>('[data-order-error]')!;
+    const contentEl = document.querySelector<HTMLElement>('[data-order-content]')!;
+
+    function esc(s: any): string {
+      return String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
+    }
+    function showError() { loadingEl.hidden = true; errorEl.hidden = false; }
+
+    if (!isAuthed()) {
+      location.replace(cfg.loginHref);
+    } else if (!id) {
+      showError();
+    } else {
+      load(id);
+    }
+
+    async function load(orderId: string) {
+      try {
+        const [orderRes, statusesRes] = await Promise.all([api.order(orderId), api.orderStatuses()]);
+        if (!orderRes || !orderRes.success || !(orderRes as any).order) { showError(); return; }
+        render((orderRes as any).order, ((statusesRes as any)?.statuses) || []);
+      } catch {
+        showError();
+      }
+    }
+
+    function render(order: any, statuses: any[]) {
+      loadingEl.hidden = true;
+      contentEl.hidden = false;
+
+      // Header
+      (document.querySelector('[data-order-title]') as HTMLElement).textContent = `${L.orderTitle} ${order.id}`;
+      const dateEl = document.querySelector('[data-order-date]') as HTMLElement;
+      dateEl.textContent = order.order_date ? `${L.placedOn}: ${arabicDate(order.order_date, locale)}` : '';
+
+      const status = order.status || {};
+      const chip = document.querySelector('[data-order-statuschip]') as HTMLElement;
+      if (status.title) {
+        chip.innerHTML = status.color
+          ? `<span class="pk-badge" style="background:${esc(status.color)}1f;color:${esc(status.color)}">${esc(status.title)}</span>`
+          : `<span class="pk-badge pk-badge--muted">${esc(status.title)}</span>`;
+      }
+
+      // Timeline from the full ordered status set
+      const timeline = document.querySelector('[data-order-timeline]') as HTMLElement;
+      const ordered = [...statuses].sort((a, b) => (a.sort || 0) - (b.sort || 0));
+      let currentIdx = ordered.findIndex((s) => String(s.id) === String(status.id));
+      if (currentIdx < 0) currentIdx = 0;
+      if (ordered.length) {
+        ordered.forEach((s, i) => {
+          const state = i < currentIdx ? 'is-done' : i === currentIdx ? 'is-current' : 'is-future';
+          const li = document.createElement('li');
+          li.className = `pk-timeline__step ${state}`;
+          if (i === currentIdx) li.setAttribute('aria-current', 'step');
+          li.innerHTML = `<span class="pk-timeline__dot" aria-hidden="true">${i < currentIdx ? '✓' : i + 1}</span><span class="pk-timeline__label">${esc(s.title)}</span>`;
+          timeline.appendChild(li);
+        });
+      } else {
+        (timeline.closest('.pk-block') as HTMLElement).hidden = true;
+      }
+
+      // Items
+      const tbody = document.querySelector('[data-order-items]') as HTMLElement;
+      const items: any[] = order.items || [];
+      items.forEach((it) => {
+        const unit = it.unit_type ? ` <span style="color:var(--pk-ink-muted)">/ ${esc(it.unit_type)}</span>` : '';
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><div style="font-weight:600">${esc(it.title)}</div>${it.description ? `<div class="pk-otable__desc">${esc(it.description)}</div>` : ''}</td>
+          <td class="pk-num">${esc(it.quantity)}${unit}</td>
+          <td class="pk-num pk-price"><bdi>${esc(formatSAR(Number(it.rate || 0), locale))}</bdi></td>
+          <td class="pk-num pk-price"><bdi>${esc(formatSAR(Number(it.total || 0), locale))}</bdi></td>`;
+        tbody.appendChild(tr);
+      });
+      const subEl = document.querySelector('[data-order-subtotal]') as HTMLElement;
+      const sub = order.total_summary != null ? Number(order.total_summary) : items.reduce((s, it) => s + Number(it.total || 0), 0);
+      subEl.textContent = formatSAR(sub, locale);
+
+      // Note
+      if (order.note) {
+        (document.querySelector('[data-order-note-wrap]') as HTMLElement).hidden = false;
+        (document.querySelector('[data-order-note]') as HTMLElement).textContent = order.note;
+      }
+
+      // Files
+      const filesEl = document.querySelector('[data-order-files]') as HTMLElement;
+      const files: any[] = order.files || [];
+      if (files.length === 0) {
+        (document.querySelector('[data-order-nofiles]') as HTMLElement).hidden = false;
+      } else {
+        files.forEach((f) => {
+          const div = document.createElement('div');
+          div.className = 'pk-fileline';
+          const size = f.file_size != null ? formatFileSize(Number(f.file_size)) : '';
+          div.innerHTML = `<div class="pk-fileline__name"><span aria-hidden="true">📎</span><span>${esc(f.file_name)}</span></div>${size ? `<span class="pk-fileline__size">${esc(size)}</span>` : ''}`;
+          filesEl.appendChild(div);
+        });
+      }
+
+      // Invoice
+      const inv = order.invoice;
+      const totalEl = document.querySelector('[data-invoice-total]') as HTMLElement;
+      const dueEl = document.querySelector('[data-invoice-due]') as HTMLElement;
+      const invChip = document.querySelector('[data-invoice-statuschip]') as HTMLElement;
+      const payBtn = document.querySelector('[data-invoice-pay]') as HTMLAnchorElement;
+      if (inv) {
+        totalEl.textContent = formatSAR(Number(inv.total ?? sub), locale);
+        dueEl.textContent = formatSAR(Number(inv.due ?? inv.total ?? sub), locale);
+        if (inv.status) invChip.innerHTML = `<span class="pk-badge pk-badge--muted">${esc(inv.status)}</span>`;
+        if (inv.pay_url) { payBtn.hidden = false; payBtn.href = inv.pay_url; }
+      } else {
+        totalEl.textContent = formatSAR(sub, locale);
+        dueEl.textContent = formatSAR(sub, locale);
+      }
+
+      // WhatsApp CTA
+      const wa = document.querySelector('[data-whatsapp]') as HTMLAnchorElement;
+      wa.href = `https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent(cfg.waPrefix + order.id)}`;
+    }
+  </script>
+</Base>

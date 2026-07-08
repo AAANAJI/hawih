@@ -1,0 +1,28 @@
+---
+/**
+ * StatusTimeline — horizontal stepper of the print order statuses.
+ * New → مراجعة التصميم → معتمد → قيد الطباعة → جاهز للاستلام → تم الشحن → تم التسليم
+ * Done steps = success, current = cobalt, future = muted. Collapses to a
+ * vertical stepper on mobile (CSS).
+ * Props:
+ *   current: number   -> zero-based index of the current status (0..6)
+ *   locale: 'ar' | 'en'
+ */
+import { STATUS_ORDER, t } from '@lib/strings';
+import type { Locale } from '@lib/format';
+
+interface Props { current: number; locale: Locale }
+const { current, locale } = Astro.props;
+const steps = STATUS_ORDER.map((key) => t(key, locale));
+---
+<ol class="pk-timeline" aria-label="order status">
+  {steps.map((label, i) => {
+    const state = i < current ? 'is-done' : i === current ? 'is-current' : 'is-future';
+    return (
+      <li class={`pk-timeline__step ${state}`} aria-current={i === current ? 'step' : undefined}>
+        <span class="pk-timeline__dot" aria-hidden="true">{i < current ? '✓' : i + 1}</span>
+        <span class="pk-timeline__label">{label}</span>
+      </li>
+    );
+  })}
+</ol>

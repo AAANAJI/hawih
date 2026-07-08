@@ -1,0 +1,27 @@
+---
+/**
+ * PriceBox — large price display with a VAT note.
+ * The amount is wrapped in <bdi> and rendered LTR so Arabic layout never
+ * reverses the digits. On the product page a client script updates the
+ * element with [data-pricebox-amount] when tier/option deltas change.
+ * Props:
+ *   amount: number
+ *   locale: 'ar' | 'en'
+ *   note?: string      -> defaults to the VAT note
+ *   id?: string        -> so a script can target this box
+ */
+import { formatSAR } from '@lib/format';
+import { t } from '@lib/strings';
+import type { Locale } from '@lib/format';
+
+interface Props { amount: number; locale: Locale; note?: string; id?: string }
+const { amount, locale, note, id } = Astro.props;
+const noteText = note ?? t('price.taxNote', locale);
+const formatted = formatSAR(amount, locale);
+---
+<div class="pk-pricebox" id={id}>
+  <div class="pk-pricebox__amount pk-price">
+    <bdi data-pricebox-amount data-base={amount}>{formatted}</bdi>
+  </div>
+  <span class="pk-pricebox__note">{noteText}</span>
+</div>
