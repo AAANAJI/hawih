@@ -111,6 +111,13 @@ export const api = {
   catalog: () => request('catalog'),
   orderStatuses: () => request('order_statuses'),
 
+  /** Upload one artwork file to the CRM temp store; returns {file_name,file_size,orig_name}. */
+  uploadArtwork: (file: File) => {
+    const fd = new FormData();
+    fd.append('file', file, file.name);
+    return request('upload', { method: 'POST', formData: fd, auth: true });
+  },
+
   signup: (payload: {
     first_name: string;
     last_name: string;

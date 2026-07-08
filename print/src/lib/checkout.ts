@@ -76,6 +76,17 @@ export function buildCheckoutForm(input: CheckoutInput): FormData {
     if (input.guest.company_name) fd.append('company_name', input.guest.company_name);
   }
 
+  // Artwork uploaded on the product page: reference the already-stored temp
+  // files by name/size. The server's move_files_from_temp_dir_to_permanent_dir
+  // consumes file_names[]/file_sizes[] and attaches them to the order.
+  for (const line of lines) {
+    for (const art of line.artwork ?? []) {
+      fd.append('file_names[]', art.file_name);
+      fd.append('file_sizes[]', String(art.file_size));
+    }
+  }
+
+  // Any files uploaded directly at checkout (fallback dropzone).
   for (const file of input.files ?? []) {
     fd.append('manualFiles[]', file, file.name);
   }
