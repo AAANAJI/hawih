@@ -181,12 +181,13 @@ const breadcrumbLd = {
   <script>
     import { addToCart } from '@lib/cart';
     import { addToCartEvent, viewItem } from '@lib/gtm';
-    import { formatSAR } from '@lib/format';
+    import { formatSAR, formatNumber } from '@lib/format';
+    import { liveItem } from '@lib/live-prices';
 
     const root = document.querySelector<HTMLElement>('[data-product]');
     if (root) {
       const locale = (root.dataset.locale === 'en' ? 'en' : 'ar') as 'ar' | 'en';
-      const base = Number(root.dataset.base);
+      let base = Number(root.dataset.base);
       const itemId = root.dataset.itemId!;
       const slug = root.dataset.slug!;
       const title = root.dataset.title!;
@@ -218,6 +219,37 @@ const breadcrumbLd = {
         r.addEventListener('change', refreshPrice),
       );
       refreshPrice();
+
+      // Live sync: overwrite the baked base rate + option deltas from the CRM,
+      // then recompute. Falls back silently to baked values if the API is down.
+      liveItem(slug).then((live) => {
+        if (!live) return;
+        if (Number.isFinite(Number(live.rate))) {
+          base = Number(live.rate);
+          root!.dataset.base = String(base);
+          if (priceEl) priceEl.dataset.base = String(base);
+        }
+        if (Array.isArray(live.options)) {
+          root!.querySelectorAll<HTMLElement>('fieldset[data-option-name-ar]').forEach((g) => {
+            const nameAr = g.getAttribute('data-option-name-ar');
+            const lo = live.options!.find((o) => o.name_ar === nameAr);
+            if (!lo || !Array.isArray(lo.values)) return;
+            g.querySelectorAll<HTMLInputElement>('input[type=radio]').forEach((inp) => {
+              const lv = lo.values.find(
+                (v) => (typeof v === 'object' ? v.label : v) === inp.value,
+              );
+              if (lv && typeof lv === 'object' && typeof lv.price_delta === 'number') {
+                inp.dataset.delta = String(lv.price_delta);
+                const deltaSpan = inp.parentElement?.querySelector('.pk-pill__delta');
+                if (deltaSpan) {
+                  deltaSpan.textContent = lv.price_delta > 0 ? '+' + formatNumber(lv.price_delta, locale) : '';
+                }
+              }
+            });
+          });
+        }
+        refreshPrice();
+      });
 
       // view_item
       viewItem({ item_id: itemId, item_name: title, price: base, item_category: root.dataset.slug });

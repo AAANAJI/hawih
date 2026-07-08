@@ -135,5 +135,11 @@ const dir = dirFor(locale);
         els.forEach((el) => el.classList.add('is-visible'));
       }
     </script>
+
+    <script>
+      // Keep displayed catalog prices in sync with the CRM without a rebuild.
+      import { hydrateCardPrices } from '@lib/live-prices';
+      hydrateCardPrices();
+    </script>
   </body>
 </html>
