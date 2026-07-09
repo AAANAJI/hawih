@@ -137,9 +137,11 @@ const dir = dirFor(locale);
     </script>
 
     <script>
-      // Keep displayed catalog prices in sync with the CRM without a rebuild.
-      import { hydrateCardPrices } from '@lib/live-prices';
-      hydrateCardPrices();
+      // Live-render the catalog from the CRM on every visit: names, prices,
+      // images, options, category membership and add/remove all reflect the
+      // CRM instantly, falling back to the baked HTML if it is unreachable.
+      import { catalogSync } from '@lib/catalog-sync';
+      catalogSync();
     </script>
   </body>
 </html>

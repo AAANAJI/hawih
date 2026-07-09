@@ -124,10 +124,10 @@ const breadcrumbLd = {
         data-locale={locale}
         data-requires-artwork={item.requires_artwork ? '1' : ''}
       >
-        <span class="pk-prodcard__tag" style="align-self:flex-start">{catTitle}</span>
-        <h1 class="pk-h1" style="margin-top:var(--sp-1)">{title}</h1>
+        <span class="pk-prodcard__tag" style="align-self:flex-start" data-live-prod-tag>{catTitle}</span>
+        <h1 class="pk-h1" style="margin-top:var(--sp-1)" data-live-prod-title>{title}</h1>
         <PriceBox amount={item.rate} locale={locale} id="pdp-price" />
-        <p class="pk-muted">{desc}</p>
+        <p class="pk-muted" data-live-prod-desc>{desc}</p>
 
         <OptionPicker options={item.options} locale={locale} />
 
@@ -161,8 +161,8 @@ const breadcrumbLd = {
         <div class="pk-card" style="padding:var(--sp-5);margin-top:var(--sp-2)">
           <h2 class="pk-h3" style="margin-bottom:var(--sp-4)">{t('product.specs', locale)}</h2>
           <dl class="pk-specs">
-            <div><dt>{t('product.spec.category', locale)}</dt><dd>{catTitle}</dd></div>
-            <div><dt>{t('product.spec.unit', locale)}</dt><dd>{unit}</dd></div>
+            <div><dt>{t('product.spec.category', locale)}</dt><dd data-live-spec-cat>{catTitle}</dd></div>
+            <div><dt>{t('product.spec.unit', locale)}</dt><dd data-live-spec-unit>{unit}</dd></div>
             <div><dt>{t('product.spec.turnaround', locale)}</dt><dd>{t('product.turnaroundValue', locale)}</dd></div>
             <div><dt>{t('product.spec.artwork', locale)}</dt><dd>{item.requires_artwork ? t('product.yes', locale) : '—'}</dd></div>
           </dl>
@@ -195,22 +195,24 @@ const breadcrumbLd = {
   <script>
     import { addToCart, type ArtworkRef } from '@lib/cart';
     import { addToCartEvent, viewItem } from '@lib/gtm';
-    import { formatSAR, formatNumber } from '@lib/format';
-    import { liveItem } from '@lib/live-prices';
+    import { formatSAR } from '@lib/format';
     import { api } from '@lib/api';
     import { UPLOAD } from '@lib/config';
 
     const root = document.querySelector<HTMLElement>('[data-product]');
     if (root) {
       const locale = (root.dataset.locale === 'en' ? 'en' : 'ar') as 'ar' | 'en';
-      let base = Number(root.dataset.base);
       const itemId = root.dataset.itemId!;
       const slug = root.dataset.slug!;
       const title = root.dataset.title!;
-      const image = root.dataset.image!;
       const priceEl = root.querySelector<HTMLElement>('[data-pricebox-amount]');
       const qtyInput = document.querySelector<HTMLInputElement>('#pdp-qty');
       const addBtn = root.querySelector<HTMLElement>('[data-add-to-cart]');
+
+      // Base rate is read from the DOM every time so catalog-sync (live CRM
+      // reconciliation) can update it — and rebuild the options — after load.
+      const currentBase = () => Number(root!.dataset.base) || 0;
+      const currentImage = () => root!.dataset.image || '';
 
       function currentSelections() {
         const groups = root!.querySelectorAll<HTMLElement>('fieldset[data-option-name]');
@@ -223,7 +225,7 @@ const breadcrumbLd = {
             delta += Number(checked.dataset.delta || '0');
           }
         });
-        return { options, rate: base + delta };
+        return { options, rate: currentBase() + delta };
       }
 
       function refreshPrice() {
@@ -231,59 +233,16 @@ const breadcrumbLd = {
         if (priceEl) priceEl.textContent = formatSAR(rate, locale);
       }
 
-      root.querySelectorAll('input[type=radio]').forEach((r) =>
-        r.addEventListener('change', refreshPrice),
-      );
+      // Delegated so option groups rebuilt live by catalog-sync still reprice.
+      root.addEventListener('change', (e) => {
+        if ((e.target as HTMLElement)?.matches?.('input[type=radio]')) refreshPrice();
+      });
+      // catalog-sync fires this after updating the base rate / rebuilding options.
+      root.addEventListener('pk:reprice', refreshPrice);
       refreshPrice();
 
-      // Live sync: overwrite the baked base rate + option deltas from the CRM,
-      // then recompute. Falls back silently to baked values if the API is down.
-      liveItem(slug).then((live) => {
-        if (!live) return;
-        if (Number.isFinite(Number(live.rate))) {
-          base = Number(live.rate);
-          root!.dataset.base = String(base);
-          if (priceEl) priceEl.dataset.base = String(base);
-        }
-        // Live sync the CRM-managed product image onto the hero + thumbnails.
-        if (live.image) {
-          const hero = document.querySelector<HTMLImageElement>('#pdp-hero');
-          if (hero) hero.src = live.image;
-          document.querySelectorAll<HTMLElement>('[data-thumb]').forEach((btn, i) => {
-            if (i === 0) {
-              btn.dataset.thumb = live.image;
-              const timg = btn.querySelector('img');
-              if (timg) (timg as HTMLImageElement).src = live.image!;
-            }
-          });
-          root!.dataset.image = live.image;
-        }
-        if (Array.isArray(live.options)) {
-          root!.querySelectorAll<HTMLElement>('fieldset[data-option-name-ar]').forEach((g) => {
-            const nameAr = g.getAttribute('data-option-name-ar');
-            const lo = live.options!.find((o) => o.name_ar === nameAr);
-            if (!lo || !Array.isArray(lo.values)) return;
-            g.querySelectorAll<HTMLInputElement>('input[type=radio]').forEach((inp) => {
-              const lv = lo.values.find((v) => {
-                if (typeof v === 'string') return v === inp.value;
-                const la = v.label_ar != null ? v.label_ar : v.label;
-                return la === inp.value;
-              });
-              if (lv && typeof lv === 'object' && typeof lv.price_delta === 'number') {
-                inp.dataset.delta = String(lv.price_delta);
-                const deltaSpan = inp.parentElement?.querySelector('.pk-pill__delta');
-                if (deltaSpan) {
-                  deltaSpan.textContent = lv.price_delta > 0 ? '+' + formatNumber(lv.price_delta, locale) : '';
-                }
-              }
-            });
-          });
-        }
-        refreshPrice();
-      });
-
       // view_item
-      viewItem({ item_id: itemId, item_name: title, price: base, item_category: root.dataset.slug });
+      viewItem({ item_id: itemId, item_name: title, price: currentBase(), item_category: root.dataset.slug });
 
       // ---- Artwork upload (immediate → CRM temp; refs travel in the cart) ----
       const requiresArtwork = root.dataset.requiresArtwork === '1';
@@ -361,7 +320,7 @@ const breadcrumbLd = {
         }
         const { options, rate } = currentSelections();
         const qty = Math.max(Number(root!.dataset.minQty || '1'), Number(qtyInput?.value || '1'));
-        addToCart({ item_id: itemId, slug, title, qty, rate, options, image, artwork: artworkRefs.slice() });
+        addToCart({ item_id: itemId, slug, title, qty, rate, options, image: currentImage(), artwork: artworkRefs.slice() });
         addToCartEvent({ item_id: itemId, item_name: title, price: rate, quantity: qty, item_category: slug });
         artworkRefs.length = 0;
         upRender();

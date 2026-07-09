@@ -18,14 +18,14 @@ export interface CatalogOption {
   values: OptionValue[];
 }
 export interface CatalogCategory {
-  id: string;
+  id: number | string;
   slug: string;
   title: string;
   title_en: string;
   sort: number;
 }
 export interface CatalogItem {
-  id: string;
+  id: number | string;
   slug: string;
   category_slug: string;
   title: string;
