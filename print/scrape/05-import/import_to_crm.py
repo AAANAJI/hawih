@@ -312,28 +312,35 @@ def post_image(session, base_url, token, slug, image_path):
 
 
 def find_image(images_dir, service):
-    """Look for an image for a service. Tries several common layouts."""
+    """
+    Look for an image for a service across common folder layouts. Tries, in
+    order, keys = service id, slug_en, reference_product_id, reference_slug:
+        <dir>/<key>/hero.<ext> · <dir>/<key>/og.<ext> · <dir>/<key>/<first image>
+        <dir>/<key>.<ext>
+    Returns the first match, or None.
+    """
     if not images_dir:
         return None
     d = Path(images_dir)
-    sid = str(service.get("id", ""))
-    slug = str(service.get("slug_en", "") or "")
     exts = ("png", "webp", "jpg", "jpeg", "gif")
-    candidates = []
-    for key in (sid, slug):
-        if not key:
-            continue
+    keys = [service.get("id"), service.get("slug_en"),
+            service.get("reference_product_id"), service.get("reference_slug")]
+    keys = [str(k).strip() for k in keys if k]
+
+    # 1) exact preferred names
+    for key in keys:
         for ext in exts:
-            candidates.append(d / key / f"hero.{ext}")
-            candidates.append(d / f"{key}.{ext}")
-        # first file inside a per-service folder
+            for p in (d / key / f"hero.{ext}", d / key / f"og.{ext}", d / f"{key}.{ext}"):
+                if p.is_file():
+                    return str(p)
+    # 2) any image inside a per-service folder
+    for key in keys:
         folder = d / key
         if folder.is_dir():
             for ext in exts:
-                candidates.extend(sorted(folder.glob(f"*.{ext}")))
-    for c in candidates:
-        if c.is_file():
-            return str(c)
+                hits = sorted(folder.glob(f"*.{ext}"))
+                if hits:
+                    return str(hits[0])
     return None
 
 
