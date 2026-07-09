@@ -24,8 +24,11 @@ Usage (see README-import.md for the full runbook):
   python3 import_to_crm.py --go --images        # + upload hero images
   python3 import_to_crm.py --go --images --publish   # push + images + visible in store
 
+Auth is your CRM admin login (email + password), sent over HTTPS as Basic auth.
+No server/DB setup needed.
+
 Config via env or a .env file next to this script (see .env.example):
-  CRM_BASE_URL, PRINT_IMPORT_TOKEN, SKELETON_PATH, XLSX_PATH, IMAGES_DIR
+  CRM_BASE_URL, CRM_ADMIN_EMAIL, CRM_ADMIN_PASSWORD, SKELETON_PATH, XLSX_PATH, IMAGES_DIR
 
 Dependencies:  pip install requests openpyxl
 """
@@ -287,28 +290,30 @@ def build_categories(skeleton):
 
 # ------------------------------------------------------------------------------- HTTP
 
-def api(session, base_url, token):
+def api_base(base_url):
     base = base_url.rstrip("/")
     if not base.endswith("index.php"):
         base = base + "/index.php"
-    headers = {"Authorization": f"Bearer {token}"}
-    return base + "/print_api", headers
+    return base + "/print_api"
 
 
-def post_import(session, base_url, token, categories, items):
-    url_base, headers = api(session, base_url, token)
-    r = session.post(url_base + "/import", headers={**headers, "Content-Type": "application/json"},
-                     data=json.dumps({"categories": categories, "items": items}, ensure_ascii=False).encode("utf-8"),
-                     timeout=60)
-    return r
+def post_import(session, url_base, categories, items):
+    return session.post(
+        url_base + "/import",
+        headers={"Content-Type": "application/json"},
+        data=json.dumps({"categories": categories, "items": items}, ensure_ascii=False).encode("utf-8"),
+        timeout=60,
+    )
 
 
-def post_image(session, base_url, token, slug, image_path):
-    url_base, headers = api(session, base_url, token)
+def post_image(session, url_base, slug, image_path):
     with open(image_path, "rb") as fh:
-        r = session.post(url_base + "/import_image", headers=headers,
-                         data={"slug": slug}, files={"image": (Path(image_path).name, fh)}, timeout=120)
-    return r
+        return session.post(
+            url_base + "/import_image",
+            data={"slug": slug},
+            files={"image": (Path(image_path).name, fh)},
+            timeout=120,
+        )
 
 
 def find_image(images_dir, service):
@@ -362,7 +367,9 @@ def main():
     xlsx_path = cfg("XLSX_PATH", str(HERE / "catalog-review.xlsx"))
     images_dir = cfg("IMAGES_DIR", "")
     base_url = cfg("CRM_BASE_URL", "https://crm.hawih.com.sa")
-    token = cfg("PRINT_IMPORT_TOKEN", "")
+    admin_email = cfg("CRM_ADMIN_EMAIL", "")
+    admin_password = cfg("CRM_ADMIN_PASSWORD", "")
+    token = cfg("PRINT_IMPORT_TOKEN", "")  # optional alternative to admin login
 
     OUT_DIR.mkdir(parents=True, exist_ok=True)
 
@@ -432,18 +439,24 @@ def main():
         print(f"  first-10 payload preview → {OUT_DIR/'payload-preview.json'}")
         return
 
-    if not token:
-        sys.exit("PRINT_IMPORT_TOKEN is not set — cannot push. See README-import.md to set it.")
+    # 5) auth — your CRM admin login (HTTP Basic), or an optional shared token
+    session = requests.Session()
+    if token:
+        session.headers["Authorization"] = f"Bearer {token}"
+    elif admin_email and admin_password:
+        session.auth = (admin_email, admin_password)  # sent as HTTPS Basic auth
+    else:
+        sys.exit("Set CRM_ADMIN_EMAIL + CRM_ADMIN_PASSWORD (your CRM login) in .env — or PRINT_IMPORT_TOKEN.")
+    url_base = api_base(base_url)
 
-    # 5) select scope
+    # select scope
     scope = items if args.go else items[: max(0, args.pilot)]
     print(f"\nPushing {len(scope)} items (publish={args.publish}) to {base_url} …")
 
-    session = requests.Session()
     ledger, publog = {}, open(OUT_DIR / "publish-log.jsonl", "a", encoding="utf-8")
 
     # 5a) categories first
-    r = post_import(session, base_url, token, categories, [])
+    r = post_import(session, url_base, categories, [])
     publog.write(json.dumps({"phase": "categories", "status": r.status_code, "body": _safe(r)}, ensure_ascii=False) + "\n")
     if r.status_code != 200:
         sys.exit(f"Category import failed [{r.status_code}]: {r.text[:300]}")
@@ -453,7 +466,7 @@ def main():
     total_created = total_updated = total_failed = 0
     for i in range(0, len(scope), args.chunk):
         chunk = scope[i : i + args.chunk]
-        r = post_import(session, base_url, token, [], [it for _s, it in chunk])
+        r = post_import(session, url_base, [], [it for _s, it in chunk])
         publog.write(json.dumps({"phase": "items", "range": [i, i + len(chunk)], "status": r.status_code, "body": _safe(r)}, ensure_ascii=False) + "\n")
         if r.status_code != 200:
             print(f"  chunk {i}-{i+len(chunk)} FAILED [{r.status_code}]: {r.text[:200]}")
@@ -480,7 +493,7 @@ def main():
                 img_miss += 1
                 continue
             try:
-                r = post_image(session, base_url, token, it["slug"], path)
+                r = post_image(session, url_base, it["slug"], path)
                 if r.status_code == 200 and r.json().get("success"):
                     img_ok += 1
                     ledger.setdefault(it["slug"], {})["image"] = r.json().get("url")
