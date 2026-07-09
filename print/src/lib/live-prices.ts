@@ -1,99 +1,27 @@
 /**
- * live-prices.ts — BROWSER-side. Keeps displayed catalog prices in sync with
- * the CRM without a rebuild: on page load we fetch the live catalog once
- * (session-cached, short TTL) and overwrite the build-time "baked" prices.
+ * live-prices.ts — BROWSER-side price/image hydration.
  *
- * The static HTML still ships with the last-built prices (good for SEO and
- * instant first paint); this just refreshes the visible numbers a moment
- * later. If the API is unreachable, the baked prices simply stand.
+ * The static HTML ships with the last-built prices/images (good for SEO and
+ * instant first paint); this refreshes the visible numbers/images a moment
+ * later from the live CRM. If the API is unreachable, the baked values stand.
+ *
+ * The actual fetch + cache now lives in live-catalog.ts (single source); this
+ * module keeps its long-standing API (hydrateCardPrices, liveItem) so callers
+ * (Base.astro, product page) are unchanged.
  *
  * Cards: any element marked [data-live-price] inside a product link has its
- * text replaced with the live "from" price (slug is derived from the link).
+ * text replaced with the live "from" price (slug derived from the link).
  * Product page: the buy box reads the live base rate + option deltas via
- * liveItem() and recomputes (see product/[slug].astro).
+ * liveItem() (see product/[slug].astro).
  */
-import { API_BASE } from './config';
+import { rawItemsBySlug, type RawItem } from './live-catalog';
 import { formatSAR, type Locale } from './format';
 
-export interface LiveOptionValue {
-  label?: string;
-  label_ar?: string;
-  label_en?: string;
-  price_delta: number;
-}
-export interface LiveOption {
-  name_ar: string;
-  name_en?: string;
-  type: string;
-  values: Array<string | LiveOptionValue>;
-}
-export interface LiveItem {
-  id: number | string;
-  slug: string;
-  rate: number;
-  currency?: string;
-  image?: string;
-  options?: LiveOption[];
-}
+export type LiveItem = RawItem;
 
-const SS_KEY = 'hawih_live_catalog';
-const TTL_MS = 90_000;
-
-let inflight: Promise<Map<string, LiveItem>> | null = null;
-
-function fromCache(): Map<string, LiveItem> | null {
-  try {
-    const raw = sessionStorage.getItem(SS_KEY);
-    if (!raw) return null;
-    const parsed = JSON.parse(raw) as { t: number; items: LiveItem[] };
-    if (!parsed || !Array.isArray(parsed.items)) return null;
-    if (Date.now() - parsed.t > TTL_MS) return null;
-    return indexBySlug(parsed.items);
-  } catch {
-    return null;
-  }
-}
-
-function indexBySlug(items: LiveItem[]): Map<string, LiveItem> {
-  const m = new Map<string, LiveItem>();
-  for (const it of items) {
-    if (it && it.slug != null) m.set(String(it.slug), it);
-  }
-  return m;
-}
-
-/** Fetch (or reuse) the live catalog as a slug→item map. Never throws. */
-export function liveCatalog(): Promise<Map<string, LiveItem>> {
-  if (inflight) return inflight;
-  const cached = fromCache();
-  if (cached) {
-    inflight = Promise.resolve(cached);
-    return inflight;
-  }
-  inflight = (async () => {
-    try {
-      const res = await fetch(API_BASE + 'catalog', { headers: { Accept: 'application/json' } });
-      if (!res.ok) return new Map<string, LiveItem>();
-      const data = (await res.json()) as { success?: boolean; items?: LiveItem[] };
-      if (!data || data.success !== true || !Array.isArray(data.items)) {
-        return new Map<string, LiveItem>();
-      }
-      try {
-        sessionStorage.setItem(SS_KEY, JSON.stringify({ t: Date.now(), items: data.items }));
-      } catch {
-        /* storage full/blocked — ignore */
-      }
-      return indexBySlug(data.items);
-    } catch {
-      return new Map<string, LiveItem>(); // offline / CORS / blocked → keep baked
-    }
-  })();
-  return inflight;
-}
-
-/** Look up one live item by slug (null if the API had nothing for it). */
+/** Look up one live (raw) item by slug (null if the API had nothing for it). */
 export async function liveItem(slug: string): Promise<LiveItem | null> {
-  const map = await liveCatalog();
+  const map = await rawItemsBySlug();
   return map.get(slug) ?? null;
 }
 
@@ -116,12 +44,14 @@ function slugFromLink(a: HTMLAnchorElement | null): string | null {
  */
 export async function hydrateCardPrices(): Promise<void> {
   if (typeof document === 'undefined') return;
-  const els = Array.from(document.querySelectorAll<HTMLElement>('[data-live-price]'));
-  if (!els.length) return;
-  const map = await liveCatalog();
+  const priceEls = Array.from(document.querySelectorAll<HTMLElement>('[data-live-price]'));
+  const imgEls = Array.from(document.querySelectorAll<HTMLImageElement>('[data-live-image]'));
+  if (!priceEls.length && !imgEls.length) return;
+  const map = await rawItemsBySlug();
   if (!map.size) return;
   const locale = currentLocale();
-  for (const el of els) {
+
+  for (const el of priceEls) {
     const slug = el.dataset.slug || slugFromLink(el.closest('a'));
     if (!slug) continue;
     const it = map.get(slug);
@@ -131,11 +61,10 @@ export async function hydrateCardPrices(): Promise<void> {
   }
 
   // Refresh card images from the CRM-managed image (when the item has one).
-  const imgEls = Array.from(document.querySelectorAll<HTMLImageElement>('[data-live-image]'));
   for (const img of imgEls) {
     const slug = img.dataset.slug || slugFromLink(img.closest('a'));
     if (!slug) continue;
     const it = map.get(slug);
-    if (it && it.image) img.src = it.image;
+    if (it && it.image) img.src = String(it.image);
   }
 }

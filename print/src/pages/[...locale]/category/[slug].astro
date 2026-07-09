@@ -81,32 +81,35 @@ const breadcrumbLd = {
   <div class="pk-container">
     <Breadcrumbs items={crumbs} />
     <div class="pk-pagehead">
-      <h1 class="pk-h1">{title}</h1>
-      <p>{formatNumber(products.length, locale)} {t('category.productsCount', locale)}</p>
+      <h1 class="pk-h1" data-live-cat-title>{title}</h1>
+      <p data-live-cat-count>{formatNumber(products.length, locale)} {t('category.productsCount', locale)}</p>
     </div>
 
-    {products.length > 0 ? (
-      <div class="pk-grid-products" data-cat-grid style="margin-bottom:var(--sp-10)">
-        {products.map((p) => (
-          <div data-product-id={p.id} data-product-name={itemTitle(p, locale)} data-product-price={p.rate}>
-            <ProductCard
-              href={href(locale, `/product/${p.slug}`)}
-              title={itemTitle(p, locale)}
-              image={p.images?.square ?? ''}
-              rate={p.rate}
-              categoryLabel={title}
-              locale={locale}
-            />
-          </div>
-        ))}
-      </div>
-    ) : (
-      <div style="margin-bottom:var(--sp-10)">
-        <EmptyState icon="🗂️" title={t('category.empty.title', locale)} body={t('category.empty.body', locale)}>
-          <Button href={href(locale, '/')}>{t('common.backHome', locale)}</Button>
-        </EmptyState>
-      </div>
-    )}
+    <!-- data-cat-body is the region catalog-sync re-renders live from the CRM -->
+    <div data-cat-body>
+      {products.length > 0 ? (
+        <div class="pk-grid-products" data-cat-grid style="margin-bottom:var(--sp-10)">
+          {products.map((p) => (
+            <div data-product-id={p.id} data-product-name={itemTitle(p, locale)} data-product-price={p.rate}>
+              <ProductCard
+                href={href(locale, `/product/${p.slug}`)}
+                title={itemTitle(p, locale)}
+                image={p.images?.square ?? ''}
+                rate={p.rate}
+                categoryLabel={title}
+                locale={locale}
+              />
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div style="margin-bottom:var(--sp-10)">
+          <EmptyState icon="🗂️" title={t('category.empty.title', locale)} body={t('category.empty.body', locale)}>
+            <Button href={href(locale, '/')}>{t('common.backHome', locale)}</Button>
+          </EmptyState>
+        </div>
+      )}
+    </div>
   </div>
 
   <script>
