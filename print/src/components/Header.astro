@@ -25,10 +25,13 @@ const cats = categories.map((c) => ({
 }));
 
 const nav = [
+  { label: t('nav.allProducts', locale), href: href(locale, '/products') },
   { label: t('nav.about', locale), href: href(locale, '/about') },
-  { label: t('nav.contact', locale), href: href(locale, '/contact') },
-  { label: t('nav.account', locale), href: href(locale, '/account') },
+  { label: t('nav.faq', locale), href: href(locale, '/faq') },
 ];
+const otherLangHref = locale === 'ar' ? switchLocalePath(path, 'en') : switchLocalePath(path, 'ar');
+const otherLangLabel = locale === 'ar' ? 'English' : 'العربية';
+const otherLangCode = locale === 'ar' ? 'en' : 'ar';
 
 const arHref = switchLocalePath(path, 'ar');
 const enHref = switchLocalePath(path, 'en');
@@ -45,7 +48,7 @@ const productsHref = href(locale, '/products');
     <nav class="pk-header__nav" aria-label="primary">
       <div class="pk-dropdown">
         <button class="pk-navlink" aria-haspopup="true" aria-expanded="false" data-dropdown-btn>
-          {t('nav.products', locale)}
+          {t('nav.categories', locale)}
           <Icon name="chevron-down" size={14} />
         </button>
         <div class="pk-dropdown__menu" data-dropdown-menu>
@@ -61,12 +64,21 @@ const productsHref = href(locale, '/products');
     <div class="pk-header__spacer"></div>
 
     <div class="pk-header__actions">
-      <div class="pk-locale pk-desktop-only" role="group" aria-label="language">
-        <a href={arHref} aria-current={locale === 'ar' ? 'true' : undefined} lang="ar">ع</a>
-        <a href={enHref} aria-current={locale === 'en' ? 'true' : undefined} lang="en">EN</a>
-      </div>
+      <a class="pk-btn pk-btn--sm pk-desktop-only" href={href(locale, '/contact')}>
+        <Icon name="message-circle" size={15} />
+        {t('nav.contact', locale)}
+      </a>
 
-      <a class="pk-navlink pk-cartbtn" href={cartHref} aria-label={t('nav.cart', locale)}>
+      <a class="pk-langbtn pk-desktop-only" href={otherLangHref} lang={otherLangCode} title={otherLangLabel}>
+        <Icon name="globe" size={16} />
+        <span>{otherLangLabel}</span>
+      </a>
+
+      <a class="pk-navlink pk-iconbtn" href={href(locale, '/account')} aria-label={t('nav.account', locale)} title={t('nav.account', locale)}>
+        <Icon name="user" size={20} />
+      </a>
+
+      <a class="pk-navlink pk-cartbtn" href={cartHref} aria-label={t('nav.cart', locale)} data-cart-open>
         <Icon name="cart" size={20} />
         <span class="pk-cartbtn__badge" data-cart-badge aria-hidden="true">0</span>
       </a>
@@ -79,6 +91,33 @@ const productsHref = href(locale, '/products');
     </div>
   </div>
 </header>
+
+<!-- Mini-cart drawer (slides from the cart's side: left in RTL, right in LTR) -->
+<div class="pk-drawer" id="pk-cartdrawer" data-cartdrawer>
+  <div class="pk-drawer__scrim" data-cartdrawer-close></div>
+  <div class="pk-minicart" role="dialog" aria-modal="true" aria-label={t('cart.title', locale)} data-locale={locale}>
+    <div class="pk-minicart__head">
+      <h2 class="pk-h3">{t('cart.title', locale)}</h2>
+      <button type="button" class="pk-minicart__close" data-cartdrawer-close aria-label={t('nav.close', locale)}>
+        <Icon name="x" size={18} />
+      </button>
+    </div>
+    <div class="pk-minicart__lines" data-minicart-lines></div>
+    <div class="pk-minicart__empty" data-minicart-empty hidden>
+      <span class="pk-empty__icon" aria-hidden="true"><Icon name="cart" size={24} /></span>
+      <p>{t('cart.empty.title', locale)}</p>
+      <a class="pk-btn pk-btn--sm" href={href(locale, '/products')}>{t('cart.empty.cta', locale)}</a>
+    </div>
+    <div class="pk-minicart__foot" data-minicart-foot>
+      <div class="pk-minicart__subtotal">
+        <span>{t('cart.subtotal', locale)}</span>
+        <bdi class="pk-price" data-minicart-total></bdi>
+      </div>
+      <a class="pk-btn pk-btn--block" href={href(locale, '/checkout')}>{t('cart.checkout', locale)}</a>
+      <a class="pk-btn pk-btn--outline pk-btn--block" href={cartHref}>{t('minicart.viewCart', locale)}</a>
+    </div>
+  </div>
+</div>
 
 <!-- Mobile drawer -->
 <div class="pk-drawer" id="pk-drawer" data-drawer>
@@ -108,7 +147,10 @@ const productsHref = href(locale, '/products');
 </div>
 
 <script>
-  import { getCart, countItems } from '@lib/cart';
+  import { getCart, countItems, updateQty, removeLine, subtotal } from '@lib/cart';
+  import { formatSAR } from '@lib/format';
+  import { iconSvg } from '@lib/icons';
+  import { t } from '@lib/strings';
 
   // Scroll border
   const header = document.querySelector<HTMLElement>('[data-header]');
@@ -183,5 +225,110 @@ const productsHref = href(locale, '/products');
       if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
       else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
     }
+  });
+
+  // ---- Mini-cart drawer ----
+  const cartDrawer = document.querySelector<HTMLElement>('[data-cartdrawer]');
+  const cartOpenBtn = document.querySelector<HTMLElement>('[data-cart-open]');
+  const mcLines = cartDrawer?.querySelector<HTMLElement>('[data-minicart-lines]');
+  const mcEmpty = cartDrawer?.querySelector<HTMLElement>('[data-minicart-empty]');
+  const mcFoot = cartDrawer?.querySelector<HTMLElement>('[data-minicart-foot]');
+  const mcTotal = cartDrawer?.querySelector<HTMLElement>('[data-minicart-total]');
+  const mcLocale = (cartDrawer?.querySelector<HTMLElement>('.pk-minicart')?.dataset.locale === 'en' ? 'en' : 'ar') as 'ar' | 'en';
+  let cartLastFocused: HTMLElement | null = null;
+
+  function renderMiniCart() {
+    if (!mcLines || !mcEmpty || !mcFoot || !mcTotal) return;
+    const lines = getCart();
+    mcEmpty.hidden = lines.length > 0;
+    mcFoot.hidden = lines.length === 0;
+    mcLines.textContent = '';
+    lines.forEach((line, i) => {
+      const row = document.createElement('div');
+      row.className = 'pk-mcline';
+
+      const media = document.createElement('div');
+      media.className = 'pk-mcline__img';
+      if (line.image) {
+        const img = document.createElement('img');
+        img.src = line.image;
+        img.alt = '';
+        img.loading = 'lazy';
+        img.addEventListener('error', () => { img.style.visibility = 'hidden'; });
+        media.appendChild(img);
+      }
+
+      const mid = document.createElement('div');
+      const title = document.createElement('div');
+      title.className = 'pk-mcline__title';
+      title.textContent = line.title;
+      mid.appendChild(title);
+      const optsText = Object.values(line.options || {}).join(' · ');
+      if (optsText) {
+        const opts = document.createElement('div');
+        opts.className = 'pk-mcline__opts';
+        opts.textContent = optsText;
+        mid.appendChild(opts);
+      }
+      const qty = document.createElement('div');
+      qty.className = 'pk-mcline__qty';
+      const dec = document.createElement('button');
+      dec.type = 'button';
+      dec.innerHTML = iconSvg('minus');
+      dec.setAttribute('aria-label', t('qty.decrease', mcLocale));
+      dec.disabled = line.qty <= 1;
+      dec.addEventListener('click', () => updateQty(i, line.qty - 1));
+      const q = document.createElement('span');
+      q.textContent = String(line.qty);
+      const inc = document.createElement('button');
+      inc.type = 'button';
+      inc.innerHTML = iconSvg('plus');
+      inc.setAttribute('aria-label', t('qty.increase', mcLocale));
+      inc.addEventListener('click', () => updateQty(i, line.qty + 1));
+      qty.append(dec, q, inc);
+      mid.appendChild(qty);
+
+      const side = document.createElement('div');
+      side.className = 'pk-mcline__side';
+      const price = document.createElement('bdi');
+      price.className = 'pk-mcline__price pk-price';
+      price.textContent = formatSAR(line.rate * line.qty, mcLocale);
+      const rm = document.createElement('button');
+      rm.type = 'button';
+      rm.className = 'pk-mcline__rm';
+      rm.innerHTML = iconSvg('trash');
+      rm.setAttribute('aria-label', t('cart.remove', mcLocale));
+      rm.addEventListener('click', () => removeLine(i));
+      side.append(price, rm);
+
+      row.append(media, mid, side);
+      mcLines.appendChild(row);
+    });
+    mcTotal.textContent = formatSAR(subtotal(lines), mcLocale);
+  }
+
+  function openMiniCart() {
+    if (!cartDrawer) return;
+    cartLastFocused = document.activeElement as HTMLElement;
+    renderMiniCart();
+    cartDrawer.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+    cartDrawer.querySelector<HTMLElement>('[data-cartdrawer-close]')?.focus();
+  }
+  function closeMiniCart() {
+    cartDrawer?.classList.remove('is-open');
+    document.body.style.overflow = '';
+    cartLastFocused?.focus();
+  }
+  cartOpenBtn?.addEventListener('click', (e) => {
+    e.preventDefault();
+    openMiniCart();
+  });
+  cartDrawer?.querySelectorAll('[data-cartdrawer-close]').forEach((el) => el.addEventListener('click', closeMiniCart));
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape' && cartDrawer?.classList.contains('is-open')) closeMiniCart();
+  });
+  window.addEventListener('cart:change', () => {
+    if (cartDrawer?.classList.contains('is-open')) renderMiniCart();
   });
 </script>
