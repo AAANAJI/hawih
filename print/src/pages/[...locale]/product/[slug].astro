@@ -227,15 +227,37 @@ const breadcrumbLd = {
       const currentBase = () => Number(root!.dataset.base) || 0;
       const currentImage = () => root!.dataset.image || '';
 
+      // Conditional groups (weej model): a group with data-cond-group/-value is
+      // visible ONLY while its controller group's selected value matches, and
+      // only VISIBLE groups count toward the price and the cart line.
+      function optionGroups(): HTMLElement[] {
+        return Array.from(root!.querySelectorAll<HTMLElement>('.pk-optpicker [data-option-name]'));
+      }
+      function refreshConditionals() {
+        const groups = optionGroups();
+        const selValue = (name: string): string | null => {
+          const g = groups.find((x) => x.dataset.optionName === name && !x.hidden);
+          const sel = g?.querySelector<HTMLSelectElement>('select');
+          return sel ? sel.value : null;
+        };
+        // Two passes so a controller hidden in pass 1 also hides its dependents.
+        for (let pass = 0; pass < 2; pass++) {
+          groups.forEach((g) => {
+            if (!g.dataset.condGroup) return;
+            g.hidden = selValue(g.dataset.condGroup) !== g.dataset.condValue;
+          });
+        }
+      }
       function currentSelections() {
-        const groups = root!.querySelectorAll<HTMLElement>('fieldset[data-option-name]');
         let delta = 0;
         const options: Record<string, string> = {};
-        groups.forEach((g) => {
-          const checked = g.querySelector<HTMLInputElement>('input:checked');
-          if (checked) {
-            options[g.dataset.optionName!] = checked.value;
-            delta += Number(checked.dataset.delta || '0');
+        optionGroups().forEach((g) => {
+          if (g.hidden) return;
+          const sel = g.querySelector<HTMLSelectElement>('select');
+          const opt = sel?.selectedOptions[0];
+          if (sel && opt) {
+            options[g.dataset.optionName!] = sel.value;
+            delta += Number(opt.dataset.delta || '0');
           }
         });
         return { options, rate: currentBase() + delta };
@@ -248,10 +270,14 @@ const breadcrumbLd = {
 
       // Delegated so option groups rebuilt live by catalog-sync still reprice.
       root.addEventListener('change', (e) => {
-        if ((e.target as HTMLElement)?.matches?.('input[type=radio]')) refreshPrice();
+        if ((e.target as HTMLElement)?.matches?.('select, input[type=radio]')) {
+          refreshConditionals();
+          refreshPrice();
+        }
       });
       // catalog-sync fires this after updating the base rate / rebuilding options.
-      root.addEventListener('pk:reprice', refreshPrice);
+      root.addEventListener('pk:reprice', () => { refreshConditionals(); refreshPrice(); });
+      refreshConditionals();
       refreshPrice();
 
       // view_item

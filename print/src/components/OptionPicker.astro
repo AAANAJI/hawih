@@ -1,64 +1,65 @@
 ---
 /**
- * OptionPicker — renders every option group of a product from the unified
- * bilingual shape ({name_ar,name_en,type,values:[{label_ar,label_en,price_delta}]}).
- *   type 'select' -> segmented pill radios
- *   type 'tier'   -> quantity-tier pills
- * Any value may carry a price add-on (price_delta), shown as a "+N" chip.
+ * OptionPicker — renders every option group of a product as a labelled
+ * <select> dropdown (the weej-style flow the owner asked for).
  *
- * Each group is a fieldset the product script reads to compute price and build
- * the cart line. Canonical Arabic is used for the machine-readable name/value
- * (data-option-name = name_ar, radio value = label_ar) so orders in the CRM are
- * consistently Arabic; the visible text is localized.
- *   fieldset[data-option-name][data-option-name-ar][data-option-type]
- *   input[type=radio][data-delta]
+ * Conditional groups (see src/lib/options.ts): a group whose name matches a
+ * value of another group (e.g. quantity group "8" under selector value
+ * "8 سم") carries data-cond-group / data-cond-value and starts hidden unless
+ * the controller's default selects it. The product-page script toggles
+ * visibility on change and only VISIBLE groups count toward the price and the
+ * cart line.
+ *
+ * Machine-readable contract (kept from the pill version): each group is
+ * [data-option-name][data-option-name-ar][data-option-type] and each <option>
+ * carries value=label_ar + data-delta. Canonical Arabic goes to the CRM.
+ * NOTE: catalog-sync.ts renderOptions rebuilds this markup in JS — keep both
+ * in lockstep.
  *
  * Props:
  *   options: CatalogOption[]
  *   locale: 'ar' | 'en'
- *   name?: string   -> radio group name prefix (default 'opt')
+ *   name?: string   -> select id prefix (default 'opt')
  */
-import { optionName, valueLabel, type CatalogOption } from '@lib/catalog';
+import type { CatalogOption } from '@lib/catalog';
 import type { Locale } from '@lib/format';
-import { formatNumber } from '@lib/format';
+import { conditionalRefs, optionValueText, optionGroupLabel } from '@lib/options';
 
 interface Props { options: CatalogOption[]; locale: Locale; name?: string }
 const { options, locale, name = 'opt' } = Astro.props;
 
-const deltaLabel = (d: number) => (d === 0 ? '' : `+${formatNumber(d, locale)}`);
+const refs = conditionalRefs(options);
+// A conditional group starts visible only if its controller's FIRST value
+// (the default selection) targets it.
+function initiallyHidden(gi: number): boolean {
+  const ref = refs[gi];
+  if (!ref) return false;
+  const controller = options.find((o) => o.name_ar === ref.group);
+  return !controller || (controller.values[0]?.label_ar ?? '') !== ref.value;
+}
 ---
 <div class="pk-optpicker">
   {options.map((o, gi) => {
-    const label = optionName(o, locale);
-    const groupName = `${name}-${gi}`;
+    const ref = refs[gi];
     return (
-      <fieldset
+      <div
         class="pk-optgroup"
-        role="radiogroup"
-        aria-label={label}
         data-option-name={o.name_ar}
         data-option-name-ar={o.name_ar}
         data-option-type={o.type}
+        data-cond-group={ref ? ref.group : undefined}
+        data-cond-value={ref ? ref.value : undefined}
+        hidden={initiallyHidden(gi)}
       >
-        <legend class="pk-optgroup__label">{label}</legend>
-        <div class="pk-optgroup__pills">
+        <label class="pk-optgroup__label" for={`${name}-${gi}`}>{optionGroupLabel(o, locale)}</label>
+        <select class="pk-select" id={`${name}-${gi}`}>
           {o.values.map((v, vi) => (
-            <label class="pk-pill">
-              <input
-                type="radio"
-                name={groupName}
-                value={v.label_ar}
-                data-delta={v.price_delta}
-                checked={vi === 0}
-              />
-              <span>{valueLabel(v, locale)}</span>
-              {v.price_delta > 0 && (
-                <span class="pk-pill__delta">{deltaLabel(v.price_delta)}</span>
-              )}
-            </label>
+            <option value={v.label_ar} data-delta={v.price_delta} selected={vi === 0}>
+              {optionValueText(v, locale)}
+            </option>
           ))}
-        </div>
-      </fieldset>
+        </select>
+      </div>
     );
   })}
 </div>
