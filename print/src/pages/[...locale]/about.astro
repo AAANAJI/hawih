@@ -1,0 +1,55 @@
+---
+/**
+ * About page — /about/ and /en/about/.
+ * Brand story, stats trio, CTA to the catalog.
+ */
+import Base from '@layouts/Base.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import Button from '@components/Button.astro';
+import { localeStaticPaths, href } from '@lib/i18n';
+import { t } from '@lib/strings';
+import type { Locale } from '@lib/format';
+
+export const getStaticPaths = localeStaticPaths;
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+
+const title = t('about.title', locale);
+const stats = [
+  { n: t('about.stat1.n', locale), l: t('about.stat1.l', locale) },
+  { n: t('about.stat2.n', locale), l: t('about.stat2.l', locale) },
+  { n: t('about.stat3.n', locale), l: t('about.stat3.l', locale) },
+];
+---
+<Base
+  locale={locale}
+  title={`${title} — ${t('brand.name', locale)}`}
+  description={t('about.sub', locale)}
+  path="/about"
+>
+  <div class="pk-container">
+    <Breadcrumbs items={[{ label: t('nav.home', locale), href: href(locale, '/') }, { label: title }]} />
+    <div class="pk-pagehead">
+      <span class="pk-eyebrow pk-eyebrow--chip">{t('brand.name', locale)}</span>
+      <h1 class="pk-h1" style="margin-top:var(--sp-3)">{title}</h1>
+      <p>{t('about.sub', locale)}</p>
+    </div>
+
+    <div class="pk-stats pk-reveal">
+      {stats.map((s) => (
+        <div class="pk-stat">
+          <span class="pk-stat__n"><bdi>{s.n}</bdi></span>
+          <span class="pk-stat__l">{s.l}</span>
+        </div>
+      ))}
+    </div>
+
+    <div class="pk-prose" style="margin-top:var(--sp-8)">
+      <p>{t('about.p1', locale)}</p>
+      <p>{t('about.p2', locale)}</p>
+      <div style="margin-top:var(--sp-6)">
+        <Button href={href(locale, '/products')} size="lg">{t('about.cta', locale)}</Button>
+      </div>
+    </div>
+  </div>
+</Base>

@@ -1,0 +1,76 @@
+---
+/**
+ * FAQ page — /faq/ and /en/faq/.
+ * Native <details> accordion (no JS), FAQPage JSON-LD.
+ */
+import Base from '@layouts/Base.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import Icon from '@components/Icon.astro';
+import JsonLd from '@components/JsonLd.astro';
+import { localeStaticPaths, href } from '@lib/i18n';
+import { t } from '@lib/strings';
+import { whatsappUrl } from '@lib/config';
+import type { Locale } from '@lib/format';
+
+export const getStaticPaths = localeStaticPaths;
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+
+const title = t('faq.title', locale);
+const qa = [1, 2, 3, 4, 5, 6].map((i) => ({
+  q: t(`faq.q${i}` as Parameters<typeof t>[0], locale),
+  a: t(`faq.a${i}` as Parameters<typeof t>[0], locale),
+}));
+
+const faqLd = {
+  '@context': 'https://schema.org',
+  '@type': 'FAQPage',
+  mainEntity: qa.map((x) => ({
+    '@type': 'Question',
+    name: x.q,
+    acceptedAnswer: { '@type': 'Answer', text: x.a },
+  })),
+};
+---
+<Base
+  locale={locale}
+  title={`${title} — ${t('brand.name', locale)}`}
+  description={t('faq.sub', locale)}
+  path="/faq"
+>
+  <Fragment slot="head">
+    <JsonLd data={[faqLd]} />
+  </Fragment>
+
+  <div class="pk-container">
+    <Breadcrumbs items={[{ label: t('nav.home', locale), href: href(locale, '/') }, { label: title }]} />
+    <div class="pk-pagehead">
+      <h1 class="pk-h1">{title}</h1>
+      <p>{t('faq.sub', locale)}</p>
+    </div>
+
+    <div class="pk-faq" style="margin-bottom:var(--sp-9)">
+      {qa.map((x, i) => (
+        <details class="pk-faq__item pk-reveal" style={`transition-delay:${i * 60}ms`} open={i === 0}>
+          <summary>
+            <span>{x.q}</span>
+            <span class="pk-faq__chev" aria-hidden="true"><Icon name="chevron-down" size={17} /></span>
+          </summary>
+          <p>{x.a}</p>
+        </details>
+      ))}
+    </div>
+
+    <div class="pk-banner" style="margin-bottom:var(--sp-10)">
+      <div class="pk-banner__deco" aria-hidden="true"></div>
+      <div class="pk-banner__copy">
+        <h2 class="pk-h2">{t('contact.title', locale)}</h2>
+        <p>{t('contact.sub', locale)}</p>
+      </div>
+      <a class="pk-btn pk-btn--light pk-btn--lg" href={whatsappUrl()} target="_blank" rel="noopener">
+        <Icon name="message-circle" size={18} />
+        {t('whatsapp.cta', locale)}
+      </a>
+    </div>
+  </div>
+</Base>

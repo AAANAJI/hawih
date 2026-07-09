@@ -110,6 +110,68 @@ export const STRINGS = {
   'qty.decrease': { ar: 'تقليل الكمية', en: 'Decrease quantity' },
   'qty.increase': { ar: 'زيادة الكمية', en: 'Increase quantity' },
 
+  // Home promos
+  'promo1.kicker': { ar: 'الأكثر مبيعاً', en: 'Best seller' },
+  'promo1.title': { ar: 'ملصقات بتصميمك الخاص', en: 'Stickers with your own design' },
+  'promo1.body': { ar: 'مقاسات وخامات متعددة، قصّ حسب الشكل، وتنفيذ سريع.', en: 'Multiple sizes and materials, custom die-cut, fast turnaround.' },
+  'promo1.cta': { ar: 'اطلب ملصقاتك', en: 'Order stickers' },
+  'promo2.kicker': { ar: 'انطباع أول لا يُنسى', en: 'A first impression that lasts' },
+  'promo2.title': { ar: 'كروت أعمال فاخرة', en: 'Premium business cards' },
+  'promo2.body': { ar: 'ورق فاخر وتشطيبات مميزة تليق بعلامتك التجارية.', en: 'Premium stocks and finishes worthy of your brand.' },
+  'promo2.cta': { ar: 'تصفّح الكروت', en: 'Browse cards' },
+
+  // Design-help banner
+  'banner.title': { ar: 'ما عندك تصميم جاهز؟', en: "Don't have a design ready?" },
+  'banner.body': { ar: 'فريق التصميم لدينا يجهّز لك تصميماً احترافياً يليق بمطبوعاتك — تواصل معنا وخلّ الباقي علينا.', en: 'Our design team will prepare a professional design for your prints — get in touch and leave the rest to us.' },
+  'banner.cta': { ar: 'اطلب تصميماً', en: 'Request a design' },
+
+  // Header / nav extras
+  'nav.about': { ar: 'من نحن', en: 'About' },
+  'nav.contact': { ar: 'تواصل معنا', en: 'Contact' },
+  'nav.faq': { ar: 'الأسئلة الشائعة', en: 'FAQ' },
+
+  // About page
+  'about.title': { ar: 'من نحن', en: 'About us' },
+  'about.sub': { ar: 'مطبعة هوية — الذراع الطباعية لهوية للأعمال.', en: 'Hawih Print — the printing arm of Hawih Business.' },
+  'about.p1': { ar: 'نؤمن أن المطبوعات ليست ورقاً وحبراً، بل امتداد لهوية علامتك التجارية. في مطبعة هوية نجمع بين الجودة العالية والتنفيذ السريع لنقدّم مطبوعات تليق بمنشأتك — من كروت الأعمال والملصقات إلى العلب والأكياس ومطبوعات المناسبات.', en: 'We believe print is not just paper and ink — it is an extension of your brand. At Hawih Print we combine high quality with fast turnaround to deliver prints worthy of your business, from business cards and stickers to boxes, bags and occasion prints.' },
+  'about.p2': { ar: 'نخدم المنشآت والأفراد في جميع مناطق المملكة، مع فواتير ضريبية، تأكيد عبر واتساب، وتوصيل موثوق حتى باب العميل.', en: 'We serve businesses and individuals across the Kingdom, with tax invoices, WhatsApp confirmation, and reliable door-to-door delivery.' },
+  'about.stat1.n': { ar: '+٢٠٠', en: '200+' },
+  'about.stat1.l': { ar: 'منتج طباعي', en: 'Print products' },
+  'about.stat2.n': { ar: '٣-٧', en: '3–7' },
+  'about.stat2.l': { ar: 'أيام تنفيذ', en: 'Days turnaround' },
+  'about.stat3.n': { ar: '١٠٠٪', en: '100%' },
+  'about.stat3.l': { ar: 'فاتورة ضريبية', en: 'Tax invoiced' },
+  'about.cta': { ar: 'تصفّح منتجاتنا', en: 'Browse our products' },
+
+  // Contact page
+  'contact.title': { ar: 'تواصل معنا', en: 'Contact us' },
+  'contact.sub': { ar: 'فريقنا جاهز للرد على استفساراتك ومساعدتك في طلبك.', en: 'Our team is ready to answer your questions and help with your order.' },
+  'contact.whatsapp.title': { ar: 'واتساب', en: 'WhatsApp' },
+  'contact.whatsapp.body': { ar: 'أسرع طريقة للتواصل — رد خلال ساعات العمل.', en: 'The fastest way to reach us — replies during working hours.' },
+  'contact.whatsapp.cta': { ar: 'ابدأ محادثة', en: 'Start a chat' },
+  'contact.phone.title': { ar: 'اتصال هاتفي', en: 'Phone' },
+  'contact.phone.body': { ar: 'من الأحد إلى الخميس، ٩ صباحاً – ٦ مساءً.', en: 'Sunday to Thursday, 9am – 6pm.' },
+  'contact.phone.cta': { ar: 'اتصل الآن', en: 'Call now' },
+  'contact.email.title': { ar: 'البريد الإلكتروني', en: 'Email' },
+  'contact.email.body': { ar: 'للاستفسارات التفصيلية وطلبات الشركات.', en: 'For detailed enquiries and corporate orders.' },
+  'contact.email.cta': { ar: 'أرسل بريداً', en: 'Send an email' },
+
+  // FAQ page
+  'faq.title': { ar: 'الأسئلة الشائعة', en: 'FAQ' },
+  'faq.sub': { ar: 'إجابات سريعة عن أكثر ما يسألنا عنه عملاؤنا.', en: 'Quick answers to what our customers ask most.' },
+  'faq.q1': { ar: 'كم تستغرق مدة التنفيذ والتوصيل؟', en: 'How long do production and delivery take?' },
+  'faq.a1': { ar: 'التنفيذ من ٣ إلى ٧ أيام عمل حسب المنتج والكمية، والتوصيل من ٢ إلى ٥ أيام لجميع مناطق المملكة.', en: 'Production takes 3–7 business days depending on the product and quantity, and delivery takes 2–5 days across the Kingdom.' },
+  'faq.q2': { ar: 'ما صيغ ملفات التصميم المقبولة؟', en: 'Which artwork file formats do you accept?' },
+  'faq.a2': { ar: 'نقبل PDF وAI وEPS وPNG وJPG وZIP حتى ٢٥ ميجابايت، بدقة لا تقل عن ٣٠٠ نقطة/بوصة وبنظام ألوان CMYK.', en: 'We accept PDF, AI, EPS, PNG, JPG and ZIP up to 25MB, at 300dpi minimum in CMYK.' },
+  'faq.q3': { ar: 'كيف يتم الدفع؟', en: 'How does payment work?' },
+  'faq.a3': { ar: 'بعد تأكيد طلبك نصدر فاتورة ضريبية يتم سدادها عبر التحويل البنكي، ثم يبدأ التنفيذ فوراً.', en: 'After confirming your order we issue a tax invoice paid by bank transfer, then production starts immediately.' },
+  'faq.q4': { ar: 'ليس لدي تصميم جاهز، هل تصممون لي؟', en: "I don't have a design — can you design for me?" },
+  'faq.a4': { ar: 'نعم، فريق التصميم لدينا يجهّز لك تصميماً احترافياً برسوم رمزية — تواصل معنا عبر واتساب.', en: 'Yes — our design team prepares a professional design for a small fee. Reach us on WhatsApp.' },
+  'faq.q5': { ar: 'هل أستطيع تتبع حالة طلبي؟', en: 'Can I track my order status?' },
+  'faq.a5': { ar: 'نعم، من صفحة حسابي تجد حالة كل طلب خطوة بخطوة من الاستلام حتى التسليم، مع فاتورتك.', en: 'Yes — the My Account page shows each order step by step from received to delivered, along with your invoice.' },
+  'faq.q6': { ar: 'هل تصدرون فواتير ضريبية؟', en: 'Do you issue tax invoices?' },
+  'faq.a6': { ar: 'نعم، جميع الطلبات تشمل فاتورة ضريبية رسمية باسم منشأتك أو باسمك الشخصي.', en: 'Yes — every order includes an official tax invoice in your company or personal name.' },
+
   // Category page
   'category.productsCount': { ar: 'منتج', en: 'products' },
   'category.empty.title': { ar: 'لا توجد منتجات بعد', en: 'No products yet' },

@@ -27,6 +27,8 @@ import SEOHead from '@components/SEOHead.astro';
 import HawihStrip from '@components/HawihStrip.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
+import Icon from '@components/Icon.astro';
+import { t } from '@lib/strings';
 import { GTM_ID, MAINTENANCE, PREVIEW_KEY, whatsappUrl } from '@lib/config';
 import { dirFor } from '@lib/i18n';
 import type { Locale } from '@lib/format';
@@ -154,6 +156,11 @@ const dir = dirFor(locale);
       <slot />
     </main>
     <Footer locale={locale} />
+
+    <!-- Floating WhatsApp button -->
+    <a class="pk-fab" href={whatsappUrl()} target="_blank" rel="noopener" aria-label={t('whatsapp.cta', locale)}>
+      <Icon name="message-circle" size={24} />
+    </a>
 
     <script>
       // Reveal-on-scroll for .pk-reveal (respects reduced motion via CSS).
