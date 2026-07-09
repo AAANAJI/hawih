@@ -66,10 +66,15 @@ export function transformCatalog(api) {
   // Map the API category slug ("category-<id>") -> normalized category.
   const catByApiSlug = new Map();
   apiCats.forEach((c, i) => {
+    // Precedence: CAT_MAP (curated demo categories) → the CRM-provided slug /
+    // English name (set by the bulk importer via print_category_meta) → a
+    // slugified Arabic title. The API emits a real slug for imported categories
+    // and a 'category-<id>' placeholder otherwise.
     const m = CAT_MAP[c.title];
+    const apiSlug = typeof c.slug === 'string' && !/^category-\d+$/.test(c.slug) ? c.slug : '';
     catByApiSlug.set(c.slug, {
       id: c.id,
-      slug: m ? m.slug : slugify(c.title, 'category-' + c.id),
+      slug: m ? m.slug : apiSlug || slugify(c.title, 'category-' + c.id),
       title: c.title || '',
       title_en: m ? m.name_en : c.title_en || c.title || '',
       sort: typeof c.sort === 'number' ? c.sort : i,
