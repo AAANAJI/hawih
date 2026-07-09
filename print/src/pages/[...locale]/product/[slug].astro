@@ -11,6 +11,7 @@ import PriceBox from '@components/PriceBox.astro';
 import QtyStepper from '@components/QtyStepper.astro';
 import ProductCard from '@components/ProductCard.astro';
 import Button from '@components/Button.astro';
+import Icon from '@components/Icon.astro';
 import JsonLd from '@components/JsonLd.astro';
 import { href } from '@lib/i18n';
 import { t } from '@lib/strings';
@@ -134,19 +135,22 @@ const breadcrumbLd = {
         <div class="pk-pdp__qtyrow">
           <div>
             <span class="pk-optgroup__label" style="display:block;margin-bottom:var(--sp-2)">{t('product.quantity', locale)}</span>
-            <QtyStepper id="pdp-qty" min={item.min_qty ?? 1} label={t('product.quantity', locale)} />
+            <QtyStepper id="pdp-qty" min={item.min_qty ?? 1} label={t('product.quantity', locale)} decLabel={t('qty.decrease', locale)} incLabel={t('qty.increase', locale)} />
           </div>
-          <Button size="lg" data-add-to-cart style="flex:1;min-width:180px">{t('product.addToCart', locale)}</Button>
+          <Button size="lg" data-add-to-cart style="flex:1;min-width:180px">
+            <Icon name="cart" size={18} />
+            <span data-add-label>{t('product.addToCart', locale)}</span>
+          </Button>
         </div>
 
         {item.requires_artwork && (
           <div style="margin-top:var(--sp-2)">
             <p class="pk-small pk-muted" style="display:flex;gap:8px;align-items:center;margin-bottom:var(--sp-2)">
-              <span aria-hidden="true">🎨</span> {t('product.artworkNote', locale)}
+              <Icon name="palette" size={16} /> {t('product.artworkNote', locale)}
             </p>
             <div class="pk-upload" data-pdp-upload>
               <label class="pk-upload__zone" tabindex="0" role="button" data-pdp-zone>
-                <span aria-hidden="true" style="font-size:1.4rem;color:var(--pk-accent)">⬆</span>
+                <span class="pk-upload__badge" aria-hidden="true"><Icon name="upload" size={20} /></span>
                 <strong>{t('upload.drop', locale)}</strong>
                 <span class="pk-upload__hint">{t('upload.hint', locale)}</span>
                 <input type="file" accept={UPLOAD.accept.map((e) => '.' + e).join(',')} multiple class="pk-visually-hidden" data-pdp-input />
@@ -157,13 +161,20 @@ const breadcrumbLd = {
           </div>
         )}
 
+        <!-- Trust mini-row -->
+        <div class="pk-minitrust">
+          <span><Icon name="receipt" size={15} /> {t('trust.tax', locale)}</span>
+          <span><Icon name="message-circle" size={15} /> {t('trust.whatsapp', locale)}</span>
+          <span><Icon name="zap" size={15} /> {t('trust.turnaround', locale)}</span>
+        </div>
+
         <!-- Specs -->
         <div class="pk-card" style="padding:var(--sp-5);margin-top:var(--sp-2)">
           <h2 class="pk-h3" style="margin-bottom:var(--sp-4)">{t('product.specs', locale)}</h2>
           <dl class="pk-specs">
             <div><dt>{t('product.spec.category', locale)}</dt><dd data-live-spec-cat>{catTitle}</dd></div>
             <div><dt>{t('product.spec.unit', locale)}</dt><dd data-live-spec-unit>{unit}</dd></div>
-            <div><dt>{t('product.spec.turnaround', locale)}</dt><dd>{t('product.turnaroundValue', locale)}</dd></div>
+            <div><dt>{t('product.spec.turnaround', locale)}</dt><dd><span class="pk-chip-amber">{t('product.turnaroundValue', locale)}</span></dd></div>
             <div><dt>{t('product.spec.artwork', locale)}</dt><dd>{item.requires_artwork ? t('product.yes', locale) : '—'}</dd></div>
           </dl>
         </div>
@@ -196,6 +207,8 @@ const breadcrumbLd = {
     import { addToCart, type ArtworkRef } from '@lib/cart';
     import { addToCartEvent, viewItem } from '@lib/gtm';
     import { formatSAR } from '@lib/format';
+    import { iconSvg } from '@lib/icons';
+    import { t } from '@lib/strings';
     import { api } from '@lib/api';
     import { UPLOAD } from '@lib/config';
 
@@ -279,8 +292,8 @@ const breadcrumbLd = {
           const rm = document.createElement('button');
           rm.type = 'button';
           rm.className = 'pk-filechip__remove';
-          rm.textContent = '✕';
-          rm.setAttribute('aria-label', 'x');
+          rm.innerHTML = iconSvg('x');
+          rm.setAttribute('aria-label', t('upload.remove', locale));
           rm.addEventListener('click', () => { artworkRefs.splice(i, 1); upRender(); });
           li.append(meta, rm);
           upList.appendChild(li);
@@ -324,9 +337,9 @@ const breadcrumbLd = {
         addToCartEvent({ item_id: itemId, item_name: title, price: rate, quantity: qty, item_category: slug });
         artworkRefs.length = 0;
         upRender();
-        const original = addBtn.textContent;
-        addBtn.textContent = locale === 'ar' ? 'تمت الإضافة ✓' : 'Added ✓';
-        setTimeout(() => { addBtn.textContent = original; }, 1600);
+        const original = addBtn.innerHTML;
+        addBtn.innerHTML = iconSvg('check') + '<span>' + t('product.added', locale) + '</span>';
+        setTimeout(() => { addBtn.innerHTML = original; }, 1600);
       });
 
       // Thumbnail swap

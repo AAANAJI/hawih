@@ -8,6 +8,7 @@
  * Behaviour (scroll border, drawer open/close + focus trap, cart badge) is
  * wired by the inline script at the bottom.
  */
+import Icon from '@components/Icon.astro';
 import { t } from '@lib/strings';
 import { href, switchLocalePath } from '@lib/i18n';
 import { categories, categoryTitle } from '@lib/catalog';
@@ -32,7 +33,7 @@ const arHref = switchLocalePath(path, 'ar');
 const enHref = switchLocalePath(path, 'en');
 const homeHref = href(locale, '/');
 const cartHref = href(locale, '/cart');
-const productsHref = href(locale, '/#categories');
+const productsHref = href(locale, '/products');
 ---
 <header class="pk-header" data-header>
   <div class="pk-container pk-header__inner">
@@ -44,10 +45,10 @@ const productsHref = href(locale, '/#categories');
       <div class="pk-dropdown">
         <button class="pk-navlink" aria-haspopup="true" aria-expanded="false" data-dropdown-btn>
           {t('nav.products', locale)}
-          <span aria-hidden="true" style="font-size:.7em">▾</span>
+          <Icon name="chevron-down" size={14} />
         </button>
         <div class="pk-dropdown__menu" data-dropdown-menu>
-          <a href={productsHref}>{t('nav.allCategories', locale)}</a>
+          <a href={productsHref}>{t('nav.allProducts', locale)}</a>
           {cats.map((c) => <a href={c.href}>{c.title}</a>)}
         </div>
       </div>
@@ -65,7 +66,7 @@ const productsHref = href(locale, '/#categories');
       </div>
 
       <a class="pk-navlink pk-cartbtn" href={cartHref} aria-label={t('nav.cart', locale)}>
-        <span aria-hidden="true" style="font-size:1.1rem">🛒</span>
+        <Icon name="cart" size={20} />
         <span class="pk-cartbtn__badge" data-cart-badge aria-hidden="true">0</span>
       </a>
 
@@ -84,10 +85,11 @@ const productsHref = href(locale, '/#categories');
   <div class="pk-drawer__panel" role="dialog" aria-modal="true" aria-label={t('nav.menu', locale)}>
     <div class="pk-drawer__head">
       <img src={logo} alt={t('brand.name', locale)} width="1080" height="390" style="height:26px;width:auto" />
-      <button class="pk-strip__close" data-drawer-close aria-label={t('nav.close', locale)} style="position:static;transform:none;color:var(--pk-ink)">✕</button>
+      <button class="pk-strip__close" data-drawer-close aria-label={t('nav.close', locale)} style="position:static;transform:none;color:var(--pk-ink)"><Icon name="x" size={18} /></button>
     </div>
     <a href={homeHref}>{t('nav.home', locale)}</a>
     <div class="pk-drawer__section">{t('nav.products', locale)}</div>
+    <a href={productsHref}>{t('nav.allProducts', locale)}</a>
     {cats.map((c) => <a href={c.href}>{c.title}</a>)}
     <div class="pk-drawer__section">{t('nav.account', locale)}</div>
     <a href={href(locale, '/account')}>{t('nav.account', locale)}</a>

@@ -5,6 +5,7 @@
  * steps, bank-transfer details + WhatsApp CTA. Fires GTM purchase, clears cart.
  */
 import Base from '@layouts/Base.astro';
+import Icon from '@components/Icon.astro';
 import Button from '@components/Button.astro';
 import { localeStaticPaths, href } from '@lib/i18n';
 import { t } from '@lib/strings';
@@ -20,9 +21,9 @@ const shopHref = href(locale, '/');
 const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.bank_name_en;
 
 const steps = [
-  { icon: '🎨', title: t('thanks.next1.title', locale), body: t('thanks.next1.body', locale) },
-  { icon: '💬', title: t('thanks.next2.title', locale), body: t('thanks.next2.body', locale) },
-  { icon: '🧾', title: t('thanks.next3.title', locale), body: t('thanks.next3.body', locale) },
+  { icon: 'palette' as const, title: t('thanks.next1.title', locale), body: t('thanks.next1.body', locale) },
+  { icon: 'message-circle' as const, title: t('thanks.next2.title', locale), body: t('thanks.next2.body', locale) },
+  { icon: 'receipt' as const, title: t('thanks.next3.title', locale), body: t('thanks.next3.body', locale) },
 ];
 ---
 <Base
@@ -34,7 +35,7 @@ const steps = [
 >
   <div class="pk-container">
     <div class="pk-thanks">
-      <div class="pk-thanks__icon" aria-hidden="true">✓</div>
+      <div class="pk-thanks__icon" aria-hidden="true"><Icon name="check" size={32} /></div>
       <h1 class="pk-h1">{t('thanks.title', locale)}</h1>
       <p class="pk-thanks__sub">{t('thanks.sub', locale)}</p>
       <div class="pk-thanks__numwrap" data-order-numwrap hidden>
@@ -55,7 +56,7 @@ const steps = [
       <div class="pk-steps">
         {steps.map((s, i) => (
           <div class="pk-card pk-step">
-            <div class="pk-step__num" aria-hidden="true">{s.icon}</div>
+            <div class="pk-step__num" aria-hidden="true"><Icon name={s.icon} size={18} /></div>
             <h3>{s.title}</h3>
             <p>{s.body}</p>
           </div>
@@ -78,7 +79,7 @@ const steps = [
       </div>
       <div style="text-align:center;margin-top:var(--sp-5)">
         <a class="pk-btn pk-btn--outline" data-whatsapp target="_blank" rel="noopener">
-          <span aria-hidden="true">💬</span> {t('whatsapp.cta', locale)}
+          <Icon name="message-circle" size={16} /> {t('whatsapp.cta', locale)}
         </a>
       </div>
     </section>

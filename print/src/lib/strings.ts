@@ -26,6 +26,7 @@ export const STRINGS = {
   'nav.menu': { ar: 'القائمة', en: 'Menu' },
   'nav.close': { ar: 'إغلاق', en: 'Close' },
   'nav.allCategories': { ar: 'كل الأقسام', en: 'All Categories' },
+  'nav.allProducts': { ar: 'كل المنتجات', en: 'All products' },
 
   // HawihStrip
   'strip.text': { ar: 'مطبعة هوية جزء من هوية للأعمال', en: 'Hawih Print is part of Hawih Business' },
@@ -69,7 +70,7 @@ export const STRINGS = {
   'product.startingFrom': { ar: 'يبدأ من', en: 'Starting from' },
   'product.from': { ar: 'من', en: 'From' },
   'product.addToCart': { ar: 'أضف إلى السلة', en: 'Add to cart' },
-  'product.added': { ar: 'تمت الإضافة ✓', en: 'Added ✓' },
+  'product.added': { ar: 'تمت الإضافة', en: 'Added' },
   'product.quantity': { ar: 'الكمية', en: 'Quantity' },
   'product.artworkNote': { ar: 'ارفع ملف التصميم عند إتمام الطلب.', en: 'Upload your artwork at checkout.' },
   'product.specs': { ar: 'المواصفات', en: 'Specifications' },
@@ -84,6 +85,30 @@ export const STRINGS = {
 
   // PriceBox
   'price.taxNote': { ar: 'شامل الضريبة تُحتسب عند الفوترة', en: 'VAT calculated at invoicing' },
+
+  // Search
+  'search.placeholder': { ar: 'ابحث عن منتج… كروت، ملصقات، علب', en: 'Search products… cards, stickers, boxes' },
+  'search.label': { ar: 'البحث في المنتجات', en: 'Search products' },
+  'search.viewAll': { ar: 'عرض كل النتائج', en: 'View all results' },
+  'search.noResults': { ar: 'لا توجد نتائج مطابقة', en: 'No matching results' },
+
+  // All-products page
+  'products.title': { ar: 'كل المنتجات', en: 'All products' },
+  'products.sub': { ar: 'تصفّح كامل منتجات المطبعة وصفِّها حسب القسم أو السعر.', en: 'Browse the full catalog and filter by category or price.' },
+  'products.count': { ar: 'منتج', en: 'products' },
+  'products.filterAll': { ar: 'الكل', en: 'All' },
+  'products.sort': { ar: 'الترتيب', en: 'Sort' },
+  'products.sort.default': { ar: 'الترتيب الافتراضي', en: 'Default order' },
+  'products.sort.priceAsc': { ar: 'السعر: من الأقل', en: 'Price: low to high' },
+  'products.sort.priceDesc': { ar: 'السعر: من الأعلى', en: 'Price: high to low' },
+  'products.sort.name': { ar: 'الاسم', en: 'Name' },
+  'products.empty.title': { ar: 'لا توجد نتائج', en: 'No results' },
+  'products.empty.body': { ar: 'جرّب كلمة بحث أخرى أو امسح الفلاتر.', en: 'Try another search term or clear the filters.' },
+  'products.clear': { ar: 'مسح الفلاتر', en: 'Clear filters' },
+
+  // Qty stepper a11y
+  'qty.decrease': { ar: 'تقليل الكمية', en: 'Decrease quantity' },
+  'qty.increase': { ar: 'زيادة الكمية', en: 'Increase quantity' },
 
   // Category page
   'category.productsCount': { ar: 'منتج', en: 'products' },
@@ -243,7 +268,7 @@ export const STRINGS = {
   'bank.iban': { ar: 'رقم الآيبان', en: 'IBAN' },
   'bank.note': { ar: 'أرسل إيصال التحويل عبر واتساب لتأكيد الدفع وبدء التنفيذ.', en: 'Send the transfer receipt on WhatsApp to confirm payment and start production.' },
   'bank.copy': { ar: 'نسخ', en: 'Copy' },
-  'bank.copied': { ar: 'تم النسخ ✓', en: 'Copied ✓' },
+  'bank.copied': { ar: 'تم النسخ', en: 'Copied' },
   'whatsapp.cta': { ar: 'تواصل عبر واتساب', en: 'Chat on WhatsApp' },
 
   // Thank-you

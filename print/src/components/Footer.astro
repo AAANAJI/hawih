@@ -6,6 +6,7 @@
  * Props:
  *   locale: 'ar' | 'en'
  */
+import Icon from '@components/Icon.astro';
 import { t } from '@lib/strings';
 import { href } from '@lib/i18n';
 import { categories, categoryTitle } from '@lib/catalog';
@@ -40,6 +41,7 @@ const cats = categories.slice(0, 6);
       <div>
         <h4>{t('footer.help', locale)}</h4>
         <ul>
+          <li><a href={href(locale, '/products')}>{t('nav.allProducts', locale)}</a></li>
           <li><a href={href(locale, '/account')}>{t('footer.track', locale)}</a></li>
           <li><a href={href(locale, '/account')}>{t('footer.account', locale)}</a></li>
           <li><a href={href(locale, '/policies/shipping-returns')}>{t('footer.shipping', locale)}</a></li>
@@ -51,16 +53,16 @@ const cats = categories.slice(0, 6);
       <div>
         <h4>{t('footer.contact', locale)}</h4>
         <ul class="pk-footer__contact">
-          <li><span aria-hidden="true">📞</span> <a class="pk-footer__phone" href="tel:+966502185471" dir="ltr">{phoneDisplay}</a></li>
-          <li><span aria-hidden="true">💬</span> <a href={whatsappUrl(locale === 'ar' ? undefined : 'Hello Hawih, I have an enquiry.')} target="_blank" rel="noopener">{t('footer.whatsapp', locale)}</a></li>
-          <li><span aria-hidden="true">✉️</span> <a href={`mailto:${email}`} dir="ltr">{email}</a></li>
+          <li><Icon name="phone" size={16} /> <a class="pk-footer__phone" href="tel:+966502185471" dir="ltr">{phoneDisplay}</a></li>
+          <li><Icon name="message-circle" size={16} /> <a href={whatsappUrl(locale === 'ar' ? undefined : 'Hello Hawih, I have an enquiry.')} target="_blank" rel="noopener">{t('footer.whatsapp', locale)}</a></li>
+          <li><Icon name="mail" size={16} /> <a href={`mailto:${email}`} dir="ltr">{email}</a></li>
         </ul>
       </div>
     </div>
 
     <div class="pk-footer__trust">
       <span>© {year} {t('brand.name', locale)} — {t('footer.rights', locale)} · {t('footer.trustNote', locale)}</span>
-      <a href={HAWIH_MAIN_URL} target="_blank" rel="noopener">{t('footer.mainSite', locale)} ↗</a>
+      <a href={HAWIH_MAIN_URL} target="_blank" rel="noopener">{t('footer.mainSite', locale)} <Icon name="arrow-up-right" size={13} /></a>
     </div>
   </div>
 </footer>

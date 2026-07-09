@@ -13,7 +13,8 @@ import JsonLd from '@components/JsonLd.astro';
 import { href } from '@lib/i18n';
 import { t } from '@lib/strings';
 import { formatNumber } from '@lib/format';
-import { categories, itemsInCategory, getCategory, categoryTitle, itemTitle } from '@lib/catalog';
+import { categories, items, itemsInCategory, getCategory, categoryTitle, itemTitle } from '@lib/catalog';
+import { categoryImage } from '@lib/catalog-transform.mjs';
 import { SITE_URL } from '@lib/config';
 import type { Locale } from '@lib/format';
 
@@ -32,6 +33,7 @@ const { slug } = Astro.params;
 const category = getCategory(slug!)!;
 const products = itemsInCategory(slug!);
 const title = categoryTitle(category, locale);
+const ogImage = categoryImage(items, slug!);
 
 const crumbs = [
   { label: t('nav.home', locale), href: href(locale, '/') },
@@ -72,7 +74,7 @@ const breadcrumbLd = {
   title={`${title} — ${t('brand.name', locale)}`}
   description={`${title} · ${t('brand.tagline', locale)}`}
   path={`/category/${slug}`}
-  image={`/img/categories/${slug}.svg`}
+  image={ogImage}
 >
   <Fragment slot="head">
     <JsonLd data={[collectionLd, breadcrumbLd]} />
@@ -83,6 +85,17 @@ const breadcrumbLd = {
     <div class="pk-pagehead">
       <h1 class="pk-h1" data-live-cat-title>{title}</h1>
       <p data-live-cat-count>{formatNumber(products.length, locale)} {t('category.productsCount', locale)}</p>
+    </div>
+
+    <!-- Lateral category navigation (baked; new categories appear after the
+         daily rebuild — same policy as new URLs/sitemap). -->
+    <div class="pk-chips pk-chips--scroll" aria-label={t('nav.products', locale)}>
+      <a class="pk-chip" href={href(locale, '/products')}>{t('nav.allProducts', locale)}</a>
+      {categories.map((c) => (
+        <a class={`pk-chip${c.slug === slug ? ' pk-chip--primary' : ''}`} href={href(locale, `/category/${c.slug}`)} aria-current={c.slug === slug ? 'page' : undefined}>
+          {categoryTitle(c, locale)}
+        </a>
+      ))}
     </div>
 
     <!-- data-cat-body is the region catalog-sync re-renders live from the CRM -->
@@ -104,7 +117,7 @@ const breadcrumbLd = {
         </div>
       ) : (
         <div style="margin-bottom:var(--sp-10)">
-          <EmptyState icon="🗂️" title={t('category.empty.title', locale)} body={t('category.empty.body', locale)}>
+          <EmptyState icon="folder" title={t('category.empty.title', locale)} body={t('category.empty.body', locale)}>
             <Button href={href(locale, '/')}>{t('common.backHome', locale)}</Button>
           </EmptyState>
         </div>

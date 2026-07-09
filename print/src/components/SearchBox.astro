@@ -1,0 +1,161 @@
+---
+/**
+ * SearchBox — the hero product search. Big pill input with an inline SVG icon
+ * and a suggestion dropdown driven by a baked JSON index of the catalog
+ * (title AR/EN, slug, category, price, thumb). Keyboard accessible
+ * (combobox/listbox pattern), RTL-aware via logical CSS, zero dependencies.
+ * Enter with no selection (or the footer row) goes to /products?q=…
+ * Props:
+ *   locale: 'ar' | 'en'
+ */
+import Icon from '@components/Icon.astro';
+import { t } from '@lib/strings';
+import { href } from '@lib/i18n';
+import { items } from '@lib/catalog';
+import type { Locale } from '@lib/format';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+
+const index = items.map((it) => ({
+  s: it.slug,
+  t: it.title,
+  e: it.title_en,
+  c: it.category_slug,
+  p: it.rate,
+  i: it.images?.square ?? '',
+}));
+const productsHref = href(locale, '/products');
+const productBase = locale === 'en' ? '/en/product/' : '/product/';
+---
+<form class="pk-search" role="search" data-search data-locale={locale} data-products-href={productsHref} data-product-base={productBase}>
+  <span class="pk-search__icon" aria-hidden="true"><Icon name="search" size={20} /></span>
+  <input
+    type="search"
+    name="q"
+    placeholder={t('search.placeholder', locale)}
+    aria-label={t('search.label', locale)}
+    autocomplete="off"
+    role="combobox"
+    aria-expanded="false"
+    aria-controls="pk-search-list"
+    aria-autocomplete="list"
+    data-search-input
+  />
+  <div class="pk-search__menu" data-search-menu hidden>
+    <ul id="pk-search-list" role="listbox" data-search-list></ul>
+    <a class="pk-search__all" data-search-all href={productsHref}>
+      {t('search.viewAll', locale)}
+      <Icon name="arrow-end" size={14} class="pk-icon--flip" />
+    </a>
+  </div>
+</form>
+<script type="application/json" data-search-index set:html={JSON.stringify(index)} />
+
+<script>
+  import { normalizeText, matchScore, type SearchEntry } from '@lib/search';
+  import { formatSAR } from '@lib/format';
+  import { t } from '@lib/strings';
+
+  const form = document.querySelector<HTMLFormElement>('[data-search]');
+  const indexEl = document.querySelector<HTMLScriptElement>('[data-search-index]');
+  if (form && indexEl) {
+    const locale = (form.dataset.locale === 'en' ? 'en' : 'ar') as 'ar' | 'en';
+    const productsHref = form.dataset.productsHref || '/products/';
+    const productBase = form.dataset.productBase || '/product/';
+    const entries = JSON.parse(indexEl.textContent || '[]') as SearchEntry[];
+    const input = form.querySelector<HTMLInputElement>('[data-search-input]')!;
+    const menu = form.querySelector<HTMLElement>('[data-search-menu]')!;
+    const list = form.querySelector<HTMLUListElement>('[data-search-list]')!;
+    const allLink = form.querySelector<HTMLAnchorElement>('[data-search-all]')!;
+
+    let results: SearchEntry[] = [];
+    let active = -1;
+    let debounceTimer = 0;
+
+    const productUrl = (slug: string) => `${productBase}${slug}/`;
+
+    function close() {
+      menu.hidden = true;
+      input.setAttribute('aria-expanded', 'false');
+      active = -1;
+    }
+    function open() {
+      menu.hidden = false;
+      input.setAttribute('aria-expanded', 'true');
+    }
+    function render() {
+      list.textContent = '';
+      results.forEach((r, idx) => {
+        const li = document.createElement('li');
+        li.role = 'option';
+        li.id = `pk-sr-${idx}`;
+        li.setAttribute('aria-selected', idx === active ? 'true' : 'false');
+        const a = document.createElement('a');
+        a.className = 'pk-search__row' + (idx === active ? ' is-active' : '');
+        a.href = productUrl(r.s);
+        const img = document.createElement('img');
+        img.src = r.i;
+        img.alt = '';
+        img.loading = 'lazy';
+        img.addEventListener('error', () => { img.style.visibility = 'hidden'; });
+        const title = document.createElement('span');
+        title.className = 'pk-search__title';
+        title.textContent = locale === 'ar' ? r.t : r.e || r.t;
+        const price = document.createElement('bdi');
+        price.className = 'pk-search__price';
+        price.textContent = formatSAR(r.p, locale);
+        a.append(img, title, price);
+        li.appendChild(a);
+        list.appendChild(li);
+      });
+      const empty = results.length === 0;
+      if (empty) {
+        const li = document.createElement('li');
+        li.className = 'pk-search__none';
+        li.textContent = t('search.noResults', locale);
+        list.appendChild(li);
+      }
+      input.setAttribute('aria-activedescendant', active >= 0 ? `pk-sr-${active}` : '');
+    }
+    function query(q: string) {
+      const nq = normalizeText(q);
+      if (nq.length < 2) { close(); return; }
+      results = entries
+        .map((e) => ({ e, score: matchScore(nq, e, locale) }))
+        .filter((x) => x.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 6)
+        .map((x) => x.e);
+      allLink.href = `${productsHref}?q=${encodeURIComponent(q.trim())}`;
+      active = -1;
+      render();
+      open();
+    }
+
+    input.addEventListener('input', () => {
+      window.clearTimeout(debounceTimer);
+      debounceTimer = window.setTimeout(() => query(input.value), 120);
+    });
+    input.addEventListener('keydown', (e) => {
+      if (menu.hidden && (e.key === 'ArrowDown' || e.key === 'ArrowUp')) { query(input.value); return; }
+      if (e.key === 'ArrowDown') { e.preventDefault(); active = Math.min(active + 1, results.length - 1); render(); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); active = Math.max(active - 1, -1); render(); }
+      else if (e.key === 'Escape') { close(); }
+      else if (e.key === 'Enter') {
+        if (!menu.hidden && active >= 0 && results[active]) {
+          e.preventDefault();
+          location.href = productUrl(results[active].s);
+        }
+      }
+    });
+    document.addEventListener('click', (e) => {
+      if (!form.contains(e.target as Node)) close();
+    });
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const q = input.value.trim();
+      location.href = q ? `${productsHref}?q=${encodeURIComponent(q)}` : productsHref;
+    });
+  }
+</script>

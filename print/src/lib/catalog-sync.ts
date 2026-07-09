@@ -21,6 +21,9 @@
  */
 import { liveCatalog } from './live-catalog';
 import { hydrateCardPrices } from './live-prices';
+// Plain .mjs module shared with the build script (same rule on both sides).
+import { categoryImage } from './catalog-transform.mjs';
+import { iconSvg } from './icons';
 import type { Catalog, CatalogCategory, CatalogItem } from './catalog';
 import { formatSAR, formatNumber, type Locale } from './format';
 import { href } from './i18n';
@@ -65,6 +68,10 @@ function renderProductCard(
     'data-live-image': '',
     'data-slug': item.slug,
   });
+  // Mirrors ProductCard.astro's onerror fallback.
+  img.addEventListener('error', () => {
+    img.style.visibility = 'hidden';
+  });
   media.appendChild(img);
 
   const body = el('div', { class: 'pk-prodcard__body' });
@@ -82,19 +89,25 @@ function renderProductCard(
   return a;
 }
 
-function renderCategoryTile(cat: CatalogCategory, locale: Locale, eager: boolean): HTMLAnchorElement {
+function renderCategoryTile(
+  cat: CatalogCategory,
+  locale: Locale,
+  eager: boolean,
+  imageSrc: string,
+): HTMLAnchorElement {
+  // MUST mirror CategoryTile.astro (imageSrc = shared categoryImage() rule).
   const title = catTitle(cat, locale);
   const a = el('a', { class: 'pk-cattile', href: href(locale, `/category/${cat.slug}`), 'aria-label': title });
   const img = el('img', {
-    src: `/img/categories/${cat.slug}.svg`,
+    src: imageSrc,
     alt: title,
     loading: eager ? 'eager' : 'lazy',
     decoding: 'async',
     width: '1200',
     height: '900',
   });
-  // A brand-new category may not have a curated tile SVG yet — hide the broken
-  // image gracefully (the scrim + label still read clearly).
+  // Failed image hides itself — the tile's CSS gradient + scrim + label keep
+  // it looking intentional (same behavior as the baked onerror handler).
   img.addEventListener('error', () => {
     img.style.visibility = 'hidden';
   });
@@ -148,7 +161,7 @@ function reconcileHome(cat: Catalog, locale: Locale): void {
     catsGrid.textContent = '';
     cat.categories.forEach((c, i) => {
       const wrap = el('div', { class: 'pk-reveal is-visible' });
-      wrap.appendChild(renderCategoryTile(c, locale, i < 4));
+      wrap.appendChild(renderCategoryTile(c, locale, i < 4, categoryImage(cat.items, c.slug)));
       catsGrid.appendChild(wrap);
     });
   }
@@ -157,7 +170,8 @@ function reconcileHome(cat: Catalog, locale: Locale): void {
   if (featGrid) {
     const byCat = new Map(cat.categories.map((c) => [c.slug, c]));
     featGrid.textContent = '';
-    cat.items.slice(0, 4).forEach((it) => {
+    // Slice size MUST match `featured` in index.astro.
+    cat.items.slice(0, 8).forEach((it) => {
       const c = byCat.get(it.category_slug);
       const wrap = el('div', {
         class: 'pk-reveal is-visible',
@@ -203,7 +217,9 @@ function reconcileCategory(cat: Catalog, locale: Locale, slug: string): void {
     const empty = el('div');
     empty.style.marginBottom = 'var(--sp-10)';
     const inner = el('div', { class: 'pk-empty' });
-    inner.appendChild(el('div', { class: 'pk-empty__icon', 'aria-hidden': 'true' }, '🗂️'));
+    const icon = el('div', { class: 'pk-empty__icon', 'aria-hidden': 'true' });
+    icon.innerHTML = iconSvg('folder');
+    inner.appendChild(icon);
     inner.appendChild(el('h2', { class: 'pk-h2' }, t('category.empty.title', locale)));
     inner.appendChild(el('p', {}, t('category.empty.body', locale)));
     inner.appendChild(el('a', { class: 'pk-btn', href: href(locale, '/') }, t('common.backHome', locale)));

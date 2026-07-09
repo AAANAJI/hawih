@@ -54,12 +54,11 @@ p { margin: 0; }
 
 /* Fluid type scale */
 .pk-display {
-  font-size: clamp(2.2rem, 5vw, 3.6rem);
+  font-size: clamp(2.3rem, 5.4vw, 4rem);
   font-weight: 700;
   line-height: 1.08;
-  letter-spacing: -0.01em;
 }
-[dir='rtl'] .pk-display { letter-spacing: 0; }
+[dir='ltr'] .pk-display { letter-spacing: -0.02em; }
 
 .pk-h1 { font-size: clamp(1.8rem, 3.6vw, 2.6rem); font-weight: 700; line-height: 1.15; }
 .pk-h2 { font-size: clamp(1.4rem, 2.6vw, 2rem); font-weight: 600; }
@@ -111,6 +110,18 @@ bdi.pk-price, .pk-price bdi, bdi { unicode-bidi: isolate; }
   color: var(--pk-accent);
 }
 [dir='rtl'] .pk-eyebrow { letter-spacing: 0.02em; }
+/* Chip variant — the ONE warm-amber accent moment per section */
+.pk-eyebrow--chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 5px 12px; border-radius: var(--r-pill);
+  background: var(--pk-amber-soft); color: var(--pk-amber-ink);
+  font-size: 0.72rem; letter-spacing: 0.04em;
+}
+[dir='rtl'] .pk-eyebrow--chip { letter-spacing: 0; }
+
+/* Inline SVG icons (see src/lib/icons.ts) */
+.pk-icon { width: 1.2em; height: 1.2em; flex: none; }
+[dir='rtl'] .pk-icon--flip { transform: scaleX(-1); }
 
 /* Focus visibility — cobalt ring */
 :focus-visible {

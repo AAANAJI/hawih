@@ -5,6 +5,7 @@
  * chips + totals + a link to each order's detail. EmptyState when none.
  */
 import Base from '@layouts/Base.astro';
+import Icon from '@components/Icon.astro';
 import { localeStaticPaths, href } from '@lib/i18n';
 import { t } from '@lib/strings';
 import type { Locale } from '@lib/format';
@@ -39,7 +40,7 @@ const orderBase = href(locale, '/account/order');
 
     <div data-orders-empty hidden>
       <div class="pk-empty">
-        <div class="pk-empty__icon" aria-hidden="true">📦</div>
+        <div class="pk-empty__icon" aria-hidden="true"><Icon name="package" size={26} /></div>
         <h2 class="pk-h2">{t('account.empty.title', locale)}</h2>
         <p>{t('account.empty.body', locale)}</p>
         <a class="pk-btn" href={shopHref}>{t('account.empty.cta', locale)}</a>
@@ -63,6 +64,7 @@ const orderBase = href(locale, '/account/order');
     window.__accountCfg = { locale, loginHref, orderBase, labels };
   </script>
   <script>
+  import { iconSvg } from '@lib/icons';
     import { isAuthed, api, clearToken } from '@lib/api';
     import { formatSAR, arabicDate } from '@lib/format';
     import { href } from '@lib/i18n';
@@ -120,7 +122,7 @@ const orderBase = href(locale, '/account/order');
             </div>
             <div class="pk-ordercard__status">${chip}</div>
             <div class="pk-ordercard__total pk-price"><bdi>${esc(formatSAR(Number(o.total || 0), locale))}</bdi></div>
-            <div class="pk-ordercard__chev" aria-hidden="true">›</div>`;
+            <div class="pk-ordercard__chev" aria-hidden="true">${iconSvg('chevron-start')}</div>`;
           listEl.appendChild(a);
         });
       } catch {

@@ -4,18 +4,22 @@
  * Props:
  *   items: { label: string; href?: string }[]
  *     The last item is treated as the current page (no link).
- * Renders a <nav aria-label>. The RTL separator is a chevron that reads
- * correctly in both directions (uses the logical › glyph).
+ * Renders a <nav aria-label>. Separator is an SVG chevron that mirrors in RTL.
+ *
+ * WARNING: catalog-sync.ts retitles product-page crumbs STRUCTURALLY via
+ * `.pk-breadcrumbs a:nth-of-type(2)` and `[aria-current="page"]` — do not add
+ * extra <a> elements before the category crumb (SVG separators are safe:
+ * nth-of-type counts per tag).
  */
+import Icon from '@components/Icon.astro';
 interface Crumb { label: string; href?: string }
 interface Props { items: Crumb[]; class?: string }
 const { items, class: className = '' } = Astro.props;
-const sep = '›';
 ---
 <nav class={`pk-breadcrumbs ${className}`.trim()} aria-label="breadcrumb">
   {items.map((c, i) => (
     <>
-      {i > 0 && <span class="pk-breadcrumbs__sep" aria-hidden="true">{sep}</span>}
+      {i > 0 && <span class="pk-breadcrumbs__sep" aria-hidden="true"><Icon name="chevron-start" size={13} class="pk-icon--flip" /></span>}
       {c.href && i < items.length - 1 ? (
         <a href={c.href}>{c.label}</a>
       ) : (

@@ -114,3 +114,20 @@ export function transformCatalog(api) {
 
   return { catalog: { success: true, categories, items }, itemCount: items.length };
 }
+
+/**
+ * Representative image for a category tile: the first product in the category
+ * with a real (CRM-hosted) photo, else any product image, else the legacy
+ * curated SVG path (exists only for the original demo slugs — CSS provides a
+ * designed gradient fallback when even that 404s).
+ *
+ * Lives HERE so the build-time pages and the browser live-sync renderer
+ * (catalog-sync.ts) share one rule by construction.
+ */
+export function categoryImage(items, slug) {
+  const inCat = (items || []).filter((i) => i.category_slug === slug);
+  const real = inCat.find((i) => i.images && /^https?:\/\//.test(i.images.square || ''));
+  if (real) return real.images.square;
+  const any = inCat.find((i) => i.images && i.images.square);
+  return any ? any.images.square : `/img/categories/${slug}.svg`;
+}
