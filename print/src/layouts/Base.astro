@@ -27,7 +27,7 @@ import SEOHead from '@components/SEOHead.astro';
 import HawihStrip from '@components/HawihStrip.astro';
 import Header from '@components/Header.astro';
 import Footer from '@components/Footer.astro';
-import { GTM_ID } from '@lib/config';
+import { GTM_ID, MAINTENANCE, PREVIEW_KEY, whatsappUrl } from '@lib/config';
 import { dirFor } from '@lib/i18n';
 import type { Locale } from '@lib/format';
 
@@ -62,6 +62,35 @@ const dir = dirFor(locale);
     <!-- Mark JS available before first paint so reveal-on-scroll can hide
          elements only when JS is present to reveal them (no-JS = visible). -->
     <script is:inline>document.documentElement.classList.add('pk-js');</script>
+    {MAINTENANCE && (
+      <>
+        <!-- Pre-launch gate: reveal the real site only when ?preview=<key> was used. -->
+        <script define:vars={{ PREVIEW_KEY }}>
+          (function () {
+            try {
+              var KEY = 'pk_preview';
+              var p = new URLSearchParams(location.search).get('preview');
+              if (p !== null) {
+                if (p === PREVIEW_KEY) localStorage.setItem(KEY, '1');
+                else if (p === 'off' || p === '0') localStorage.removeItem(KEY);
+              }
+              if (localStorage.getItem(KEY) === '1') document.documentElement.classList.add('pk-preview');
+            } catch (e) {}
+          })();
+        </script>
+        <style is:inline>
+          #pk-maint{position:fixed;inset:0;z-index:2147483647;display:flex;align-items:center;justify-content:center;background:#F4F1EB;color:#0B0B10;font-family:'IBM Plex Sans Arabic',system-ui,sans-serif;padding:24px;text-align:center}
+          .pk-preview #pk-maint{display:none}
+          #pk-maint .pk-maint__card{max-width:520px}
+          #pk-maint img{height:46px;width:auto;margin-bottom:26px}
+          #pk-maint h1{font-size:1.7rem;font-weight:700;margin:0 0 12px;color:#1F1FFE;line-height:1.4}
+          #pk-maint p{font-size:1.05rem;line-height:1.75;margin:0 0 8px;color:#14141C}
+          #pk-maint .pk-maint__en{font-family:Inter,system-ui,sans-serif;font-size:.92rem;color:#5b5b66;direction:ltr}
+          #pk-maint a{display:inline-block;margin-top:22px;background:#1F1FFE;color:#fff;text-decoration:none;padding:12px 24px;border-radius:12px;font-weight:600}
+          #pk-maint a:hover{background:#1414D6}
+        </style>
+      </>
+    )}
     <link rel="icon" href="/favicon.png" type="image/png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -92,11 +121,22 @@ const dir = dirFor(locale);
       path={path}
       image={image}
       type={type}
-      noindex={noindex}
+      noindex={noindex || MAINTENANCE}
     />
     <slot name="head" />
   </head>
   <body class={bodyClass}>
+    {MAINTENANCE && (
+      <div id="pk-maint" role="dialog" aria-label="قريباً">
+        <div class="pk-maint__card">
+          <img src="/img/logo/hawih-logo-dark.png" alt="Hawih" width="180" height="46" />
+          <h1>متجر مطبعة هوية — قريباً</h1>
+          <p>نضع اللمسات الأخيرة على متجرنا. عُد إلينا قريباً 🚀</p>
+          <p class="pk-maint__en">Hawih Print — launching soon.</p>
+          <a href={whatsappUrl()}>تواصل عبر واتساب</a>
+        </div>
+      </div>
+    )}
     <!-- Google Tag Manager (noscript) -->
     <noscript>
       <iframe

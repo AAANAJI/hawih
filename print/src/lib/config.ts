@@ -9,6 +9,17 @@ export const GTM_ID = 'GTM-N3BWDWG';
 
 export const SITE_URL = 'https://print.hawih.com.sa';
 
+/**
+ * Pre-launch / maintenance gate. While `MAINTENANCE` is true, every page shows
+ * a branded Arabic "coming soon" cover to the public and is marked noindex, so
+ * the store stays out of search results. To view and test the real site,
+ * append `?preview=<PREVIEW_KEY>` to any URL once — it's remembered in
+ * localStorage (use `?preview=off` to clear). Flip `MAINTENANCE` to false and
+ * rebuild to launch publicly.
+ */
+export const MAINTENANCE = true;
+export const PREVIEW_KEY = 'hawih-preview-7Qk2mZ';
+
 export const CURRENCY = 'SAR';
 
 /** WhatsApp business number (E.164, no +) for wa.me links. */
