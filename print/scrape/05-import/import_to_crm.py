@@ -317,36 +317,52 @@ def post_image(session, url_base, slug, image_path):
         )
 
 
-def find_image(images_dir, service):
-    """
-    Look for an image for a service across common folder layouts. Tries, in
-    order, keys = service id, slug_en, reference_product_id, reference_slug:
-        <dir>/<key>/hero.<ext> · <dir>/<key>/og.<ext> · <dir>/<key>/<first image>
-        <dir>/<key>.<ext>
-    Returns the first match, or None.
-    """
-    if not images_dir:
-        return None
-    d = Path(images_dir)
-    exts = ("png", "webp", "jpg", "jpeg", "gif")
-    keys = [service.get("id"), service.get("slug_en"),
-            service.get("reference_product_id"), service.get("reference_slug")]
-    keys = [str(k).strip() for k in keys if k]
+IMAGE_EXTS = ("png", "webp", "jpg", "jpeg", "gif")
+_PREFER = ("hero", "og", "main", "cover", "1", "01")
 
-    # 1) exact preferred names
-    for key in keys:
-        for ext in exts:
-            for p in (d / key / f"hero.{ext}", d / key / f"og.{ext}", d / f"{key}.{ext}"):
-                if p.is_file():
-                    return str(p)
-    # 2) any image inside a per-service folder
-    for key in keys:
-        folder = d / key
-        if folder.is_dir():
-            for ext in exts:
-                hits = sorted(folder.glob(f"*.{ext}"))
-                if hits:
-                    return str(hits[0])
+
+def build_image_index(images_dir):
+    """
+    Walk IMAGES_DIR once and index every image by folder name AND by file stem
+    (lowercased), so lookups work no matter how the folders are laid out:
+      generated/<service_id>/hero.png  ·  reference/<product_id>/og.jpg  ·
+      <slug>.jpg  ·  <product_id>/gallery_1.jpg ...
+    When a folder holds several images, the hero/og/first one is chosen.
+    Returns (index: {key -> path}, total_images_seen).
+    """
+    index, total = {}, 0
+    if not images_dir or not Path(images_dir).is_dir():
+        return index, 0
+    for root, _dirs, files in os.walk(images_dir):
+        imgs = [f for f in files if f.rsplit(".", 1)[-1].lower() in IMAGE_EXTS]
+        if not imgs:
+            continue
+        total += len(imgs)
+        low = {f.lower(): f for f in imgs}
+        best = None
+        for p in _PREFER:
+            for ext in IMAGE_EXTS:
+                if f"{p}.{ext}" in low:
+                    best = os.path.join(root, low[f"{p}.{ext}"])
+                    break
+            if best:
+                break
+        if not best:
+            best = os.path.join(root, sorted(imgs)[0])
+        parent = Path(root).name.lower()
+        if parent:
+            index.setdefault(parent, best)          # folder-name match → best image in it
+        for f in imgs:
+            index.setdefault(f.rsplit(".", 1)[0].lower(), os.path.join(root, f))  # file-stem match
+    return index, total
+
+
+def find_image(index, service):
+    """Match a service to an indexed image by id / slug / legacy product id."""
+    for k in (service.get("id"), service.get("slug_en"),
+              service.get("reference_product_id"), service.get("reference_slug")):
+        if k and str(k).strip().lower() in index:
+            return index[str(k).strip().lower()]
     return None
 
 
@@ -493,12 +509,19 @@ def main():
 
     # 6) images
     if args.images:
-        print("\nUploading images …")
+        img_index, img_total = build_image_index(images_dir)
+        print(f"\nUploading images … (scanned {img_total} image files under: {images_dir or '(IMAGES_DIR not set)'})")
+        if img_total == 0:
+            print("  ⚠ No image files found there. Point IMAGES_DIR in .env at the folder that")
+            print("    actually contains your product images (it's scanned recursively), then re-run")
+            print("    with --images. Nothing else needs to change.")
         img_ok = img_miss = img_err = 0
+        missing = []
         for svc, it in scope:
-            path = find_image(images_dir, svc)
+            path = find_image(img_index, svc)
             if not path:
                 img_miss += 1
+                missing.append(svc.get("id"))
                 continue
             try:
                 r = post_image(session, url_base, it["slug"], path)
@@ -512,7 +535,11 @@ def main():
                 img_err += 1
                 publog.write(json.dumps({"phase": "image", "slug": it["slug"], "error": str(e)}, ensure_ascii=False) + "\n")
             time.sleep(0.4)
-        print(f"Images: {img_ok} uploaded, {img_miss} missing (no file found), {img_err} errors.")
+        print(f"Images: {img_ok} uploaded, {img_miss} missing (no match), {img_err} errors.")
+        if missing and img_total:
+            print(f"  no image matched for e.g.: {missing[:8]}")
+            print("  (these are matched by service id / slug / legacy product id — from a folder")
+            print("   name or a file name. Tell me one of your image paths and I'll map it.)")
 
     publog.close()
     (OUT_DIR / "sync-ledger.json").write_text(json.dumps(ledger, ensure_ascii=False, indent=2), encoding="utf-8")
