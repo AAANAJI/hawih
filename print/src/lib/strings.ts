@@ -129,6 +129,10 @@ export const STRINGS = {
   'nav.about': { ar: 'من نحن', en: 'About' },
   'nav.contact': { ar: 'تواصل معنا', en: 'Contact' },
   'nav.faq': { ar: 'الأسئلة الشائعة', en: 'FAQ' },
+  'nav.categories': { ar: 'الأقسام', en: 'Categories' },
+
+  // Mini cart (slide-in)
+  'minicart.viewCart': { ar: 'عرض السلة', en: 'View cart' },
 
   // About page
   'about.title': { ar: 'من نحن', en: 'About us' },

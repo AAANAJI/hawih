@@ -12,7 +12,8 @@
 export type IconName =
   | 'search' | 'cart' | 'chevron-down' | 'chevron-start' | 'arrow-end' | 'arrow-up-right'
   | 'x' | 'check' | 'plus' | 'minus' | 'upload' | 'palette' | 'receipt' | 'landmark'
-  | 'message-circle' | 'mail' | 'phone' | 'zap' | 'folder' | 'package' | 'sliders' | 'paperclip';
+  | 'message-circle' | 'mail' | 'phone' | 'zap' | 'folder' | 'package' | 'sliders' | 'paperclip'
+  | 'globe' | 'user' | 'trash';
 
 /** Inner SVG markup (paths only) per icon. */
 export const ICON_PATHS: Record<IconName, string> = {
@@ -38,6 +39,9 @@ export const ICON_PATHS: Record<IconName, string> = {
   package: '<path d="M11 21.73a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73z"/><path d="M12 22V12"/><path d="m3.3 7 8.7 5 8.7-5"/>',
   sliders: '<line x1="4" x2="4" y1="21" y2="14"/><line x1="4" x2="4" y1="10" y2="3"/><line x1="12" x2="12" y1="21" y2="12"/><line x1="12" x2="12" y1="8" y2="3"/><line x1="20" x2="20" y1="21" y2="16"/><line x1="20" x2="20" y1="12" y2="3"/><line x1="2" x2="6" y1="14" y2="14"/><line x1="10" x2="14" y1="8" y2="8"/><line x1="18" x2="22" y1="16" y2="16"/>',
   paperclip: '<path d="m21.44 11.05-9.19 9.19a6 6 0 0 1-8.49-8.49l8.57-8.57A4 4 0 1 1 18 8.84l-8.59 8.57a2 2 0 0 1-2.83-2.83l8.49-8.48"/>',
+  globe: '<circle cx="12" cy="12" r="10"/><path d="M12 2a14.5 14.5 0 0 0 0 20 14.5 14.5 0 0 0 0-20"/><path d="M2 12h20"/>',
+  user: '<path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>',
+  trash: '<path d="M3 6h18"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6"/><path d="M8 6V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>',
 };
 
 /** Full <svg> string for JS-rendered DOM (catalog-sync, file chips, buttons). */
