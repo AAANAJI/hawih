@@ -350,7 +350,23 @@
 
 /* ---------- OptionPicker ---------- */
 .pk-optgroup { margin-bottom: var(--sp-5); }
+.pk-optgroup[hidden] { display: none; }
 .pk-optgroup__label { display: block; font-weight: 600; font-size: 0.92rem; margin-bottom: var(--sp-3); }
+
+/* Option dropdown (weej-style) */
+.pk-select {
+  width: 100%; max-width: 420px; height: 48px; padding-inline: 14px 40px;
+  border: 1px solid var(--pk-line-strong); border-radius: var(--r-md);
+  background: var(--pk-surface); color: var(--pk-ink);
+  font-family: inherit; font-size: 0.95rem; cursor: pointer;
+  appearance: none; -webkit-appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%235B5E6B' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat; background-position: right 14px center;
+  transition: border-color var(--t-base), box-shadow var(--t-base);
+}
+[dir='rtl'] .pk-select { background-position: left 14px center; padding-inline: 14px 40px; }
+.pk-select:hover { border-color: var(--pk-accent); }
+.pk-select:focus { outline: none; border-color: var(--pk-accent); box-shadow: 0 0 0 3px var(--pk-accent-soft); }
 .pk-optgroup__pills { display: flex; flex-wrap: wrap; gap: var(--sp-2); }
 .pk-pill {
   position: relative; display: inline-flex; align-items: center; gap: 6px;

@@ -24,6 +24,7 @@ import { hydrateCardPrices } from './live-prices';
 // Plain .mjs module shared with the build script (same rule on both sides).
 import { categoryImage } from './catalog-transform.mjs';
 import { iconSvg } from './icons';
+import { conditionalRefs, optionValueText, optionGroupLabel } from './options';
 import type { Catalog, CatalogCategory, CatalogItem } from './catalog';
 import { formatSAR, formatNumber, type Locale } from './format';
 import { href } from './i18n';
@@ -117,39 +118,38 @@ function renderCategoryTile(
   return a;
 }
 
-/** Rebuild an OptionPicker's fieldsets from live options (matches OptionPicker.astro). */
+/** Rebuild an OptionPicker's dropdowns from live options (matches OptionPicker.astro). */
 function renderOptions(picker: Element, options: CatalogItem['options'], locale: Locale): void {
+  const refs = conditionalRefs(options);
   picker.textContent = '';
   options.forEach((o, gi) => {
-    const label = (locale === 'ar' ? o.name_ar || o.name_en : o.name_en || o.name_ar) || '';
-    const fs = el('fieldset', {
+    const ref = refs[gi];
+    const attrs: Record<string, string> = {
       class: 'pk-optgroup',
-      role: 'radiogroup',
-      'aria-label': label,
       'data-option-name': o.name_ar,
       'data-option-name-ar': o.name_ar,
       'data-option-type': o.type,
-    });
-    fs.appendChild(el('legend', { class: 'pk-optgroup__label' }, label));
-    const pills = el('div', { class: 'pk-optgroup__pills' });
+    };
+    if (ref) {
+      attrs['data-cond-group'] = ref.group;
+      attrs['data-cond-value'] = ref.value;
+    }
+    const wrap = el('div', attrs);
+    if (ref) {
+      const controller = options.find((c) => c.name_ar === ref.group);
+      wrap.hidden = !controller || (controller.values[0]?.label_ar ?? '') !== ref.value;
+    }
+    const lbl = el('label', { class: 'pk-optgroup__label', for: `opt-${gi}` },
+      optionGroupLabel(o, locale));
+    const sel = el('select', { class: 'pk-select', id: `opt-${gi}` });
     o.values.forEach((v, vi) => {
-      const lbl = el('label', { class: 'pk-pill' });
-      const attrs: Record<string, string> = {
-        type: 'radio',
-        name: `opt-${gi}`,
-        value: v.label_ar,
-        'data-delta': String(v.price_delta),
-      };
-      if (vi === 0) attrs.checked = '';
-      lbl.appendChild(el('input', attrs));
-      lbl.appendChild(el('span', {}, (locale === 'ar' ? v.label_ar || v.label_en : v.label_en || v.label_ar) || ''));
-      if (v.price_delta > 0) {
-        lbl.appendChild(el('span', { class: 'pk-pill__delta' }, `+${formatNumber(v.price_delta, locale)}`));
-      }
-      pills.appendChild(lbl);
+      const opt = el('option', { value: v.label_ar, 'data-delta': String(v.price_delta) },
+        optionValueText(v, locale));
+      if (vi === 0) opt.setAttribute('selected', '');
+      sel.appendChild(opt);
     });
-    fs.appendChild(pills);
-    picker.appendChild(fs);
+    wrap.append(lbl, sel);
+    picker.appendChild(wrap);
   });
 }
 
