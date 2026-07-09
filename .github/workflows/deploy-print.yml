@@ -25,6 +25,13 @@ on:
     branches: [ main, "claude/print-hawih-store-plan-557i68" ]
     paths: [ "print/**" ]
   workflow_dispatch:
+  # Nightly catalog re-sync: rebuild from the live CRM catalog and redeploy so
+  # category/name/product changes made in the CRM (which are baked at build
+  # time) propagate to the static store without needing a code push. The build
+  # falls back to the committed snapshot on any API failure, so this never
+  # publishes a broken store. 03:00 UTC = 06:00 Riyadh.
+  schedule:
+    - cron: "0 3 * * *"
 
 concurrency:
   group: deploy-print
