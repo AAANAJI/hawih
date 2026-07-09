@@ -1,0 +1,221 @@
+---
+/**
+ * All-products page — /products/ and /en/products/.
+ * Every catalog item is server-rendered (SEO + crawlable links); a client
+ * script filters by category chip + search query and sorts, toggling `hidden`
+ * on the card wrappers. Reads ?cat= and ?q= on load, keeps the URL shareable
+ * via replaceState. Prices/images live-hydrate through hydrateCardPrices()
+ * ([data-live-price]/[data-live-image] on the cards) — item add/remove lands
+ * with the daily rebuild, same policy as new URLs/sitemap.
+ * NOTE: deliberately does NOT carry catalog-sync region markers
+ * (.pk-grid-cats/[data-cat-body]/[data-featured-grid]) so only hydration runs.
+ */
+import Base from '@layouts/Base.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import ProductCard from '@components/ProductCard.astro';
+import Icon from '@components/Icon.astro';
+import JsonLd from '@components/JsonLd.astro';
+import { localeStaticPaths, href } from '@lib/i18n';
+import { t } from '@lib/strings';
+import { formatNumber } from '@lib/format';
+import { normalizeText } from '@lib/search';
+import { categories, items, categoryTitle, itemTitle } from '@lib/catalog';
+import { SITE_URL } from '@lib/config';
+import type { Locale } from '@lib/format';
+
+export const getStaticPaths = localeStaticPaths;
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+
+const title = t('products.title', locale);
+const crumbs = [
+  { label: t('nav.home', locale), href: href(locale, '/') },
+  { label: title },
+];
+
+const collectionLd = {
+  '@context': 'https://schema.org',
+  '@type': 'CollectionPage',
+  name: title,
+  url: SITE_URL + href(locale, '/products'),
+  inLanguage: locale === 'ar' ? 'ar-SA' : 'en',
+  mainEntity: {
+    '@type': 'ItemList',
+    numberOfItems: items.length,
+    itemListElement: items.slice(0, 50).map((p, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      url: SITE_URL + href(locale, `/product/${p.slug}`),
+      name: itemTitle(p, locale),
+    })),
+  },
+};
+---
+<Base
+  locale={locale}
+  title={`${title} — ${t('brand.name', locale)}`}
+  description={t('products.sub', locale)}
+  path="/products"
+  image="/img/og/default.svg"
+>
+  <Fragment slot="head">
+    <JsonLd data={[collectionLd]} />
+  </Fragment>
+
+  <div class="pk-container">
+    <Breadcrumbs items={crumbs} />
+    <div class="pk-pagehead">
+      <h1 class="pk-h1">{title}</h1>
+      <p>
+        <span data-products-count>{formatNumber(items.length, locale)}</span>
+        {t('products.count', locale)}
+      </p>
+    </div>
+
+    <!-- Toolbar: search · category chips · sort -->
+    <div class="pk-toolbar" data-products-toolbar>
+      <label class="pk-toolbar__search">
+        <span aria-hidden="true"><Icon name="search" size={17} /></span>
+        <input
+          type="search"
+          class="pk-toolbar__q"
+          placeholder={t('search.placeholder', locale)}
+          aria-label={t('search.label', locale)}
+          autocomplete="off"
+          data-products-q
+        />
+      </label>
+      <div class="pk-chips pk-chips--scroll" data-products-cats>
+        <button type="button" class="pk-chip pk-chip--primary" data-cat="">{t('products.filterAll', locale)}</button>
+        {categories.map((c) => (
+          <button type="button" class="pk-chip" data-cat={c.slug}>{categoryTitle(c, locale)}</button>
+        ))}
+      </div>
+      <label class="pk-toolbar__sort">
+        <span class="pk-visually-hidden">{t('products.sort', locale)}</span>
+        <select class="pk-toolbar__select" data-products-sort>
+          <option value="default">{t('products.sort.default', locale)}</option>
+          <option value="price-asc">{t('products.sort.priceAsc', locale)}</option>
+          <option value="price-desc">{t('products.sort.priceDesc', locale)}</option>
+          <option value="name">{t('products.sort.name', locale)}</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="pk-grid-products" data-products-grid style="margin-bottom:var(--sp-10)">
+      {items.map((p, i) => (
+        <div
+          class="pk-pitem"
+          data-cat={p.category_slug}
+          data-price={p.rate}
+          data-idx={i}
+          data-name={normalizeText(itemTitle(p, locale))}
+          data-search={`${normalizeText(p.title)} ${normalizeText(p.title_en)}`}
+          data-product-id={p.id}
+          data-product-name={itemTitle(p, locale)}
+          data-product-price={p.rate}
+        >
+          <ProductCard
+            href={href(locale, `/product/${p.slug}`)}
+            title={itemTitle(p, locale)}
+            image={p.images?.square ?? ''}
+            rate={p.rate}
+            categoryLabel={(() => { const c = categories.find((x) => x.slug === p.category_slug); return c ? categoryTitle(c, locale) : undefined; })()}
+            locale={locale}
+          />
+        </div>
+      ))}
+    </div>
+
+    <div data-products-empty hidden style="margin-bottom:var(--sp-10)">
+      <div class="pk-empty">
+        <div class="pk-empty__icon" aria-hidden="true"><Icon name="search" size={26} /></div>
+        <h2 class="pk-h2">{t('products.empty.title', locale)}</h2>
+        <p>{t('products.empty.body', locale)}</p>
+        <button type="button" class="pk-btn" data-products-clear>{t('products.clear', locale)}</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    import { normalizeText } from '@lib/search';
+    import { viewItemList } from '@lib/gtm';
+    import { formatNumber } from '@lib/format';
+
+    const grid = document.querySelector<HTMLElement>('[data-products-grid]');
+    if (grid) {
+      const locale = (document.documentElement.lang === 'en' ? 'en' : 'ar') as 'ar' | 'en';
+      const cards = Array.from(grid.querySelectorAll<HTMLElement>('.pk-pitem'));
+      const qInput = document.querySelector<HTMLInputElement>('[data-products-q]')!;
+      const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('[data-products-cats] .pk-chip'));
+      const sortSel = document.querySelector<HTMLSelectElement>('[data-products-sort]')!;
+      const countEl = document.querySelector<HTMLElement>('[data-products-count]')!;
+      const emptyEl = document.querySelector<HTMLElement>('[data-products-empty]')!;
+
+      let cat = '';
+      let q = '';
+      let debounceTimer = 0;
+
+      function apply() {
+        const nq = normalizeText(q);
+        let visible = 0;
+        for (const card of cards) {
+          const okCat = !cat || card.dataset.cat === cat;
+          const okQ = !nq || (card.dataset.search || '').includes(nq);
+          const show = okCat && okQ;
+          card.hidden = !show;
+          if (show) visible++;
+        }
+        countEl.textContent = formatNumber(visible, locale);
+        emptyEl.hidden = visible > 0;
+        grid.style.display = visible > 0 ? '' : 'none';
+        chips.forEach((c) => c.classList.toggle('pk-chip--primary', (c.dataset.cat || '') === cat));
+        const params = new URLSearchParams();
+        if (cat) params.set('cat', cat);
+        if (q.trim()) params.set('q', q.trim());
+        const qs = params.toString();
+        history.replaceState(null, '', location.pathname + (qs ? '?' + qs : ''));
+      }
+
+      function sortCards() {
+        const mode = sortSel.value;
+        const sorted = cards.slice().sort((a, b) => {
+          if (mode === 'price-asc') return Number(a.dataset.price) - Number(b.dataset.price);
+          if (mode === 'price-desc') return Number(b.dataset.price) - Number(a.dataset.price);
+          if (mode === 'name') return (a.dataset.name || '').localeCompare(b.dataset.name || '', locale);
+          return Number(a.dataset.idx) - Number(b.dataset.idx);
+        });
+        sorted.forEach((c) => grid.appendChild(c));
+      }
+
+      // Init from URL (?cat= & ?q=)
+      const params = new URLSearchParams(location.search);
+      cat = params.get('cat') || '';
+      q = params.get('q') || '';
+      if (q) qInput.value = q;
+      if (cat && !chips.some((c) => c.dataset.cat === cat)) cat = '';
+      apply();
+
+      qInput.addEventListener('input', () => {
+        window.clearTimeout(debounceTimer);
+        debounceTimer = window.setTimeout(() => { q = qInput.value; apply(); }, 120);
+      });
+      chips.forEach((chip) =>
+        chip.addEventListener('click', () => { cat = chip.dataset.cat || ''; apply(); }),
+      );
+      sortSel.addEventListener('change', sortCards);
+      document.querySelector('[data-products-clear]')?.addEventListener('click', () => {
+        cat = ''; q = ''; qInput.value = ''; sortSel.value = 'default'; sortCards(); apply();
+      });
+
+      // GTM: first 20 visible items
+      const first = cards.filter((c) => !c.hidden).slice(0, 20).map((el) => ({
+        item_id: el.dataset.productId!,
+        item_name: el.dataset.productName!,
+        price: Number(el.dataset.productPrice),
+        item_category: el.dataset.cat!,
+      }));
+      viewItemList('all-products', first);
+    }
+  </script>
+</Base>

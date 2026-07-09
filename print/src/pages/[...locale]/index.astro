@@ -1,35 +1,50 @@
 ---
 /**
  * Home page — Arabic at /, English at /en/.
- * Hero, category grid, featured products, how-to steps, trust strip.
+ * Search-first hero (headline → search → category chips → product photo strip),
+ * category grid, featured products, how-to steps, trust band.
+ * LIVE-SYNC MARKERS (do not rename; see catalog-sync.ts):
+ *   .pk-grid-cats · [data-featured-grid] (+ per-card data-product-* wrappers)
  */
 import Base from '@layouts/Base.astro';
-import Button from '@components/Button.astro';
 import CategoryTile from '@components/CategoryTile.astro';
 import ProductCard from '@components/ProductCard.astro';
+import SearchBox from '@components/SearchBox.astro';
+import Icon from '@components/Icon.astro';
 import JsonLd from '@components/JsonLd.astro';
 import { localeStaticPaths } from '@lib/i18n';
 import { href } from '@lib/i18n';
 import { t } from '@lib/strings';
 import { categories, items, categoryTitle, itemTitle, getCategory } from '@lib/catalog';
+import { categoryImage } from '@lib/catalog-transform.mjs';
 import { HAWIH_ORG_ID, SITE_URL } from '@lib/config';
 import type { Locale } from '@lib/format';
+import type { IconName } from '@lib/icons';
 
 export const getStaticPaths = localeStaticPaths;
 interface Props { locale: Locale }
 const { locale } = Astro.props as Props;
 
-const featured = items.slice(0, 4);
+// Featured grid — slice size MUST match reconcileHome() in catalog-sync.ts.
+const featured = items.slice(0, 8);
+
+// Hero photo strip: first ~10 products with a real (CRM-hosted) photo.
+const stripItems = items
+  .filter((it) => /^https?:\/\//.test(it.images?.square ?? ''))
+  .slice(0, 10);
+
+const heroChips = categories.slice(0, 6);
+
 const steps = [
   { n: '1', title: t('step.1.title', locale), body: t('step.1.body', locale) },
   { n: '2', title: t('step.2.title', locale), body: t('step.2.body', locale) },
   { n: '3', title: t('step.3.title', locale), body: t('step.3.body', locale) },
 ];
-const trust = [
-  { icon: '🧾', label: t('trust.tax', locale) },
-  { icon: '🏦', label: t('trust.bank', locale) },
-  { icon: '💬', label: t('trust.whatsapp', locale) },
-  { icon: '⚡', label: t('trust.turnaround', locale) },
+const trust: { icon: IconName; label: string }[] = [
+  { icon: 'receipt', label: t('trust.tax', locale) },
+  { icon: 'landmark', label: t('trust.bank', locale) },
+  { icon: 'message-circle', label: t('trust.whatsapp', locale) },
+  { icon: 'zap', label: t('trust.turnaround', locale) },
 ];
 
 // Structured data: Organization (store) linked to the main brand org.
@@ -62,24 +77,46 @@ const websiteLd = {
     <JsonLd data={[orgLd, websiteLd]} />
   </Fragment>
 
-  <!-- Hero -->
+  <!-- Hero — search-first -->
   <section class="pk-hero">
     <div class="pk-container">
-      <div class="pk-hero__inner">
-        <div class="pk-hero__copy pk-reveal">
-          <span class="pk-eyebrow">{t('hero.eyebrow', locale)}</span>
-          <h1 class="pk-display">{t('hero.title', locale)}</h1>
-          <p class="pk-muted" style="font-size:1.1rem;max-width:52ch">{t('hero.subtitle', locale)}</p>
-          <div class="pk-hero__actions">
-            <Button href={href(locale, '/#categories')} size="lg">{t('hero.ctaPrimary', locale)}</Button>
-            <Button href={href(locale, '/#how')} size="lg" variant="outline">{t('hero.ctaSecondary', locale)}</Button>
-          </div>
-        </div>
-        <div class="pk-hero__media pk-reveal">
-          <img src="/img/home/hero.svg" alt={t('hero.title', locale)} width="2400" height="1200" fetchpriority="high" />
+      <div class="pk-hero__center pk-reveal">
+        <span class="pk-eyebrow pk-eyebrow--chip">{t('hero.eyebrow', locale)}</span>
+        <h1 class="pk-display">{t('hero.title', locale)}</h1>
+        <p class="pk-hero__sub pk-muted">{t('hero.subtitle', locale)}</p>
+
+        <SearchBox locale={locale} />
+
+        <div class="pk-chips" aria-label={t('nav.products', locale)}>
+          <a class="pk-chip pk-chip--primary" href={href(locale, '/products')}>{t('nav.allProducts', locale)}</a>
+          {heroChips.map((c) => (
+            <a class="pk-chip" href={href(locale, `/category/${c.slug}`)}>{categoryTitle(c, locale)}</a>
+          ))}
         </div>
       </div>
     </div>
+
+    {stripItems.length > 3 && (
+      <div class="pk-hero__strip" aria-hidden="false">
+        <div class="pk-hero__striptrack">
+          {stripItems.map((it) => (
+            <a class="pk-hero__stripcard" href={href(locale, `/product/${it.slug}`)} title={itemTitle(it, locale)}>
+              <img
+                src={it.images?.square}
+                alt={itemTitle(it, locale)}
+                loading="lazy"
+                decoding="async"
+                width="320"
+                height="320"
+                data-live-image
+                data-slug={it.slug}
+                onerror="this.parentElement.style.display='none'"
+              />
+            </a>
+          ))}
+        </div>
+      </div>
+    )}
   </section>
 
   <!-- Categories -->
@@ -97,7 +134,7 @@ const websiteLd = {
             <CategoryTile
               title={categoryTitle(c, locale)}
               href={href(locale, `/category/${c.slug}`)}
-              image={`/img/categories/${c.slug}.svg`}
+              image={categoryImage(items, c.slug)}
               eager={i < 4}
             />
           </div>
@@ -107,14 +144,17 @@ const websiteLd = {
   </section>
 
   <!-- Featured products -->
-  <section class="pk-section" style="background:var(--pk-bg-2)">
+  <section class="pk-section pk-section--band">
     <div class="pk-container">
       <div class="pk-section-head">
         <div>
-          <h2 class="pk-h2">{t('home.featuredTitle', locale)}</h2>
-          <p>{t('home.featuredSub', locale)}</p>
+          <span class="pk-eyebrow pk-eyebrow--chip">{t('home.featuredTitle', locale)}</span>
+          <h2 class="pk-h2" style="margin-top:var(--sp-2)">{t('home.featuredSub', locale)}</h2>
         </div>
-        <a class="pk-btn pk-btn--ghost pk-btn--sm" href={href(locale, '/#categories')}>{t('home.viewAll', locale)} →</a>
+        <a class="pk-btn pk-btn--ghost pk-btn--sm" href={href(locale, '/products')}>
+          {t('home.viewAll', locale)}
+          <Icon name="arrow-end" size={15} class="pk-icon--flip" />
+        </a>
       </div>
       <div class="pk-grid-products" data-featured-grid>
         {featured.map((it) => {
@@ -157,12 +197,12 @@ const websiteLd = {
     </div>
   </section>
 
-  <!-- Trust strip -->
-  <section class="pk-container" style="margin-bottom:var(--sp-10)">
-    <div class="pk-card pk-trust">
+  <!-- Trust band -->
+  <section class="pk-trustband">
+    <div class="pk-container pk-trust">
       {trust.map((x) => (
         <div class="pk-trust__item">
-          <span aria-hidden="true">{x.icon}</span>
+          <span class="pk-trust__icon" aria-hidden="true"><Icon name={x.icon} size={19} /></span>
           <span>{x.label}</span>
         </div>
       ))}

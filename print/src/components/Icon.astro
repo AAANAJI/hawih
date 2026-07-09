@@ -1,0 +1,28 @@
+---
+/**
+ * Icon — inline stroke SVG from the shared icon map (src/lib/icons.ts).
+ * Same single source as iconSvg(), so Astro-rendered and JS-rendered icons
+ * can never drift.
+ * Props:
+ *   name: IconName
+ *   size?: number       -> px (default: 1.2em via .pk-icon)
+ *   class?: string      -> add `pk-icon--flip` for direction-aware icons
+ */
+import { ICON_PATHS, type IconName } from '@lib/icons';
+
+interface Props { name: IconName; size?: number; class?: string }
+const { name, size, class: className = '' } = Astro.props;
+const style = size ? `width:${size}px;height:${size}px` : undefined;
+---
+<svg
+  class={`pk-icon ${className}`.trim()}
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.75"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  style={style}
+  set:html={ICON_PATHS[name]}
+/>

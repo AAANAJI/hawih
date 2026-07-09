@@ -10,12 +10,13 @@
  *   id?: string    -> id of the inner <input> (parent scripts read its value)
  *   label?: string -> accessible label
  */
-interface Props { min?: number; max?: number; value?: number; id?: string; label?: string }
-const { min = 1, max, value, id = 'qty', label = 'Quantity' } = Astro.props;
+import Icon from '@components/Icon.astro';
+interface Props { min?: number; max?: number; value?: number; id?: string; label?: string; decLabel?: string; incLabel?: string }
+const { min = 1, max, value, id = 'qty', label = 'Quantity', decLabel = 'decrease', incLabel = 'increase' } = Astro.props;
 const start = value ?? min;
 ---
 <div class="pk-qty" data-qty>
-  <button type="button" data-qty-dec aria-label="−">−</button>
+  <button type="button" data-qty-dec aria-label={decLabel}><Icon name="minus" size={16} /></button>
   <input
     type="number"
     id={id}
@@ -27,7 +28,7 @@ const start = value ?? min;
     aria-label={label}
     data-qty-input
   />
-  <button type="button" data-qty-inc aria-label="+">＋</button>
+  <button type="button" data-qty-inc aria-label={incLabel}><Icon name="plus" size={16} /></button>
 </div>
 
 <script>

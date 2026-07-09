@@ -5,6 +5,7 @@
  * "متابعة الدفع" links to /checkout. EmptyState when empty.
  */
 import Base from '@layouts/Base.astro';
+import Icon from '@components/Icon.astro';
 import { localeStaticPaths, href } from '@lib/i18n';
 import { t } from '@lib/strings';
 import type { Locale } from '@lib/format';
@@ -28,7 +29,7 @@ const shopHref = href(locale, '/');
     <!-- Empty -->
     <div data-cart-empty hidden>
       <div class="pk-empty">
-        <div class="pk-empty__icon" aria-hidden="true">🛒</div>
+        <div class="pk-empty__icon" aria-hidden="true"><Icon name="cart" size={26} /></div>
         <h2 class="pk-h2">{t('cart.empty.title', locale)}</h2>
         <p>{t('cart.empty.body', locale)}</p>
         <a class="pk-btn" href={shopHref}>{t('cart.empty.cta', locale)}</a>

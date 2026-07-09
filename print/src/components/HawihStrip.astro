@@ -5,6 +5,7 @@
  * Props:
  *   locale: 'ar' | 'en'
  */
+import Icon from '@components/Icon.astro';
 import { t } from '@lib/strings';
 import { HAWIH_MAIN_URL } from '@lib/config';
 import type { Locale } from '@lib/format';
@@ -15,9 +16,9 @@ const { locale } = Astro.props;
 <div class="pk-strip" data-hawih-strip>
   <div class="pk-strip__inner">
     <span>{t('strip.text', locale)}</span>
-    <a href={HAWIH_MAIN_URL} target="_blank" rel="noopener">{t('strip.cta', locale)} ↗</a>
+    <a href={HAWIH_MAIN_URL} target="_blank" rel="noopener">{t('strip.cta', locale)} <Icon name="arrow-up-right" size={12} /></a>
   </div>
-  <button type="button" class="pk-strip__close" data-strip-close aria-label={t('strip.dismiss', locale)}>✕</button>
+  <button type="button" class="pk-strip__close" data-strip-close aria-label={t('strip.dismiss', locale)}><Icon name="x" size={15} /></button>
 </div>
 
 <script>

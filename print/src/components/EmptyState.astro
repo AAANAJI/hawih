@@ -2,16 +2,20 @@
 /**
  * EmptyState — centered empty/placeholder message.
  * Props:
- *   icon?: string     -> emoji or short glyph (default 📦)
+ *   icon?: IconName   -> icon from the shared map (default 'package')
  *   title: string
  *   body?: string
  * Slot: optional action (e.g. a Button).
+ * NOTE: catalog-sync.ts rebuilds this markup in JS for empty categories —
+ * keep the structure (.pk-empty > __icon + h2 + p) in lockstep.
  */
-interface Props { icon?: string; title: string; body?: string }
-const { icon = '📦', title, body } = Astro.props;
+import Icon from '@components/Icon.astro';
+import type { IconName } from '@lib/icons';
+interface Props { icon?: IconName; title: string; body?: string }
+const { icon = 'package', title, body } = Astro.props;
 ---
 <div class="pk-empty">
-  <div class="pk-empty__icon" aria-hidden="true">{icon}</div>
+  <div class="pk-empty__icon" aria-hidden="true"><Icon name={icon} size={26} /></div>
   <h2 class="pk-h2">{title}</h2>
   {body && <p>{body}</p>}
   <slot />

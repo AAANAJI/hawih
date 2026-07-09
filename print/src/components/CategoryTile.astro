@@ -1,11 +1,14 @@
 ---
 /**
- * CategoryTile — image + scrim + Arabic/English label, hover zoom.
+ * CategoryTile — representative product photo + scrim + label, hover zoom.
  * Props:
  *   title: string
  *   href: string
- *   image: string
+ *   image: string     -> use categoryImage() from catalog-transform.mjs
  *   eager?: boolean   -> load image eagerly (above-the-fold)
+ * NOTE: catalog-sync.ts renderCategoryTile rebuilds this markup in JS —
+ * keep both in lockstep. A failed image hides itself; the tile's CSS
+ * gradient + scrim + label keep it looking intentional.
  */
 interface Props { title: string; href: string; image: string; eager?: boolean }
 const { title, href, image, eager = false } = Astro.props;
@@ -18,6 +21,7 @@ const { title, href, image, eager = false } = Astro.props;
     decoding="async"
     width="1200"
     height="900"
+    onerror="this.style.visibility='hidden'"
   />
   <span class="pk-cattile__scrim" aria-hidden="true"></span>
   <span class="pk-cattile__label">{title}</span>

@@ -19,28 +19,35 @@
   --hawih-paper-2:     #E9E4D7;
   --hawih-paper-line:  rgba(11, 11, 16, 0.10);
 
-  /* ---- Store semantic surface ---- */
-  --pk-bg:            var(--hawih-paper);        /* page background */
-  --pk-bg-2:          var(--hawih-paper-2);      /* alt sections */
+  /* ---- Store semantic surface (white canvas) ---- */
+  --pk-bg:            #FFFFFF;                    /* page background */
+  --pk-bg-2:          #F6F7F9;                    /* alt sections (cool gray band) */
   --pk-surface:       #FFFFFF;                    /* card surface */
-  --pk-surface-2:     #FBFAF6;                    /* subtle inset */
+  --pk-surface-2:     #F3F4F7;                    /* subtle inset / media bg */
   --pk-ink:           var(--hawih-ink);          /* primary text */
-  --pk-ink-muted:     #6B6B72;                    /* muted text */
-  --pk-line:          var(--hawih-paper-line);   /* hairline border */
-  --pk-line-strong:   rgba(11, 11, 16, 0.16);
+  --pk-ink-muted:     #5B5E6B;                    /* muted text (6.4:1 on white) */
+  --pk-line:          rgba(15, 18, 36, 0.08);    /* hairline border */
+  --pk-line-strong:   rgba(15, 18, 36, 0.16);
 
   --pk-accent:        var(--hawih-blue);
   --pk-accent-hover:  var(--hawih-blue-hover);
-  --pk-accent-soft:   var(--hawih-blue-soft);
+  --pk-accent-soft:   rgba(31, 31, 254, 0.07);   /* hover washes (quiet on white) */
+  --pk-accent-tint:   rgba(31, 31, 254, 0.10);   /* chip/badge fills, step numbers */
   --pk-accent-glow:   var(--hawih-blue-glow);
   --pk-on-accent:     #FFFFFF;
 
+  /* ---- Warm secondary (small highlights ONLY: delta chips, featured/count
+         chips, eyebrow accents — never large surfaces, buttons or links) ---- */
+  --pk-amber:         #E8A33C;
+  --pk-amber-ink:     #8A5A12;
+  --pk-amber-soft:    #FCF4E4;
+
   /* ---- Status semantics (status chips only) ---- */
   --pk-success:       #27ae60;
-  --pk-warning:       #E67E22;
+  --pk-warning:       #B45309;
   --pk-danger:        #E74C3C;
   --pk-success-soft:  rgba(39, 174, 96, 0.12);
-  --pk-warning-soft:  rgba(230, 126, 34, 0.12);
+  --pk-warning-soft:  rgba(180, 83, 9, 0.12);
   --pk-danger-soft:   rgba(231, 76, 60, 0.12);
 
   /* ---- Spacing scale (4px base) ---- */
@@ -64,10 +71,10 @@
   --r-xl:   24px;
   --r-pill: 999px;
 
-  /* ---- Shadows (soft, low-opacity, layered) ---- */
-  --sh-1: 0 1px 2px rgba(11, 11, 16, 0.04), 0 2px 8px rgba(11, 11, 16, 0.05);
-  --sh-2: 0 2px 6px rgba(11, 11, 16, 0.06), 0 10px 24px rgba(11, 11, 16, 0.09);
-  --sh-3: 0 8px 24px rgba(11, 11, 16, 0.10), 0 24px 60px rgba(11, 11, 16, 0.14);
+  /* ---- Shadows (soft, low-opacity, layered — hairlines do the real work) ---- */
+  --sh-1: 0 1px 2px rgba(16, 18, 35, 0.05), 0 1px 3px rgba(16, 18, 35, 0.04);
+  --sh-2: 0 2px 4px rgba(16, 18, 35, 0.04), 0 8px 20px rgba(16, 18, 35, 0.08);
+  --sh-3: 0 4px 12px rgba(16, 18, 35, 0.06), 0 16px 40px rgba(16, 18, 35, 0.12);
 
   /* ---- Layout ---- */
   --container: 1200px;

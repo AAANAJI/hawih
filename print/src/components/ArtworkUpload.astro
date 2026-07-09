@@ -16,6 +16,7 @@
  *   locale: 'ar' | 'en'
  *   name?: string   -> reserved for future native form use
  */
+import Icon from '@components/Icon.astro';
 import { t } from '@lib/strings';
 import { UPLOAD } from '@lib/config';
 import type { Locale } from '@lib/format';
@@ -34,7 +35,7 @@ const accept = UPLOAD.accept.map((e) => '.' + e).join(',');
   data-msg-size={t('upload.errSize', locale)}
 >
   <label class="pk-upload__zone" data-artwork-zone tabindex="0" role="button">
-    <span aria-hidden="true" style="font-size:1.6rem;color:var(--pk-accent)">⬆</span>
+    <span class="pk-upload__badge" aria-hidden="true"><Icon name="upload" size={20} /></span>
     <strong>{t('upload.drop', locale)}</strong>
     <span class="pk-upload__hint">{t('upload.hint', locale)}</span>
     <input type="file" accept={accept} multiple class="pk-visually-hidden" data-artwork-input />
@@ -44,6 +45,8 @@ const accept = UPLOAD.accept.map((e) => '.' + e).join(',');
 </div>
 
 <script>
+  import { iconSvg } from '@lib/icons';
+
   function human(bytes: number): string {
     if (bytes < 1024) return bytes + ' B';
     if (bytes < 1048576) return Math.round(bytes / 1024) + ' KB';
@@ -99,7 +102,7 @@ const accept = UPLOAD.accept.map((e) => '.' + e).join(',');
         rm.type = 'button';
         rm.className = 'pk-filechip__remove';
         rm.setAttribute('aria-label', removeLabel);
-        rm.textContent = '✕';
+        rm.innerHTML = iconSvg('x');
         rm.addEventListener('click', () => { files.splice(i, 1); render(); emit(); });
         li.append(meta, rm);
         list!.appendChild(li);

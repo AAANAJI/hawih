@@ -8,6 +8,7 @@
  *   current: number   -> zero-based index of the current status (0..6)
  *   locale: 'ar' | 'en'
  */
+import Icon from '@components/Icon.astro';
 import { STATUS_ORDER, t } from '@lib/strings';
 import type { Locale } from '@lib/format';
 
@@ -20,7 +21,7 @@ const steps = STATUS_ORDER.map((key) => t(key, locale));
     const state = i < current ? 'is-done' : i === current ? 'is-current' : 'is-future';
     return (
       <li class={`pk-timeline__step ${state}`} aria-current={i === current ? 'step' : undefined}>
-        <span class="pk-timeline__dot" aria-hidden="true">{i < current ? '✓' : i + 1}</span>
+        <span class="pk-timeline__dot" aria-hidden="true">{i < current ? <Icon name="check" size={13} /> : i + 1}</span>
         <span class="pk-timeline__label">{label}</span>
       </li>
     );

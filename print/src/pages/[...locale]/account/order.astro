@@ -6,6 +6,7 @@
  * ("ادفع الآن" when a pay_url exists, otherwise bank transfer + WhatsApp).
  */
 import Base from '@layouts/Base.astro';
+import Icon from '@components/Icon.astro';
 import { localeStaticPaths, href } from '@lib/i18n';
 import { t } from '@lib/strings';
 import { BANK_TRANSFER, WHATSAPP } from '@lib/config';
@@ -33,7 +34,7 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
 
     <div data-order-error hidden>
       <div class="pk-empty">
-        <div class="pk-empty__icon" aria-hidden="true">🔍</div>
+        <div class="pk-empty__icon" aria-hidden="true"><Icon name="search" size={26} /></div>
         <h2 class="pk-h2">{t('order.notFound', locale)}</h2>
         <a class="pk-btn" href={accountHref}>{t('order.backToOrders', locale)}</a>
       </div>
@@ -122,7 +123,7 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
             <p class="pk-bank__note">{t('bank.note', locale)}</p>
           </div>
           <a class="pk-btn pk-btn--outline pk-btn--block" data-whatsapp target="_blank" rel="noopener">
-            <span aria-hidden="true">💬</span> {t('whatsapp.cta', locale)}
+            <Icon name="message-circle" size={16} /> {t('whatsapp.cta', locale)}
           </a>
         </aside>
       </div>
@@ -142,6 +143,7 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
     window.__orderCfg = { locale, loginHref, whatsapp, waPrefix, labels };
   </script>
   <script>
+  import { iconSvg } from '@lib/icons';
     import { isAuthed, api } from '@lib/api';
     import { formatSAR, arabicDate, formatFileSize } from '@lib/format';
 
@@ -233,7 +235,7 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
           const li = document.createElement('li');
           li.className = `pk-timeline__step ${state}`;
           if (i === currentIdx) li.setAttribute('aria-current', 'step');
-          li.innerHTML = `<span class="pk-timeline__dot" aria-hidden="true">${i < currentIdx ? '✓' : i + 1}</span><span class="pk-timeline__label">${esc(step[locale])}</span>`;
+          li.innerHTML = `<span class="pk-timeline__dot" aria-hidden="true">${i < currentIdx ? iconSvg('check') : i + 1}</span><span class="pk-timeline__label">${esc(step[locale])}</span>`;
           timeline.appendChild(li);
         });
       }
@@ -271,7 +273,7 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
           const div = document.createElement('div');
           div.className = 'pk-fileline';
           const size = f.file_size != null ? formatFileSize(Number(f.file_size)) : '';
-          div.innerHTML = `<div class="pk-fileline__name"><span aria-hidden="true">📎</span><span>${esc(f.file_name)}</span></div>${size ? `<span class="pk-fileline__size">${esc(size)}</span>` : ''}`;
+          div.innerHTML = `<div class="pk-fileline__name">${iconSvg('paperclip')}<span>${esc(f.file_name)}</span></div>${size ? `<span class="pk-fileline__size">${esc(size)}</span>` : ''}`;
           filesEl.appendChild(div);
         });
       }

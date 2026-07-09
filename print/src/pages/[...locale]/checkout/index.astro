@@ -7,6 +7,7 @@
  * GTM begin_checkout on load. Fully client-rendered (cart lives in the browser).
  */
 import Base from '@layouts/Base.astro';
+import Icon from '@components/Icon.astro';
 import Button from '@components/Button.astro';
 import { localeStaticPaths, href } from '@lib/i18n';
 import { t } from '@lib/strings';
@@ -37,7 +38,7 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
     <!-- Empty -->
     <div data-checkout-empty hidden>
       <div class="pk-empty">
-        <div class="pk-empty__icon" aria-hidden="true">🧾</div>
+        <div class="pk-empty__icon" aria-hidden="true"><Icon name="receipt" size={26} /></div>
         <h2 class="pk-h2">{t('checkout.emptyTitle', locale)}</h2>
         <p>{t('checkout.emptyBody', locale)}</p>
         <a class="pk-btn" href={shopHref}>{t('cart.empty.cta', locale)}</a>
@@ -170,6 +171,7 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
     window.__checkoutCfg = { locale, thankyouHref, whatsapp, labels };
   </script>
   <script>
+  import { iconSvg } from '@lib/icons';
     import { getCart, subtotal } from '@lib/cart';
     import { getItem } from '@lib/catalog';
     import { isAuthed, api } from '@lib/api';
@@ -228,10 +230,10 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
       const wrap = document.createElement('div');
       wrap.className = 'pk-coline__art';
       wrap.innerHTML = `
-        <div class="pk-coline__artlabel"><span aria-hidden="true">🎨</span> ${esc(L.artworkFor)}</div>
+        <div class="pk-coline__artlabel">${iconSvg('palette')} ${esc(L.artworkFor)}</div>
         <div class="pk-upload">
           <label class="pk-upload__zone" tabindex="0" role="button">
-            <span aria-hidden="true" style="font-size:1.4rem;color:var(--pk-accent)">⬆</span>
+            <span class="pk-upload__badge" aria-hidden="true">${iconSvg('upload')}</span>
             <strong>${esc(uploadDrop())}</strong>
             <span class="pk-upload__hint">${esc(uploadHint())}</span>
             <input type="file" accept="${UPLOAD.accept.map((e) => '.' + e).join(',')}" multiple class="pk-visually-hidden" />
@@ -259,7 +261,7 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
           li.className = 'pk-filechip';
           li.innerHTML = `<div class="pk-filechip__meta"><span class="pk-filechip__name">${esc(f.name)}</span><span class="pk-filechip__size">${human(f.size)}</span></div>`;
           const rm = document.createElement('button');
-          rm.type = 'button'; rm.className = 'pk-filechip__remove'; rm.textContent = '✕';
+          rm.type = 'button'; rm.className = 'pk-filechip__remove'; rm.innerHTML = iconSvg('x');
           rm.setAttribute('aria-label', 'x');
           rm.addEventListener('click', () => { files.splice(i, 1); render(); });
           li.appendChild(rm);
@@ -290,7 +292,7 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
       wrap.className = 'pk-coline__art';
       const lbl = document.createElement('div');
       lbl.className = 'pk-coline__artlabel';
-      lbl.textContent = locale === 'ar' ? '🎨 ملفات مرفقة' : '🎨 Attached files';
+      lbl.innerHTML = iconSvg('palette') + ' ' + (locale === 'ar' ? 'ملفات مرفقة' : 'Attached files');
       wrap.appendChild(lbl);
       const ul = document.createElement('ul');
       ul.className = 'pk-upload__list';
