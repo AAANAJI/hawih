@@ -42,8 +42,9 @@ const cats = categories.slice(0, 6);
         <h4>{t('footer.help', locale)}</h4>
         <ul>
           <li><a href={href(locale, '/products')}>{t('nav.allProducts', locale)}</a></li>
+          <li><a href={href(locale, '/about')}>{t('nav.about', locale)}</a></li>
+          <li><a href={href(locale, '/faq')}>{t('nav.faq', locale)}</a></li>
           <li><a href={href(locale, '/account')}>{t('footer.track', locale)}</a></li>
-          <li><a href={href(locale, '/account')}>{t('footer.account', locale)}</a></li>
           <li><a href={href(locale, '/policies/shipping-returns')}>{t('footer.shipping', locale)}</a></li>
           <li><a href={href(locale, '/policies/privacy')}>{t('footer.privacy', locale)}</a></li>
           <li><a href={href(locale, '/policies/terms')}>{t('footer.terms', locale)}</a></li>

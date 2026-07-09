@@ -410,16 +410,24 @@
   max-width: 780px; margin-inline: auto;
 }
 .pk-hero__sub { font-size: 1.1rem; max-width: 56ch; }
-.pk-hero__strip { padding-block: var(--sp-2) var(--sp-9); }
-.pk-hero__striptrack {
-  display: flex; gap: var(--sp-4); overflow-x: auto; padding-inline: var(--sp-5);
-  scroll-snap-type: x mandatory; scrollbar-width: none;
+.pk-hero__strip {
+  padding-block: var(--sp-2) var(--sp-9); overflow: hidden;
   mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
   -webkit-mask-image: linear-gradient(to right, transparent, #000 6%, #000 94%, transparent);
 }
-.pk-hero__striptrack::-webkit-scrollbar { display: none; }
+/* Continuous marquee: two identical segments, track slides one segment-width
+   per loop. Pauses on hover; reduced-motion falls back to manual scroll. */
+.pk-marquee { display: flex; width: max-content; animation: pk-marquee 45s linear infinite; }
+.pk-marquee:hover { animation-play-state: paused; }
+.pk-marquee__seg { display: flex; gap: var(--sp-4); padding-inline-end: var(--sp-4); }
+@keyframes pk-marquee { to { transform: translateX(-50%); } }
+[dir='rtl'] .pk-marquee { animation-name: pk-marquee-rtl; }
+@keyframes pk-marquee-rtl { to { transform: translateX(50%); } }
+@media (prefers-reduced-motion: reduce) {
+  .pk-marquee { animation: none !important; width: auto; overflow-x: auto; scrollbar-width: none; }
+}
 .pk-hero__stripcard {
-  flex: 0 0 auto; width: 150px; aspect-ratio: 1; scroll-snap-align: center;
+  flex: 0 0 auto; width: 150px; aspect-ratio: 1;
   border-radius: var(--r-lg); overflow: hidden;
   border: 1px solid var(--pk-line); background: var(--pk-surface-2);
   transition: transform var(--t-base), box-shadow var(--t-base), border-color var(--t-base);
@@ -525,6 +533,131 @@
 [dir='rtl'] .pk-toolbar__select { background-position: left 12px center; }
 .pk-pitem { content-visibility: auto; contain-intrinsic-size: 380px; }
 .pk-pitem[hidden] { display: none; }
+
+/* ---------- Category mosaic: first tile spans 2 columns on desktop ---------- */
+@media (min-width: 1025px) {
+  .pk-grid-cats > :first-child { grid-column: span 2; }
+}
+
+/* ---------- Promo tiles ---------- */
+.pk-promos { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-6); }
+.pk-promo {
+  position: relative; display: flex; align-items: center; gap: var(--sp-5);
+  min-height: 220px; padding: var(--sp-7); border-radius: var(--r-xl); overflow: hidden;
+  transition: transform var(--t-base), box-shadow var(--t-base);
+}
+.pk-promo:hover { transform: translateY(-3px); box-shadow: var(--sh-3); }
+.pk-promo--cobalt {
+  background: linear-gradient(135deg, #1F1FFE 0%, #0D0DB8 100%); color: #fff;
+}
+.pk-promo--cobalt .pk-promo__kicker { color: rgba(255, 255, 255, 0.75); }
+.pk-promo--cobalt .pk-promo__body { color: rgba(255, 255, 255, 0.82); }
+.pk-promo--warm {
+  background: linear-gradient(135deg, #FCF4E4 0%, #F6E7C8 100%); color: var(--pk-ink);
+  border: 1px solid rgba(138, 90, 18, 0.12);
+}
+.pk-promo--warm .pk-promo__kicker { color: var(--pk-amber-ink); }
+.pk-promo--warm .pk-promo__body { color: rgba(11, 11, 16, 0.62); }
+.pk-promo__copy { position: relative; z-index: 1; display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-3); flex: 1; }
+.pk-promo__kicker { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+[dir='rtl'] .pk-promo__kicker { letter-spacing: 0; }
+.pk-promo__title { font-size: clamp(1.3rem, 2.2vw, 1.7rem); font-weight: 700; line-height: 1.25; color: inherit; }
+.pk-promo__body { font-size: 0.94rem; line-height: 1.6; max-width: 34ch; }
+.pk-promo__media {
+  position: relative; z-index: 1; flex: 0 0 38%; align-self: stretch;
+  border-radius: var(--r-lg); overflow: hidden;
+  box-shadow: 0 10px 30px rgba(11, 11, 16, 0.22);
+  transform: rotate(2.5deg);
+  transition: transform var(--t-slow);
+}
+.pk-promo:hover .pk-promo__media { transform: rotate(0deg) scale(1.03); }
+.pk-promo__media img { width: 100%; height: 100%; object-fit: cover; }
+@media (max-width: 900px) {
+  .pk-promos { grid-template-columns: 1fr; }
+  .pk-promo { min-height: 180px; }
+}
+@media (max-width: 480px) {
+  .pk-promo { flex-direction: column; align-items: stretch; }
+  .pk-promo__media { flex-basis: auto; height: 150px; transform: none; }
+}
+
+/* ---------- Design-help banner ---------- */
+.pk-banner {
+  position: relative; overflow: hidden;
+  display: flex; align-items: center; gap: var(--sp-6); flex-wrap: wrap;
+  padding: var(--sp-8); border-radius: var(--r-xl);
+  background: linear-gradient(120deg, var(--hawih-ink) 0%, #1B1B4A 60%, #1F1FFE 130%);
+  color: #EDECF5;
+}
+.pk-banner__copy { flex: 1; min-width: 260px; position: relative; z-index: 1; }
+.pk-banner__copy h2 { color: #fff; margin-bottom: var(--sp-2); }
+.pk-banner__copy p { color: rgba(237, 236, 245, 0.78); max-width: 56ch; }
+.pk-banner .pk-btn { position: relative; z-index: 1; }
+.pk-banner__deco {
+  position: absolute; inset-inline-end: -80px; top: -90px; width: 300px; height: 300px;
+  border-radius: 50%; background: radial-gradient(circle, rgba(31, 31, 254, 0.5), transparent 65%);
+  filter: blur(2px); pointer-events: none;
+  animation: pk-float 9s ease-in-out infinite alternate;
+}
+@keyframes pk-float { from { transform: translateY(0); } to { transform: translateY(26px); } }
+@media (prefers-reduced-motion: reduce) { .pk-banner__deco { animation: none; } }
+
+/* Light button (on dark/gradient surfaces) */
+.pk-btn--light { background: #fff; color: var(--pk-accent); border-color: #fff; }
+.pk-btn--light:hover { background: #F3F4F7; color: var(--pk-accent-hover); }
+
+/* ---------- Floating WhatsApp button ---------- */
+.pk-fab {
+  position: fixed; inset-inline-end: 18px; bottom: 18px; z-index: 95;
+  width: 54px; height: 54px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--pk-accent); color: #fff; box-shadow: var(--sh-3);
+  transition: transform var(--t-base), background var(--t-base);
+}
+.pk-fab:hover { transform: translateY(-3px) scale(1.05); background: var(--pk-accent-hover); color: #fff; }
+.pk-fab::after {
+  content: ''; position: absolute; top: 4px; inset-inline-end: 4px;
+  width: 11px; height: 11px; border-radius: 50%;
+  background: #22C55E; border: 2px solid #fff;
+}
+
+/* ---------- About stats ---------- */
+.pk-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-5); max-width: 640px; }
+.pk-stat {
+  display: flex; flex-direction: column; gap: 4px; padding: var(--sp-5);
+  border: 1px solid var(--pk-line); border-radius: var(--r-lg); background: var(--pk-surface);
+}
+.pk-stat__n { font-size: 1.6rem; font-weight: 700; color: var(--pk-accent); }
+.pk-stat__l { font-size: 0.85rem; color: var(--pk-ink-muted); }
+@media (max-width: 560px) { .pk-stats { grid-template-columns: 1fr; } }
+
+/* ---------- Contact cards ---------- */
+.pk-contactgrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--sp-5); }
+.pk-contactcard { display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-3); padding: var(--sp-6); }
+.pk-contactcard__icon {
+  width: 46px; height: 46px; border-radius: var(--r-md);
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--pk-accent-tint); color: var(--pk-accent);
+}
+.pk-contactcard__sub { font-weight: 600; unicode-bidi: isolate; }
+.pk-contactcard .pk-btn { margin-top: auto; }
+@media (max-width: 860px) { .pk-contactgrid { grid-template-columns: 1fr; } }
+
+/* ---------- FAQ accordion ---------- */
+.pk-faq { display: flex; flex-direction: column; gap: var(--sp-3); max-width: 780px; }
+.pk-faq__item {
+  border: 1px solid var(--pk-line); border-radius: var(--r-lg);
+  background: var(--pk-surface); box-shadow: var(--sh-1); overflow: hidden;
+}
+.pk-faq__item summary {
+  display: flex; align-items: center; justify-content: space-between; gap: var(--sp-4);
+  padding: var(--sp-5); cursor: pointer; font-weight: 600; list-style: none;
+}
+.pk-faq__item summary::-webkit-details-marker { display: none; }
+.pk-faq__item summary:hover { color: var(--pk-accent); }
+.pk-faq__chev { color: var(--pk-ink-muted); transition: transform var(--t-base); display: inline-flex; flex: none; }
+.pk-faq__item[open] .pk-faq__chev { transform: rotate(180deg); }
+.pk-faq__item > p { padding: 0 var(--sp-5) var(--sp-5); color: var(--pk-ink-muted); line-height: 1.75; max-width: 68ch; }
 
 /* ---------- Amber highlight chip (small accents only) ---------- */
 .pk-chip-amber {

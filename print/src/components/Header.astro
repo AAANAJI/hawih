@@ -25,7 +25,8 @@ const cats = categories.map((c) => ({
 }));
 
 const nav = [
-  { label: t('nav.track', locale), href: href(locale, '/account') },
+  { label: t('nav.about', locale), href: href(locale, '/about') },
+  { label: t('nav.contact', locale), href: href(locale, '/contact') },
   { label: t('nav.account', locale), href: href(locale, '/account') },
 ];
 
@@ -91,6 +92,10 @@ const productsHref = href(locale, '/products');
     <div class="pk-drawer__section">{t('nav.products', locale)}</div>
     <a href={productsHref}>{t('nav.allProducts', locale)}</a>
     {cats.map((c) => <a href={c.href}>{c.title}</a>)}
+    <div class="pk-drawer__section">{t('brand.name', locale)}</div>
+    <a href={href(locale, '/about')}>{t('nav.about', locale)}</a>
+    <a href={href(locale, '/faq')}>{t('nav.faq', locale)}</a>
+    <a href={href(locale, '/contact')}>{t('nav.contact', locale)}</a>
     <div class="pk-drawer__section">{t('nav.account', locale)}</div>
     <a href={href(locale, '/account')}>{t('nav.account', locale)}</a>
     <a href={cartHref}>{t('nav.cart', locale)}</a>

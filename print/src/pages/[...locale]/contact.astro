@@ -1,0 +1,59 @@
+---
+/**
+ * Contact page — /contact/ and /en/contact/.
+ * WhatsApp / phone / email cards + link to FAQ.
+ */
+import Base from '@layouts/Base.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import Icon from '@components/Icon.astro';
+import { localeStaticPaths, href } from '@lib/i18n';
+import { t } from '@lib/strings';
+import { whatsappUrl } from '@lib/config';
+import type { Locale } from '@lib/format';
+import type { IconName } from '@lib/icons';
+
+export const getStaticPaths = localeStaticPaths;
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+
+const title = t('contact.title', locale);
+const phoneDisplay = '+966 50 218 5471';
+const email = 'print@hawih.com.sa';
+
+const cards: { icon: IconName; title: string; body: string; cta: string; href: string; sub?: string; external?: boolean }[] = [
+  { icon: 'message-circle', title: t('contact.whatsapp.title', locale), body: t('contact.whatsapp.body', locale), cta: t('contact.whatsapp.cta', locale), href: whatsappUrl(), external: true },
+  { icon: 'phone', title: t('contact.phone.title', locale), body: t('contact.phone.body', locale), cta: t('contact.phone.cta', locale), href: 'tel:+966502185471', sub: phoneDisplay },
+  { icon: 'mail', title: t('contact.email.title', locale), body: t('contact.email.body', locale), cta: t('contact.email.cta', locale), href: `mailto:${email}`, sub: email },
+];
+---
+<Base
+  locale={locale}
+  title={`${title} — ${t('brand.name', locale)}`}
+  description={t('contact.sub', locale)}
+  path="/contact"
+>
+  <div class="pk-container">
+    <Breadcrumbs items={[{ label: t('nav.home', locale), href: href(locale, '/') }, { label: title }]} />
+    <div class="pk-pagehead">
+      <h1 class="pk-h1">{title}</h1>
+      <p>{t('contact.sub', locale)}</p>
+    </div>
+
+    <div class="pk-contactgrid" style="margin-bottom:var(--sp-9)">
+      {cards.map((c, i) => (
+        <div class="pk-card pk-contactcard pk-reveal" style={`transition-delay:${i * 80}ms`}>
+          <span class="pk-contactcard__icon" aria-hidden="true"><Icon name={c.icon} size={22} /></span>
+          <h2 class="pk-h3">{c.title}</h2>
+          <p class="pk-muted pk-small">{c.body}</p>
+          {c.sub && <p class="pk-contactcard__sub" dir="ltr">{c.sub}</p>}
+          <a class="pk-btn pk-btn--sm" href={c.href} target={c.external ? '_blank' : undefined} rel={c.external ? 'noopener' : undefined}>{c.cta}</a>
+        </div>
+      ))}
+    </div>
+
+    <div class="pk-card" style="padding:var(--sp-6);margin-bottom:var(--sp-10);display:flex;align-items:center;justify-content:space-between;gap:var(--sp-4);flex-wrap:wrap">
+      <p class="pk-muted">{t('faq.sub', locale)}</p>
+      <a class="pk-btn pk-btn--outline pk-btn--sm" href={href(locale, '/faq')}>{t('nav.faq', locale)}</a>
+    </div>
+  </div>
+</Base>
