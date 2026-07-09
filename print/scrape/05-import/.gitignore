@@ -1,3 +1,5 @@
 .env
 output/
 __pycache__/
+# the template is safe to commit (re-included past print/.gitignore's .env.* rule)
+!.env.example

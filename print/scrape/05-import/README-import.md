@@ -15,33 +15,22 @@ prices and every `reference_*` field are never sent, and a forbidden-string scan
 
 ---
 
-## One-time setup
+## Setup — all on your Mac (no server access needed)
 
-### 1. Turn on the import API (set the token) — on the server, Hawih tenant only
-
-The endpoint is **disabled by default** and returns 403 until you set a secret
-token. Pick a long random token and set it in the Hawih CRM database:
-
-```sql
--- run against the Hawih CRM database (crm.hawih.com.sa)
-INSERT INTO rise_settings (setting_name, setting_value)
-VALUES ('print_import_token', 'PASTE-A-LONG-RANDOM-TOKEN-HERE')
-ON DUPLICATE KEY UPDATE setting_value = VALUES(setting_value);
-```
-
-Generate a token however you like, e.g. `openssl rand -hex 32`.
-(Shfrah never gets this row, so its import API stays dark.)
-
-To disable the API again later: `DELETE FROM rise_settings WHERE setting_name='print_import_token';`
-
-### 2. Install + configure the script (on your Mac)
+Auth is just your **CRM admin login**. The script signs in over HTTPS with your
+email + password (the same ones you use on crm.hawih.com.sa) — nothing to set up
+on the server, no token, no database.
 
 ```bash
 cd "print hawih/…/print/scrape/05-import"   # wherever this folder lives
+python3 -m venv .venv && source .venv/bin/activate
 python3 -m pip install -r requirements.txt
 cp .env.example .env
-# edit .env: paste the SAME token into PRINT_IMPORT_TOKEN, and fix the file paths
+# edit .env: your CRM_ADMIN_EMAIL + CRM_ADMIN_PASSWORD, and the file/image paths
 ```
+
+(You must be a CRM **admin** — the import endpoint only accepts an admin team
+member. It only works on the Hawih tenant; Shfrah returns 404.)
 
 ---
 
