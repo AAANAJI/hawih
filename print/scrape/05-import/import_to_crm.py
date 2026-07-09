@@ -35,6 +35,7 @@ Dependencies:  pip install requests openpyxl
 
 import argparse
 import csv
+import getpass
 import json
 import os
 import re
@@ -439,14 +440,21 @@ def main():
         print(f"  first-10 payload preview → {OUT_DIR/'payload-preview.json'}")
         return
 
-    # 5) auth — your CRM admin login (HTTP Basic), or an optional shared token
+    # 5) auth — your CRM admin login (HTTP Basic), or an optional shared token.
+    # If the email is set but the password isn't, prompt for it (no need to put
+    # the password in .env or juggle shell env vars).
+    if not token and admin_email and not admin_password:
+        try:
+            admin_password = getpass.getpass(f"CRM password for {admin_email}: ")
+        except (EOFError, KeyboardInterrupt):
+            admin_password = ""
     session = requests.Session()
     if token:
         session.headers["Authorization"] = f"Bearer {token}"
     elif admin_email and admin_password:
         session.auth = (admin_email, admin_password)  # sent as HTTPS Basic auth
     else:
-        sys.exit("Set CRM_ADMIN_EMAIL + CRM_ADMIN_PASSWORD (your CRM login) in .env — or PRINT_IMPORT_TOKEN.")
+        sys.exit("Set CRM_ADMIN_EMAIL (and CRM_ADMIN_PASSWORD, or type it when prompted) in .env — or PRINT_IMPORT_TOKEN.")
     url_base = api_base(base_url)
 
     # select scope
