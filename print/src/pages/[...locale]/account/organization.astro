@@ -1,0 +1,79 @@
+---
+/**
+ * Organization — /account/organization. Edit company details; read-only team.
+ */
+import AccountLayout from '@components/AccountLayout.astro';
+import { localeStaticPaths } from '@lib/i18n';
+import { t } from '@lib/strings';
+import type { Locale } from '@lib/format';
+
+export const getStaticPaths = localeStaticPaths;
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+---
+<AccountLayout locale={locale} active="organization" title={t('account.org.title', locale)}>
+  <div class="pk-acct__head"><h1 class="pk-h1">{t('account.org.title', locale)}</h1></div>
+
+  <form class="pk-acct-card pk-form" data-org-form novalidate>
+    <div class="pk-form-alert pk-form-alert--success" data-ok hidden>{t('account.saved', locale)}</div>
+    <div class="pk-form-alert pk-form-alert--error" data-err hidden></div>
+    <div class="pk-acct-form-grid">
+      <div class="pk-field pk-field--full"><label class="pk-label" for="o-name">{t('account.org.companyName', locale)} <span class="pk-req">*</span></label><input class="pk-input" id="o-name" name="company_name" required /></div>
+      <div class="pk-field"><label class="pk-label" for="o-vat">{t('account.org.vat', locale)}</label><input class="pk-input" id="o-vat" name="vat_number" dir="ltr" /></div>
+      <div class="pk-field"><label class="pk-label" for="o-phone">{t('account.org.phone', locale)}</label><input class="pk-input" id="o-phone" name="phone" dir="ltr" /></div>
+      <div class="pk-field"><label class="pk-label" for="o-web">{t('account.org.website', locale)}</label><input class="pk-input" id="o-web" name="website" dir="ltr" /></div>
+      <div class="pk-field"><label class="pk-label" for="o-country">{t('account.org.country', locale)}</label><input class="pk-input" id="o-country" name="country" /></div>
+      <div class="pk-field pk-field--full"><label class="pk-label" for="o-addr">{t('account.org.address', locale)}</label><input class="pk-input" id="o-addr" name="address" /></div>
+      <div class="pk-field"><label class="pk-label" for="o-city">{t('account.org.city', locale)}</label><input class="pk-input" id="o-city" name="city" /></div>
+      <div class="pk-field"><label class="pk-label" for="o-state">{t('account.org.state', locale)}</label><input class="pk-input" id="o-state" name="state" /></div>
+      <div class="pk-field"><label class="pk-label" for="o-zip">{t('account.org.zip', locale)}</label><input class="pk-input" id="o-zip" name="zip" dir="ltr" /></div>
+    </div>
+    <button class="pk-btn" type="submit" data-save>{t('account.save', locale)}</button>
+  </form>
+
+  <div class="pk-acct-card">
+    <h2>{t('account.org.team', locale)}</h2>
+    <div class="pk-acct-rows" data-team></div>
+  </div>
+
+  <script define:vars={{ saveError: t('account.saveError', locale), primaryLabel: t('account.org.primary', locale) }}>
+    window.__orgCfg = { saveError, primaryLabel };
+  </script>
+  <script>
+    import { api } from '@lib/api';
+    const cfg = (window as any).__orgCfg;
+    const esc = (s: string) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
+    const form = document.querySelector<HTMLFormElement>('[data-org-form]')!;
+    const ok = document.querySelector<HTMLElement>('[data-ok]')!;
+    const err = document.querySelector<HTMLElement>('[data-err]')!;
+    const save = document.querySelector<HTMLButtonElement>('[data-save]')!;
+    const teamEl = document.querySelector<HTMLElement>('[data-team]')!;
+    const set = (n: string, v: string) => { const el = form.elements.namedItem(n) as HTMLInputElement; if (el) el.value = v || ''; };
+
+    function fill(r: any) {
+      const o = r.organization || {};
+      ['company_name','vat_number','phone','website','country','address','city','state','zip'].forEach((k) => set(k, o[k]));
+      const team: any[] = r.team || [];
+      teamEl.innerHTML = team.map((m) => `<div class="pk-acct-row">
+          <span class="pk-acct-row__main"><span class="pk-acct-row__title">${esc(m.name || m.email)}</span>
+          <span class="pk-acct-row__meta">${esc(m.email || '')}${m.phone ? ' · ' + esc(m.phone) : ''}</span></span>
+          ${m.is_primary ? `<span class="pk-badge pk-badge--muted">${esc(cfg.primaryLabel)}</span>` : ''}
+        </div>`).join('');
+    }
+    if ((window as any).__acct) fill((window as any).__acct);
+    else document.addEventListener('acct:ready', (e: any) => fill(e.detail));
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      ok.hidden = true; err.hidden = true; save.disabled = true;
+      const payload: any = {};
+      ['company_name','vat_number','phone','website','country','address','city','state','zip'].forEach((k) => { payload[k] = (form.elements.namedItem(k) as HTMLInputElement).value.trim(); });
+      try {
+        const r: any = await api.updateOrganization(payload);
+        if (r && r.success) ok.hidden = false;
+        else { err.textContent = (r && r.message) || cfg.saveError; err.hidden = false; }
+      } catch { err.textContent = cfg.saveError; err.hidden = false; }
+      save.disabled = false;
+    });
+  </script>
+</AccountLayout>

@@ -1,0 +1,108 @@
+---
+/**
+ * AccountLayout — shared chrome for every /account/* page: a sidebar of
+ * sections + a content <slot>. Handles the auth guard (redirect to login),
+ * loads the signed-in identity (name/email/avatar) into the sidebar, and
+ * wires logout. Each page fetches its own section data.
+ *
+ * Props:
+ *   locale: 'ar' | 'en'
+ *   active: nav key of the current page ('overview' | 'orders' | ...)
+ *   title:  page <title> (localized)
+ */
+import Base from '@layouts/Base.astro';
+import Icon from '@components/Icon.astro';
+import { href } from '@lib/i18n';
+import { t } from '@lib/strings';
+import type { Locale } from '@lib/format';
+import type { IconName } from '@lib/icons';
+
+interface Props { locale: Locale; active: string; title: string }
+const { locale, active, title } = Astro.props as Props;
+const loginHref = href(locale, '/auth/login') + '?redirect=' + encodeURIComponent(href(locale, '/account'));
+
+const nav: { key: string; icon: IconName; href: string; label: string }[] = [
+  { key: 'overview', icon: 'zap', href: '/account', label: t('account.nav.overview', locale) },
+  { key: 'orders', icon: 'package', href: '/account/orders', label: t('account.nav.orders', locale) },
+  { key: 'invoices', icon: 'receipt', href: '/account/invoices', label: t('account.nav.invoices', locale) },
+  { key: 'estimates', icon: 'paperclip', href: '/account/estimates', label: t('account.nav.estimates', locale) },
+  { key: 'tickets', icon: 'message-circle', href: '/account/tickets', label: t('account.nav.tickets', locale) },
+  { key: 'profile', icon: 'user', href: '/account/profile', label: t('account.nav.profile', locale) },
+  { key: 'organization', icon: 'landmark', href: '/account/organization', label: t('account.nav.organization', locale) },
+  { key: 'security', icon: 'sliders', href: '/account/security', label: t('account.nav.security', locale) },
+];
+---
+<Base
+  locale={locale}
+  title={`${title} — ${t('brand.name', locale)}`}
+  description={t('account.subtitle', locale)}
+  path="/account"
+  noindex={true}
+>
+  <div class="pk-container pk-acct">
+    <aside class="pk-acct__side">
+      <div class="pk-acct__ident">
+        <span class="pk-acct__avatar" data-acct-avatar aria-hidden="true"><Icon name="user" size={24} /></span>
+        <span class="pk-acct__who">
+          <strong data-acct-name>{t('account.hello', locale)}</strong>
+          <small class="pk-muted" data-acct-email></small>
+        </span>
+      </div>
+      <nav class="pk-acct__nav" aria-label={t('account.title', locale)}>
+        {nav.map((n) => (
+          <a
+            class:list={['pk-acct__navlink', active === n.key && 'is-active']}
+            href={href(locale, n.href)}
+            aria-current={active === n.key ? 'page' : undefined}
+          >
+            <Icon name={n.icon} size={18} />
+            <span>{n.label}</span>
+          </a>
+        ))}
+        <button class="pk-acct__navlink pk-acct__logout" type="button" data-logout>
+          <Icon name="arrow-end" size={18} class="pk-icon--flip" />
+          <span>{t('auth.logout', locale)}</span>
+        </button>
+      </nav>
+    </aside>
+
+    <main class="pk-acct__main">
+      <slot />
+    </main>
+  </div>
+
+  <script define:vars={{ loginHref }}>
+    window.__acctLoginHref = loginHref;
+  </script>
+  <script>
+    import { isAuthed, api, clearToken } from '@lib/api';
+    import { href } from '@lib/i18n';
+
+    const locale = location.pathname.startsWith('/en') ? 'en' : 'ar';
+
+    if (!isAuthed()) {
+      location.replace((window as any).__acctLoginHref);
+    } else {
+      api.account().then((r: any) => {
+        if (!r || !r.success) return;
+        const c = r.contact || {};
+        const nameEl = document.querySelector('[data-acct-name]');
+        if (nameEl) nameEl.textContent = `${c.first_name || ''} ${c.last_name || ''}`.trim() || nameEl.textContent;
+        const emailEl = document.querySelector('[data-acct-email]');
+        if (emailEl) emailEl.textContent = c.email || '';
+        if (c.avatar_url) {
+          const av = document.querySelector('[data-acct-avatar]');
+          if (av) av.innerHTML = `<img src="${c.avatar_url}" alt="" />`;
+        }
+        (window as any).__acct = r;
+        document.dispatchEvent(new CustomEvent('acct:ready', { detail: r }));
+      }).catch(() => {});
+    }
+
+    document.querySelector('[data-logout]')?.addEventListener('click', async () => {
+      try { await api.logout(); } catch { /* ignore */ }
+      clearToken();
+      location.href = href(locale as 'ar' | 'en', '/');
+    });
+  </script>
+</Base>

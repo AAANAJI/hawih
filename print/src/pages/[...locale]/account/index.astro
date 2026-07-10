@@ -1,11 +1,9 @@
 ---
 /**
- * Account — /account and /en/account.
- * Requires a token (redirects to login otherwise). Lists orders with status
- * chips + totals + a link to each order's detail. EmptyState when none.
+ * Account overview — /account and /en/account.
+ * Stats (orders, open invoices, amount due) + recent orders + quick links.
  */
-import Base from '@layouts/Base.astro';
-import Icon from '@components/Icon.astro';
+import AccountLayout from '@components/AccountLayout.astro';
 import { localeStaticPaths, href } from '@lib/i18n';
 import { t } from '@lib/strings';
 import type { Locale } from '@lib/format';
@@ -13,123 +11,78 @@ import type { Locale } from '@lib/format';
 export const getStaticPaths = localeStaticPaths;
 interface Props { locale: Locale }
 const { locale } = Astro.props as Props;
-const title = t('nav.account', locale);
-const loginHref = href(locale, '/auth/login') + '?redirect=' + encodeURIComponent(href(locale, '/account'));
-const shopHref = href(locale, '/');
+const ordersHref = href(locale, '/account/orders');
 const orderBase = href(locale, '/account/order');
+const shopHref = href(locale, '/');
 ---
-<Base
-  locale={locale}
-  title={`${title} — ${t('brand.name', locale)}`}
-  description={t('account.subtitle', locale)}
-  path="/account"
-  noindex={true}
->
-  <div class="pk-container" style="min-height:56vh">
-    <div class="pk-pagehead" style="display:flex;align-items:flex-end;justify-content:space-between;gap:var(--sp-4);flex-wrap:wrap">
-      <div>
-        <h1 class="pk-h1">{t('account.orders', locale)}</h1>
-        <p>{t('account.subtitle', locale)}</p>
-      </div>
-      <button class="pk-btn pk-btn--ghost pk-btn--sm" data-logout>{t('auth.logout', locale)}</button>
-    </div>
-
-    <p class="pk-muted" data-orders-loading style="padding-block:var(--sp-6)">{t('account.loading', locale)}</p>
-
-    <div class="pk-form-alert pk-form-alert--error" data-orders-error hidden style="margin-bottom:var(--sp-5)"></div>
-
-    <div data-orders-empty hidden>
-      <div class="pk-empty">
-        <div class="pk-empty__icon" aria-hidden="true"><Icon name="package" size={26} /></div>
-        <h2 class="pk-h2">{t('account.empty.title', locale)}</h2>
-        <p>{t('account.empty.body', locale)}</p>
-        <a class="pk-btn" href={shopHref}>{t('account.empty.cta', locale)}</a>
-      </div>
-    </div>
-
-    <div class="pk-orderlist" data-orders-list hidden></div>
+<AccountLayout locale={locale} active="overview" title={t('account.overview.title', locale)}>
+  <div class="pk-acct__head">
+    <h1 class="pk-h1">{t('account.overview.title', locale)}</h1>
+    <p>{t('account.subtitle', locale)}</p>
   </div>
 
-  <script define:vars={{
-    locale,
-    loginHref,
-    orderBase,
-    labels: {
-      orderNum: t('account.orderNum', locale),
-      itemsCount: t('account.itemsCount', locale),
-      view: t('account.view', locale),
-      error: t('account.error', locale),
-    },
-  }}>
-    window.__accountCfg = { locale, loginHref, orderBase, labels };
+  <div class="pk-acct-stats">
+    <div class="pk-acct-stat"><div class="pk-acct-stat__n" data-stat-orders>—</div><div class="pk-acct-stat__l">{t('account.overview.statOrders', locale)}</div></div>
+    <div class="pk-acct-stat"><div class="pk-acct-stat__n" data-stat-open>—</div><div class="pk-acct-stat__l">{t('account.overview.statOpenInvoices', locale)}</div></div>
+    <div class="pk-acct-stat"><div class="pk-acct-stat__n pk-price"><bdi data-stat-due>—</bdi></div><div class="pk-acct-stat__l">{t('account.overview.statDue', locale)}</div></div>
+  </div>
+
+  <div class="pk-acct-card">
+    <div style="display:flex;align-items:center;justify-content:space-between;gap:var(--sp-3);margin-bottom:var(--sp-3)">
+      <h2 style="margin:0">{t('account.overview.recentOrders', locale)}</h2>
+      <a class="pk-btn pk-btn--ghost pk-btn--sm" href={ordersHref}>{t('account.viewAll', locale)}</a>
+    </div>
+    <p class="pk-muted" data-recent-loading>{t('account.loadingGeneric', locale)}</p>
+    <p class="pk-muted" data-recent-empty hidden>{t('account.overview.noRecent', locale)}</p>
+    <div class="pk-acct-rows" data-recent hidden></div>
+  </div>
+
+  <script define:vars={{ orderBase, labels: {
+    orderNum: t('account.orderNum', locale), items: t('account.itemsCount', locale),
+  } }}>
+    window.__ovCfg = { orderBase, labels };
   </script>
   <script>
-  import { iconSvg } from '@lib/icons';
-    import { isAuthed, api, clearToken } from '@lib/api';
+    import { api } from '@lib/api';
     import { formatSAR, arabicDate } from '@lib/format';
-    import { href } from '@lib/i18n';
+    const cfg = (window as any).__ovCfg;
+    const locale = location.pathname.startsWith('/en') ? 'en' : 'ar';
+    const esc = (s: string) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
 
-    const cfg = (window as any).__accountCfg;
-    const L = cfg.labels;
-    const locale = cfg.locale === 'en' ? 'en' : 'ar';
-
-    const loadingEl = document.querySelector<HTMLElement>('[data-orders-loading]')!;
-    const errorEl = document.querySelector<HTMLElement>('[data-orders-error]')!;
-    const emptyEl = document.querySelector<HTMLElement>('[data-orders-empty]')!;
-    const listEl = document.querySelector<HTMLElement>('[data-orders-list]')!;
-
-    // Logout
-    document.querySelector<HTMLButtonElement>('[data-logout]')?.addEventListener('click', async () => {
-      try { await api.logout(); } catch { /* ignore */ }
-      clearToken();
-      location.href = href(locale, '/');
-    });
-
-    if (!isAuthed()) {
-      location.replace(cfg.loginHref);
-    } else {
-      load();
+    function fillStats(r: any) {
+      const s = r.stats || {};
+      const o = document.querySelector('[data-stat-orders]'); if (o) o.textContent = String(s.orders ?? 0);
+      const op = document.querySelector('[data-stat-open]'); if (op) op.textContent = String(s.invoices_open ?? 0);
+      const d = document.querySelector('[data-stat-due]'); if (d) d.textContent = formatSAR(Number(s.invoices_due || 0), locale);
     }
+    // reuse identity fetch from the layout if it arrived
+    if ((window as any).__acct) fillStats((window as any).__acct);
+    else document.addEventListener('acct:ready', (e: any) => fillStats(e.detail));
 
-    function esc(s: string): string {
-      return String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
-    }
-
-    async function load() {
-      try {
-        const res: any = await api.orders();
-        loadingEl.hidden = true;
-        if (!res || !res.success) { errorEl.textContent = L.error; errorEl.hidden = false; return; }
-        const orders: any[] = res.orders || [];
-        if (orders.length === 0) { emptyEl.hidden = false; return; }
-
-        listEl.hidden = false;
-        orders.forEach((o) => {
-          const a = document.createElement('a');
-          a.className = 'pk-card pk-ordercard';
-          a.href = `${cfg.orderBase}?id=${encodeURIComponent(o.id)}`;
-          const status = o.status || {};
-          const color = status.color || '';
-          const chip = color
-            ? `<span class="pk-badge" style="background:${esc(color)}1f;color:${esc(color)}">${esc(status.title || '')}</span>`
-            : `<span class="pk-badge pk-badge--muted">${esc(status.title || '')}</span>`;
-          const dateStr = o.order_date ? arabicDate(o.order_date, locale) : '';
-          const count = o.items_count != null ? `${o.items_count} ${L.itemsCount}` : '';
-          a.innerHTML = `
-            <div class="pk-ordercard__id">
-              <span class="pk-ordercard__num">${esc(L.orderNum)} ${esc(String(o.id))}</span>
-              <span class="pk-ordercard__meta">${esc(dateStr)}${count ? ' · ' + esc(count) : ''}</span>
-            </div>
-            <div class="pk-ordercard__status">${chip}</div>
-            <div class="pk-ordercard__total pk-price"><bdi>${esc(formatSAR(Number(o.total || 0), locale))}</bdi></div>
-            <div class="pk-ordercard__chev" aria-hidden="true">${iconSvg('chevron-start')}</div>`;
-          listEl.appendChild(a);
-        });
-      } catch {
-        loadingEl.hidden = true;
-        errorEl.textContent = L.error;
-        errorEl.hidden = false;
-      }
-    }
+    const loadEl = document.querySelector<HTMLElement>('[data-recent-loading]')!;
+    const emptyEl = document.querySelector<HTMLElement>('[data-recent-empty]')!;
+    const listEl = document.querySelector<HTMLElement>('[data-recent]')!;
+    api.orders().then((res: any) => {
+      loadEl.hidden = true;
+      const orders: any[] = (res && res.orders) || [];
+      if (!orders.length) { emptyEl.hidden = false; return; }
+      listEl.hidden = false;
+      orders.slice(0, 5).forEach((o) => {
+        const a = document.createElement('a');
+        a.className = 'pk-acct-row';
+        a.href = `${cfg.orderBase}?id=${encodeURIComponent(o.id)}`;
+        const st = o.status || {};
+        const date = o.order_date ? arabicDate(o.order_date, locale) : '';
+        a.innerHTML = `<span class="pk-acct-row__main">
+            <span class="pk-acct-row__title">${esc(cfg.labels.orderNum)} ${esc(String(o.id))}</span>
+            <span class="pk-acct-row__meta">${esc(date)} · ${esc(String(o.items_count || 0))} ${esc(cfg.labels.items)}</span>
+          </span>
+          <span class="pk-acct-row__end">
+            <span class="pk-price"><bdi>${esc(formatSAR(Number(o.total || 0), locale))}</bdi></span>
+            ${st.title ? `<span class="pk-badge pk-badge--muted">${esc(st.title)}</span>` : ''}
+          </span>`;
+        listEl.appendChild(a);
+      });
+    }).catch(() => { loadEl.hidden = true; emptyEl.hidden = false; });
   </script>
-</Base>
+</AccountLayout>

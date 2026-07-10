@@ -140,4 +140,42 @@ export const api = {
   orders: () => request('orders', { requireAuth: true }),
 
   order: (id: string | number) => request(`orders/${id}`, { requireAuth: true }),
+
+  // ---- Self-service account ----
+  account: () => request('account', { requireAuth: true }),
+
+  updateProfile: (p: { first_name: string; last_name: string; phone: string; email?: string }) =>
+    request('profile_update', { method: 'POST', body: p, auth: true }),
+
+  changePassword: (p: { current_password: string; new_password: string }) =>
+    request('password_change', { method: 'POST', body: p, auth: true }),
+
+  /** Upload a new avatar (multipart); returns {avatar_url}. */
+  uploadAvatar: (file: File) => {
+    const fd = new FormData();
+    fd.append('avatar', file, file.name);
+    return request('avatar_upload', { method: 'POST', formData: fd, auth: true });
+  },
+
+  updateOrganization: (p: {
+    company_name: string; address?: string; city?: string; state?: string;
+    zip?: string; country?: string; phone?: string; website?: string; vat_number?: string;
+  }) => request('organization_update', { method: 'POST', body: p, auth: true }),
+
+  invoices: () => request('invoices', { requireAuth: true }),
+  invoice: (id: string | number) => request(`invoices/${id}`, { requireAuth: true }),
+
+  estimates: () => request('estimates', { requireAuth: true }),
+  estimate: (id: string | number) => request(`estimates/${id}`, { requireAuth: true }),
+  respondEstimate: (p: { id: number; action: 'accept' | 'reject' }) =>
+    request('estimate_respond', { method: 'POST', body: p, auth: true }),
+
+  tickets: () => request('tickets', { requireAuth: true }),
+  ticket: (id: string | number) => request(`tickets/${id}`, { requireAuth: true }),
+  createTicket: (p: { title: string; message: string }) =>
+    request('ticket_create', { method: 'POST', body: p, auth: true }),
+  replyTicket: (p: { id: number; message: string }) =>
+    request('ticket_reply', { method: 'POST', body: p, auth: true }),
+  closeTicket: (p: { id: number }) =>
+    request('ticket_close', { method: 'POST', body: p, auth: true }),
 };

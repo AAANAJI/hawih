@@ -1,0 +1,117 @@
+---
+/**
+ * Ticket thread — /account/ticket?id=N. Messages + reply + close.
+ */
+import AccountLayout from '@components/AccountLayout.astro';
+import Icon from '@components/Icon.astro';
+import { localeStaticPaths, href } from '@lib/i18n';
+import { t } from '@lib/strings';
+import type { Locale } from '@lib/format';
+
+export const getStaticPaths = localeStaticPaths;
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+const ticketsHref = href(locale, '/account/tickets');
+---
+<AccountLayout locale={locale} active="tickets" title={t('account.tickets.title', locale)}>
+  <a class="pk-btn pk-btn--ghost pk-btn--sm" href={ticketsHref}><Icon name="chevron-start" size={16} class="pk-icon--flip" /> {t('account.tickets.title', locale)}</a>
+
+  <p class="pk-muted" data-loading style="padding-block:var(--sp-5)">{t('account.loadingGeneric', locale)}</p>
+  <div data-notfound hidden><div class="pk-empty"><div class="pk-empty__icon" aria-hidden="true"><Icon name="search" size={26} /></div><h2 class="pk-h2">{t('order.notFound', locale)}</h2></div></div>
+
+  <div data-content hidden>
+    <div class="pk-acct__head" style="display:flex;justify-content:space-between;align-items:flex-end;gap:var(--sp-4);flex-wrap:wrap;margin-top:var(--sp-4)">
+      <div><h1 class="pk-h1" data-tk-title></h1><p data-tk-meta></p></div>
+      <span data-tk-statuspill></span>
+    </div>
+
+    <div class="pk-acct-card">
+      <div class="pk-thread" data-thread></div>
+    </div>
+
+    <form class="pk-acct-card pk-form" data-reply-form novalidate>
+      <div class="pk-field"><label class="pk-label" for="tk-reply">{t('account.tickets.reply', locale)}</label><textarea class="pk-input" id="tk-reply" name="message" rows="3" required></textarea></div>
+      <div style="display:flex;gap:var(--sp-3)">
+        <button class="pk-btn" type="submit" data-send>{t('account.tickets.send', locale)}</button>
+        <button class="pk-btn pk-btn--outline pk-btn--sm" type="button" data-close>{t('account.tickets.close', locale)}</button>
+      </div>
+    </form>
+    <p class="pk-muted" data-closed-note hidden>{t('account.tickets.closed', locale)}</p>
+  </div>
+
+  <script define:vars={{ labels: {
+    you: t('account.tickets.you', locale), support: t('account.tickets.support', locale), saveError: t('account.saveError', locale),
+    st_new: t('account.tickets.status.new', locale), st_open: t('account.tickets.status.open', locale),
+    st_client_replied: t('account.tickets.status.client_replied', locale), st_closed: t('account.tickets.status.closed', locale),
+  } }}>
+    window.__tkdCfg = { labels };
+  </script>
+  <script>
+    import { api } from '@lib/api';
+    import { arabicDate } from '@lib/format';
+    const cfg = (window as any).__tkdCfg;
+    const locale = location.pathname.startsWith('/en') ? 'en' : 'ar';
+    const esc = (s: string) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
+    const id = new URLSearchParams(location.search).get('id');
+    const loadEl = document.querySelector<HTMLElement>('[data-loading]')!;
+    const nf = document.querySelector<HTMLElement>('[data-notfound]')!;
+    const content = document.querySelector<HTMLElement>('[data-content]')!;
+    const thread = document.querySelector<HTMLElement>('[data-thread]')!;
+    const rform = document.querySelector<HTMLFormElement>('[data-reply-form]')!;
+    const closedNote = document.querySelector<HTMLElement>('[data-closed-note]')!;
+
+    function statusPill(status: string) {
+      const map: any = { new: cfg.labels.st_new, open: cfg.labels.st_open, client_replied: cfg.labels.st_client_replied, closed: cfg.labels.st_closed };
+      return `<span class="pk-stat-pill pk-stat-pill--${esc(status)}">${esc(map[status] || status)}</span>`;
+    }
+    function renderMessages(msgs: any[]) {
+      thread.innerHTML = (msgs || []).map((m) => {
+        const you = !m.is_staff;
+        const who = you ? cfg.labels.you : (m.author || cfg.labels.support);
+        return `<div class="pk-bubble${you ? ' pk-bubble--you' : ''}">
+            <div class="pk-bubble__who">${esc(who)}${m.created_at ? ' · ' + esc(arabicDate(m.created_at, locale)) : ''}</div>
+            <div class="pk-bubble__body">${esc(m.body || '')}</div>
+          </div>`;
+      }).join('');
+    }
+
+    function load() {
+      if (!id) { loadEl.hidden = true; nf.hidden = false; return; }
+      api.ticket(id).then((res: any) => {
+        loadEl.hidden = true;
+        if (!res || !res.success || !res.ticket) { nf.hidden = false; return; }
+        const tk = res.ticket;
+        content.hidden = false;
+        document.querySelector('[data-tk-title]')!.textContent = tk.title || '';
+        document.querySelector('[data-tk-meta]')!.textContent = tk.type || '';
+        document.querySelector('[data-tk-statuspill]')!.innerHTML = statusPill(tk.status);
+        renderMessages(tk.messages);
+        if (tk.closed) { rform.hidden = true; closedNote.hidden = false; }
+        else { rform.hidden = false; closedNote.hidden = true; }
+      }).catch(() => { loadEl.hidden = true; nf.hidden = false; });
+    }
+    load();
+
+    rform.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const ta = rform.elements.namedItem('message') as HTMLTextAreaElement;
+      const btn = rform.querySelector<HTMLButtonElement>('[data-send]')!;
+      const msg = ta.value.trim();
+      if (!msg) return;
+      btn.disabled = true;
+      try {
+        const r: any = await api.replyTicket({ id: Number(id), message: msg });
+        if (r && r.success) { ta.value = ''; load(); }
+        else alert((r && r.message) || cfg.labels.saveError);
+      } catch { alert(cfg.labels.saveError); }
+      btn.disabled = false;
+    });
+
+    document.querySelector('[data-close]')?.addEventListener('click', async () => {
+      try {
+        const r: any = await api.closeTicket({ id: Number(id) });
+        if (r && r.success) load();
+      } catch { alert(cfg.labels.saveError); }
+    });
+  </script>
+</AccountLayout>

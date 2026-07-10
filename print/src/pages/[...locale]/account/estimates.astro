@@ -1,0 +1,59 @@
+---
+/**
+ * Estimates list — /account/estimates.
+ */
+import AccountLayout from '@components/AccountLayout.astro';
+import { localeStaticPaths, href } from '@lib/i18n';
+import { t } from '@lib/strings';
+import type { Locale } from '@lib/format';
+
+export const getStaticPaths = localeStaticPaths;
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+const estBase = href(locale, '/account/estimate');
+---
+<AccountLayout locale={locale} active="estimates" title={t('account.estimates.title', locale)}>
+  <div class="pk-acct__head"><h1 class="pk-h1">{t('account.estimates.title', locale)}</h1></div>
+  <p class="pk-muted" data-loading>{t('account.loadingGeneric', locale)}</p>
+  <p class="pk-muted" data-empty hidden>{t('account.estimates.empty', locale)}</p>
+  <div class="pk-acct-card" data-list hidden><div class="pk-acct-rows" data-rows></div></div>
+
+  <script define:vars={{ estBase, statusLabels: {
+    sent: t('account.estimates.status.sent', locale), accepted: t('account.estimates.status.accepted', locale),
+    declined: t('account.estimates.status.declined', locale), expired: t('account.estimates.status.expired', locale),
+  } }}>
+    window.__estCfg = { estBase, statusLabels };
+  </script>
+  <script>
+    import { api } from '@lib/api';
+    import { formatSAR, arabicDate } from '@lib/format';
+    const cfg = (window as any).__estCfg;
+    const locale = location.pathname.startsWith('/en') ? 'en' : 'ar';
+    const esc = (s: string) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
+    const loadEl = document.querySelector<HTMLElement>('[data-loading]')!;
+    const emptyEl = document.querySelector<HTMLElement>('[data-empty]')!;
+    const wrap = document.querySelector<HTMLElement>('[data-list]')!;
+    const rows = document.querySelector<HTMLElement>('[data-rows]')!;
+    api.estimates().then((res: any) => {
+      loadEl.hidden = true;
+      const items: any[] = (res && res.estimates) || [];
+      if (!items.length) { emptyEl.hidden = false; return; }
+      wrap.hidden = false;
+      items.forEach((e) => {
+        const a = document.createElement('a');
+        a.className = 'pk-acct-row';
+        a.href = `${cfg.estBase}?id=${encodeURIComponent(e.id)}`;
+        const label = cfg.statusLabels[e.status] || e.status;
+        a.innerHTML = `<span class="pk-acct-row__main">
+            <span class="pk-acct-row__title">${esc(e.display_id || ('#' + e.id))}</span>
+            <span class="pk-acct-row__meta">${esc(e.estimate_date ? arabicDate(e.estimate_date, locale) : '')}</span>
+          </span>
+          <span class="pk-acct-row__end">
+            <span class="pk-price"><bdi>${esc(formatSAR(Number(e.total || 0), locale))}</bdi></span>
+            <span class="pk-stat-pill pk-stat-pill--${esc(e.status)}">${esc(label)}</span>
+          </span>`;
+        rows.appendChild(a);
+      });
+    }).catch(() => { loadEl.hidden = true; emptyEl.hidden = false; });
+  </script>
+</AccountLayout>

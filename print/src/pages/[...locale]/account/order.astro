@@ -17,7 +17,7 @@ interface Props { locale: Locale }
 const { locale } = Astro.props as Props;
 const title = t('page.order', locale);
 const loginHref = href(locale, '/auth/login') + '?redirect=' + encodeURIComponent(href(locale, '/account'));
-const accountHref = href(locale, '/account');
+const accountHref = href(locale, '/account/orders');
 const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.bank_name_en;
 ---
 <Base

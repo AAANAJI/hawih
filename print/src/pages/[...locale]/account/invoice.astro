@@ -1,0 +1,90 @@
+---
+/**
+ * Invoice detail — /account/invoice?id=N. Items, totals, pay + print.
+ */
+import AccountLayout from '@components/AccountLayout.astro';
+import Icon from '@components/Icon.astro';
+import { localeStaticPaths, href } from '@lib/i18n';
+import { t } from '@lib/strings';
+import type { Locale } from '@lib/format';
+
+export const getStaticPaths = localeStaticPaths;
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+const invoicesHref = href(locale, '/account/invoices');
+---
+<AccountLayout locale={locale} active="invoices" title={t('account.invoices.title', locale)}>
+  <a class="pk-btn pk-btn--ghost pk-btn--sm" href={invoicesHref}><Icon name="chevron-start" size={16} class="pk-icon--flip" /> {t('account.invoices.title', locale)}</a>
+
+  <p class="pk-muted" data-loading style="padding-block:var(--sp-5)">{t('account.loadingGeneric', locale)}</p>
+  <div data-notfound hidden><div class="pk-empty"><div class="pk-empty__icon" aria-hidden="true"><Icon name="search" size={26} /></div><h2 class="pk-h2">{t('order.notFound', locale)}</h2></div></div>
+
+  <div data-content hidden>
+    <div class="pk-acct__head" style="display:flex;justify-content:space-between;align-items:flex-end;gap:var(--sp-4);flex-wrap:wrap;margin-top:var(--sp-4)">
+      <div><h1 class="pk-h1" data-inv-id></h1><p data-inv-meta></p></div>
+      <div style="display:flex;gap:var(--sp-2)">
+        <a class="pk-btn" data-pay hidden target="_blank" rel="noopener">{t('account.invoices.payNow', locale)}</a>
+        <button class="pk-btn pk-btn--outline pk-btn--sm" onclick="window.print()">{t('account.invoices.print', locale)}</button>
+      </div>
+    </div>
+
+    <div class="pk-acct-card">
+      <div class="pk-otable__wrap">
+        <table class="pk-otable">
+          <thead><tr>
+            <th>{t('order.item', locale)}</th><th class="pk-num">{t('order.qty', locale)}</th><th class="pk-num">{t('order.rate', locale)}</th><th class="pk-num">{t('order.lineTotal', locale)}</th>
+          </tr></thead>
+          <tbody data-items></tbody>
+        </table>
+      </div>
+      <div class="pk-invoice" data-totals style="max-width:340px;margin-inline-start:auto;margin-top:var(--sp-4)"></div>
+    </div>
+  </div>
+
+  <script define:vars={{ labels: {
+    subtotal: t('account.invoices.subtotal', locale), tax: t('account.invoices.tax', locale),
+    total: t('order.lineTotal', locale), paid: t('account.invoices.paid', locale), due: t('account.invoices.due', locale),
+  } }}>
+    window.__invdCfg = { labels };
+  </script>
+  <script>
+    import { api } from '@lib/api';
+    import { formatSAR, arabicDate } from '@lib/format';
+    const cfg = (window as any).__invdCfg;
+    const locale = location.pathname.startsWith('/en') ? 'en' : 'ar';
+    const esc = (s: string) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
+    const id = new URLSearchParams(location.search).get('id');
+    const loadEl = document.querySelector<HTMLElement>('[data-loading]')!;
+    const nf = document.querySelector<HTMLElement>('[data-notfound]')!;
+    const content = document.querySelector<HTMLElement>('[data-content]')!;
+
+    if (!id) { loadEl.hidden = true; nf.hidden = false; }
+    else api.invoice(id).then((res: any) => {
+      loadEl.hidden = true;
+      if (!res || !res.success || !res.invoice) { nf.hidden = false; return; }
+      const iv = res.invoice;
+      content.hidden = false;
+      document.querySelector('[data-inv-id]')!.textContent = iv.display_id || ('#' + iv.id);
+      const meta = [iv.invoice_date ? arabicDate(iv.invoice_date, locale) : '', iv.due_date ? `${cfg.labels.due}: ${arabicDate(iv.due_date, locale)}` : ''].filter(Boolean).join(' · ');
+      document.querySelector('[data-inv-meta]')!.textContent = meta;
+      if (iv.pay_url) { const p = document.querySelector<HTMLAnchorElement>('[data-pay]')!; p.href = iv.pay_url; p.hidden = false; }
+
+      const tb = document.querySelector('[data-items]')!;
+      tb.innerHTML = (iv.items || []).map((it: any) => `<tr>
+          <td><strong>${esc(it.title || '')}</strong>${it.description ? `<div class="pk-small pk-muted">${esc(it.description)}</div>` : ''}</td>
+          <td><bdi>${esc(String(it.quantity))}</bdi> ${esc(it.unit_type || '')}</td>
+          <td><bdi>${esc(formatSAR(Number(it.rate || 0), locale))}</bdi></td>
+          <td><bdi>${esc(formatSAR(Number(it.total || 0), locale))}</bdi></td>
+        </tr>`).join('');
+
+      const tt = iv.totals || {};
+      const row = (l: string, v: number, strong = false) => `<div class="pk-invoice__row"><span class="pk-muted">${esc(l)}</span><span class="pk-price"${strong ? ' style="font-weight:700"' : ''}><bdi>${esc(formatSAR(Number(v || 0), locale))}</bdi></span></div>`;
+      let html = row(cfg.labels.subtotal, tt.subtotal);
+      if (Number(tt.tax || 0) > 0) html += row(cfg.labels.tax, tt.tax);
+      html += row(cfg.labels.total, tt.total, true);
+      if (Number(tt.paid || 0) > 0) html += row(cfg.labels.paid, tt.paid);
+      if (Number(tt.due || 0) > 0.001) html += row(cfg.labels.due, tt.due, true);
+      document.querySelector('[data-totals]')!.innerHTML = html;
+    }).catch(() => { loadEl.hidden = true; nf.hidden = false; });
+  </script>
+</AccountLayout>

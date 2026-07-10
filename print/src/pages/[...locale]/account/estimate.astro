@@ -1,0 +1,115 @@
+---
+/**
+ * Estimate detail — /account/estimate?id=N. Items + totals + accept/reject.
+ */
+import AccountLayout from '@components/AccountLayout.astro';
+import Icon from '@components/Icon.astro';
+import { localeStaticPaths, href } from '@lib/i18n';
+import { t } from '@lib/strings';
+import type { Locale } from '@lib/format';
+
+export const getStaticPaths = localeStaticPaths;
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+const estimatesHref = href(locale, '/account/estimates');
+---
+<AccountLayout locale={locale} active="estimates" title={t('account.estimates.title', locale)}>
+  <a class="pk-btn pk-btn--ghost pk-btn--sm" href={estimatesHref}><Icon name="chevron-start" size={16} class="pk-icon--flip" /> {t('account.estimates.title', locale)}</a>
+
+  <p class="pk-muted" data-loading style="padding-block:var(--sp-5)">{t('account.loadingGeneric', locale)}</p>
+  <div data-notfound hidden><div class="pk-empty"><div class="pk-empty__icon" aria-hidden="true"><Icon name="search" size={26} /></div><h2 class="pk-h2">{t('order.notFound', locale)}</h2></div></div>
+
+  <div data-content hidden>
+    <div class="pk-acct__head" style="display:flex;justify-content:space-between;align-items:flex-end;gap:var(--sp-4);flex-wrap:wrap;margin-top:var(--sp-4)">
+      <div><h1 class="pk-h1" data-est-id></h1><p data-est-meta></p></div>
+      <span data-est-statuspill></span>
+    </div>
+
+    <div class="pk-form-alert pk-form-alert--success" data-resp-ok hidden></div>
+
+    <div class="pk-acct-card">
+      <div class="pk-otable__wrap">
+        <table class="pk-otable">
+          <thead><tr><th>{t('order.item', locale)}</th><th class="pk-num">{t('order.qty', locale)}</th><th class="pk-num">{t('order.rate', locale)}</th><th class="pk-num">{t('order.lineTotal', locale)}</th></tr></thead>
+          <tbody data-items></tbody>
+        </table>
+      </div>
+      <div class="pk-invoice" data-totals style="max-width:340px;margin-inline-start:auto;margin-top:var(--sp-4)"></div>
+    </div>
+
+    <div data-actions hidden style="display:flex;gap:var(--sp-3)">
+      <button class="pk-btn" data-accept><Icon name="check" size={18} /> {t('account.estimates.accept', locale)}</button>
+      <button class="pk-btn pk-btn--outline" data-reject>{t('account.estimates.reject', locale)}</button>
+    </div>
+  </div>
+
+  <script define:vars={{ labels: {
+    subtotal: t('account.invoices.subtotal', locale), total: t('order.lineTotal', locale),
+    validUntil: t('account.estimates.validUntil', locale), accepted: t('account.estimates.accepted', locale),
+    declined: t('account.estimates.declined', locale), saveError: t('account.saveError', locale),
+    st_sent: t('account.estimates.status.sent', locale), st_accepted: t('account.estimates.status.accepted', locale),
+    st_declined: t('account.estimates.status.declined', locale), st_expired: t('account.estimates.status.expired', locale),
+  } }}>
+    window.__estdCfg = { labels };
+  </script>
+  <script>
+    import { api } from '@lib/api';
+    import { formatSAR, arabicDate } from '@lib/format';
+    const cfg = (window as any).__estdCfg;
+    const locale = location.pathname.startsWith('/en') ? 'en' : 'ar';
+    const esc = (s: string) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
+    const id = new URLSearchParams(location.search).get('id');
+    const loadEl = document.querySelector<HTMLElement>('[data-loading]')!;
+    const nf = document.querySelector<HTMLElement>('[data-notfound]')!;
+    const content = document.querySelector<HTMLElement>('[data-content]')!;
+    const actions = document.querySelector<HTMLElement>('[data-actions]')!;
+    const respOk = document.querySelector<HTMLElement>('[data-resp-ok]')!;
+
+    function statusPill(status: string) {
+      const map: any = { sent: cfg.labels.st_sent, accepted: cfg.labels.st_accepted, declined: cfg.labels.st_declined, expired: cfg.labels.st_expired };
+      return `<span class="pk-stat-pill pk-stat-pill--${esc(status)}">${esc(map[status] || status)}</span>`;
+    }
+
+    async function respond(action: 'accept' | 'reject') {
+      const btns = actions.querySelectorAll('button'); btns.forEach((b) => (b as HTMLButtonElement).disabled = true);
+      try {
+        const r: any = await api.respondEstimate({ id: Number(id), action });
+        if (r && r.success) {
+          actions.hidden = true;
+          respOk.textContent = action === 'accept' ? cfg.labels.accepted : cfg.labels.declined;
+          respOk.hidden = false;
+          document.querySelector('[data-est-statuspill]')!.innerHTML = statusPill(r.status || (action === 'accept' ? 'accepted' : 'declined'));
+        } else { alert((r && r.message) || cfg.labels.saveError); btns.forEach((b) => (b as HTMLButtonElement).disabled = false); }
+      } catch { alert(cfg.labels.saveError); btns.forEach((b) => (b as HTMLButtonElement).disabled = false); }
+    }
+
+    if (!id) { loadEl.hidden = true; nf.hidden = false; }
+    else api.estimate(id).then((res: any) => {
+      loadEl.hidden = true;
+      if (!res || !res.success || !res.estimate) { nf.hidden = false; return; }
+      const e = res.estimate;
+      content.hidden = false;
+      document.querySelector('[data-est-id]')!.textContent = e.display_id || ('#' + e.id);
+      const meta = [e.estimate_date ? arabicDate(e.estimate_date, locale) : '', e.valid_until ? `${cfg.labels.validUntil}: ${arabicDate(e.valid_until, locale)}` : ''].filter(Boolean).join(' · ');
+      document.querySelector('[data-est-meta]')!.textContent = meta;
+      document.querySelector('[data-est-statuspill]')!.innerHTML = statusPill(e.status);
+
+      document.querySelector('[data-items]')!.innerHTML = (e.items || []).map((it: any) => `<tr>
+          <td><strong>${esc(it.title || '')}</strong>${it.description ? `<div class="pk-small pk-muted">${esc(it.description)}</div>` : ''}</td>
+          <td class="pk-num"><bdi>${esc(String(it.quantity))}</bdi> ${esc(it.unit_type || '')}</td>
+          <td class="pk-num"><bdi>${esc(formatSAR(Number(it.rate || 0), locale))}</bdi></td>
+          <td class="pk-num"><bdi>${esc(formatSAR(Number(it.total || 0), locale))}</bdi></td>
+        </tr>`).join('');
+      const tt = e.totals || {};
+      document.querySelector('[data-totals]')!.innerHTML =
+        `<div class="pk-invoice__row"><span class="pk-muted">${esc(cfg.labels.subtotal)}</span><span class="pk-price"><bdi>${esc(formatSAR(Number(tt.subtotal || 0), locale))}</bdi></span></div>` +
+        `<div class="pk-invoice__row"><span class="pk-muted">${esc(cfg.labels.total)}</span><span class="pk-price" style="font-weight:700"><bdi>${esc(formatSAR(Number(tt.total || 0), locale))}</bdi></span></div>`;
+
+      if (e.can_respond) {
+        actions.hidden = false;
+        actions.querySelector('[data-accept]')!.addEventListener('click', () => respond('accept'));
+        actions.querySelector('[data-reject]')!.addEventListener('click', () => respond('reject'));
+      }
+    }).catch(() => { loadEl.hidden = true; nf.hidden = false; });
+  </script>
+</AccountLayout>

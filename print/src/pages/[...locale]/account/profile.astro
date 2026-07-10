@@ -1,0 +1,100 @@
+---
+/**
+ * Profile — /account/profile. Edit name/phone/email + change avatar.
+ */
+import AccountLayout from '@components/AccountLayout.astro';
+import Icon from '@components/Icon.astro';
+import { localeStaticPaths } from '@lib/i18n';
+import { t } from '@lib/strings';
+import type { Locale } from '@lib/format';
+
+export const getStaticPaths = localeStaticPaths;
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+---
+<AccountLayout locale={locale} active="profile" title={t('account.profile.title', locale)}>
+  <div class="pk-acct__head"><h1 class="pk-h1">{t('account.profile.title', locale)}</h1></div>
+
+  <div class="pk-acct-card">
+    <div class="pk-acct__ident" style="border:none;padding:0;margin-bottom:var(--sp-4)">
+      <span class="pk-acct__avatar" style="width:64px;height:64px" data-avatar aria-hidden="true"><Icon name="user" size={30} /></span>
+      <div>
+        <label class="pk-btn pk-btn--outline pk-btn--sm" style="cursor:pointer">
+          {t('account.profile.changePhoto', locale)}
+          <input type="file" accept="image/*" data-avatar-input class="pk-visually-hidden" />
+        </label>
+        <p class="pk-small pk-muted" data-avatar-msg style="margin-top:var(--sp-2)"></p>
+      </div>
+    </div>
+
+    <form class="pk-form" data-profile-form novalidate>
+      <div class="pk-form-alert pk-form-alert--success" data-ok hidden>{t('account.saved', locale)}</div>
+      <div class="pk-form-alert pk-form-alert--error" data-err hidden></div>
+      <div class="pk-acct-form-grid">
+        <div class="pk-field"><label class="pk-label" for="p-first">{t('account.profile.firstName', locale)} <span class="pk-req">*</span></label><input class="pk-input" id="p-first" name="first_name" required /></div>
+        <div class="pk-field"><label class="pk-label" for="p-last">{t('account.profile.lastName', locale)}</label><input class="pk-input" id="p-last" name="last_name" /></div>
+        <div class="pk-field"><label class="pk-label" for="p-email">{t('account.profile.email', locale)}</label><input class="pk-input" id="p-email" name="email" type="email" dir="ltr" /></div>
+        <div class="pk-field"><label class="pk-label" for="p-phone">{t('account.profile.phone', locale)}</label><input class="pk-input" id="p-phone" name="phone" dir="ltr" /></div>
+      </div>
+      <button class="pk-btn" type="submit" data-save>{t('account.save', locale)}</button>
+    </form>
+  </div>
+
+  <script define:vars={{ msgs: {
+    saveError: t('account.saveError', locale), photoError: t('account.profile.photoError', locale), saving: t('account.loadingGeneric', locale),
+  } }}>
+    window.__profCfg = { msgs };
+  </script>
+  <script>
+    import { api } from '@lib/api';
+    const cfg = (window as any).__profCfg;
+    const form = document.querySelector<HTMLFormElement>('[data-profile-form]')!;
+    const ok = document.querySelector<HTMLElement>('[data-ok]')!;
+    const err = document.querySelector<HTMLElement>('[data-err]')!;
+    const save = document.querySelector<HTMLButtonElement>('[data-save]')!;
+    const val = (n: string) => (form.elements.namedItem(n) as HTMLInputElement);
+
+    function fill(r: any) {
+      const c = r.contact || {};
+      val('first_name').value = c.first_name || '';
+      val('last_name').value = c.last_name || '';
+      val('email').value = c.email || '';
+      val('phone').value = c.phone || '';
+      if (c.avatar_url) { const a = document.querySelector('[data-avatar]'); if (a) a.innerHTML = `<img src="${c.avatar_url}" alt="" />`; }
+    }
+    if ((window as any).__acct) fill((window as any).__acct);
+    else document.addEventListener('acct:ready', (e: any) => fill(e.detail));
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      ok.hidden = true; err.hidden = true; save.disabled = true;
+      try {
+        const r: any = await api.updateProfile({
+          first_name: val('first_name').value.trim(),
+          last_name: val('last_name').value.trim(),
+          phone: val('phone').value.trim(),
+          email: val('email').value.trim(),
+        });
+        if (r && r.success) ok.hidden = false;
+        else { err.textContent = (r && r.message) || cfg.msgs.saveError; err.hidden = false; }
+      } catch { err.textContent = cfg.msgs.saveError; err.hidden = false; }
+      save.disabled = false;
+    });
+
+    const input = document.querySelector<HTMLInputElement>('[data-avatar-input]')!;
+    const amsg = document.querySelector<HTMLElement>('[data-avatar-msg]')!;
+    input.addEventListener('change', async () => {
+      const f = input.files && input.files[0];
+      if (!f) return;
+      amsg.textContent = cfg.msgs.saving;
+      try {
+        const r: any = await api.uploadAvatar(f);
+        if (r && r.success && r.avatar_url) {
+          amsg.textContent = '';
+          document.querySelectorAll('[data-avatar], [data-acct-avatar]').forEach((el) => { el.innerHTML = `<img src="${r.avatar_url}?t=${Date.now()}" alt="" />`; });
+        } else amsg.textContent = cfg.msgs.photoError;
+      } catch { amsg.textContent = cfg.msgs.photoError; }
+      input.value = '';
+    });
+  </script>
+</AccountLayout>

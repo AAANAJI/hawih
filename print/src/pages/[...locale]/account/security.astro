@@ -1,0 +1,56 @@
+---
+/**
+ * Security — /account/security. Change password (verify current + confirm new).
+ */
+import AccountLayout from '@components/AccountLayout.astro';
+import { localeStaticPaths } from '@lib/i18n';
+import { t } from '@lib/strings';
+import type { Locale } from '@lib/format';
+
+export const getStaticPaths = localeStaticPaths;
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+---
+<AccountLayout locale={locale} active="security" title={t('account.security.title', locale)}>
+  <div class="pk-acct__head"><h1 class="pk-h1">{t('account.security.title', locale)}</h1></div>
+
+  <form class="pk-acct-card pk-form" data-pw-form novalidate style="max-width:520px">
+    <div class="pk-form-alert pk-form-alert--success" data-ok hidden>{t('account.security.changed', locale)}</div>
+    <div class="pk-form-alert pk-form-alert--error" data-err hidden></div>
+    <div class="pk-field"><label class="pk-label" for="s-cur">{t('account.security.current', locale)}</label><input class="pk-input" id="s-cur" name="current_password" type="password" autocomplete="current-password" required /></div>
+    <div class="pk-field"><label class="pk-label" for="s-new">{t('account.security.new', locale)}</label><input class="pk-input" id="s-new" name="new_password" type="password" autocomplete="new-password" required /></div>
+    <div class="pk-field"><label class="pk-label" for="s-conf">{t('account.security.confirm', locale)}</label><input class="pk-input" id="s-conf" name="confirm" type="password" autocomplete="new-password" required /></div>
+    <button class="pk-btn" type="submit" data-save>{t('account.security.update', locale)}</button>
+  </form>
+
+  <script define:vars={{ msgs: {
+    mismatch: t('account.security.mismatch', locale), tooShort: t('account.security.tooShort', locale),
+    wrongCurrent: t('account.security.wrongCurrent', locale), saveError: t('account.saveError', locale),
+  } }}>
+    window.__secCfg = { msgs };
+  </script>
+  <script>
+    import { api } from '@lib/api';
+    const cfg = (window as any).__secCfg;
+    const form = document.querySelector<HTMLFormElement>('[data-pw-form]')!;
+    const ok = document.querySelector<HTMLElement>('[data-ok]')!;
+    const err = document.querySelector<HTMLElement>('[data-err]')!;
+    const save = document.querySelector<HTMLButtonElement>('[data-save]')!;
+    const v = (n: string) => (form.elements.namedItem(n) as HTMLInputElement).value;
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      ok.hidden = true; err.hidden = true;
+      const cur = v('current_password'), nw = v('new_password'), conf = v('confirm');
+      if (nw.length < 8) { err.textContent = cfg.msgs.tooShort; err.hidden = false; return; }
+      if (nw !== conf) { err.textContent = cfg.msgs.mismatch; err.hidden = false; return; }
+      save.disabled = true;
+      try {
+        const r: any = await api.changePassword({ current_password: cur, new_password: nw });
+        if (r && r.success) { ok.hidden = false; form.reset(); }
+        else { err.textContent = (r && r.message) || cfg.msgs.wrongCurrent; err.hidden = false; }
+      } catch { err.textContent = cfg.msgs.saveError; err.hidden = false; }
+      save.disabled = false;
+    });
+  </script>
+</AccountLayout>

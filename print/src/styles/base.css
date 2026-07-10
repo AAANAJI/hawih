@@ -152,3 +152,7 @@ html.pk-js .pk-reveal.is-visible { opacity: 1; transform: none; }
 @media (prefers-reduced-motion: reduce) {
   html.pk-js .pk-reveal { opacity: 1; transform: none; }
 }
+
+/* The `hidden` attribute must always win — even on flex/grid elements
+   (.pk-form, .pk-acct__nav, etc.) whose class sets an explicit `display`. */
+[hidden] { display: none !important; }

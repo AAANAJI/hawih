@@ -1,0 +1,73 @@
+---
+/**
+ * Orders list — /account/orders. All of the client's orders with status +
+ * total, each linking to the order detail page.
+ */
+import AccountLayout from '@components/AccountLayout.astro';
+import Icon from '@components/Icon.astro';
+import { localeStaticPaths, href } from '@lib/i18n';
+import { t } from '@lib/strings';
+import type { Locale } from '@lib/format';
+
+export const getStaticPaths = localeStaticPaths;
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+const orderBase = href(locale, '/account/order');
+const shopHref = href(locale, '/');
+---
+<AccountLayout locale={locale} active="orders" title={t('account.nav.orders', locale)}>
+  <div class="pk-acct__head"><h1 class="pk-h1">{t('account.orders', locale)}</h1></div>
+
+  <p class="pk-muted" data-orders-loading>{t('account.loading', locale)}</p>
+  <div class="pk-form-alert pk-form-alert--error" data-orders-error hidden></div>
+  <div data-orders-empty hidden>
+    <div class="pk-empty">
+      <div class="pk-empty__icon" aria-hidden="true"><Icon name="package" size={26} /></div>
+      <h2 class="pk-h2">{t('account.empty.title', locale)}</h2>
+      <p>{t('account.empty.body', locale)}</p>
+      <a class="pk-btn" href={shopHref}>{t('account.empty.cta', locale)}</a>
+    </div>
+  </div>
+  <div class="pk-acct-card" data-orders-list hidden><div class="pk-acct-rows" data-orders-rows></div></div>
+
+  <script define:vars={{ orderBase, labels: {
+    orderNum: t('account.orderNum', locale), items: t('account.itemsCount', locale), error: t('account.error', locale),
+  } }}>
+    window.__ordCfg = { orderBase, labels };
+  </script>
+  <script>
+    import { api } from '@lib/api';
+    import { formatSAR, arabicDate } from '@lib/format';
+    const cfg = (window as any).__ordCfg;
+    const locale = location.pathname.startsWith('/en') ? 'en' : 'ar';
+    const esc = (s: string) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
+    const loadEl = document.querySelector<HTMLElement>('[data-orders-loading]')!;
+    const errEl = document.querySelector<HTMLElement>('[data-orders-error]')!;
+    const emptyEl = document.querySelector<HTMLElement>('[data-orders-empty]')!;
+    const wrapEl = document.querySelector<HTMLElement>('[data-orders-list]')!;
+    const rowsEl = document.querySelector<HTMLElement>('[data-orders-rows]')!;
+    api.orders().then((res: any) => {
+      loadEl.hidden = true;
+      if (!res || !res.success) { errEl.textContent = cfg.labels.error; errEl.hidden = false; return; }
+      const orders: any[] = res.orders || [];
+      if (!orders.length) { emptyEl.hidden = false; return; }
+      wrapEl.hidden = false;
+      orders.forEach((o) => {
+        const a = document.createElement('a');
+        a.className = 'pk-acct-row';
+        a.href = `${cfg.orderBase}?id=${encodeURIComponent(o.id)}`;
+        const st = o.status || {};
+        const date = o.order_date ? arabicDate(o.order_date, locale) : '';
+        const chip = st.color
+          ? `<span class="pk-badge" style="background:${esc(st.color)}1f;color:${esc(st.color)}">${esc(st.title || '')}</span>`
+          : `<span class="pk-badge pk-badge--muted">${esc(st.title || '')}</span>`;
+        a.innerHTML = `<span class="pk-acct-row__main">
+            <span class="pk-acct-row__title">${esc(cfg.labels.orderNum)} ${esc(String(o.id))}</span>
+            <span class="pk-acct-row__meta">${esc(date)} · ${esc(String(o.items_count || 0))} ${esc(cfg.labels.items)}</span>
+          </span>
+          <span class="pk-acct-row__end"><span class="pk-price"><bdi>${esc(formatSAR(Number(o.total || 0), locale))}</bdi></span>${chip}</span>`;
+        rowsEl.appendChild(a);
+      });
+    }).catch(() => { loadEl.hidden = true; errEl.textContent = cfg.labels.error; errEl.hidden = false; });
+  </script>
+</AccountLayout>
