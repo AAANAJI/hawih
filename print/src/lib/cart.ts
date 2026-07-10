@@ -9,7 +9,6 @@
  */
 import { STORAGE_KEYS } from './config';
 
-/** A design file already uploaded to the CRM temp store (Print_api/upload). */
 export interface CartLine {
   item_id: string;
   slug: string;
@@ -23,11 +22,49 @@ export interface CartLine {
 
 const KEY = STORAGE_KEYS.cart;
 
+/**
+ * Coerce one stored entry into a well-formed CartLine, or null if it's junk.
+ * Carts persist across deploys, so a line written by an older version of the
+ * store can be missing fields (notably `options`). Normalizing on read keeps a
+ * stale line from crashing consumers that assume the current shape — e.g.
+ * `Object.keys(line.options)` in the checkout renderer and in sameLine(). This
+ * is the single choke point every read passes through, so one guard here
+ * protects the whole app.
+ */
+function normalizeLine(raw: unknown): CartLine | null {
+  if (!raw || typeof raw !== 'object') return null;
+  const r = raw as Record<string, unknown>;
+  const item_id = String(r.item_id ?? '').trim();
+  const slug = String(r.slug ?? '').trim();
+  if (!item_id || !slug) return null;
+
+  const options: Record<string, string> = {};
+  if (r.options && typeof r.options === 'object' && !Array.isArray(r.options)) {
+    for (const [k, v] of Object.entries(r.options as Record<string, unknown>)) {
+      options[k] = String(v ?? '');
+    }
+  }
+
+  const qty = Math.floor(Number(r.qty));
+  const rate = Number(r.rate);
+  return {
+    item_id,
+    slug,
+    title: String(r.title ?? ''),
+    qty: Number.isFinite(qty) && qty > 0 ? qty : 1,
+    rate: Number.isFinite(rate) ? rate : 0,
+    options,
+    note: typeof r.note === 'string' ? r.note : undefined,
+    image: typeof r.image === 'string' ? r.image : undefined,
+  };
+}
+
 function safeParse(json: string | null): CartLine[] {
   if (!json) return [];
   try {
     const val = JSON.parse(json);
-    return Array.isArray(val) ? (val as CartLine[]) : [];
+    if (!Array.isArray(val)) return [];
+    return val.map(normalizeLine).filter((l): l is CartLine => l !== null);
   } catch {
     return [];
   }

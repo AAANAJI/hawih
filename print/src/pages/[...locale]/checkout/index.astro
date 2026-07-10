@@ -199,16 +199,6 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
 
     const cart = getCart();
 
-    // ---- Empty guard ----
-    if (cart.length === 0) {
-      loadingEl.hidden = true;
-      emptyEl.hidden = false;
-    } else {
-      loadingEl.hidden = true;
-      formEl.hidden = false;
-      init();
-    }
-
     // Per-line artwork stores: index -> File[]
     const artworkByLine: Record<number, File[]> = {};
 
@@ -287,7 +277,36 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
     function errSize() { return locale === 'ar' ? 'حجم الملف يتجاوز 25 ميجابايت' : 'File exceeds 25MB'; }
 
     function init() {
-      // Lines + per-line artwork
+      // Resolve the signed-in state FIRST and independently of line rendering.
+      // If a rendering error ever throws, the buyer must still not be wrongly
+      // shown the "create an account" form while they're already logged in.
+      resolveAuth();
+      try {
+        renderLines();
+      } catch (e) {
+        console.error('checkout: failed to render cart lines', e);
+      }
+    }
+
+    // Hide the guest signup block when a session token exists; greet the buyer.
+    // A token-holder is never dropped back to the signup form: the Bearer token
+    // authenticates the checkout submit on its own, and an actually-invalid
+    // token makes api.me() return 401, which request() handles by redirecting
+    // to login. So a transient me() failure must NOT resurrect the guest fields.
+    function resolveAuth() {
+      if (!isAuthed()) return; // genuinely a guest → keep the signup form
+      guestFields.hidden = true;
+      authKnown.hidden = false; // show the "you're logged in" block immediately
+      api.me().then((res: any) => {
+        if (res && res.success && res.contact) {
+          const c = res.contact;
+          const hi = locale === 'ar' ? 'مرحباً' : 'Welcome';
+          welcomeEl.textContent = `${hi} ${c.first_name || ''} ${c.last_name || ''}`.trim();
+        }
+      }).catch(() => { /* network hiccup — token still carries the checkout */ });
+    }
+
+    function renderLines() {
       cart.forEach((line, idx) => {
         const item = getItem(line.slug);
         const requiresArtwork = item ? item.requires_artwork : true;
@@ -315,21 +334,6 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
         sumLinesEl.appendChild(sl);
       });
       subtotalEl.textContent = formatSAR(subtotal(cart), locale);
-
-      // Auth state
-      if (isAuthed()) {
-        guestFields.hidden = true;
-        api.me().then((res: any) => {
-          if (res && res.success && res.contact) {
-            authKnown.hidden = false;
-            const c = res.contact;
-            const hi = locale === 'ar' ? 'مرحباً' : 'Welcome';
-            welcomeEl.textContent = `${hi} ${c.first_name || ''} ${c.last_name || ''}`.trim();
-          } else {
-            guestFields.hidden = false;
-          }
-        }).catch(() => { guestFields.hidden = false; });
-      }
 
       // GTM begin_checkout
       beginCheckout(
@@ -404,5 +408,18 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
       submitBtn.disabled = false;
       submitBtn.textContent = L.submit;
     });
+
+    // ---- Bootstrap ----
+    // Run last, after every const/function above is initialized. init() reaches
+    // buildUploader → artworkByLine, so calling it earlier would hit that const
+    // in its temporal dead zone and crash rendering for artwork-required lines.
+    if (cart.length === 0) {
+      loadingEl.hidden = true;
+      emptyEl.hidden = false;
+    } else {
+      loadingEl.hidden = true;
+      formEl.hidden = false;
+      init();
+    }
   </script>
 </Base>
