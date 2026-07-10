@@ -1099,3 +1099,8 @@ a.pk-acct-row:hover { color: var(--pk-accent); }
   .pk-acct-stats { grid-template-columns: 1fr; }
   .pk-acct-form-grid { grid-template-columns: 1fr; }
 }
+
+/* Staff ticket replies are rich HTML — tame paragraph spacing inside bubbles. */
+.pk-bubble__body p { margin: 0 0 .4em; }
+.pk-bubble__body p:last-child { margin-bottom: 0; }
+.pk-bubble__body a { color: var(--pk-accent); }

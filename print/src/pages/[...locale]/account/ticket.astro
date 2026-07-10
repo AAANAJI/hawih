@@ -68,9 +68,12 @@ const ticketsHref = href(locale, '/account/tickets');
       thread.innerHTML = (msgs || []).map((m) => {
         const you = !m.is_staff;
         const who = you ? cfg.labels.you : (m.author || cfg.labels.support);
+        // Staff replies are rich text from the CRM (trusted) → render as HTML.
+        // The buyer's own messages are plain text → escape.
+        const body = m.is_staff ? (m.body || '') : esc(m.body || '');
         return `<div class="pk-bubble${you ? ' pk-bubble--you' : ''}">
             <div class="pk-bubble__who">${esc(who)}${m.created_at ? ' · ' + esc(arabicDate(m.created_at, locale)) : ''}</div>
-            <div class="pk-bubble__body">${esc(m.body || '')}</div>
+            <div class="pk-bubble__body">${body}</div>
           </div>`;
       }).join('');
     }
