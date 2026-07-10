@@ -48,6 +48,7 @@ const shopHref = href(locale, '/');
           <span class="pk-summary__total pk-price"><bdi data-cart-subtotal>—</bdi></span>
         </div>
         <p class="pk-small pk-muted">{t('cart.taxNote', locale)}</p>
+        <p class="pk-small pk-muted" data-range-note hidden>{t('checkout.rangeNote', locale)}</p>
         <a class="pk-btn pk-btn--block pk-btn--lg" href={checkoutHref} data-checkout-link>{t('cart.checkout', locale)}</a>
       </aside>
     </div>
@@ -59,9 +60,21 @@ const shopHref = href(locale, '/');
   </script>
   <script>
     import { getCart, updateQty, removeLine, subtotal } from '@lib/cart';
-    import { formatSAR } from '@lib/format';
+    import { formatPrice, type PriceModeConfig } from '@lib/format';
+    import { storeConfig } from '@lib/catalog';
+    import { liveStoreConfig } from '@lib/live-catalog';
 
     const locale = (window as any).__cartLocale === 'en' ? 'en' : 'ar';
+
+    // Range mode (vendor-quote flow): line totals + subtotal render as
+    // estimate bands. Baked config first, refreshed from the live catalog.
+    let priceCfg: PriceModeConfig = storeConfig;
+    liveStoreConfig().then((cfg) => {
+      priceCfg = cfg;
+      const note = document.querySelector<HTMLElement>('[data-range-note]');
+      if (note) note.hidden = cfg.price_mode !== 'range';
+      render();
+    }).catch(() => {});
     const labels = (window as any).__cartLabels || { remove: 'Remove', note: 'Note' };
     const emptyEl = document.querySelector<HTMLElement>('[data-cart-empty]');
     const filledEl = document.querySelector<HTMLElement>('[data-cart-filled]');
@@ -91,7 +104,7 @@ const shopHref = href(locale, '/');
             ${line.note ? `<div class="pk-cartline__note">${labels.note}: ${line.note}</div>` : ''}
           </div>
           <div class="pk-cartline__side">
-            <div class="pk-price" style="font-weight:700"><bdi>${formatSAR(line.rate * line.qty, locale)}</bdi></div>
+            <div class="pk-price" style="font-weight:700"><bdi>${formatPrice(line.rate * line.qty, priceCfg, locale)}</bdi></div>
             <div class="pk-qty" data-line-qty>
               <button type="button" data-dec aria-label="−">−</button>
               <input type="number" value="${line.qty}" min="1" data-qty aria-label="qty" />
@@ -108,7 +121,7 @@ const shopHref = href(locale, '/');
         linesEl.appendChild(row);
       });
 
-      if (subtotalEl) subtotalEl.textContent = formatSAR(subtotal(cart), locale);
+      if (subtotalEl) subtotalEl.textContent = formatPrice(subtotal(cart), priceCfg, locale);
     }
 
     render();

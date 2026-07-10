@@ -142,6 +142,14 @@ export const api = {
   order: (id: string | number) => request(`orders/${id}`, { requireAuth: true }),
 
   /**
+   * Respond to the final (vendor-quoted + commissioned) price on an order.
+   * approve → the tax invoice is issued and production starts;
+   * decline → the order is put on hold and staff follow up.
+   */
+  orderPriceRespond: (id: string | number, action: 'approve' | 'decline') =>
+    request(`order_price_respond/${id}`, { method: 'POST', body: { action }, auth: true }),
+
+  /**
    * Attach design file(s) to a specific line of an order the caller owns
    * (post-placement upload). Files are linked to itemId so the CRM shows which
    * design belongs to which item. Returns {item_id, files:[{file_name,file_size}]}.

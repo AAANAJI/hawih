@@ -56,6 +56,30 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
         <ol class="pk-timeline" data-order-timeline aria-label={t('order.status', locale)}></ol>
       </section>
 
+      <!-- Final-price approval (vendor-quote flow): shown only while the order
+           is awaiting the client's approval of the reviewed final price. -->
+      <section class="pk-card pk-block pk-approve" data-price-approval hidden>
+        <h2 class="pk-h3" style="margin-bottom:var(--sp-2)"><Icon name="receipt" size={18} /> {t('order.priceApprovalTitle', locale)}</h2>
+        <p class="pk-muted" style="margin-bottom:var(--sp-4)">{t('order.priceApprovalBody', locale)}</p>
+        <div class="pk-approve__totals">
+          <div class="pk-approve__row">
+            <span class="pk-muted">{t('order.estimateWas', locale)}</span>
+            <span class="pk-price" style="text-decoration:line-through;opacity:.6"><bdi data-approval-estimate>—</bdi></span>
+          </div>
+          <div class="pk-approve__row pk-approve__row--final">
+            <span style="font-weight:700">{t('order.finalPrice', locale)}</span>
+            <span class="pk-price" style="font-weight:800;font-size:1.25rem"><bdi data-approval-final>—</bdi></span>
+          </div>
+        </div>
+        <p class="pk-small pk-muted" style="margin:var(--sp-2) 0 var(--sp-4)">{t('cart.taxNote', locale)}</p>
+        <div style="display:flex;gap:var(--sp-3);flex-wrap:wrap">
+          <button type="button" class="pk-btn pk-btn--lg" data-approve-btn>{t('order.approve', locale)}</button>
+          <button type="button" class="pk-btn pk-btn--outline pk-btn--lg" data-decline-btn>{t('order.decline', locale)}</button>
+        </div>
+        <p class="pk-form-alert pk-form-alert--error" data-approval-error hidden style="margin-top:var(--sp-3)"></p>
+        <p class="pk-form-alert pk-form-alert--success" data-approval-done hidden style="margin-top:var(--sp-3)"></p>
+      </section>
+
       <div class="pk-ordergrid">
         <div style="min-width:0">
           <!-- Items -->
@@ -147,6 +171,10 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
       itemHint: t('order.uploadItemHint', locale),
       uploading: t('order.uploading', locale),
       uploadError: t('order.uploadError', locale),
+      approvedMsg: t('order.approvedMsg', locale),
+      declinedMsg: t('order.declinedMsg', locale),
+      respondError: t('order.respondError', locale),
+      pricePendingNote: t('order.pricePendingNote', locale),
     },
   }}>
     window.__orderCfg = { locale, loginHref, whatsapp, waPrefix, labels };
@@ -215,6 +243,9 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
       void statuses;
       const PIPELINE = [
         { keys: ['new', 'جديد', 'processing', 'confirmed', 'تم استلام الطلب'], ar: 'تم استلام الطلب', en: 'Order received' },
+        // Vendor-quote flow: pricing → the client approves the final price.
+        { keys: ['بانتظار التسعير'], ar: 'تسعير الطلب', en: 'Pricing' },
+        { keys: ['بانتظار اعتماد السعر'], ar: 'اعتماد السعر', en: 'Price approval' },
         { keys: ['مراجعة التصميم'], ar: 'مراجعة التصميم', en: 'Design review' },
         { keys: ['معتمد'], ar: 'معتمد', en: 'Approved' },
         { keys: ['قيد الطباعة'], ar: 'قيد الطباعة', en: 'In production' },
@@ -255,11 +286,17 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
       const items: any[] = order.items || [];
       items.forEach((it) => {
         const unit = it.unit_type ? ` <span style="color:var(--pk-ink-muted)">/ ${esc(it.unit_type)}</span>` : '';
+        // Post-award: show the original estimate struck through next to the
+        // final rate, so the client sees exactly what changed.
+        const hasEst = it.estimate_rate != null && Number(it.estimate_rate) !== Number(it.rate || 0);
+        const estHtml = hasEst
+          ? `<div class="pk-small" style="text-decoration:line-through;opacity:.55"><bdi>${esc(formatSAR(Number(it.estimate_rate), locale))}</bdi></div>`
+          : '';
         const tr = document.createElement('tr');
         tr.innerHTML = `
           <td><div style="font-weight:600">${esc(it.title)}</div>${it.description ? `<div class="pk-otable__desc">${esc(it.description)}</div>` : ''}</td>
           <td class="pk-num">${esc(it.quantity)}${unit}</td>
-          <td class="pk-num pk-price"><bdi>${esc(formatSAR(Number(it.rate || 0), locale))}</bdi></td>
+          <td class="pk-num pk-price">${estHtml}<bdi>${esc(formatSAR(Number(it.rate || 0), locale))}</bdi></td>
           <td class="pk-num pk-price"><bdi>${esc(formatSAR(Number(it.total || 0), locale))}</bdi></td>`;
         tbody.appendChild(tr);
       });
@@ -313,6 +350,69 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
       // WhatsApp CTA
       const wa = document.querySelector('[data-whatsapp]') as HTMLAnchorElement;
       wa.href = `https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent(cfg.waPrefix + order.id)}`;
+
+      // ---- Vendor-quote price states ----
+      if (order.price_state === 'awaiting_approval') {
+        mountApproval(order);
+      } else if (order.price_state === 'estimate') {
+        // Order is still being priced — set expectations under the timeline.
+        const note = document.createElement('p');
+        note.className = 'pk-small pk-muted';
+        note.style.marginTop = 'var(--sp-3)';
+        note.textContent = L.pricePendingNote;
+        (document.querySelector('[data-order-timeline]') as HTMLElement).insertAdjacentElement('afterend', note);
+      }
+    }
+
+    /** Final-price approval block: old→new totals + approve/decline. */
+    function mountApproval(order: any) {
+      const block = document.querySelector('[data-price-approval]') as HTMLElement;
+      if (!block) return;
+      const approval = order.approval || {};
+      const estEl = block.querySelector('[data-approval-estimate]') as HTMLElement;
+      const finEl = block.querySelector('[data-approval-final]') as HTMLElement;
+      const est = Number(approval.estimate_total);
+      const fin = Number(approval.final_total ?? order.total_summary ?? 0);
+      // Hide the strikethrough row when there's nothing meaningful to compare.
+      if (Number.isFinite(est) && est > 0 && est !== fin) {
+        estEl.textContent = formatSAR(est, locale);
+      } else {
+        (estEl.closest('.pk-approve__row') as HTMLElement).hidden = true;
+      }
+      finEl.textContent = formatSAR(fin, locale);
+
+      const approveBtn = block.querySelector('[data-approve-btn]') as HTMLButtonElement;
+      const declineBtn = block.querySelector('[data-decline-btn]') as HTMLButtonElement;
+      const errEl = block.querySelector('[data-approval-error]') as HTMLElement;
+      const doneEl = block.querySelector('[data-approval-done]') as HTMLElement;
+
+      async function respond(action: 'approve' | 'decline') {
+        errEl.hidden = true;
+        approveBtn.disabled = true;
+        declineBtn.disabled = true;
+        try {
+          const res: any = await api.orderPriceRespond(order.id, action);
+          if (res && res.success) {
+            doneEl.textContent = action === 'approve' ? L.approvedMsg : L.declinedMsg;
+            doneEl.hidden = false;
+            approveBtn.hidden = true;
+            declineBtn.hidden = true;
+            // Refresh so the timeline/invoice reflect the new state.
+            setTimeout(() => location.reload(), 1800);
+            return;
+          }
+          errEl.textContent = (res && res.message) ? res.message : L.respondError;
+          errEl.hidden = false;
+        } catch {
+          errEl.textContent = L.respondError;
+          errEl.hidden = false;
+        }
+        approveBtn.disabled = false;
+        declineBtn.disabled = false;
+      }
+      approveBtn.addEventListener('click', () => respond('approve'));
+      declineBtn.addEventListener('click', () => respond('decline'));
+      block.hidden = false;
     }
 
     /** Render legacy order-level files (read-only — new uploads go per item). */

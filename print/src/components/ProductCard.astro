@@ -11,7 +11,8 @@
  *   locale: 'ar' | 'en'
  *   eager?: boolean
  */
-import { formatSAR } from '@lib/format';
+import { formatCardPrice } from '@lib/format';
+import { storeConfig } from '@lib/catalog';
 import { t } from '@lib/strings';
 import type { Locale } from '@lib/format';
 
@@ -25,7 +26,8 @@ interface Props {
   eager?: boolean;
 }
 const { href, title, image, rate, categoryLabel, locale, eager = false } = Astro.props;
-const price = formatSAR(rate, locale);
+// Range mode: "starting from" + the low bound (rule mirrored in live-sync).
+const price = formatCardPrice(rate, storeConfig, locale);
 ---
 <a class="pk-prodcard" href={href}>
   <div class="pk-prodcard__media">

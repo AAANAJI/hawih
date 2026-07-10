@@ -86,6 +86,7 @@ export const STRINGS = {
 
   // PriceBox
   'price.taxNote': { ar: 'شامل الضريبة تُحتسب عند الفوترة', en: 'VAT calculated at invoicing' },
+  'price.estimateNote': { ar: 'سعر تقريبي — يُؤكد السعر النهائي بعد مراجعة الطلب', en: 'Estimated price — final price confirmed after order review' },
 
   // Search
   'search.placeholder': { ar: 'ابحث عن منتج… كروت، ملصقات، علب', en: 'Search products… cards, stickers, boxes' },
@@ -265,6 +266,7 @@ export const STRINGS = {
   'checkout.guestNote': { ar: 'ننشئ لك حساباً تلقائياً لمتابعة طلبك وفاتورتك.', en: 'We create an account for you so you can track your order and invoice.' },
   'checkout.reviewFiles': { ar: 'مراجعة الطلب', en: 'Review your order' },
   'checkout.uploadAfterNote': { ar: 'سترفع ملفات التصميم بعد تقديم الطلب — من صفحة التأكيد أو صفحة الطلب.', en: 'You’ll upload your design files after placing the order — from the confirmation page or your order page.' },
+  'checkout.rangeNote': { ar: 'الأسعار تقريبية — نراجع طلبك ثم نرسل لك السعر النهائي لاعتماده قبل إصدار الفاتورة.', en: 'Prices are estimates — we review your order, then send the final price for your approval before invoicing.' },
   'checkout.artworkFor': { ar: 'ملفات التصميم لـ', en: 'Artwork for' },
   'checkout.orderNote': { ar: 'ملاحظات على الطلب', en: 'Order notes' },
   'checkout.orderNotePlaceholder': { ar: 'أي تفاصيل إضافية تودّ إخبارنا بها (اختياري)', en: 'Anything else we should know (optional)' },
@@ -430,6 +432,16 @@ export const STRINGS = {
   'order.unit': { ar: 'الوحدة', en: 'Unit' },
   'order.rate': { ar: 'السعر', en: 'Rate' },
   'order.lineTotal': { ar: 'الإجمالي', en: 'Total' },
+  'order.priceApprovalTitle': { ar: 'السعر النهائي جاهز لاعتمادك', en: 'Your final price is ready' },
+  'order.priceApprovalBody': { ar: 'راجعنا طلبك وهذا هو السعر النهائي. باعتماده نُصدر الفاتورة الضريبية ونبدأ التنفيذ فوراً.', en: 'We reviewed your order — this is the final price. Approve it and we issue the tax invoice and start production right away.' },
+  'order.estimateWas': { ar: 'السعر التقديري', en: 'Estimated price' },
+  'order.finalPrice': { ar: 'السعر النهائي', en: 'Final price' },
+  'order.approve': { ar: 'اعتماد السعر والمتابعة', en: 'Approve & continue' },
+  'order.decline': { ar: 'لا أوافق على السعر', en: 'Decline the price' },
+  'order.approvedMsg': { ar: 'تم اعتماد السعر — بدأنا التنفيذ وستجد فاتورتك في حسابك.', en: 'Price approved — production has started and your invoice is in your account.' },
+  'order.declinedMsg': { ar: 'سجّلنا اعتذارك عن السعر — سنتواصل معك قريباً.', en: 'Your response was recorded — we will contact you shortly.' },
+  'order.respondError': { ar: 'تعذّر إرسال ردك. حاول مرة أخرى.', en: 'Could not send your response. Please try again.' },
+  'order.pricePendingNote': { ar: 'جاري تسعير طلبك — سنرسل لك السعر النهائي لاعتماده قريباً.', en: 'Your order is being priced — we will send the final price for your approval soon.' },
   'order.files': { ar: 'ملفات التصميم', en: 'Design files' },
   'order.filesPerItemHint': { ar: 'ارفع ملف التصميم لكل عنصر على حدة حتى يعرف فريق الطباعة أي ملف يخص أي منتج.', en: 'Upload a design file for each item separately so the print team knows which file belongs to which product.' },
   'order.generalFiles': { ar: 'ملفات عامة (غير مرتبطة بعنصر)', en: 'General files (not linked to an item)' },
@@ -468,8 +480,8 @@ export const STRINGS = {
   'thanks.next': { ar: 'ماذا بعد؟', en: "What's next?" },
   'thanks.next1.title': { ar: 'مراجعة التصميم', en: 'Design review' },
   'thanks.next1.body': { ar: 'يراجع فريقنا ملفات تصميمك ويجهّزها للطباعة.', en: 'Our team reviews your artwork and prepares it for print.' },
-  'thanks.next2.title': { ar: 'تأكيد عبر واتساب', en: 'WhatsApp confirmation' },
-  'thanks.next2.body': { ar: 'نتواصل معك لتأكيد التفاصيل وإصدار الفاتورة الضريبية.', en: "We'll reach out to confirm details and issue your tax invoice." },
+  'thanks.next2.title': { ar: 'تأكيد السعر النهائي', en: 'Final price confirmation' },
+  'thanks.next2.body': { ar: 'نراجع طلبك ونرسل لك السعر النهائي لاعتماده، ثم نُصدر الفاتورة الضريبية.', en: 'We review your order and send the final price for your approval, then issue the tax invoice.' },
   'thanks.next3.title': { ar: 'الفاتورة في حسابك', en: 'Invoice in your account' },
   'thanks.next3.body': { ar: 'تجد فاتورتك وحالة طلبك في صفحة حسابك في أي وقت.', en: 'Find your invoice and order status in your account anytime.' },
   'thanks.viewAccount': { ar: 'عرض طلباتي', en: 'View my orders' },

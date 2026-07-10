@@ -14,8 +14,8 @@
  * Product page: the buy box reads the live base rate + option deltas via
  * liveItem() (see product/[slug].astro).
  */
-import { rawItemsBySlug, type RawItem } from './live-catalog';
-import { formatSAR, type Locale } from './format';
+import { rawItemsBySlug, liveStoreConfig, type RawItem } from './live-catalog';
+import { formatCardPrice, type Locale } from './format';
 
 export type LiveItem = RawItem;
 
@@ -50,13 +50,15 @@ export async function hydrateCardPrices(): Promise<void> {
   const map = await rawItemsBySlug();
   if (!map.size) return;
   const locale = currentLocale();
+  // Same card rule as ProductCard.astro: range mode → "from" + low bound.
+  const cfg = await liveStoreConfig();
 
   for (const el of priceEls) {
     const slug = el.dataset.slug || slugFromLink(el.closest('a'));
     if (!slug) continue;
     const it = map.get(slug);
     if (it && Number.isFinite(Number(it.rate))) {
-      el.textContent = formatSAR(Number(it.rate), locale);
+      el.textContent = formatCardPrice(Number(it.rate), cfg, locale);
     }
   }
 

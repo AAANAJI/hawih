@@ -41,13 +41,31 @@ export interface CatalogItem {
   images?: { hero: string; square: string };
   options: CatalogOption[];
 }
+/**
+ * Store-wide config that rides the catalog payload (CRM settings-driven).
+ * price_mode 'range' = vendor-quote mode: prices render as a low–high range
+ * ("final price confirmed after review") and no invoice is issued at checkout.
+ */
+export interface StoreConfig {
+  price_mode: 'exact' | 'range';
+  range_low_pct: number;
+  range_high_pct: number;
+}
 export interface Catalog {
   success: boolean;
+  store_config?: StoreConfig;
   categories: CatalogCategory[];
   items: CatalogItem[];
 }
 
 const catalog = raw as Catalog;
+
+/** Baked store config (live pages re-read it from the live catalog). */
+export const storeConfig: StoreConfig = catalog.store_config ?? {
+  price_mode: 'exact',
+  range_low_pct: 0,
+  range_high_pct: 0,
+};
 
 export const categories: CatalogCategory[] = [...catalog.categories].sort(
   (a, b) => a.sort - b.sort,

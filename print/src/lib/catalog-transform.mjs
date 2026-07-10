@@ -112,7 +112,18 @@ export function transformCatalog(api) {
     .sort((a, b) => a.sort - b.sort)
     .map((c) => ({ id: c.id, slug: c.slug, title: c.title, title_en: c.title_en, sort: c.sort }));
 
-  return { catalog: { success: true, categories, items }, itemCount: items.length };
+  // Store-wide config from the CRM (settings-driven, no store deploy needed):
+  //   price_mode 'exact' → today's behaviour;
+  //   price_mode 'range' → vendor-quote mode: prices display as a low–high
+  //   range and the final price is confirmed after order review.
+  const sc = api.store_config && typeof api.store_config === 'object' ? api.store_config : {};
+  const store_config = {
+    price_mode: sc.price_mode === 'range' ? 'range' : 'exact',
+    range_low_pct: Number(sc.range_low_pct) || 0,
+    range_high_pct: Number(sc.range_high_pct) || 0,
+  };
+
+  return { catalog: { success: true, store_config, categories, items }, itemCount: items.length };
 }
 
 /**

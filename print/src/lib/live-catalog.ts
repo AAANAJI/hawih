@@ -15,7 +15,8 @@
  */
 import { API_BASE } from './config';
 import { transformCatalog } from './catalog-transform.mjs';
-import type { Catalog, CatalogItem } from './catalog';
+import { storeConfig as bakedStoreConfig } from './catalog';
+import type { Catalog, CatalogItem, StoreConfig } from './catalog';
 
 export interface RawItem {
   id: number | string;
@@ -29,6 +30,7 @@ export interface RawItem {
 }
 interface RawApi {
   success?: boolean;
+  store_config?: { price_mode?: string; range_low_pct?: number; range_high_pct?: number };
   categories?: unknown[];
   items?: RawItem[];
 }
@@ -88,6 +90,22 @@ export async function liveCatalog(): Promise<Catalog | null> {
   } catch {
     return null;
   }
+}
+
+/**
+ * The LIVE store config (price mode + range bounds), falling back to the
+ * baked snapshot when the API is unreachable. This is what lets flipping the
+ * CRM setting change the storefront pricing display with no redeploy.
+ */
+export async function liveStoreConfig(): Promise<StoreConfig> {
+  const raw = await rawCatalog();
+  const sc = raw && raw.store_config && typeof raw.store_config === 'object' ? raw.store_config : null;
+  if (!sc) return bakedStoreConfig;
+  return {
+    price_mode: sc.price_mode === 'range' ? 'range' : 'exact',
+    range_low_pct: Number(sc.range_low_pct) || 0,
+    range_high_pct: Number(sc.range_high_pct) || 0,
+  };
 }
 
 /** slug → raw API item, for price/image hydration. Empty map if unavailable. */

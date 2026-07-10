@@ -943,6 +943,11 @@
 .pk-fileline__name { display: flex; align-items: center; gap: var(--sp-2); min-width: 0; }
 .pk-fileline__name span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .pk-fileline__size { color: var(--pk-ink-muted); font-size: 0.8rem; direction: ltr; unicode-bidi: isolate; white-space: nowrap; }
+/* Final-price approval block (vendor-quote flow, account order page) */
+.pk-approve { border: 2px solid var(--pk-accent); }
+.pk-approve__totals { display: flex; flex-direction: column; gap: var(--sp-2); padding: var(--sp-4); background: var(--pk-surface-2); border-radius: var(--r-md); max-width: 420px; }
+.pk-approve__row { display: flex; justify-content: space-between; align-items: baseline; gap: var(--sp-4); }
+
 /* Per-item design-file uploader (order + thank-you pages) */
 .pk-itemup-block { padding: var(--sp-4) 0; border-top: 1px solid var(--pk-line); }
 .pk-itemup-block:first-of-type { border-top: 0; padding-top: var(--sp-3); }

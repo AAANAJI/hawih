@@ -23,8 +23,10 @@ import {
   categoryTitle,
   itemTitle,
   itemDescription,
+  storeConfig,
 } from '@lib/catalog';
 import { SITE_URL, HAWIH_ORG_ID } from '@lib/config';
+import { priceRangeBounds } from '@lib/format';
 import type { Locale } from '@lib/format';
 
 export function getStaticPaths() {
@@ -54,6 +56,10 @@ const crumbs = [
 ];
 
 const absImg = (p: string | undefined) => (!p ? '' : p.startsWith('http') ? p : SITE_URL + p);
+// Range mode (vendor-quote flow) → AggregateOffer with low/high bounds;
+// exact mode → the plain Offer as before.
+const rangeMode = storeConfig.price_mode === 'range';
+const bounds = priceRangeBounds(item.rate, storeConfig);
 const productLd = {
   '@context': 'https://schema.org',
   '@type': 'Product',
@@ -62,14 +68,24 @@ const productLd = {
   image: absImg(item.images?.hero),
   category: catTitle,
   brand: { '@id': HAWIH_ORG_ID },
-  offers: {
-    '@type': 'Offer',
-    price: item.rate,
-    priceCurrency: 'SAR',
-    availability: 'https://schema.org/InStock',
-    url: SITE_URL + href(locale, `/product/${slug}`),
-    seller: { '@id': HAWIH_ORG_ID },
-  },
+  offers: rangeMode
+    ? {
+        '@type': 'AggregateOffer',
+        lowPrice: bounds.low,
+        highPrice: bounds.high,
+        priceCurrency: 'SAR',
+        availability: 'https://schema.org/InStock',
+        url: SITE_URL + href(locale, `/product/${slug}`),
+        seller: { '@id': HAWIH_ORG_ID },
+      }
+    : {
+        '@type': 'Offer',
+        price: item.rate,
+        priceCurrency: 'SAR',
+        availability: 'https://schema.org/InStock',
+        url: SITE_URL + href(locale, `/product/${slug}`),
+        seller: { '@id': HAWIH_ORG_ID },
+      },
 };
 const breadcrumbLd = {
   '@context': 'https://schema.org',
@@ -194,7 +210,9 @@ const breadcrumbLd = {
   <script>
     import { addToCart } from '@lib/cart';
     import { addToCartEvent, viewItem } from '@lib/gtm';
-    import { formatSAR } from '@lib/format';
+    import { formatPrice, type PriceModeConfig } from '@lib/format';
+    import { storeConfig } from '@lib/catalog';
+    import { liveStoreConfig } from '@lib/live-catalog';
     import { iconSvg } from '@lib/icons';
     import { t } from '@lib/strings';
 
@@ -249,9 +267,14 @@ const breadcrumbLd = {
         return { options, rate: currentBase() + delta };
       }
 
+      // Price mode starts from the baked config and refreshes from the live
+      // catalog, so flipping the CRM setting changes this page on next load.
+      let priceCfg: PriceModeConfig = storeConfig;
+      liveStoreConfig().then((cfg) => { priceCfg = cfg; refreshPrice(); }).catch(() => {});
+
       function refreshPrice() {
         const { rate } = currentSelections();
-        if (priceEl) priceEl.textContent = formatSAR(rate, locale);
+        if (priceEl) priceEl.textContent = formatPrice(rate, priceCfg, locale);
       }
 
       // Delegated so option groups rebuilt live by catalog-sync still reprice.

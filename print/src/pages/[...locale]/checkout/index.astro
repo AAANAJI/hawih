@@ -142,6 +142,7 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
           <span class="pk-summary__total pk-price"><bdi data-checkout-subtotal>—</bdi></span>
         </div>
         <p class="pk-small pk-muted">{t('cart.taxNote', locale)}</p>
+        <p class="pk-small pk-muted" data-range-note hidden>{t('checkout.rangeNote', locale)}</p>
         <div class="pk-form-alert pk-form-alert--error" data-checkout-error hidden></div>
         <Button type="submit" size="lg" block data-checkout-submit>{t('checkout.submit', locale)}</Button>
         <p class="pk-summary__terms">
@@ -174,7 +175,9 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
     import { getCart, subtotal } from '@lib/cart';
     import { isAuthed, api } from '@lib/api';
     import { submitCheckout } from '@lib/checkout';
-    import { formatSAR } from '@lib/format';
+    import { formatPrice, type PriceModeConfig } from '@lib/format';
+    import { storeConfig } from '@lib/catalog';
+    import { liveStoreConfig } from '@lib/live-catalog';
     import { beginCheckout } from '@lib/gtm';
 
     const cfg = (window as any).__checkoutCfg;
@@ -196,6 +199,22 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
 
     const cart = getCart();
 
+    // Range mode (vendor-quote flow): all checkout prices render as estimate
+    // bands + the "final price after review" note. Baked config first,
+    // refreshed from the live catalog so a settings flip needs no redeploy.
+    let priceCfg: PriceModeConfig = storeConfig;
+    liveStoreConfig().then((cfg) => {
+      priceCfg = cfg;
+      const note = document.querySelector<HTMLElement>('[data-range-note]');
+      if (note) note.hidden = cfg.price_mode !== 'range';
+      if (cart.length && cfg.price_mode === 'range') {
+        // Re-render with range formatting (cheap: rebuild both line lists).
+        linesEl.innerHTML = '';
+        sumLinesEl.innerHTML = '';
+        try { renderLines(); } catch { /* rendered once already */ }
+      }
+    }).catch(() => {});
+
     function optSummary(options: Record<string, string>): string {
       return Object.entries(options).map(([k, v]) => `${k}: ${v}`).join(' · ');
     }
@@ -213,6 +232,12 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
       } catch (e) {
         console.error('checkout: failed to render cart lines', e);
       }
+      // GTM begin_checkout — fired ONCE here (renderLines may re-run when the
+      // live price config arrives, and must not double-fire analytics).
+      beginCheckout(
+        cart.map((l) => ({ item_id: l.item_id, item_name: l.title, price: l.rate, quantity: l.qty, item_category: l.slug })),
+        subtotal(cart),
+      );
     }
 
     // Hide the guest signup block when a session token exists; greet the buyer.
@@ -245,24 +270,18 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
           <div>
             <div class="pk-coline__title">${esc(line.title)}</div>
             ${Object.keys(line.options).length ? `<div class="pk-coline__opts">${esc(optSummary(line.options))}</div>` : ''}
-            <div class="pk-coline__qty">${esc(L.qty)}: ${line.qty} × <bdi>${esc(formatSAR(line.rate, locale))}</bdi></div>
+            <div class="pk-coline__qty">${esc(L.qty)}: ${line.qty} × <bdi>${esc(formatPrice(line.rate, priceCfg, locale))}</bdi></div>
           </div>
-          <div class="pk-coline__price pk-price"><bdi>${esc(formatSAR(line.rate * line.qty, locale))}</bdi></div>`;
+          <div class="pk-coline__price pk-price"><bdi>${esc(formatPrice(line.rate * line.qty, priceCfg, locale))}</bdi></div>`;
         linesEl.appendChild(row);
 
         // Summary line
         const sl = document.createElement('div');
         sl.className = 'pk-summary__line';
-        sl.innerHTML = `<span class="pk-summary__line-name">${esc(line.title)} ×${line.qty}</span><span class="pk-summary__line-price pk-price"><bdi>${esc(formatSAR(line.rate * line.qty, locale))}</bdi></span>`;
+        sl.innerHTML = `<span class="pk-summary__line-name">${esc(line.title)} ×${line.qty}</span><span class="pk-summary__line-price pk-price"><bdi>${esc(formatPrice(line.rate * line.qty, priceCfg, locale))}</bdi></span>`;
         sumLinesEl.appendChild(sl);
       });
-      subtotalEl.textContent = formatSAR(subtotal(cart), locale);
-
-      // GTM begin_checkout
-      beginCheckout(
-        cart.map((l) => ({ item_id: l.item_id, item_name: l.title, price: l.rate, quantity: l.qty, item_category: l.slug })),
-        subtotal(cart),
-      );
+      subtotalEl.textContent = formatPrice(subtotal(cart), priceCfg, locale);
     }
 
     // ---- Guest validation ----

@@ -35,6 +35,47 @@ export function formatNumber(n: number, locale: Locale = 'ar'): string {
   }).format(n);
 }
 
+/** Shape of the store price config as it rides the catalog payload. */
+export interface PriceModeConfig {
+  price_mode: 'exact' | 'range';
+  range_low_pct: number;
+  range_high_pct: number;
+}
+
+/** The low/high bounds of an estimated price under range mode. */
+export function priceRangeBounds(rate: number, cfg: PriceModeConfig): { low: number; high: number } {
+  const r = Number.isFinite(rate) ? rate : 0;
+  const low = Math.max(0, Math.round(r * (1 - (Number(cfg.range_low_pct) || 0) / 100)));
+  const high = Math.round(r * (1 + (Number(cfg.range_high_pct) || 0) / 100));
+  return { low, high: Math.max(high, low) };
+}
+
+/**
+ * THE single price formatter for every surface (PriceBox, cards, cart,
+ * checkout, and both live-sync mirrors). In 'exact' mode it's formatSAR; in
+ * 'range' mode it renders the estimate band, e.g. ar → "٩٥–١٣٥ ر.س",
+ * en → "SAR 95–135". Whole-riyal rounding keeps the band honest and clean.
+ */
+export function formatPrice(rate: number, cfg: PriceModeConfig | undefined, locale: Locale = 'ar'): string {
+  if (!cfg || cfg.price_mode !== 'range') return formatSAR(rate, locale);
+  const { low, high } = priceRangeBounds(rate, cfg);
+  if (low === high) return formatSAR(low, locale);
+  const nf = new Intl.NumberFormat(locale === 'ar' ? 'ar-SA' : 'en-US', { maximumFractionDigits: 0 });
+  return locale === 'ar'
+    ? `${nf.format(low)}–${nf.format(high)} ${SAR_AR}`
+    : `${SAR_EN} ${nf.format(low)}–${nf.format(high)}`;
+}
+
+/**
+ * Product-CARD price. Cards already say "starting from", so under range mode
+ * they show just the LOW bound (clean, sortable, honest); exact mode = rate.
+ * Mirrored by the live-sync card renderers — keep the rule identical.
+ */
+export function formatCardPrice(rate: number, cfg: PriceModeConfig | undefined, locale: Locale = 'ar'): string {
+  if (!cfg || cfg.price_mode !== 'range') return formatSAR(rate, locale);
+  return formatSAR(priceRangeBounds(rate, cfg).low, locale);
+}
+
 /** Format an ISO date to a readable localized date. */
 export function arabicDate(iso: string, locale: Locale = 'ar'): string {
   const d = new Date(iso);

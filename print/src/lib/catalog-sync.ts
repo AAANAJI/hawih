@@ -25,8 +25,8 @@ import { hydrateCardPrices } from './live-prices';
 import { categoryImage } from './catalog-transform.mjs';
 import { iconSvg } from './icons';
 import { conditionalRefs, optionValueText, optionGroupLabel } from './options';
-import type { Catalog, CatalogCategory, CatalogItem } from './catalog';
-import { formatSAR, formatNumber, type Locale } from './format';
+import type { Catalog, CatalogCategory, CatalogItem, StoreConfig } from './catalog';
+import { formatCardPrice, formatNumber, type Locale } from './format';
 import { href } from './i18n';
 import { t } from './strings';
 
@@ -55,6 +55,7 @@ function renderProductCard(
   item: CatalogItem,
   categoryLabel: string,
   locale: Locale,
+  cfg?: StoreConfig,
 ): HTMLAnchorElement {
   const a = el('a', { class: 'pk-prodcard', href: href(locale, `/product/${item.slug}`) });
 
@@ -81,8 +82,9 @@ function renderProductCard(
 
   const price = el('div', { class: 'pk-prodcard__price pk-price' });
   price.appendChild(el('span', { class: 'pk-from' }, t('product.startingFrom', locale)));
+  // Same card rule as ProductCard.astro: range mode → low bound.
   price.appendChild(
-    el('bdi', { 'data-live-price': '', 'data-slug': item.slug }, formatSAR(item.rate, locale)),
+    el('bdi', { 'data-live-price': '', 'data-slug': item.slug }, formatCardPrice(item.rate, cfg, locale)),
   );
   body.appendChild(price);
 
@@ -180,7 +182,7 @@ function reconcileHome(cat: Catalog, locale: Locale): void {
         'data-product-price': String(it.rate),
         'data-product-cat': it.category_slug,
       });
-      wrap.appendChild(renderProductCard(it, c ? catTitle(c, locale) : '', locale));
+      wrap.appendChild(renderProductCard(it, c ? catTitle(c, locale) : '', locale, cat.store_config));
       featGrid.appendChild(wrap);
     });
   }
@@ -208,7 +210,7 @@ function reconcileCategory(cat: Catalog, locale: Locale, slug: string): void {
         'data-product-name': itemTitle(p, locale),
         'data-product-price': String(p.rate),
       });
-      wrap.appendChild(renderProductCard(p, label, locale));
+      wrap.appendChild(renderProductCard(p, label, locale, cat.store_config));
       grid.appendChild(wrap);
     });
     body.appendChild(grid);
