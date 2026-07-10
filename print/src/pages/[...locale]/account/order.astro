@@ -72,6 +72,13 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
           </div>
         </div>
         <p class="pk-small pk-muted" style="margin:var(--sp-2) 0 var(--sp-4)">{t('cart.taxNote', locale)}</p>
+        <!-- Optional vendor pricing matrix — the client picks a supplier. -->
+        <div class="pk-matrix-wrap" data-vendor-matrix hidden style="margin-bottom:var(--sp-4)"></div>
+        <!-- Decline reason (revealed on first decline click). -->
+        <div data-decline-reason-wrap hidden style="margin-bottom:var(--sp-4)">
+          <label class="pk-small" style="font-weight:600;display:block;margin-bottom:var(--sp-2)">{t('order.declineReasonLabel', locale)}</label>
+          <textarea class="pk-input" data-decline-reason rows="2" placeholder={t('order.declineReasonPlaceholder', locale)}></textarea>
+        </div>
         <div style="display:flex;gap:var(--sp-3);flex-wrap:wrap">
           <button type="button" class="pk-btn pk-btn--lg" data-approve-btn>{t('order.approve', locale)}</button>
           <button type="button" class="pk-btn pk-btn--outline pk-btn--lg" data-decline-btn>{t('order.decline', locale)}</button>
@@ -175,6 +182,15 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
       declinedMsg: t('order.declinedMsg', locale),
       respondError: t('order.respondError', locale),
       pricePendingNote: t('order.pricePendingNote', locale),
+      matrixTitle: t('order.matrixTitle', locale),
+      matrixHint: t('order.matrixHint', locale),
+      vendor: t('order.vendor', locale),
+      recommended: t('order.recommended', locale),
+      leadTime: t('order.leadTime', locale),
+      days: t('order.days', locale),
+      deliversOffice: t('order.deliversOffice', locale),
+      declineConfirm: t('order.declineConfirm', locale),
+      declineReasonLabel: t('order.declineReasonLabel', locale),
     },
   }}>
     window.__orderCfg = { locale, loginHref, whatsapp, waPrefix, labels };
@@ -385,19 +401,25 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
       const declineBtn = block.querySelector('[data-decline-btn]') as HTMLButtonElement;
       const errEl = block.querySelector('[data-approval-error]') as HTMLElement;
       const doneEl = block.querySelector('[data-approval-done]') as HTMLElement;
+      const reasonWrap = block.querySelector('[data-decline-reason-wrap]') as HTMLElement;
+      const reasonEl = block.querySelector('[data-decline-reason]') as HTMLTextAreaElement;
 
-      async function respond(action: 'approve' | 'decline') {
+      // Optional vendor matrix — the client picks a supplier (their choice re-awards).
+      renderMatrix(approval.matrix, block, finEl);
+
+      let declineArmed = false;
+
+      async function respond(action: 'approve' | 'decline', extra: { choice?: number; reason?: string } = {}) {
         errEl.hidden = true;
         approveBtn.disabled = true;
         declineBtn.disabled = true;
         try {
-          const res: any = await api.orderPriceRespond(order.id, action);
+          const res: any = await api.orderPriceRespond(order.id, action, extra);
           if (res && res.success) {
             doneEl.textContent = action === 'approve' ? L.approvedMsg : L.declinedMsg;
             doneEl.hidden = false;
             approveBtn.hidden = true;
             declineBtn.hidden = true;
-            // Refresh so the timeline/invoice reflect the new state.
             setTimeout(() => location.reload(), 1800);
             return;
           }
@@ -410,9 +432,64 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
         approveBtn.disabled = false;
         declineBtn.disabled = false;
       }
-      approveBtn.addEventListener('click', () => respond('approve'));
-      declineBtn.addEventListener('click', () => respond('decline'));
+
+      approveBtn.addEventListener('click', () => {
+        const picked = block.querySelector('input[name="pk-vendor-choice"]:checked') as HTMLInputElement | null;
+        respond('approve', picked ? { choice: Number(picked.value) } : {});
+      });
+      declineBtn.addEventListener('click', () => {
+        // Two-step: first click reveals the reason field, second submits it.
+        if (!declineArmed) {
+          declineArmed = true;
+          reasonWrap.hidden = false;
+          reasonEl.focus();
+          declineBtn.textContent = L.declineConfirm;
+          return;
+        }
+        respond('decline', { reason: reasonEl.value.trim() });
+      });
       block.hidden = false;
+    }
+
+    /** Render the (optional) anonymized vendor pricing matrix; client picks one. */
+    function renderMatrix(matrix: any, block: HTMLElement, finEl: HTMLElement) {
+      const wrap = block.querySelector('[data-vendor-matrix]') as HTMLElement;
+      if (!wrap || !matrix || !Array.isArray(matrix.vendors) || matrix.vendors.length === 0) return;
+      const items: any[] = matrix.items || [];
+      const letter = (i: number) => String.fromCharCode(65 + (i % 26));
+
+      wrap.innerHTML = `<div class="pk-matrix__title">${esc(L.matrixTitle)}</div><p class="pk-matrix__hint">${esc(L.matrixHint)}</p>`;
+      matrix.vendors.forEach((v: any) => {
+        const name = v.label || `${L.vendor} ${letter(Number(v.choice))}`;
+        const lines = items.map((it) => {
+          const p = it.prices ? it.prices[String(v.choice)] : null;
+          const low = it.lowest_choice === v.choice;
+          return `<div class="pk-matrix__line"><span>${esc(it.title)}</span><span class="pk-price${low ? ' pk-matrix__low' : ''}">${p != null ? esc(formatSAR(Number(p), locale)) : '—'}</span></div>`;
+        }).join('');
+        const meta = [`${esc(L.leadTime)}: ${esc(v.lead_time_days)} ${esc(L.days)}`, v.delivers_to_office ? esc(L.deliversOffice) : '']
+          .filter(Boolean).join(' · ');
+        const card = document.createElement('label');
+        card.className = 'pk-matrix__card';
+        card.innerHTML =
+          `<div class="pk-matrix__head">` +
+            `<input type="radio" name="pk-vendor-choice" value="${v.choice}"${v.recommended ? ' checked' : ''}>` +
+            `<span class="pk-matrix__name">${esc(name)}</span>` +
+            (v.recommended ? `<span class="pk-matrix__rec">${esc(L.recommended)}</span>` : '') +
+            `<span class="pk-matrix__total pk-price">${esc(formatSAR(Number(v.total), locale))}</span>` +
+          `</div>` +
+          `<div class="pk-matrix__meta">${meta}</div>` +
+          `<div class="pk-matrix__lines">${lines}</div>`;
+        wrap.appendChild(card);
+      });
+      // Keep the headline "final price" in sync with the picked vendor's total.
+      wrap.addEventListener('change', (e) => {
+        const r = e.target as HTMLInputElement;
+        if (r && r.name === 'pk-vendor-choice') {
+          const v = matrix.vendors.find((x: any) => String(x.choice) === r.value);
+          if (v) finEl.textContent = formatSAR(Number(v.total), locale);
+        }
+      });
+      wrap.hidden = false;
     }
 
     /** Render legacy order-level files (read-only — new uploads go per item). */

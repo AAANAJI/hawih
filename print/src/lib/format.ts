@@ -16,14 +16,18 @@ const SAR_EN = 'SAR';
  */
 export function formatSAR(amount: number, locale: Locale = 'ar'): string {
   const n = Number.isFinite(amount) ? amount : 0;
+  // Show the real price: up to 2 decimals (9.6 → "9.6", 9.65 → "9.65"), but no
+  // trailing ".00" on whole riyals (149 → "149"). Never round to whole riyals.
   if (locale === 'ar') {
     const digits = new Intl.NumberFormat('ar-SA', {
-      maximumFractionDigits: 0,
+      minimumFractionDigits: 0,
+      maximumFractionDigits: 2,
     }).format(n);
     return `${digits} ${SAR_AR}`;
   }
   const digits = new Intl.NumberFormat('en-US', {
-    maximumFractionDigits: 0,
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 2,
   }).format(n);
   return `${SAR_EN} ${digits}`;
 }
@@ -45,8 +49,10 @@ export interface PriceModeConfig {
 /** The low/high bounds of an estimated price under range mode. */
 export function priceRangeBounds(rate: number, cfg: PriceModeConfig): { low: number; high: number } {
   const r = Number.isFinite(rate) ? rate : 0;
-  const low = Math.max(0, Math.round(r * (1 - (Number(cfg.range_low_pct) || 0) / 100)));
-  const high = Math.round(r * (1 + (Number(cfg.range_high_pct) || 0) / 100));
+  // Keep 2dp precision on the band bounds (don't round to whole riyals).
+  const round2 = (x: number) => Math.round(x * 100) / 100;
+  const low = Math.max(0, round2(r * (1 - (Number(cfg.range_low_pct) || 0) / 100)));
+  const high = round2(r * (1 + (Number(cfg.range_high_pct) || 0) / 100));
   return { low, high: Math.max(high, low) };
 }
 
@@ -54,13 +60,13 @@ export function priceRangeBounds(rate: number, cfg: PriceModeConfig): { low: num
  * THE single price formatter for every surface (PriceBox, cards, cart,
  * checkout, and both live-sync mirrors). In 'exact' mode it's formatSAR; in
  * 'range' mode it renders the estimate band, e.g. ar → "٩٥–١٣٥ ر.س",
- * en → "SAR 95–135". Whole-riyal rounding keeps the band honest and clean.
+ * en → "SAR 95–135". Bounds keep up to 2 decimals — never rounded to whole riyals.
  */
 export function formatPrice(rate: number, cfg: PriceModeConfig | undefined, locale: Locale = 'ar'): string {
   if (!cfg || cfg.price_mode !== 'range') return formatSAR(rate, locale);
   const { low, high } = priceRangeBounds(rate, cfg);
   if (low === high) return formatSAR(low, locale);
-  const nf = new Intl.NumberFormat(locale === 'ar' ? 'ar-SA' : 'en-US', { maximumFractionDigits: 0 });
+  const nf = new Intl.NumberFormat(locale === 'ar' ? 'ar-SA' : 'en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
   return locale === 'ar'
     ? `${nf.format(low)}–${nf.format(high)} ${SAR_AR}`
     : `${SAR_EN} ${nf.format(low)}–${nf.format(high)}`;

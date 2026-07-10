@@ -146,8 +146,16 @@ export const api = {
    * approve → the tax invoice is issued and production starts;
    * decline → the order is put on hold and staff follow up.
    */
-  orderPriceRespond: (id: string | number, action: 'approve' | 'decline') =>
-    request(`order_price_respond/${id}`, { method: 'POST', body: { action }, auth: true }),
+  orderPriceRespond: (
+    id: string | number,
+    action: 'approve' | 'decline',
+    opts: { choice?: number; reason?: string } = {},
+  ) =>
+    request(`order_price_respond/${id}`, {
+      method: 'POST',
+      body: { action, ...(opts.choice != null ? { choice: opts.choice } : {}), ...(opts.reason ? { reason: opts.reason } : {}) },
+      auth: true,
+    }),
 
   /**
    * Attach design file(s) to a specific line of an order the caller owns
