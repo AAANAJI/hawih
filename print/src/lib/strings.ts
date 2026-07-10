@@ -339,7 +339,9 @@ export const STRINGS = {
   'account.profile.phone': { ar: 'رقم الجوال', en: 'Phone' },
   'account.profile.avatar': { ar: 'الصورة الشخصية', en: 'Profile photo' },
   'account.profile.changePhoto': { ar: 'تغيير الصورة', en: 'Change photo' },
-  'account.profile.photoError': { ar: 'تعذّر رفع الصورة.', en: 'Could not upload the photo.' },
+  'account.profile.photoError': { ar: 'تعذّر رفع الصورة. حاول مرة أخرى.', en: 'Could not upload the photo. Please try again.' },
+  'account.profile.photoType': { ar: 'يرجى اختيار صورة بصيغة JPG أو PNG (صيغة HEIC غير مدعومة — حوّلها أولاً).', en: 'Please use a JPG or PNG image (HEIC isn’t supported — convert it first).' },
+  'account.profile.photoProcessing': { ar: 'جاري تجهيز الصورة…', en: 'Preparing image…' },
 
   // Organization
   'account.org.title': { ar: 'المنشأة', en: 'Organization' },
