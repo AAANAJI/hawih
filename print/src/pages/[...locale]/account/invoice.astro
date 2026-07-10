@@ -24,7 +24,7 @@ const invoicesHref = href(locale, '/account/invoices');
       <div><h1 class="pk-h1" data-inv-id></h1><p data-inv-meta></p></div>
       <div style="display:flex;gap:var(--sp-2)">
         <a class="pk-btn" data-pay hidden target="_blank" rel="noopener">{t('account.invoices.payNow', locale)}</a>
-        <button class="pk-btn pk-btn--outline pk-btn--sm" type="button" data-print>{t('account.invoices.print', locale)}</button>
+        <button class="pk-btn pk-btn--outline pk-btn--sm" type="button" data-print>{t('account.invoices.download', locale)}</button>
       </div>
     </div>
 
@@ -56,11 +56,17 @@ const invoicesHref = href(locale, '/account/invoices');
     const esc = (s: string) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
     const id = new URLSearchParams(location.search).get('id');
 
-    // Print → open the real invoice (Zoho PDF if synced, else CRM) in a new tab.
+    // Download the real invoice PDF (Zoho if synced, else CRM). Content-Disposition
+    // is attachment, so the browser downloads without leaving the account page.
     document.querySelector('[data-print]')?.addEventListener('click', () => {
       if (!id) return;
       const tok = getToken();
-      window.open(`${API_BASE}invoice_pdf/${encodeURIComponent(id)}${tok ? '?token=' + encodeURIComponent(tok) : ''}`, '_blank');
+      const a = document.createElement('a');
+      a.href = `${API_BASE}invoice_pdf/${encodeURIComponent(id)}${tok ? '?token=' + encodeURIComponent(tok) : ''}`;
+      a.rel = 'noopener';
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
     });
     const loadEl = document.querySelector<HTMLElement>('[data-loading]')!;
     const nf = document.querySelector<HTMLElement>('[data-notfound]')!;

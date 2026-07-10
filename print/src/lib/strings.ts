@@ -379,6 +379,7 @@ export const STRINGS = {
   'account.invoices.tax': { ar: 'الضريبة', en: 'Tax' },
   'account.invoices.payNow': { ar: 'ادفع الآن', en: 'Pay now' },
   'account.invoices.print': { ar: 'طباعة', en: 'Print' },
+  'account.invoices.download': { ar: 'تحميل الفاتورة', en: 'Download invoice' },
   'account.invoices.status.paid': { ar: 'مدفوعة', en: 'Paid' },
   'account.invoices.status.not_paid': { ar: 'غير مدفوعة', en: 'Not paid' },
   'account.invoices.status.partially_paid': { ar: 'مدفوعة جزئياً', en: 'Partially paid' },
