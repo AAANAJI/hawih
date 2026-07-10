@@ -141,9 +141,14 @@ export const api = {
 
   order: (id: string | number) => request(`orders/${id}`, { requireAuth: true }),
 
-  /** Attach design file(s) to an order the caller owns (post-placement upload). */
-  uploadOrderFile: (orderId: string | number, files: File[]) => {
+  /**
+   * Attach design file(s) to a specific line of an order the caller owns
+   * (post-placement upload). Files are linked to itemId so the CRM shows which
+   * design belongs to which item. Returns {item_id, files:[{file_name,file_size}]}.
+   */
+  uploadItemFile: (orderId: string | number, itemId: string | number, files: File[]) => {
     const fd = new FormData();
+    fd.append('item_id', String(itemId));
     for (const f of files) fd.append('files[]', f, f.name);
     return request(`order_upload/${orderId}`, { method: 'POST', formData: fd, auth: true });
   },

@@ -104,9 +104,10 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
           </div>
         </section>
 
-        <!-- Items + artwork -->
+        <!-- Items -->
         <section class="pk-card pk-block">
           <h2 class="pk-h3">{t('checkout.reviewFiles', locale)}</h2>
+          <p class="pk-small pk-muted" style="margin-top:calc(-1 * var(--sp-2))">{t('checkout.uploadAfterNote', locale)}</p>
           <div data-checkout-lines></div>
         </section>
 
@@ -161,7 +162,6 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
       emailInvalid: t('field.emailInvalid', locale),
       phoneInvalid: t('field.phoneInvalid', locale),
       passwordShort: t('field.passwordShort', locale),
-      artworkFor: t('checkout.artworkFor', locale),
       submit: t('checkout.submit', locale),
       submitting: t('checkout.submitting', locale),
       error: t('checkout.error', locale),
@@ -171,14 +171,11 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
     window.__checkoutCfg = { locale, thankyouHref, whatsapp, labels };
   </script>
   <script>
-  import { iconSvg } from '@lib/icons';
     import { getCart, subtotal } from '@lib/cart';
-    import { getItem } from '@lib/catalog';
     import { isAuthed, api } from '@lib/api';
     import { submitCheckout } from '@lib/checkout';
     import { formatSAR } from '@lib/format';
     import { beginCheckout } from '@lib/gtm';
-    import { UPLOAD } from '@lib/config';
 
     const cfg = (window as any).__checkoutCfg;
     const L = cfg.labels;
@@ -199,82 +196,12 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
 
     const cart = getCart();
 
-    // Per-line artwork stores: index -> File[]
-    const artworkByLine: Record<number, File[]> = {};
-
     function optSummary(options: Record<string, string>): string {
       return Object.entries(options).map(([k, v]) => `${k}: ${v}`).join(' · ');
     }
     function esc(s: string): string {
       return s.replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
     }
-    function human(bytes: number): string {
-      if (bytes < 1024) return bytes + ' B';
-      if (bytes < 1048576) return Math.round(bytes / 1024) + ' KB';
-      return (bytes / 1048576).toFixed(1) + ' MB';
-    }
-
-    // Build a reusable dropzone that mirrors ArtworkUpload validation.
-    function buildUploader(lineIdx: number): HTMLElement {
-      artworkByLine[lineIdx] = [];
-      const wrap = document.createElement('div');
-      wrap.className = 'pk-coline__art';
-      wrap.innerHTML = `
-        <div class="pk-coline__artlabel">${iconSvg('palette')} ${esc(L.artworkFor)}</div>
-        <div class="pk-upload">
-          <label class="pk-upload__zone" tabindex="0" role="button">
-            <span class="pk-upload__badge" aria-hidden="true">${iconSvg('upload')}</span>
-            <strong>${esc(uploadDrop())}</strong>
-            <span class="pk-upload__hint">${esc(uploadHint())}</span>
-            <input type="file" accept="${UPLOAD.accept.map((e) => '.' + e).join(',')}" multiple class="pk-visually-hidden" />
-          </label>
-          <p class="pk-upload__error" hidden></p>
-          <ul class="pk-upload__list"></ul>
-        </div>`;
-      const input = wrap.querySelector<HTMLInputElement>('input[type=file]')!;
-      const zone = wrap.querySelector<HTMLElement>('.pk-upload__zone')!;
-      const list = wrap.querySelector<HTMLUListElement>('.pk-upload__list')!;
-      const err = wrap.querySelector<HTMLElement>('.pk-upload__error')!;
-      const files = artworkByLine[lineIdx];
-
-      function showErr(msg: string) { err.textContent = msg; err.hidden = false; setTimeout(() => (err.hidden = true), 4000); }
-      function validate(f: File): boolean {
-        const ext = f.name.split('.').pop()?.toLowerCase() || '';
-        if (!UPLOAD.accept.includes(ext)) { showErr(`${errType()}: ${f.name}`); return false; }
-        if (f.size > UPLOAD.maxBytes) { showErr(`${errSize()}: ${f.name}`); return false; }
-        return true;
-      }
-      function render() {
-        list.innerHTML = '';
-        files.forEach((f, i) => {
-          const li = document.createElement('li');
-          li.className = 'pk-filechip';
-          li.innerHTML = `<div class="pk-filechip__meta"><span class="pk-filechip__name">${esc(f.name)}</span><span class="pk-filechip__size">${human(f.size)}</span></div>`;
-          const rm = document.createElement('button');
-          rm.type = 'button'; rm.className = 'pk-filechip__remove'; rm.innerHTML = iconSvg('x');
-          rm.setAttribute('aria-label', 'x');
-          rm.addEventListener('click', () => { files.splice(i, 1); render(); });
-          li.appendChild(rm);
-          list.appendChild(li);
-        });
-      }
-      function accept(fl: FileList | File[]) {
-        Array.from(fl).forEach((f) => { if (validate(f)) files.push(f); });
-        render();
-      }
-      input.addEventListener('change', () => { if (input.files) accept(input.files); input.value = ''; });
-      zone.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); input.click(); } });
-      ['dragover', 'dragenter'].forEach((ev) => zone.addEventListener(ev, (e) => { e.preventDefault(); zone.classList.add('is-drag'); }));
-      ['dragleave', 'dragend', 'drop'].forEach((ev) => zone.addEventListener(ev, () => zone.classList.remove('is-drag')));
-      zone.addEventListener('drop', (e) => { e.preventDefault(); const dt = (e as DragEvent).dataTransfer; if (dt?.files) accept(dt.files); });
-      return wrap;
-    }
-
-    // Localized upload chrome (mirrors strings so we don't re-import t here).
-    function uploadDrop() { return locale === 'ar' ? 'اسحب الملفات هنا أو اضغط للاختيار' : 'Drag files here or click to browse'; }
-    function uploadHint() { return locale === 'ar' ? 'JPG, PNG, PDF, ZIP, AI, EPS — حتى 25 ميجابايت' : 'JPG, PNG, PDF, ZIP, AI, EPS — up to 25MB'; }
-    function errType() { return locale === 'ar' ? 'صيغة الملف غير مدعومة' : 'Unsupported file type'; }
-    function errSize() { return locale === 'ar' ? 'حجم الملف يتجاوز 25 ميجابايت' : 'File exceeds 25MB'; }
 
     function init() {
       // Resolve the signed-in state FIRST and independently of line rendering.
@@ -307,11 +234,12 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
     }
 
     function renderLines() {
-      cart.forEach((line, idx) => {
-        const item = getItem(line.slug);
-        const requiresArtwork = item ? item.requires_artwork : true;
+      cart.forEach((line) => {
         const row = document.createElement('div');
         row.className = 'pk-coline';
+        // Design files are NOT uploaded here — a file can only be attached once
+        // the order exists (from the thank-you page or the order page), and it's
+        // linked to its specific line there.
         row.innerHTML = `
           <div class="pk-coline__media">${line.image ? `<img src="${esc(line.image)}" alt="" width="64" height="64" />` : ''}</div>
           <div>
@@ -320,11 +248,6 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
             <div class="pk-coline__qty">${esc(L.qty)}: ${line.qty} × <bdi>${esc(formatSAR(line.rate, locale))}</bdi></div>
           </div>
           <div class="pk-coline__price pk-price"><bdi>${esc(formatSAR(line.rate * line.qty, locale))}</bdi></div>`;
-        // Design files are attached here at checkout (uploaded with the order),
-        // or later from the order page — never before the order exists.
-        if (requiresArtwork) {
-          row.appendChild(buildUploader(idx));
-        }
         linesEl.appendChild(row);
 
         // Summary line
@@ -383,17 +306,12 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
         guest = g.data;
       }
 
-      // Collect the design files attached at checkout (order-level).
-      const files: File[] = [];
-      Object.values(artworkByLine).forEach((fl) => fl.forEach((f) => files.push(f)));
-
       submitBtn.disabled = true;
       submitBtn.textContent = L.submitting;
       try {
         const res = await submitCheckout({
           orderNote: noteEl.value.trim(),
           guest,
-          files,
         });
         if (res && res.success) {
           location.href = cfg.thankyouHref;
@@ -410,9 +328,8 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
     });
 
     // ---- Bootstrap ----
-    // Run last, after every const/function above is initialized. init() reaches
-    // buildUploader → artworkByLine, so calling it earlier would hit that const
-    // in its temporal dead zone and crash rendering for artwork-required lines.
+    // Run last, after every const/function above is initialized, so init() never
+    // reaches a binding still in its temporal dead zone.
     if (cart.length === 0) {
       loadingEl.hidden = true;
       emptyEl.hidden = false;

@@ -943,6 +943,14 @@
 .pk-fileline__name { display: flex; align-items: center; gap: var(--sp-2); min-width: 0; }
 .pk-fileline__name span:last-child { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .pk-fileline__size { color: var(--pk-ink-muted); font-size: 0.8rem; direction: ltr; unicode-bidi: isolate; white-space: nowrap; }
+/* Per-item design-file uploader (order + thank-you pages) */
+.pk-itemup-block { padding: var(--sp-4) 0; border-top: 1px solid var(--pk-line); }
+.pk-itemup-block:first-of-type { border-top: 0; padding-top: var(--sp-3); }
+.pk-itemup-block__title { font-weight: 600; font-size: 0.95rem; margin-bottom: var(--sp-3); }
+.pk-itemup { display: flex; flex-direction: column; gap: var(--sp-3); }
+.pk-itemup__files { display: flex; flex-direction: column; gap: var(--sp-2); }
+.pk-itemup__files:empty { display: none; }
+.pk-itemup__row { display: flex; align-items: center; gap: var(--sp-3); flex-wrap: wrap; }
 .pk-invoice { display: flex; flex-direction: column; gap: var(--sp-4); }
 .pk-invoice__row { display: flex; align-items: center; justify-content: space-between; gap: var(--sp-3); }
 .pk-invoice__due { font-size: 1.35rem; font-weight: 700; }

@@ -49,6 +49,14 @@ const steps = [
       </div>
     </div>
 
+    <section class="pk-section" data-thanks-upload hidden style="padding-top:0;max-width:720px;margin-inline:auto">
+      <div class="pk-card pk-block" style="margin-bottom:0">
+        <h2 class="pk-h3">{t('thanks.uploadTitle', locale)}</h2>
+        <p class="pk-small pk-muted" style="margin-top:calc(-1 * var(--sp-2))">{t('thanks.uploadHint', locale)}</p>
+        <div data-thanks-item-uploads></div>
+      </div>
+    </section>
+
     <section class="pk-section" style="padding-top:0">
       <div class="pk-section-head" style="justify-content:center;text-align:center">
         <h2 class="pk-h2">{t('thanks.next', locale)}</h2>
@@ -90,13 +98,21 @@ const steps = [
     whatsapp: WHATSAPP,
     waPrefix: locale === 'ar' ? 'مرحباً هوية، أرغب بمتابعة طلبي رقم ' : 'Hello Hawih, I would like to follow up on my order ',
     ibanRaw: BANK_TRANSFER.iban,
+    uploadLabels: {
+      uploadBtn: t('order.uploadBtn', locale),
+      uploading: t('order.uploading', locale),
+      uploadError: t('order.uploadError', locale),
+      hint: t('order.uploadItemHint', locale),
+    },
   }}>
-    window.__thanksCfg = { locale, whatsapp, waPrefix, ibanRaw };
+    window.__thanksCfg = { locale, whatsapp, waPrefix, ibanRaw, uploadLabels };
   </script>
   <script>
     import { getLastOrder } from '@lib/checkout';
     import { clearCart } from '@lib/cart';
     import { purchase } from '@lib/gtm';
+    import { isAuthed, api } from '@lib/api';
+    import { buildItemUploader } from '@lib/itemUpload';
 
     const cfg = (window as any).__thanksCfg;
     const order = getLastOrder();
@@ -113,8 +129,39 @@ const steps = [
       if (numEl) numEl.textContent = display;
       // GTM purchase (revenue tracking; cart already cleared at checkout time)
       purchase(String(order.order_id ?? display), Number(order.total ?? 0), []);
+      // Invite the buyer to attach a design file to each item they just ordered.
+      if (order.order_id != null && isAuthed()) mountItemUploads(order.order_id);
     } else {
       if (noOrder) noOrder.hidden = false;
+    }
+
+    // Fetch the placed order and render a per-item uploader for each line.
+    async function mountItemUploads(orderId: string | number) {
+      let res: any;
+      try {
+        res = await api.order(orderId);
+      } catch { return; }
+      const items: any[] = (res && res.success && res.order && res.order.items) || [];
+      if (!items.length) return;
+      const wrap = document.querySelector<HTMLElement>('[data-thanks-upload]');
+      const host = document.querySelector<HTMLElement>('[data-thanks-item-uploads]');
+      if (!wrap || !host) return;
+      items.forEach((it) => {
+        const block = document.createElement('div');
+        block.className = 'pk-itemup-block';
+        const title = document.createElement('div');
+        title.className = 'pk-itemup-block__title';
+        title.textContent = it.title;
+        block.appendChild(title);
+        block.appendChild(buildItemUploader({
+          orderId,
+          itemId: it.item_id,
+          files: it.files || [],
+          labels: cfg.uploadLabels,
+        }));
+        host.appendChild(block);
+      });
+      wrap.hidden = false;
     }
 
     // WhatsApp CTA prefilled with order number

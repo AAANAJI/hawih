@@ -88,17 +88,15 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
             <p class="pk-muted" data-order-note></p>
           </section>
 
-          <!-- Files -->
+          <!-- Design files — one uploader per order item -->
           <section class="pk-card pk-block" style="margin-bottom:0">
             <h2 class="pk-h3">{t('order.files', locale)}</h2>
-            <div class="pk-files" data-order-files></div>
-            <p class="pk-muted" data-order-nofiles hidden>{t('order.noFiles', locale)}</p>
-            <div style="margin-top:var(--sp-4);display:flex;align-items:center;gap:var(--sp-3);flex-wrap:wrap">
-              <label class="pk-btn pk-btn--outline pk-btn--sm" style="cursor:pointer">
-                <Icon name="upload" size={16} /> {t('order.uploadBtn', locale)}
-                <input type="file" multiple class="pk-visually-hidden" data-order-upload-input />
-              </label>
-              <span class="pk-small pk-muted" data-order-upload-msg>{t('order.uploadHint', locale)}</span>
+            <p class="pk-small pk-muted" style="margin-top:calc(-1 * var(--sp-2))">{t('order.filesPerItemHint', locale)}</p>
+            <div data-order-item-uploads></div>
+            <!-- Legacy order-level files (older orders, not linked to a line) -->
+            <div data-order-general hidden style="margin-top:var(--sp-5)">
+              <h3 class="pk-h4" style="margin:0 0 var(--sp-2)">{t('order.generalFiles', locale)}</h3>
+              <div class="pk-files" data-order-files></div>
             </div>
           </section>
         </div>
@@ -145,7 +143,8 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
     labels: {
       orderTitle: t('account.orderNum', locale),
       placedOn: t('order.placedOn', locale),
-      uploadHint: t('order.uploadHint', locale),
+      uploadBtn: t('order.uploadBtn', locale),
+      itemHint: t('order.uploadItemHint', locale),
       uploading: t('order.uploading', locale),
       uploadError: t('order.uploadError', locale),
     },
@@ -156,6 +155,7 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
   import { iconSvg } from '@lib/icons';
     import { isAuthed, api } from '@lib/api';
     import { formatSAR, arabicDate, formatFileSize } from '@lib/format';
+    import { buildItemUploader } from '@lib/itemUpload';
 
     const cfg = (window as any).__orderCfg;
     const L = cfg.labels;
@@ -273,9 +273,26 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
         (document.querySelector('[data-order-note]') as HTMLElement).textContent = order.note;
       }
 
-      // Files
-      renderFiles(order.files || []);
-      wireUpload(order.id);
+      // Design files — one uploader per order item (links each file to its line).
+      const itemUploadsEl = document.querySelector('[data-order-item-uploads]') as HTMLElement;
+      const itemLabels = { uploadBtn: L.uploadBtn, uploading: L.uploading, uploadError: L.uploadError, hint: L.itemHint };
+      items.forEach((it) => {
+        const block = document.createElement('div');
+        block.className = 'pk-itemup-block';
+        const title = document.createElement('div');
+        title.className = 'pk-itemup-block__title';
+        title.textContent = it.title;
+        block.appendChild(title);
+        block.appendChild(buildItemUploader({ orderId: order.id, itemId: it.item_id, files: it.files || [], labels: itemLabels }));
+        itemUploadsEl.appendChild(block);
+      });
+
+      // Legacy order-level files (older orders uploaded before per-item linking).
+      const general: any[] = order.files || [];
+      if (general.length) {
+        (document.querySelector('[data-order-general]') as HTMLElement).hidden = false;
+        renderLegacyFiles(general);
+      }
 
       // Invoice
       const inv = order.invoice;
@@ -298,47 +315,16 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
       wa.href = `https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent(cfg.waPrefix + order.id)}`;
     }
 
-    /** (Re)render the uploaded-files list from an order.files array. */
-    function renderFiles(files: any[]) {
+    /** Render legacy order-level files (read-only — new uploads go per item). */
+    function renderLegacyFiles(files: any[]) {
       const filesEl = document.querySelector('[data-order-files]') as HTMLElement;
-      const noFilesEl = document.querySelector('[data-order-nofiles]') as HTMLElement;
       filesEl.innerHTML = '';
-      if (!files || files.length === 0) {
-        noFilesEl.hidden = false;
-        return;
-      }
-      noFilesEl.hidden = true;
       files.forEach((f) => {
         const div = document.createElement('div');
         div.className = 'pk-fileline';
         const size = f.file_size != null ? formatFileSize(Number(f.file_size)) : '';
         div.innerHTML = `<div class="pk-fileline__name">${iconSvg('paperclip')}<span>${esc(f.file_name)}</span></div>${size ? `<span class="pk-fileline__size">${esc(size)}</span>` : ''}`;
         filesEl.appendChild(div);
-      });
-    }
-
-    /** Wire the "add design file" control to the owned-order upload endpoint. */
-    function wireUpload(orderId: any) {
-      const input = document.querySelector('[data-order-upload-input]') as HTMLInputElement | null;
-      const msg = document.querySelector('[data-order-upload-msg]') as HTMLElement | null;
-      if (!input || !msg) return;
-      const hint = msg.textContent || '';
-      input.addEventListener('change', async () => {
-        const files = input.files ? Array.from(input.files) : [];
-        if (files.length === 0) return;
-        msg.textContent = L.uploading;
-        try {
-          const res: any = await api.uploadOrderFile(orderId, files);
-          if (res && res.success && Array.isArray(res.files)) {
-            renderFiles(res.files);
-            msg.textContent = hint;
-          } else {
-            msg.textContent = (res && res.message) ? res.message : L.uploadError;
-          }
-        } catch {
-          msg.textContent = L.uploadError;
-        }
-        input.value = '';
       });
     }
   </script>

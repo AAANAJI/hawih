@@ -25,8 +25,6 @@ export interface CheckoutInput {
   orderNote?: string;
   /** Guest fields — omit when the user is logged in. */
   guest?: GuestFields;
-  /** Design files attached at checkout (order-level, uploaded with the order). */
-  files?: File[];
 }
 
 export interface CheckoutResult {
@@ -66,10 +64,8 @@ export function buildCheckoutForm(input: CheckoutInput): FormData {
     if (input.guest.company_name) fd.append('company_name', input.guest.company_name);
   }
 
-  // Design files attached at checkout → uploaded with the order (order-level).
-  for (const file of input.files ?? []) {
-    fd.append('manualFiles[]', file, file.name);
-  }
+  // Design files are NOT sent at checkout — they're uploaded per item after the
+  // order exists (thank-you page / order page), so they always link to a line.
   return fd;
 }
 
