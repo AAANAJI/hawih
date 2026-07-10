@@ -195,15 +195,57 @@ FREE_TEXT_TYPES = {"text", "textarea", "note"}
 QTY_HINTS = ("كمية", "الكمية", "عدد", "quantity")
 
 
-def map_options(service, tier_map, base):
+def price_blocks_by_name(tiers):
+    """
+    Segment the ordered tier rows into consecutive same-option BLOCKS and group
+    them by normalized option name, preserving order:
+      {name_norm: [{label_norm: price}, {label_norm: price}, ...]}
+
+    A single product often lists the SAME option name more than once — one
+    size-specific quantity table per size (e.g. four "كمية استيكر الغطاء" blocks
+    for cover sizes 20/25/30/34, each pricier than the last). Keying prices by
+    (name, label) alone COLLIDES across those blocks and keeps only the last
+    one, so every size ends up charged the most expensive size's price. Blocks
+    preserve each table separately; map_options assigns the k-th option group of
+    a name its k-th block.
+    """
+    # A new block starts when the option name changes OR the label sequence
+    # restarts (a label already seen in the current block reappears) — the only
+    # way to separate consecutive same-named tables ("كمية…" 15/20/… then 15/20/…
+    # again), which share both name and labels.
+    blocks = []              # [(name_norm, {label_norm: price})], in sheet order
+    cur_name = object()      # sentinel that never equals a real key
+    cur = None
+    for (o, l, p) in tiers:
+        nk = _norm(o)
+        lk = _norm(l)
+        if nk != cur_name or (cur is not None and lk in cur):
+            cur = {}
+            blocks.append((nk, cur))
+            cur_name = nk
+        cur[lk] = p
+    by_name = {}
+    for nk, mp in blocks:
+        by_name.setdefault(nk, []).append(mp)
+    return by_name
+
+
+def map_options(service, blocks_by_name, base):
     """
     Build the store's print_options from the skeleton options, pricing each value
     from the xlsx tiers (NEVER from the scraped additional_price_sar).
-      tier_map: {(option_norm, label_norm): price}
+      blocks_by_name: {name_norm: [ {label_norm: price}, ... ]} — one block per
+      occurrence of the option name, in order (see price_blocks_by_name). The
+      k-th option group named X takes the k-th block of X, so each size-specific
+      quantity table prices its OWN group instead of all sharing the last one.
+    Repeated groups are kept (NOT collapsed): the store hides all but the one
+    matching the chosen size (conditional-option linking), so each size shows —
+    and is charged — its own price.
     Returns (options_list, requires_artwork_bool).
     """
     requires_artwork = bool((service.get("specs") or {}).get("accepted_files"))
     options = []
+    occ = {}  # name_norm -> option groups of this name already emitted
     for opt in service.get("options", []) or []:
         otype = str(opt.get("type", "single-option")).strip().lower()
         name = str(opt.get("name", "")).strip()
@@ -215,13 +257,19 @@ def map_options(service, tier_map, base):
         values = opt.get("values", []) or []
         if not values:
             continue
+        # This group's own price block: the k-th group named X uses the k-th block.
+        nk = _norm(name)
+        idx = occ.get(nk, 0)
+        occ[nk] = idx + 1
+        blist = blocks_by_name.get(nk)
+        block = (blist[idx] if idx < len(blist) else blist[-1]) if blist else None
         is_qty = any(h in name for h in QTY_HINTS)
         out_values = []
         for v in values:
             label = str(v.get("label", "")).strip()
             if label == "":
                 continue
-            tier_price = tier_map.get((_norm(name), _norm(label)))
+            tier_price = block.get(_norm(label)) if block else None
             delta = round(tier_price - base, 2) if (tier_price is not None and base is not None) else 0.0
             if delta < 0:
                 delta = 0.0
@@ -256,8 +304,8 @@ def build_item(service, price_row):
     if base is None:
         return ("blocked", "no price (fill catalog-review.xlsx)")
 
-    tier_map = {(_norm(o), _norm(l)): p for (o, l, p) in tiers}
-    options, requires_artwork = map_options(service, tier_map, base)
+    blocks_by_name = price_blocks_by_name(tiers)
+    options, requires_artwork = map_options(service, blocks_by_name, base)
 
     category = service.get("category_id", "")  # resolved to name_ar by the caller
 

@@ -73,6 +73,23 @@ python3 import_to_crm.py --go --images --publish
 Re-running is safe — items are matched by `slug_en` (upsert), so a second run
 updates rather than duplicates.
 
+### Re-run to fix per-size pricing
+
+Products whose quantity price depends on a chosen size (e.g. stickers with a
+cover-size selector, multi-size cards/boxes) carry one quantity table **per
+size**. An earlier build keyed prices by option name + label, which collided
+across those same-named tables and left every size charged the **largest**
+size's price (inflating small/medium sizes 2–6×). The importer now assigns each
+size its own price block. To correct already-imported items, re-run:
+
+```bash
+python3 import_to_crm.py --go --publish
+```
+
+Images are already uploaded, so `--images` is not needed. The store's
+conditional-option display then shows each size its own price automatically —
+no code deploy required.
+
 ---
 
 ## After import
