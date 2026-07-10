@@ -24,7 +24,7 @@ const invoicesHref = href(locale, '/account/invoices');
       <div><h1 class="pk-h1" data-inv-id></h1><p data-inv-meta></p></div>
       <div style="display:flex;gap:var(--sp-2)">
         <a class="pk-btn" data-pay hidden target="_blank" rel="noopener">{t('account.invoices.payNow', locale)}</a>
-        <button class="pk-btn pk-btn--outline pk-btn--sm" onclick="window.print()">{t('account.invoices.print', locale)}</button>
+        <button class="pk-btn pk-btn--outline pk-btn--sm" type="button" data-print>{t('account.invoices.print', locale)}</button>
       </div>
     </div>
 
@@ -48,12 +48,20 @@ const invoicesHref = href(locale, '/account/invoices');
     window.__invdCfg = { labels };
   </script>
   <script>
-    import { api } from '@lib/api';
+    import { api, getToken } from '@lib/api';
+    import { API_BASE } from '@lib/config';
     import { formatSAR, arabicDate } from '@lib/format';
     const cfg = (window as any).__invdCfg;
     const locale = location.pathname.startsWith('/en') ? 'en' : 'ar';
     const esc = (s: string) => String(s).replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c] as string));
     const id = new URLSearchParams(location.search).get('id');
+
+    // Print → open the real invoice (Zoho PDF if synced, else CRM) in a new tab.
+    document.querySelector('[data-print]')?.addEventListener('click', () => {
+      if (!id) return;
+      const tok = getToken();
+      window.open(`${API_BASE}invoice_pdf/${encodeURIComponent(id)}${tok ? '?token=' + encodeURIComponent(tok) : ''}`, '_blank');
+    });
     const loadEl = document.querySelector<HTMLElement>('[data-loading]')!;
     const nf = document.querySelector<HTMLElement>('[data-notfound]')!;
     const content = document.querySelector<HTMLElement>('[data-content]')!;
