@@ -10,12 +10,6 @@
 import { STORAGE_KEYS } from './config';
 
 /** A design file already uploaded to the CRM temp store (Print_api/upload). */
-export interface ArtworkRef {
-  file_name: string; // unique temp name the server returned
-  file_size: number;
-  orig_name: string; // the customer's original filename (for display)
-}
-
 export interface CartLine {
   item_id: string;
   slug: string;
@@ -25,7 +19,6 @@ export interface CartLine {
   options: Record<string, string>; // { optionName: value }
   note?: string;
   image?: string;
-  artwork?: ArtworkRef[]; // design files uploaded on the product page
 }
 
 const KEY = STORAGE_KEYS.cart;
@@ -72,10 +65,7 @@ function sameLine(a: CartLine, b: Pick<CartLine, 'slug' | 'options'>): boolean {
 /** Add a line (merges qty if an identical slug+options line exists). */
 export function addToCart(line: CartLine): CartLine[] {
   const lines = getCart();
-  // Lines carrying uploaded artwork are always distinct (each has its own
-  // file), so never merge them into an existing line.
-  const existing =
-    line.artwork && line.artwork.length ? undefined : lines.find((l) => sameLine(l, line));
+  const existing = lines.find((l) => sameLine(l, line));
   if (existing) {
     existing.qty += line.qty;
     existing.rate = line.rate;

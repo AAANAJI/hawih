@@ -25,14 +25,8 @@ export interface CheckoutInput {
   orderNote?: string;
   /** Guest fields — omit when the user is logged in. */
   guest?: GuestFields;
-  /** Artwork files to attach as manualFiles[]. */
+  /** Design files attached at checkout (order-level, uploaded with the order). */
   files?: File[];
-  /**
-   * Per-line artwork file-name mapping. cart[].artwork_file_names references
-   * files uploaded via manualFiles[] by name. If omitted, all files are
-   * treated as order-level attachments.
-   */
-  artworkNamesByLine?: Record<number, string[]>;
 }
 
 export interface CheckoutResult {
@@ -46,19 +40,12 @@ export interface CheckoutResult {
 }
 
 /** Serialize the cart into the API's expected `cart` JSON string. */
-export function buildCartJson(
-  lines: CartLine[],
-  artworkNamesByLine: Record<number, string[]> = {},
-): string {
-  const payload = lines.map((l, idx) => ({
+export function buildCartJson(lines: CartLine[]): string {
+  const payload = lines.map((l) => ({
     item_id: l.item_id,
     quantity: l.qty,
     options: l.options,
     note: l.note ?? '',
-    // Each line carries the temp names of the design files uploaded for it on
-    // the product page; the server links those files to this exact order_item.
-    // An explicit override (artworkNamesByLine) still wins when provided.
-    artwork_file_names: artworkNamesByLine[idx] ?? (l.artwork ?? []).map((a) => a.file_name),
   }));
   return JSON.stringify(payload);
 }
@@ -67,7 +54,7 @@ export function buildCartJson(
 export function buildCheckoutForm(input: CheckoutInput): FormData {
   const lines = getCart();
   const fd = new FormData();
-  fd.append('cart', buildCartJson(lines, input.artworkNamesByLine));
+  fd.append('cart', buildCartJson(lines));
   fd.append('order_note', input.orderNote ?? '');
 
   if (input.guest) {
@@ -79,17 +66,7 @@ export function buildCheckoutForm(input: CheckoutInput): FormData {
     if (input.guest.company_name) fd.append('company_name', input.guest.company_name);
   }
 
-  // Artwork uploaded on the product page: reference the already-stored temp
-  // files by name/size. The server's move_files_from_temp_dir_to_permanent_dir
-  // consumes file_names[]/file_sizes[] and attaches them to the order.
-  for (const line of lines) {
-    for (const art of line.artwork ?? []) {
-      fd.append('file_names[]', art.file_name);
-      fd.append('file_sizes[]', String(art.file_size));
-    }
-  }
-
-  // Any files uploaded directly at checkout (fallback dropzone).
+  // Design files attached at checkout → uploaded with the order (order-level).
   for (const file of input.files ?? []) {
     fd.append('manualFiles[]', file, file.name);
   }

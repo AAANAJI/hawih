@@ -24,7 +24,7 @@ import {
   itemTitle,
   itemDescription,
 } from '@lib/catalog';
-import { SITE_URL, HAWIH_ORG_ID, UPLOAD } from '@lib/config';
+import { SITE_URL, HAWIH_ORG_ID } from '@lib/config';
 import type { Locale } from '@lib/format';
 
 export function getStaticPaths() {
@@ -144,21 +144,9 @@ const breadcrumbLd = {
         </div>
 
         {item.requires_artwork && (
-          <div style="margin-top:var(--sp-2)">
-            <p class="pk-small pk-muted" style="display:flex;gap:8px;align-items:center;margin-bottom:var(--sp-2)">
-              <Icon name="palette" size={16} /> {t('product.artworkNote', locale)}
-            </p>
-            <div class="pk-upload" data-pdp-upload>
-              <label class="pk-upload__zone" tabindex="0" role="button" data-pdp-zone>
-                <span class="pk-upload__badge" aria-hidden="true"><Icon name="upload" size={20} /></span>
-                <strong>{t('upload.drop', locale)}</strong>
-                <span class="pk-upload__hint">{t('upload.hint', locale)}</span>
-                <input type="file" accept={UPLOAD.accept.map((e) => '.' + e).join(',')} multiple class="pk-visually-hidden" data-pdp-input />
-              </label>
-              <p class="pk-upload__error" data-pdp-error hidden></p>
-              <ul class="pk-upload__list" data-pdp-list></ul>
-            </div>
-          </div>
+          <p class="pk-artnote" style="margin-top:var(--sp-2)">
+            <Icon name="palette" size={16} /> {t('product.artworkAfter', locale)}
+          </p>
         )}
 
         <!-- Trust mini-row -->
@@ -204,13 +192,11 @@ const breadcrumbLd = {
   </div>
 
   <script>
-    import { addToCart, type ArtworkRef } from '@lib/cart';
+    import { addToCart } from '@lib/cart';
     import { addToCartEvent, viewItem } from '@lib/gtm';
     import { formatSAR } from '@lib/format';
     import { iconSvg } from '@lib/icons';
     import { t } from '@lib/strings';
-    import { api } from '@lib/api';
-    import { UPLOAD } from '@lib/config';
 
     const root = document.querySelector<HTMLElement>('[data-product]');
     if (root) {
@@ -283,86 +269,13 @@ const breadcrumbLd = {
       // view_item
       viewItem({ item_id: itemId, item_name: title, price: currentBase(), item_category: root.dataset.slug });
 
-      // ---- Artwork upload (immediate → CRM temp; refs travel in the cart) ----
-      const requiresArtwork = root.dataset.requiresArtwork === '1';
-      const artworkRefs: ArtworkRef[] = [];
-      const up = root.querySelector<HTMLElement>('[data-pdp-upload]');
-      const upInput = root.querySelector<HTMLInputElement>('[data-pdp-input]');
-      const upZone = root.querySelector<HTMLElement>('[data-pdp-zone]');
-      const upList = root.querySelector<HTMLUListElement>('[data-pdp-list]');
-      const upErr = root.querySelector<HTMLElement>('[data-pdp-error]');
-
-      const human = (b: number) =>
-        b < 1024 ? b + ' B' : b < 1048576 ? Math.round(b / 1024) + ' KB' : (b / 1048576).toFixed(1) + ' MB';
-      function upShowErr(m: string) {
-        if (!upErr) return;
-        upErr.textContent = m;
-        upErr.hidden = false;
-        setTimeout(() => { upErr.hidden = true; }, 4000);
-      }
-      function upRender() {
-        if (!upList) return;
-        upList.innerHTML = '';
-        artworkRefs.forEach((a, i) => {
-          const li = document.createElement('li');
-          li.className = 'pk-filechip';
-          const meta = document.createElement('div');
-          meta.className = 'pk-filechip__meta';
-          const nm = document.createElement('span');
-          nm.className = 'pk-filechip__name';
-          nm.textContent = a.orig_name;
-          const sz = document.createElement('span');
-          sz.className = 'pk-filechip__size';
-          sz.textContent = human(a.file_size);
-          meta.append(nm, sz);
-          const rm = document.createElement('button');
-          rm.type = 'button';
-          rm.className = 'pk-filechip__remove';
-          rm.innerHTML = iconSvg('x');
-          rm.setAttribute('aria-label', t('upload.remove', locale));
-          rm.addEventListener('click', () => { artworkRefs.splice(i, 1); upRender(); });
-          li.append(meta, rm);
-          upList.appendChild(li);
-        });
-      }
-      async function upAccept(fl: FileList | File[]) {
-        for (const f of Array.from(fl)) {
-          const ext = (f.name.split('.').pop() || '').toLowerCase();
-          if (!UPLOAD.accept.includes(ext)) { upShowErr((locale === 'ar' ? 'صيغة غير مدعومة: ' : 'Unsupported type: ') + f.name); continue; }
-          if (f.size > UPLOAD.maxBytes) { upShowErr((locale === 'ar' ? 'حجم كبير جداً: ' : 'Too large: ') + f.name); continue; }
-          try {
-            const res = (await api.uploadArtwork(f)) as any;
-            if (res && res.success && res.file_name) {
-              artworkRefs.push({ file_name: res.file_name, file_size: Number(res.file_size) || f.size, orig_name: res.orig_name || f.name });
-              upRender();
-            } else {
-              upShowErr(res?.message || (locale === 'ar' ? 'فشل الرفع' : 'Upload failed'));
-            }
-          } catch {
-            upShowErr(locale === 'ar' ? 'فشل الرفع' : 'Upload failed');
-          }
-        }
-      }
-      if (upInput && upZone) {
-        upInput.addEventListener('change', () => { if (upInput.files) upAccept(upInput.files); upInput.value = ''; });
-        upZone.addEventListener('keydown', (e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); upInput.click(); } });
-        ['dragover', 'dragenter'].forEach((ev) => upZone.addEventListener(ev, (e) => { e.preventDefault(); upZone.classList.add('is-drag'); }));
-        ['dragleave', 'dragend', 'drop'].forEach((ev) => upZone.addEventListener(ev, () => upZone.classList.remove('is-drag')));
-        upZone.addEventListener('drop', (e) => { e.preventDefault(); const dt = (e as DragEvent).dataTransfer; if (dt?.files) upAccept(dt.files); });
-      }
-
+      // Add to cart (config only — design files are attached at checkout or from
+      // the order page after placing, never before an order exists).
       addBtn?.addEventListener('click', () => {
-        if (requiresArtwork && artworkRefs.length === 0) {
-          upShowErr(locale === 'ar' ? 'الرجاء رفع ملف التصميم أولاً' : 'Please upload your design first');
-          up?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-          return;
-        }
         const { options, rate } = currentSelections();
         const qty = Math.max(Number(root!.dataset.minQty || '1'), Number(qtyInput?.value || '1'));
-        addToCart({ item_id: itemId, slug, title, qty, rate, options, image: currentImage(), artwork: artworkRefs.slice() });
+        addToCart({ item_id: itemId, slug, title, qty, rate, options, image: currentImage() });
         addToCartEvent({ item_id: itemId, item_name: title, price: rate, quantity: qty, item_category: slug });
-        artworkRefs.length = 0;
-        upRender();
         const original = addBtn.innerHTML;
         addBtn.innerHTML = iconSvg('check') + '<span>' + t('product.added', locale) + '</span>';
         setTimeout(() => { addBtn.innerHTML = original; }, 1600);
