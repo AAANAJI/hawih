@@ -18,6 +18,8 @@ export interface CartLine {
   options: Record<string, string>; // { optionName: value }
   note?: string;
   image?: string;
+  /** Item's resolved price lane at add time ('exact'|'range'; '' inherits). */
+  price_mode?: string;
 }
 
 const KEY = STORAGE_KEYS.cart;
@@ -56,6 +58,7 @@ function normalizeLine(raw: unknown): CartLine | null {
     options,
     note: typeof r.note === 'string' ? r.note : undefined,
     image: typeof r.image === 'string' ? r.image : undefined,
+    price_mode: r.price_mode === 'range' || r.price_mode === 'exact' ? r.price_mode : '',
   };
 }
 

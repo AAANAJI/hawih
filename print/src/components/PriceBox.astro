@@ -5,25 +5,28 @@
  * reverses the digits. On the product page a client script updates the
  * element with [data-pricebox-amount] when tier/option deltas change.
  *
- * Under range price mode (vendor-quote flow, settings-driven via the catalog
- * store_config) the amount renders as a low–high band and the note becomes
- * "final price confirmed after review".
+ * Range mode (vendor-quote flow) is PER ITEM (spec 013 R-9): the item's own
+ * resolved price_mode wins over the store-wide store_config mode. Under range
+ * mode the amount renders as a low–high band and the note becomes "final
+ * price confirmed after review".
  * Props:
  *   amount: number
  *   locale: 'ar' | 'en'
+ *   itemMode?: string  -> the item's resolved price_mode ('' inherits global)
  *   note?: string      -> defaults to the VAT note (estimate note in range mode)
  *   id?: string        -> so a script can target this box
  */
-import { formatPrice } from '@lib/format';
+import { formatPrice, itemPriceCfg } from '@lib/format';
 import { storeConfig } from '@lib/catalog';
 import { t } from '@lib/strings';
 import type { Locale } from '@lib/format';
 
-interface Props { amount: number; locale: Locale; note?: string; id?: string }
-const { amount, locale, note, id } = Astro.props;
-const isRange = storeConfig.price_mode === 'range';
+interface Props { amount: number; locale: Locale; itemMode?: string; note?: string; id?: string }
+const { amount, locale, itemMode, note, id } = Astro.props;
+const cfg = itemPriceCfg(storeConfig, itemMode);
+const isRange = cfg?.price_mode === 'range';
 const noteText = note ?? t(isRange ? 'price.estimateNote' : 'price.taxNote', locale);
-const formatted = formatPrice(amount, storeConfig, locale);
+const formatted = formatPrice(amount, cfg, locale);
 ---
 <div class="pk-pricebox" id={id}>
   <div class="pk-pricebox__amount pk-price">

@@ -26,7 +26,7 @@ import { categoryImage } from './catalog-transform.mjs';
 import { iconSvg } from './icons';
 import { conditionalRefs, optionValueText, optionGroupLabel } from './options';
 import type { Catalog, CatalogCategory, CatalogItem, StoreConfig } from './catalog';
-import { formatCardPrice, formatNumber, type Locale } from './format';
+import { formatCardPrice, formatNumber, itemPriceCfg, type Locale } from './format';
 import { href } from './i18n';
 import { t } from './strings';
 
@@ -82,9 +82,10 @@ function renderProductCard(
 
   const price = el('div', { class: 'pk-prodcard__price pk-price' });
   price.appendChild(el('span', { class: 'pk-from' }, t('product.startingFrom', locale)));
-  // Same card rule as ProductCard.astro: range mode → low bound.
+  // Same card rule as ProductCard.astro: range mode (per item) → low bound.
   price.appendChild(
-    el('bdi', { 'data-live-price': '', 'data-slug': item.slug }, formatCardPrice(item.rate, cfg, locale)),
+    el('bdi', { 'data-live-price': '', 'data-slug': item.slug },
+      formatCardPrice(item.rate, itemPriceCfg(cfg, item.price_mode), locale)),
   );
   body.appendChild(price);
 
@@ -262,6 +263,8 @@ function reconcileProduct(cat: Catalog, locale: Locale, root: HTMLElement): void
 
   // Live base price → the inline buy-box script recomputes from data-base.
   root.dataset.base = String(item.rate);
+  // Per-item price lane too (spec 013 R-9) — the buy-box reads data-price-mode.
+  root.dataset.priceMode = item.price_mode === 'range' || item.price_mode === 'exact' ? item.price_mode : '';
   const priceEl = root.querySelector<HTMLElement>('[data-pricebox-amount]');
   if (priceEl) priceEl.dataset.base = String(item.rate);
 

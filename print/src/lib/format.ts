@@ -46,6 +46,21 @@ export interface PriceModeConfig {
   range_high_pct: number;
 }
 
+/**
+ * Per-ITEM price config (spec 013 R-9): an item's own resolved mode
+ * ('exact' | 'range') overrides the store-wide mode; anything else ('' from
+ * older snapshots) inherits. Pass the result to formatPrice/formatCardPrice/
+ * priceRangeBounds so every surface stays on the one formatter.
+ */
+export function itemPriceCfg(
+  cfg: PriceModeConfig | undefined,
+  itemMode?: string,
+): PriceModeConfig | undefined {
+  if (!cfg) return cfg;
+  if (itemMode === 'range' || itemMode === 'exact') return { ...cfg, price_mode: itemMode };
+  return cfg;
+}
+
 /** The low/high bounds of an estimated price under range mode. */
 export function priceRangeBounds(rate: number, cfg: PriceModeConfig): { low: number; high: number } {
   const r = Number.isFinite(rate) ? rate : 0;
@@ -57,19 +72,27 @@ export function priceRangeBounds(rate: number, cfg: PriceModeConfig): { low: num
 }
 
 /**
- * THE single price formatter for every surface (PriceBox, cards, cart,
- * checkout, and both live-sync mirrors). In 'exact' mode it's formatSAR; in
- * 'range' mode it renders the estimate band, e.g. ar → "٩٥–١٣٥ ر.س",
- * en → "SAR 95–135". Bounds keep up to 2 decimals — never rounded to whole riyals.
+ * Render an explicit low–high band, e.g. ar → "٩٥–١٣٥ ر.س", en → "SAR 95–135".
+ * Collapses to a plain price when the bounds meet. Bounds keep up to 2
+ * decimals — never rounded to whole riyals.
  */
-export function formatPrice(rate: number, cfg: PriceModeConfig | undefined, locale: Locale = 'ar'): string {
-  if (!cfg || cfg.price_mode !== 'range') return formatSAR(rate, locale);
-  const { low, high } = priceRangeBounds(rate, cfg);
+export function formatBand(low: number, high: number, locale: Locale = 'ar'): string {
   if (low === high) return formatSAR(low, locale);
   const nf = new Intl.NumberFormat(locale === 'ar' ? 'ar-SA' : 'en-US', { minimumFractionDigits: 0, maximumFractionDigits: 2 });
   return locale === 'ar'
     ? `${nf.format(low)}–${nf.format(high)} ${SAR_AR}`
     : `${SAR_EN} ${nf.format(low)}–${nf.format(high)}`;
+}
+
+/**
+ * THE single price formatter for every surface (PriceBox, cards, cart,
+ * checkout, and both live-sync mirrors). In 'exact' mode it's formatSAR; in
+ * 'range' mode it renders the estimate band via formatBand().
+ */
+export function formatPrice(rate: number, cfg: PriceModeConfig | undefined, locale: Locale = 'ar'): string {
+  if (!cfg || cfg.price_mode !== 'range') return formatSAR(rate, locale);
+  const { low, high } = priceRangeBounds(rate, cfg);
+  return formatBand(low, high, locale);
 }
 
 /**
