@@ -157,6 +157,14 @@ export const api = {
       auth: true,
     }),
 
+  /** Approve or reject the pending proof/sample (spec 013 R-2). */
+  orderProofRespond: (id: string | number, action: 'approve' | 'reject', reason = '') =>
+    request(`order_proof_respond/${id}`, {
+      method: 'POST',
+      body: { action, ...(reason ? { reason } : {}) },
+      auth: true,
+    }),
+
   /**
    * Attach design file(s) to a specific line of an order the caller owns
    * (post-placement upload). Files are linked to itemId so the CRM shows which
