@@ -149,11 +149,16 @@ export const api = {
   orderPriceRespond: (
     id: string | number,
     action: 'approve' | 'decline',
-    opts: { choice?: number; reason?: string } = {},
+    opts: { choice?: number; reason?: string; terms?: boolean } = {},
   ) =>
     request(`order_price_respond/${id}`, {
       method: 'POST',
-      body: { action, ...(opts.choice != null ? { choice: opts.choice } : {}), ...(opts.reason ? { reason: opts.reason } : {}) },
+      body: {
+        action,
+        ...(opts.choice != null ? { choice: opts.choice } : {}),
+        ...(opts.reason ? { reason: opts.reason } : {}),
+        ...(opts.terms ? { terms_accepted: '1' } : {}),
+      },
       auth: true,
     }),
 

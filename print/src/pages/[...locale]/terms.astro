@@ -1,0 +1,61 @@
+---
+/**
+ * Terms of sale — /terms/ and /en/terms/ (spec 013 R-8 / §5.2).
+ * OUTLINE PLACEHOLDER pending legal review (D-5): acceptance binds to the
+ * CRM's print_terms_version, so the final wording lands by bumping the
+ * version — no store logic changes. Content inline (both languages) — these
+ * are legal clauses, not UI strings.
+ */
+import Base from '@layouts/Base.astro';
+import Breadcrumbs from '@components/Breadcrumbs.astro';
+import { localeStaticPaths, href } from '@lib/i18n';
+import { t } from '@lib/strings';
+import type { Locale } from '@lib/format';
+
+export const getStaticPaths = localeStaticPaths;
+interface Props { locale: Locale }
+const { locale } = Astro.props as Props;
+
+const T = {
+  ar: {
+    title: 'شروط البيع',
+    sub: 'تسري على كل الطلبات عبر print.hawih.com.sa (مسودة مختصرة — النص النهائي بعد المراجعة القانونية).',
+    items: [
+      'الأسعار تشمل خدمة التوريد؛ ضريبة القيمة المضافة تُحتسب عند الفوترة.',
+      'الدفع قبل الإنتاج (وللحسابات المعتمدة: دفعة مقدمة ثم السداد الكامل قبل التسليم).',
+      'اعتمادك للبروفة الرقمية أو العينة هو المرجع الملزم للجودة؛ يُقبل تفاوت لوني تجاري معقول.',
+      'المنتجات المطابقة للمرجع المعتمد غير قابلة للاسترداد — تغيير الرأي بعد الاعتماد على العميل، وأي مجاملة تقديرية من هوية.',
+      'تعديلات التصميم بعد الاعتماد: إعادة تسعير قبل بدء الإنتاج / طلب جديد بعده.',
+      'الإلغاء: قبل الإرسال للمورّد — استرداد بعد خصم رسوم بوابة الدفع؛ بعد بدء الإنتاج — بعد خصم تكلفة المورّد الملتزم بها؛ بعد التسليم — لا إلغاء (بلاغات العيوب فقط).',
+      'بلاغات العيوب خلال 3 أيام من توقيع الاستلام، بصور، وتُقاس على المرجع المعتمد.',
+      'تأكيد الاستلام (رمز/توقيع) يُعد قبولاً للبضاعة.',
+      'حد المسؤولية قيمة الطلب. تُعالج بياناتك وفق سياسة الخصوصية.',
+    ],
+  },
+  en: {
+    title: 'Terms of Sale',
+    sub: 'Apply to all orders via print.hawih.com.sa (summary draft — final wording after legal review).',
+    items: [
+      'Prices include the sourcing service; VAT applies at invoicing.',
+      'Payment before production (approved accounts: deposit, then full payment before release).',
+      'Your approval of the digital proof or sample is the binding quality reference; reasonable commercial color tolerance applies.',
+      'Conforming goods are non-refundable — change of mind after approval is borne by the client; any goodwill gesture is at Hawih’s discretion.',
+      'Design changes after approval: re-quoted before production / a new job after it starts.',
+      'Cancellation: before vendor dispatch — refund minus gateway fees; after production starts — minus the vendor’s committed cost; after delivery — no cancellation (defect claims only).',
+      'Defect claims within 3 days of signed receipt, with photos, judged against the approved reference.',
+      'Delivery confirmation (code/signature) constitutes acceptance.',
+      'Liability is capped at the order value. Data handled per our privacy policy.',
+    ],
+  },
+}[locale];
+---
+<Base locale={locale} title={`${T.title} — ${t('brand.name', locale)}`} description={T.sub} path="/terms">
+  <div class="pk-container" style="max-width:760px">
+    <Breadcrumbs locale={locale} items={[{ label: t('nav.home', locale), href: href(locale, '/') }, { label: T.title }]} />
+    <h1 class="pk-h1" style="margin:var(--sp-4) 0 var(--sp-2)">{T.title}</h1>
+    <p class="pk-muted" style="margin-bottom:var(--sp-6)">{T.sub}</p>
+    <ol class="pk-card" style="padding:var(--sp-6) var(--sp-8);display:grid;gap:var(--sp-3);margin-bottom:var(--sp-10)">
+      {T.items.map((it) => <li>{it}</li>)}
+    </ol>
+  </div>
+</Base>

@@ -25,6 +25,8 @@ export interface CheckoutInput {
   orderNote?: string;
   /** Guest fields — omit when the user is logged in. */
   guest?: GuestFields;
+  /** Terms-of-sale consent (spec 013 R-8; required when the CRM enforces it). */
+  termsAccepted?: boolean;
 }
 
 export interface CheckoutResult {
@@ -54,6 +56,7 @@ export function buildCheckoutForm(input: CheckoutInput): FormData {
   const fd = new FormData();
   fd.append('cart', buildCartJson(lines));
   fd.append('order_note', input.orderNote ?? '');
+  if (input.termsAccepted) fd.append('terms_accepted', '1');
 
   if (input.guest) {
     fd.append('first_name', input.guest.first_name);

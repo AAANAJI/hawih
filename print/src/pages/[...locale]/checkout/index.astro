@@ -144,6 +144,15 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
         <p class="pk-small pk-muted">{t('cart.taxNote', locale)}</p>
         <p class="pk-small pk-muted" data-range-note hidden>{t('checkout.rangeNote', locale)}</p>
         <div class="pk-form-alert pk-form-alert--error" data-checkout-error hidden></div>
+        <!-- Explicit terms consent (spec 013 R-8) — revealed only when the
+             CRM enforces it (store_config.require_terms). -->
+        <label class="pk-small" data-terms-consent hidden style="display:flex;gap:8px;align-items:flex-start;margin-bottom:var(--sp-3)">
+          <input type="checkbox" data-terms-checkbox style="margin-top:2px" />
+          <span>
+            {locale === 'ar' ? 'أوافق على ' : 'I agree to the '}
+            <a href={href(locale, '/terms')} target="_blank">{locale === 'ar' ? 'شروط البيع' : 'terms of sale'}</a>
+          </span>
+        </label>
         <Button type="submit" size="lg" block data-checkout-submit>{t('checkout.submit', locale)}</Button>
         <p class="pk-summary__terms">
           <Fragment set:html={t('checkout.terms', locale)
@@ -177,7 +186,7 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
     import { submitCheckout } from '@lib/checkout';
     import { formatPrice, formatBand, itemPriceCfg, priceRangeBounds, type PriceModeConfig } from '@lib/format';
     import { storeConfig } from '@lib/catalog';
-    import { liveStoreConfig } from '@lib/live-catalog';
+    import { liveStoreConfig, rawCatalog } from '@lib/live-catalog';
     import { beginCheckout } from '@lib/gtm';
 
     const cfg = (window as any).__checkoutCfg;
@@ -233,6 +242,15 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
         linesEl.innerHTML = '';
         sumLinesEl.innerHTML = '';
         try { renderLines(); } catch { /* rendered once already */ }
+      }
+    }).catch(() => {});
+
+    // Terms consent row (R-8): revealed only when the CRM enforces it —
+    // legal-gated, ships hidden.
+    rawCatalog().then((raw: any) => {
+      if (raw?.store_config?.require_terms) {
+        const row = document.querySelector<HTMLElement>('[data-terms-consent]');
+        if (row) row.hidden = false;
       }
     }).catch(() => {});
 
@@ -350,12 +368,23 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
         guest = g.data;
       }
 
+      // Terms consent (R-8): required only when the CRM enforces it (the
+      // consent row is revealed by the live store_config below).
+      const termsRow = document.querySelector<HTMLElement>('[data-terms-consent]');
+      const termsBox = document.querySelector<HTMLInputElement>('[data-terms-checkbox]');
+      if (termsRow && !termsRow.hidden && termsBox && !termsBox.checked) {
+        alertEl.textContent = locale === 'ar' ? 'فعّل خانة الموافقة على شروط البيع أولاً.' : 'Please accept the terms of sale first.';
+        alertEl.hidden = false;
+        return;
+      }
+
       submitBtn.disabled = true;
       submitBtn.textContent = L.submitting;
       try {
         const res = await submitCheckout({
           orderNote: noteEl.value.trim(),
           guest,
+          termsAccepted: !!(termsBox && termsBox.checked),
         });
         if (res && res.success) {
           location.href = cfg.thankyouHref;

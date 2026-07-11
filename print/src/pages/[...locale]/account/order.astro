@@ -79,6 +79,15 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
           <label class="pk-small" style="font-weight:600;display:block;margin-bottom:var(--sp-2)">{t('order.declineReasonLabel', locale)}</label>
           <textarea class="pk-input" data-decline-reason rows="2" placeholder={t('order.declineReasonPlaceholder', locale)}></textarea>
         </div>
+        <!-- Terms re-acceptance at approval (spec 013 R-8) — revealed only
+             when the CRM enforces it (legal-gated, ships hidden). -->
+        <label class="pk-small" data-approval-terms hidden style="display:flex;gap:8px;align-items:flex-start;margin-bottom:var(--sp-4)">
+          <input type="checkbox" data-approval-terms-box style="margin-top:2px" />
+          <span>
+            {locale === 'ar' ? 'أوافق على ' : 'I agree to the '}
+            <a href={href(locale, '/terms')} target="_blank">{locale === 'ar' ? 'شروط البيع' : 'terms of sale'}</a>
+          </span>
+        </label>
         <div style="display:flex;gap:var(--sp-3);flex-wrap:wrap">
           <button type="button" class="pk-btn pk-btn--lg" data-approve-btn>{t('order.approve', locale)}</button>
           <button type="button" class="pk-btn pk-btn--outline pk-btn--lg" data-decline-btn>{t('order.decline', locale)}</button>
@@ -508,9 +517,17 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
       // Optional vendor matrix — the client picks a supplier (their choice re-awards).
       renderMatrix(approval.matrix, block, finEl);
 
+      // Terms re-acceptance (R-8): reveal the consent row only when the CRM
+      // enforces it; require it before approve.
+      const termsRow = block.querySelector('[data-approval-terms]') as HTMLElement;
+      const termsBox = block.querySelector('[data-approval-terms-box]') as HTMLInputElement;
+      import('@lib/live-catalog').then(({ rawCatalog }) => rawCatalog()).then((raw: any) => {
+        if (raw?.store_config?.require_terms && termsRow) termsRow.hidden = false;
+      }).catch(() => {});
+
       let declineArmed = false;
 
-      async function respond(action: 'approve' | 'decline', extra: { choice?: number; reason?: string } = {}) {
+      async function respond(action: 'approve' | 'decline', extra: { choice?: number; reason?: string; terms?: boolean } = {}) {
         errEl.hidden = true;
         approveBtn.disabled = true;
         declineBtn.disabled = true;
@@ -535,8 +552,16 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
       }
 
       approveBtn.addEventListener('click', () => {
+        if (termsRow && !termsRow.hidden && termsBox && !termsBox.checked) {
+          errEl.textContent = locale === 'ar' ? 'فعّل خانة الموافقة على شروط البيع أولاً.' : 'Please accept the terms of sale first.';
+          errEl.hidden = false;
+          return;
+        }
         const picked = block.querySelector('input[name="pk-vendor-choice"]:checked') as HTMLInputElement | null;
-        respond('approve', picked ? { choice: Number(picked.value) } : {});
+        respond('approve', {
+          ...(picked ? { choice: Number(picked.value) } : {}),
+          ...(termsBox && termsBox.checked ? { terms: true } : {}),
+        });
       });
       declineBtn.addEventListener('click', () => {
         // Two-step: first click reveals the reason field, second submits it.
