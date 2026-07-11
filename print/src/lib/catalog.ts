@@ -28,6 +28,8 @@ export interface CatalogCategory {
   title: string;
   title_en: string;
   sort: number;
+  /** Provenance tag (e.g. 'helloprint' design-QA); absent for real categories. */
+  tag?: string;
 }
 export interface CatalogItem {
   id: number | string;
@@ -50,7 +52,15 @@ export interface CatalogItem {
   price_mode?: string;
   images?: { hero: string; square: string };
   options: CatalogOption[];
+  /**
+   * Provenance tag. 'helloprint' marks the design-QA catalog imported for
+   * head-to-head comparison — kept OUT of the real storefront listings and
+   * shown only under the ?qa=helloprint toggle. Absent for real products.
+   */
+  tag?: string;
 }
+/** The design-QA tag (see CatalogItem.tag). */
+export const QA_TAG = 'helloprint';
 /**
  * Store-wide config that rides the catalog payload (CRM settings-driven).
  * price_mode 'range' = vendor-quote mode: prices render as a low–high range
@@ -77,10 +87,23 @@ export const storeConfig: StoreConfig = catalog.store_config ?? {
   range_high_pct: 0,
 };
 
+// ALL baked categories/items — used for static path generation and lookups so
+// design-QA product/category pages exist and resolve (navigable behind the
+// ?qa toggle). Listings use displayCategories/displayItems below.
 export const categories: CatalogCategory[] = [...catalog.categories].sort(
   (a, b) => a.sort - b.sort,
 );
 export const items: CatalogItem[] = catalog.items;
+
+/** True for the design-QA (HelloPrint) catalog rows. */
+export const isQaItem = (i: CatalogItem): boolean => i.tag === QA_TAG;
+export const isQaCategory = (c: CatalogCategory): boolean => c.tag === QA_TAG;
+
+// Real storefront view — design-QA rows removed. Every default listing (home,
+// category grid, /products, nav) reads THESE, so the live/launch store never
+// shows the comparison catalog. The ?qa toggle re-renders from the live layer.
+export const displayCategories: CatalogCategory[] = categories.filter((c) => !isQaCategory(c));
+export const displayItems: CatalogItem[] = items.filter((i) => !isQaItem(i));
 
 export function getCategory(slug: string): CatalogCategory | undefined {
   return categories.find((c) => c.slug === slug);

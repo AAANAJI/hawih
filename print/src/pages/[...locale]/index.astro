@@ -15,7 +15,10 @@ import JsonLd from '@components/JsonLd.astro';
 import { localeStaticPaths } from '@lib/i18n';
 import { href } from '@lib/i18n';
 import { t } from '@lib/strings';
-import { categories, items, categoryTitle, itemTitle, getCategory } from '@lib/catalog';
+// Real catalog only for the baked listings — the design-QA (HelloPrint)
+// catalog is kept out of the default home page and surfaced solely through the
+// ?qa=helloprint toggle (live layer repaints these regions on demand).
+import { displayCategories as categories, displayItems as items, categoryTitle, itemTitle, getCategory } from '@lib/catalog';
 import { categoryImage } from '@lib/catalog-transform.mjs';
 import { HAWIH_ORG_ID, SITE_URL, whatsappUrl } from '@lib/config';
 import type { Locale } from '@lib/format';

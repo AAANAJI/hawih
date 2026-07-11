@@ -77,7 +77,10 @@ export function transformCatalog(api) {
     // English name (set by the bulk importer via print_category_meta) → a
     // slugified Arabic title. The API emits a real slug for imported categories
     // and a 'category-<id>' placeholder otherwise.
-    const m = CAT_MAP[c.title];
+    // Tagged (e.g. design-QA) categories ALWAYS keep their own explicit slug —
+    // CAT_MAP is bypassed so a QA title can never collide with a real slug
+    // (e.g. 'أظرف' → 'envelopes').
+    const m = c.tag ? null : CAT_MAP[c.title];
     const apiSlug = typeof c.slug === 'string' && !/^category-\d+$/.test(c.slug) ? c.slug : '';
     catByApiSlug.set(c.slug, {
       id: c.id,
@@ -85,6 +88,9 @@ export function transformCatalog(api) {
       title: c.title || '',
       title_en: m ? m.name_en : c.title_en || c.title || '',
       sort: typeof c.sort === 'number' ? c.sort : i,
+      // Optional provenance tag (e.g. 'helloprint' for the design-QA catalog),
+      // so tagged categories can be filtered out of the real storefront.
+      tag: c.tag ? String(c.tag) : '',
     });
   });
 
@@ -113,6 +119,9 @@ export function transformCatalog(api) {
         ? { hero: it.image, square: it.image }
         : { hero: `/img/products/${it.slug}/hero.svg`, square: `/img/products/${it.slug}/square.svg` },
       options: normalizeOptions(it.options),
+      // Provenance tag (e.g. 'helloprint'): carried through so the store can
+      // keep design-QA items out of the real listings and toggle them on demand.
+      ...(it.tag ? { tag: String(it.tag) } : {}),
     };
   });
 
@@ -121,7 +130,14 @@ export function transformCatalog(api) {
   const categories = Array.from(catByApiSlug.values())
     .filter((c) => used.has(c.slug))
     .sort((a, b) => a.sort - b.sort)
-    .map((c) => ({ id: c.id, slug: c.slug, title: c.title, title_en: c.title_en, sort: c.sort }));
+    .map((c) => ({
+      id: c.id,
+      slug: c.slug,
+      title: c.title,
+      title_en: c.title_en,
+      sort: c.sort,
+      ...(c.tag ? { tag: c.tag } : {}),
+    }));
 
   // Store-wide config from the CRM (settings-driven, no store deploy needed):
   //   price_mode 'exact' → today's behaviour;

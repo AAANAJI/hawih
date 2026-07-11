@@ -12,7 +12,9 @@ import Icon from '@components/Icon.astro';
 import SearchBox from '@components/SearchBox.astro';
 import { t } from '@lib/strings';
 import { href, switchLocalePath } from '@lib/i18n';
-import { categories, categoryTitle } from '@lib/catalog';
+// Real categories only — the design-QA (HelloPrint) catalog never appears in
+// the live nav; it's reachable solely through the ?qa=helloprint toggle.
+import { displayCategories as categories, categoryTitle } from '@lib/catalog';
 import type { Locale } from '@lib/format';
 
 interface Props { locale: Locale }

@@ -15,7 +15,10 @@ import JsonLd from '@components/JsonLd.astro';
 import { href } from '@lib/i18n';
 import { t } from '@lib/strings';
 import { formatNumber } from '@lib/format';
-import { categories, items, itemsInCategory, getCategory, categoryTitle, itemTitle } from '@lib/catalog';
+// `categories` (all) drives getStaticPaths so design-QA category pages still
+// build and resolve; `displayCategories` (real only) drives the visible chip
+// rail so the QA catalog never shows in the live nav.
+import { categories, displayCategories, items, itemsInCategory, getCategory, categoryTitle, itemTitle } from '@lib/catalog';
 import { categoryImage } from '@lib/catalog-transform.mjs';
 import { SITE_URL } from '@lib/config';
 import type { Locale } from '@lib/format';
@@ -101,7 +104,7 @@ const breadcrumbLd = {
          daily rebuild — same policy as new URLs/sitemap). -->
     <div class="pk-chips pk-chips--scroll" aria-label={t('nav.products', locale)}>
       <a class="pk-chip" href={href(locale, '/products')}>{t('nav.allProducts', locale)}</a>
-      {categories.map((c) => (
+      {displayCategories.map((c) => (
         <a class={`pk-chip${c.slug === slug ? ' pk-chip--primary' : ''}`} href={href(locale, `/category/${c.slug}`)} aria-current={c.slug === slug ? 'page' : undefined}>
           {categoryTitle(c, locale)}
         </a>

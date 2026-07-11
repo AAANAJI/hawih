@@ -40,6 +40,32 @@ const TTL_MS = 90_000;
 
 let inflight: Promise<RawApi | null> | null = null;
 
+/* --------------------------------------------------------------- design-QA */
+/**
+ * Design-QA mode (?qa=helloprint). When the flag is set, the live layer serves
+ * the HelloPrint comparison catalog (tag 'helloprint') INSTEAD of the CRM, so
+ * every reconciled surface (home, category, product) repaints with it for a
+ * fair head-to-head — with no CRM call, offline-safe. The real/launch store
+ * (flag off) is completely unaffected: this whole branch is skipped.
+ */
+let qaInflight: Promise<RawApi | null> | null = null;
+function qaActive(): boolean {
+  try {
+    return typeof document !== 'undefined' && document.documentElement.dataset.qa === 'helloprint';
+  } catch {
+    return false;
+  }
+}
+function loadQaRaw(): Promise<RawApi | null> {
+  if (qaInflight) return qaInflight;
+  // Dynamic import → the ~QA dataset is a separate chunk, only fetched when the
+  // toggle is on, so it never weighs down the real store bundle.
+  qaInflight = import('../data/helloprint-catalog.raw.json')
+    .then((m) => (m.default ?? m) as RawApi)
+    .catch(() => null);
+  return qaInflight;
+}
+
 function fromCache(): RawApi | null {
   try {
     const raw = sessionStorage.getItem(SS_KEY);
@@ -55,6 +81,8 @@ function fromCache(): RawApi | null {
 
 /** Fetch (or reuse) the raw live catalog response. Never throws. */
 export function rawCatalog(): Promise<RawApi | null> {
+  // Design-QA: serve the HelloPrint comparison catalog and skip the CRM.
+  if (qaActive()) return loadQaRaw();
   if (inflight) return inflight;
   const cached = fromCache();
   if (cached) {
