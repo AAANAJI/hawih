@@ -129,6 +129,19 @@ const breadcrumbLd = {
             <img src={item.images?.square} alt="" width="200" height="200" loading="lazy" />
           </button>
         </div>
+
+        <!-- Description accordion (HelloPrint-style, under the gallery) -->
+        <details class="pk-acc" id="pdp-desc" open>
+          <summary>{t('pdp.description', locale)}</summary>
+          <div class="pk-acc__body">
+            <p class="pk-muted" data-live-prod-desc>{desc}</p>
+            <ul class="pk-pluslist">
+              <li>{t('trust.tax', locale)}</li>
+              <li>{t('trust.whatsapp', locale)}</li>
+              <li>{t('trust.turnaround', locale)}</li>
+            </ul>
+          </div>
+        </details>
       </div>
 
       <!-- Buy box -->
@@ -146,8 +159,14 @@ const breadcrumbLd = {
       >
         <span class="pk-prodcard__tag" style="align-self:flex-start" data-live-prod-tag>{catTitle}</span>
         <h1 class="pk-h1" style="margin-top:var(--sp-1)" data-live-prod-title>{title}</h1>
+        <nav class="pk-pdptabs" aria-label={t('pdp.tabInfo', locale)}>
+          <a href="#pdp-desc">{t('pdp.tabInfo', locale)}</a>
+          <a href="#pdp-specs">{t('pdp.tabSpecs', locale)}</a>
+          <a href="#pdp-guides">{t('pdp.tabGuides', locale)}</a>
+          <a href={href(locale, '/faq')}>{t('pdp.tabFaq', locale)}</a>
+          <a href="#pdp-ordering">{t('pdp.tabOrdering', locale)}</a>
+        </nav>
         <PriceBox amount={item.rate} locale={locale} itemMode={item.price_mode} id="pdp-price" />
-        <p class="pk-muted" data-live-prod-desc>{desc}</p>
 
         <OptionPicker options={item.options} locale={locale} />
 
@@ -176,7 +195,7 @@ const breadcrumbLd = {
         </div>
 
         <!-- Specs -->
-        <div class="pk-card" style="padding:var(--sp-5);margin-top:var(--sp-2)">
+        <div class="pk-card" id="pdp-specs" style="padding:var(--sp-5);margin-top:var(--sp-2)">
           <h2 class="pk-h3" style="margin-bottom:var(--sp-4)">{t('product.specs', locale)}</h2>
           <dl class="pk-specs">
             <div><dt>{t('product.spec.category', locale)}</dt><dd data-live-spec-cat>{catTitle}</dd></div>
@@ -187,6 +206,29 @@ const breadcrumbLd = {
         </div>
       </div>
     </div>
+
+    <!-- Design guidelines + ordering process (tab targets) -->
+    <section class="pk-section" style="padding-top:0">
+      <div class="pk-cathero" style="margin-block:0">
+        <div class="pk-card" id="pdp-guides" style="padding:var(--sp-6)">
+          <h2 class="pk-h3" style="margin-bottom:var(--sp-3)">{t('pdp.guidesTitle', locale)}</h2>
+          <ul class="pk-pluslist">
+            <li>{t('pdp.guide1', locale)}</li>
+            <li>{t('pdp.guide2', locale)}</li>
+            <li>{t('pdp.guide3', locale)}</li>
+          </ul>
+        </div>
+        <div class="pk-card" id="pdp-ordering" style="padding:var(--sp-6)">
+          <h2 class="pk-h3" style="margin-bottom:var(--sp-3)">{t('pdp.orderingTitle', locale)}</h2>
+          <ul class="pk-pluslist">
+            <li>{t('pdp.order1', locale)}</li>
+            <li>{t('pdp.order2', locale)}</li>
+            <li>{t('pdp.order3', locale)}</li>
+            <li>{t('pdp.order4', locale)}</li>
+          </ul>
+        </div>
+      </div>
+    </section>
 
     <!-- Related -->
     {related.length > 0 && (
@@ -241,12 +283,21 @@ const breadcrumbLd = {
       function optionGroups(): HTMLElement[] {
         return Array.from(root!.querySelectorAll<HTMLElement>('.pk-optpicker [data-option-name]'));
       }
+      // A group's chosen control: visual-card radio (current UI) with a
+      // legacy <select> fallback so older markup keeps working.
+      function chosen(g: HTMLElement): { value: string; delta: number; text: string } | null {
+        const radio = g.querySelector<HTMLInputElement>('input[type=radio]:checked');
+        if (radio) return { value: radio.value, delta: Number(radio.dataset.delta || '0'), text: radio.dataset.text || radio.value };
+        const sel = g.querySelector<HTMLSelectElement>('select');
+        const opt = sel?.selectedOptions[0];
+        if (sel && opt) return { value: sel.value, delta: Number(opt.dataset.delta || '0'), text: opt.textContent || sel.value };
+        return null;
+      }
       function refreshConditionals() {
         const groups = optionGroups();
         const selValue = (name: string): string | null => {
           const g = groups.find((x) => x.dataset.optionName === name && !x.hidden);
-          const sel = g?.querySelector<HTMLSelectElement>('select');
-          return sel ? sel.value : null;
+          return g ? (chosen(g)?.value ?? null) : null;
         };
         // Two passes so a controller hidden in pass 1 also hides its dependents.
         for (let pass = 0; pass < 2; pass++) {
@@ -255,17 +306,22 @@ const breadcrumbLd = {
             g.hidden = selValue(g.dataset.condGroup) !== g.dataset.condValue;
           });
         }
+        // Legend echo: "المقاس: <current>" on every visible group.
+        groups.forEach((g) => {
+          const cur = g.querySelector<HTMLElement>('[data-opt-current]');
+          const c = chosen(g);
+          if (cur && c) cur.textContent = c.text;
+        });
       }
       function currentSelections() {
         let delta = 0;
         const options: Record<string, string> = {};
         optionGroups().forEach((g) => {
           if (g.hidden) return;
-          const sel = g.querySelector<HTMLSelectElement>('select');
-          const opt = sel?.selectedOptions[0];
-          if (sel && opt) {
-            options[g.dataset.optionName!] = sel.value;
-            delta += Number(opt.dataset.delta || '0');
+          const c = chosen(g);
+          if (c) {
+            options[g.dataset.optionName!] = c.value;
+            delta += c.delta;
           }
         });
         return { options, rate: currentBase() + delta };

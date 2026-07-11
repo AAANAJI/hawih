@@ -9,6 +9,7 @@
  * wired by the inline script at the bottom.
  */
 import Icon from '@components/Icon.astro';
+import SearchBox from '@components/SearchBox.astro';
 import { t } from '@lib/strings';
 import { href, switchLocalePath } from '@lib/i18n';
 import { categories, categoryTitle } from '@lib/catalog';
@@ -18,17 +19,13 @@ interface Props { locale: Locale }
 const { locale } = Astro.props;
 const path = Astro.url.pathname;
 
-const logo = '/img/logo/hawih-logo-dark.png';
+// Dark chrome (HelloPrint-style shell) → white logo variant.
+const logo = '/img/logo/hawih-logo-white.png';
 const cats = categories.map((c) => ({
   title: categoryTitle(c, locale),
   href: href(locale, `/category/${c.slug}`),
 }));
 
-const nav = [
-  { label: t('nav.allProducts', locale), href: href(locale, '/products') },
-  { label: t('nav.about', locale), href: href(locale, '/about') },
-  { label: t('nav.faq', locale), href: href(locale, '/faq') },
-];
 const otherLangHref = locale === 'ar' ? switchLocalePath(path, 'en') : switchLocalePath(path, 'ar');
 const otherLangLabel = locale === 'ar' ? 'English' : 'العربية';
 const otherLangCode = locale === 'ar' ? 'en' : 'ar';
@@ -40,42 +37,26 @@ const cartHref = href(locale, '/cart');
 const productsHref = href(locale, '/products');
 ---
 <header class="pk-header" data-header>
+  <!-- Row 1: logo · big search · language / login / cart -->
   <div class="pk-container pk-header__inner">
     <a class="pk-header__logo" href={homeHref} aria-label={t('brand.name', locale)}>
       <img src={logo} alt={t('brand.name', locale)} width="1080" height="390" />
     </a>
 
-    <nav class="pk-header__nav" aria-label="primary">
-      <div class="pk-dropdown">
-        <button class="pk-navlink" aria-haspopup="true" aria-expanded="false" data-dropdown-btn>
-          {t('nav.categories', locale)}
-          <Icon name="chevron-down" size={14} />
-        </button>
-        <div class="pk-dropdown__menu" data-dropdown-menu>
-          <a href={productsHref}>{t('nav.allProducts', locale)}</a>
-          {cats.map((c) => <a href={c.href}>{c.title}</a>)}
-        </div>
-      </div>
-      {nav.map((n) => (
-        <a class="pk-navlink" href={n.href} aria-current={path === new URL(n.href, Astro.url).pathname ? 'page' : undefined}>{n.label}</a>
-      ))}
-    </nav>
+    <div class="pk-header__search pk-desktop-only">
+      <SearchBox locale={locale} />
+    </div>
 
     <div class="pk-header__spacer"></div>
 
     <div class="pk-header__actions">
-      <a class="pk-btn pk-btn--sm pk-desktop-only" href={href(locale, '/contact')}>
-        <Icon name="message-circle" size={15} />
-        {t('nav.contact', locale)}
-      </a>
-
       <a class="pk-langbtn pk-desktop-only" href={otherLangHref} lang={otherLangCode} title={otherLangLabel}>
         <Icon name="globe" size={16} />
         <span>{otherLangLabel}</span>
       </a>
 
-      <a class="pk-navlink pk-iconbtn" href={href(locale, '/account')} aria-label={t('nav.account', locale)} title={t('nav.account', locale)}>
-        <Icon name="user" size={20} />
+      <a class="pk-btn pk-btn--sm pk-header__login pk-desktop-only" href={href(locale, '/account')}>
+        {t('nav.account', locale)}
       </a>
 
       <a class="pk-navlink pk-cartbtn" href={cartHref} aria-label={t('nav.cart', locale)} data-cart-open>
@@ -90,6 +71,26 @@ const productsHref = href(locale, '/products');
       </button>
     </div>
   </div>
+
+  <!-- Row 2: category nav bar (scrolls horizontally below 1024px) -->
+  <nav class="pk-header__navbar" aria-label="primary">
+    <div class="pk-container pk-header__navrow">
+      <div class="pk-dropdown">
+        <button class="pk-navlink" aria-haspopup="true" aria-expanded="false" data-dropdown-btn>
+          {t('nav.allProducts', locale)}
+          <Icon name="chevron-down" size={14} />
+        </button>
+        <div class="pk-dropdown__menu" data-dropdown-menu>
+          <a href={productsHref}>{t('nav.allProducts', locale)}</a>
+          {cats.map((c) => <a href={c.href}>{c.title}</a>)}
+        </div>
+      </div>
+      {cats.map((c) => (
+        <a class="pk-navlink" href={c.href} aria-current={path === new URL(c.href, Astro.url).pathname ? 'page' : undefined}>{c.title}</a>
+      ))}
+      <a class="pk-navlink" href={href(locale, '/contact')}>{t('nav.contact', locale)}</a>
+    </div>
+  </nav>
 </header>
 
 <!-- Mini-cart drawer (slides from the cart's side: left in RTL, right in LTR) -->

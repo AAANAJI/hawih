@@ -1,7 +1,10 @@
 ---
 /**
- * ProductCard — square image, tag, title, "starting from" price.
- * Whole card links to the product page. Price uses <bdi> LTR.
+ * ProductCard — HelloPrint-style: product photo on a light-gray media tile,
+ * optional corner badge, bold title, "starting from" + BIG price, optional
+ * fast-delivery chip. Whole card links to the product page. Price uses
+ * <bdi> LTR. MIRROR: catalog-sync.ts renderProductCard() must produce the
+ * exact same structure — edit both together.
  * Props:
  *   href: string
  *   title: string
@@ -10,7 +13,9 @@
  *   categoryLabel?: string
  *   locale: 'ar' | 'en'
  *   eager?: boolean
- *   itemMode?: string  -> the item's resolved price_mode ('' inherits global)
+ *   itemMode?: string   -> the item's resolved price_mode ('' inherits global)
+ *   badge?: string      -> corner badge text ('' = none)
+ *   fastChip?: boolean  -> show the fast-delivery chip under the price
  */
 import { formatCardPrice, itemPriceCfg } from '@lib/format';
 import { storeConfig } from '@lib/catalog';
@@ -26,14 +31,17 @@ interface Props {
   locale: Locale;
   eager?: boolean;
   itemMode?: string;
+  badge?: string;
+  fastChip?: boolean;
 }
-const { href, title, image, rate, categoryLabel, locale, eager = false, itemMode } = Astro.props;
+const { href, title, image, rate, categoryLabel, locale, eager = false, itemMode, badge = '', fastChip = false } = Astro.props;
 // Range mode (per item, spec 013 R-9): "starting from" + the low bound
 // (rule mirrored in live-sync).
 const price = formatCardPrice(rate, itemPriceCfg(storeConfig, itemMode), locale);
 ---
 <a class="pk-prodcard" href={href}>
   <div class="pk-prodcard__media">
+    {badge && <span class="pk-prodcard__badge">{badge}</span>}
     <img
       src={image}
       alt={title}
@@ -52,5 +60,11 @@ const price = formatCardPrice(rate, itemPriceCfg(storeConfig, itemMode), locale)
       <span class="pk-from">{t('product.startingFrom', locale)}</span>
       <bdi data-live-price>{price}</bdi>
     </div>
+    {fastChip && (
+      <span class="pk-prodcard__fast">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg>
+        {t('badge.fast', locale)}
+      </span>
+    )}
   </div>
 </a>

@@ -10,6 +10,11 @@ export interface OptionValue {
   label_ar: string;
   label_en: string;
   price_delta: number;
+  /** Optional curated extras from the CRM print_options JSON. */
+  recommended?: boolean;
+  sublabel_ar?: string;
+  sublabel_en?: string;
+  icon?: string;
 }
 export interface CatalogOption {
   name_ar: string;

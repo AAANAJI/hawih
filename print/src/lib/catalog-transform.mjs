@@ -46,11 +46,18 @@ export function normalizeOptions(opts) {
     values: (o.values || []).map((v) => {
       if (typeof v === 'string') return { label_ar: v, label_en: v, price_delta: 0 };
       const label = v.label != null ? v.label : '';
-      return {
+      const out = {
         label_ar: v.label_ar != null ? v.label_ar : label,
         label_en: v.label_en != null ? v.label_en : label || (v.label_ar != null ? v.label_ar : ''),
         price_delta: Number(v.price_delta) || 0,
       };
+      // Optional curated extras (configurator cards): recommended ribbon,
+      // sublabel, explicit icon key. Only attached when present.
+      if (v.recommended === true || v.recommended === 1 || v.recommended === '1') out.recommended = true;
+      if (v.sublabel_ar) out.sublabel_ar = String(v.sublabel_ar);
+      if (v.sublabel_en) out.sublabel_en = String(v.sublabel_en);
+      if (v.icon) out.icon = String(v.icon);
+      return out;
     }),
   }));
 }

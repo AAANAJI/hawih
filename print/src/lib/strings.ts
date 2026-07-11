@@ -35,7 +35,7 @@ export const STRINGS = {
 
   // Home hero
   'hero.eyebrow': { ar: 'مطبعة رقمية · الرياض', en: 'Digital Print House · Riyadh' },
-  'hero.title': { ar: 'مطبعة هوية — طباعة استثنائية لعلامتك', en: 'Hawih Print — exceptional printing for your brand' },
+  'hero.title': { ar: 'مرحباً بك في مطبوعات هوية، خدمة الطباعة الأونلاين', en: 'Welcome to Hawih Print, your online printing service' },
   'hero.subtitle': {
     ar: 'كروت أعمال، ملصقات، علب وأكياس، ومطبوعات مناسبات بجودة راقية وتنفيذ سريع وتوصيل لكل مناطق المملكة.',
     en: 'Business cards, stickers, boxes, bags and occasion prints — premium quality, fast turnaround, delivered across the Kingdom.',
@@ -112,15 +112,63 @@ export const STRINGS = {
   'qty.decrease': { ar: 'تقليل الكمية', en: 'Decrease quantity' },
   'qty.increase': { ar: 'زيادة الكمية', en: 'Increase quantity' },
 
-  // Home promos
-  'promo1.kicker': { ar: 'الأكثر مبيعاً', en: 'Best seller' },
-  'promo1.title': { ar: 'ملصقات بتصميمك الخاص', en: 'Stickers with your own design' },
-  'promo1.body': { ar: 'مقاسات وخامات متعددة، قصّ حسب الشكل، وتنفيذ سريع.', en: 'Multiple sizes and materials, custom die-cut, fast turnaround.' },
-  'promo1.cta': { ar: 'اطلب ملصقاتك', en: 'Order stickers' },
-  'promo2.kicker': { ar: 'انطباع أول لا يُنسى', en: 'A first impression that lasts' },
-  'promo2.title': { ar: 'كروت أعمال فاخرة', en: 'Premium business cards' },
-  'promo2.body': { ar: 'ورق فاخر وتشطيبات مميزة تليق بعلامتك التجارية.', en: 'Premium stocks and finishes worthy of your brand.' },
-  'promo2.cta': { ar: 'تصفّح الكروت', en: 'Browse cards' },
+  // Home promos (HelloPrint-style photo cards: 1 wide + 2)
+  'promo1.kicker': { ar: 'عروض الموسم', en: 'Seasonal deals' },
+  'promo1.title': { ar: 'جهّز مطبوعات علامتك بأسعار خاصة', en: 'Stock up on your brand prints at special prices' },
+  'promo1.body': { ar: 'ملصقات، كروت، وأكياس بتصميمك — جودة عالية وتنفيذ سريع من الرياض.', en: 'Stickers, cards and bags with your design — premium quality, fast turnaround from Riyadh.' },
+  'promo1.cta': { ar: 'تسوّق العروض', en: 'Shop deals' },
+  'promo2.kicker': { ar: 'معارض وفعاليات', en: 'Exhibitions & events' },
+  'promo2.title': { ar: 'اخطف الأنظار في فعاليتك القادمة', en: 'Steal the show at your next event' },
+  'promo2.body': { ar: 'بنرات، استاندات، ومطبوعات فعاليات عالية التأثير.', en: 'High-impact banners, stands and event essentials.' },
+  'promo2.cta': { ar: 'تصفّح مطبوعات الفعاليات', en: 'Shop event products' },
+  'promo3.kicker': { ar: 'هدايا بهويتك', en: 'Branded gifts' },
+  'promo3.title': { ar: 'هدايا وعلب مخصصة بالكامل لعلامتك', en: 'Gifts and boxes fully customised to your brand' },
+  'promo3.body': { ar: 'علب، أكياس، ومطبوعات مناسبات تلمس عملاءك.', en: 'Boxes, bags and occasion prints your clients will feel.' },
+  'promo3.cta': { ar: 'اكتشف الهدايا', en: 'Discover gifts' },
+
+  // Trust bar (HelloPrint-style guarantees — honest, no invented reviews)
+  'trustbar.g1': { ar: 'أفضل سعر مضمون', en: 'Best price guaranteed' },
+  'trustbar.g2': { ar: 'أسعار شاملة بلا مفاجآت', en: 'All-inclusive prices' },
+  'trustbar.g3': { ar: 'تصميم مثالي دائماً', en: 'Always a perfect design' },
+  'trustbar.g4': { ar: 'ضمان رضا 100%', en: '100% satisfaction guarantee' },
+  'trustbar.help': { ar: 'تحتاج مساعدة؟', en: 'Do you need help?' },
+  'trustbar.chat': { ar: 'تواصل معنا واتساب', en: 'Chat with us' },
+
+  // Product-card badges
+  'badge.popular': { ar: 'الأكثر طلباً', en: 'Most popular' },
+  'badge.upload': { ar: 'بتصميمك الخاص', en: 'Your own design' },
+  'badge.fast': { ar: 'توصيل سريع', en: 'Fast delivery' },
+
+  // Category page (HelloPrint layout)
+  'category.blurb': {
+    ar: 'اكتشف تشكيلة {cat} من مطبوعات هوية — جودة عالية، أسعار واضحة، وتنفيذ سريع بتصميمك الخاص.',
+    en: 'Discover {cat} at Hawih Print — premium quality, clear prices, printed fast to your design.',
+  },
+  'category.heroTitle': { ar: 'ابدأ بأفضل منتجات {cat}!', en: 'Start with our top {cat} picks!' },
+  'category.heroBody': {
+    ar: 'جهّز طلبك من أفضل تصنيفاتنا وامنح كل تفصيلة لمسة من هويتك.',
+    en: 'Build your order from our top picks and give every detail a clear brand touch.',
+  },
+  'category.popular': { ar: 'الأكثر طلباً في هذا القسم', en: 'Most popular in this category' },
+  'category.browse': { ar: 'تصفّح الأقسام', en: 'Browse categories' },
+
+  // PDP (tabs · configurator · accordion)
+  'pdp.tabInfo': { ar: 'معلومات المنتج', en: 'Product info' },
+  'pdp.tabSpecs': { ar: 'المواصفات', en: 'Specifications' },
+  'pdp.tabGuides': { ar: 'إرشادات التصميم', en: 'Design guidelines' },
+  'pdp.tabFaq': { ar: 'الأسئلة الشائعة', en: "FAQ's" },
+  'pdp.tabOrdering': { ar: 'خطوات الطلب', en: 'Ordering process' },
+  'pdp.description': { ar: 'الوصف', en: 'Description' },
+  'pdp.recommended': { ar: 'نُرشّحه', en: 'Recommended' },
+  'pdp.guidesTitle': { ar: 'إرشادات التصميم', en: 'Design guidelines' },
+  'pdp.guide1': { ar: 'أرسل ملفك بصيغة PDF أو AI أو PNG عالي الدقة (300dpi).', en: 'Send your file as PDF, AI, or high-resolution PNG (300dpi).' },
+  'pdp.guide2': { ar: 'أضف هامش قصّ 3مم حول التصميم وأبقِ النصوص داخل المنطقة الآمنة.', en: 'Add a 3mm bleed around the design and keep text inside the safe area.' },
+  'pdp.guide3': { ar: 'استخدم ألوان CMYK للنتيجة الأدق — وفريقنا يراجع كل ملف قبل الطباعة.', en: 'Use CMYK colors for the most accurate result — our team reviews every file before printing.' },
+  'pdp.orderingTitle': { ar: 'خطوات الطلب', en: 'Ordering process' },
+  'pdp.order1': { ar: 'اختر الخيارات والكمية وأضف المنتج إلى السلة.', en: 'Pick your options and quantity, then add to cart.' },
+  'pdp.order2': { ar: 'ارفع تصميمك بعد إتمام الطلب — لكل منتج ملفه الخاص.', en: 'Upload your design after checkout — each item gets its own file.' },
+  'pdp.order3': { ar: 'نراجع الملفات ونرسل لك بروفة للاعتماد قبل الطباعة.', en: 'We review your files and send a proof for approval before printing.' },
+  'pdp.order4': { ar: 'الإنتاج والتسليم خلال 3–7 أيام عمل.', en: 'Production and delivery within 3–7 working days.' },
 
   // Design-help banner
   'banner.title': { ar: 'ما عندك تصميم جاهز؟', en: "Don't have a design ready?" },

@@ -36,6 +36,13 @@
   --pk-accent-glow:   var(--hawih-blue-glow);
   --pk-on-accent:     #FFFFFF;
 
+  /* ---- Chrome (dark header + nav bar — HelloPrint-style shell) ---- */
+  --pk-chrome:        var(--hawih-ink);            /* header/nav surface */
+  --pk-chrome-2:      var(--hawih-ink-2);          /* hover rows on chrome */
+  --pk-chrome-ink:    #FFFFFF;                     /* text/icons on chrome */
+  --pk-chrome-muted:  rgba(255, 255, 255, 0.72);
+  --pk-chrome-line:   rgba(255, 255, 255, 0.12);
+
   /* ---- Warm secondary (small highlights ONLY: delta chips, featured/count
          chips, eyebrow accents — never large surfaces, buttons or links) ---- */
   --pk-amber:         #E8A33C;
