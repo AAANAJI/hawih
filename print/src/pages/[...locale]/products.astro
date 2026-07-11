@@ -122,6 +122,7 @@ const collectionLd = {
             rate={p.rate}
             categoryLabel={(() => { const c = categories.find((x) => x.slug === p.category_slug); return c ? categoryTitle(c, locale) : undefined; })()}
             locale={locale}
+            itemMode={p.price_mode}
           />
         </div>
       ))}

@@ -59,20 +59,37 @@ const shopHref = href(locale, '/');
     window.__cartLabels = { remove: removeLabel, note: noteLabel };
   </script>
   <script>
-    import { getCart, updateQty, removeLine, subtotal } from '@lib/cart';
-    import { formatPrice, type PriceModeConfig } from '@lib/format';
+    import { getCart, updateQty, removeLine } from '@lib/cart';
+    import { formatPrice, formatBand, itemPriceCfg, priceRangeBounds, type PriceModeConfig } from '@lib/format';
     import { storeConfig } from '@lib/catalog';
     import { liveStoreConfig } from '@lib/live-catalog';
 
     const locale = (window as any).__cartLocale === 'en' ? 'en' : 'ar';
 
-    // Range mode (vendor-quote flow): line totals + subtotal render as
-    // estimate bands. Baked config first, refreshed from the live catalog.
+    // Range mode is PER LINE (spec 013 R-9): each line's price_mode (stamped
+    // at add-to-cart) overrides the store-wide mode. The estimate note + a
+    // banded subtotal appear when ANY line is an estimate. Baked config first,
+    // refreshed from the live catalog.
     let priceCfg: PriceModeConfig = storeConfig;
+    const lineCfg = (line: { price_mode?: string }) => itemPriceCfg(priceCfg, line.price_mode);
+    const anyRange = (cart: { price_mode?: string }[]) =>
+      cart.some((l) => lineCfg(l)?.price_mode === 'range');
+    // Honest subtotal: exact lines contribute their REAL price; only estimate
+    // lines widen the band. Sum of per-line bounds, not a band on the total.
+    const cartBounds = (cart: { price_mode?: string; rate: number; qty: number }[]) => {
+      let low = 0, high = 0;
+      cart.forEach((l) => {
+        const c = lineCfg(l);
+        const total = l.rate * l.qty;
+        if (c?.price_mode === 'range') {
+          const b = priceRangeBounds(total, c);
+          low += b.low; high += b.high;
+        } else { low += total; high += total; }
+      });
+      return { low: Math.round(low * 100) / 100, high: Math.round(high * 100) / 100 };
+    };
     liveStoreConfig().then((cfg) => {
       priceCfg = cfg;
-      const note = document.querySelector<HTMLElement>('[data-range-note]');
-      if (note) note.hidden = cfg.price_mode !== 'range';
       render();
     }).catch(() => {});
     const labels = (window as any).__cartLabels || { remove: 'Remove', note: 'Note' };
@@ -90,6 +107,8 @@ const shopHref = href(locale, '/');
       const empty = cart.length === 0;
       if (emptyEl) emptyEl.hidden = !empty;
       if (filledEl) filledEl.hidden = empty;
+      const note = document.querySelector<HTMLElement>('[data-range-note]');
+      if (note) note.hidden = empty || !anyRange(cart);
       if (empty || !linesEl) return;
 
       linesEl.innerHTML = '';
@@ -104,7 +123,7 @@ const shopHref = href(locale, '/');
             ${line.note ? `<div class="pk-cartline__note">${labels.note}: ${line.note}</div>` : ''}
           </div>
           <div class="pk-cartline__side">
-            <div class="pk-price" style="font-weight:700"><bdi>${formatPrice(line.rate * line.qty, priceCfg, locale)}</bdi></div>
+            <div class="pk-price" style="font-weight:700"><bdi>${formatPrice(line.rate * line.qty, lineCfg(line), locale)}</bdi></div>
             <div class="pk-qty" data-line-qty>
               <button type="button" data-dec aria-label="−">−</button>
               <input type="number" value="${line.qty}" min="1" data-qty aria-label="qty" />
@@ -121,7 +140,12 @@ const shopHref = href(locale, '/');
         linesEl.appendChild(row);
       });
 
-      if (subtotalEl) subtotalEl.textContent = formatPrice(subtotal(cart), priceCfg, locale);
+      // Subtotal is a band only when an estimate line is present — and only
+      // the estimate lines widen it (exact lines stay at their real price).
+      if (subtotalEl) {
+        const b = cartBounds(cart);
+        subtotalEl.textContent = formatBand(b.low, b.high, locale);
+      }
     }
 
     render();

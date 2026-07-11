@@ -79,6 +79,15 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
           <label class="pk-small" style="font-weight:600;display:block;margin-bottom:var(--sp-2)">{t('order.declineReasonLabel', locale)}</label>
           <textarea class="pk-input" data-decline-reason rows="2" placeholder={t('order.declineReasonPlaceholder', locale)}></textarea>
         </div>
+        <!-- Terms re-acceptance at approval (spec 013 R-8) — revealed only
+             when the CRM enforces it (legal-gated, ships hidden). -->
+        <label class="pk-small" data-approval-terms hidden style="display:flex;gap:8px;align-items:flex-start;margin-bottom:var(--sp-4)">
+          <input type="checkbox" data-approval-terms-box style="margin-top:2px" />
+          <span>
+            {locale === 'ar' ? 'أوافق على ' : 'I agree to the '}
+            <a href={href(locale, '/terms')} target="_blank">{locale === 'ar' ? 'شروط البيع' : 'terms of sale'}</a>
+          </span>
+        </label>
         <div style="display:flex;gap:var(--sp-3);flex-wrap:wrap">
           <button type="button" class="pk-btn pk-btn--lg" data-approve-btn>{t('order.approve', locale)}</button>
           <button type="button" class="pk-btn pk-btn--outline pk-btn--lg" data-decline-btn>{t('order.decline', locale)}</button>
@@ -86,6 +95,11 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
         <p class="pk-form-alert pk-form-alert--error" data-approval-error hidden style="margin-top:var(--sp-3)"></p>
         <p class="pk-form-alert pk-form-alert--success" data-approval-done hidden style="margin-top:var(--sp-3)"></p>
       </section>
+
+      <!-- Proof / sample approval (spec 013 R-2): rendered by mountProof()
+           while a proof is pending; the approved proof is the binding
+           quality reference. -->
+      <section class="pk-card pk-block pk-approve" data-proof-approval hidden></section>
 
       <div class="pk-ordergrid">
         <div style="min-width:0">
@@ -262,11 +276,14 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
         // Vendor-quote flow: pricing → the client approves the final price.
         { keys: ['بانتظار التسعير'], ar: 'تسعير الطلب', en: 'Pricing' },
         { keys: ['بانتظار اعتماد السعر'], ar: 'اعتماد السعر', en: 'Price approval' },
+        // Funds-first spine (spec 013 phase 2): pay → proof → production.
+        { keys: ['بانتظار الدفع'], ar: 'الدفع', en: 'Payment' },
+        { keys: ['بانتظار اعتماد البروفة'], ar: 'اعتماد البروفة', en: 'Proof approval' },
         { keys: ['مراجعة التصميم'], ar: 'مراجعة التصميم', en: 'Design review' },
         { keys: ['معتمد'], ar: 'معتمد', en: 'Approved' },
         { keys: ['قيد الطباعة'], ar: 'قيد الطباعة', en: 'In production' },
         { keys: ['جاهز للاستلام'], ar: 'جاهز للاستلام', en: 'Ready for pickup' },
-        { keys: ['تم الشحن'], ar: 'تم الشحن', en: 'Shipped' },
+        { keys: ['تم الشحن', 'بانتظار توقيع الاستلام'], ar: 'التسليم والتوقيع', en: 'Delivery & sign-off' },
         { keys: ['تم التسليم'], ar: 'تم التسليم', en: 'Delivered' },
       ];
       const EXCEPTIONS: Record<string, { ar: string; en: string }> = {
@@ -367,6 +384,9 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
       const wa = document.querySelector('[data-whatsapp]') as HTMLAnchorElement;
       wa.href = `https://wa.me/${cfg.whatsapp}?text=${encodeURIComponent(cfg.waPrefix + order.id)}`;
 
+      // ---- Proof / sample approval (spec 013 R-2) ----
+      mountProof(order);
+
       // ---- Vendor-quote price states ----
       if (order.price_state === 'awaiting_approval') {
         mountApproval(order);
@@ -378,6 +398,96 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
         note.textContent = L.pricePendingNote;
         (document.querySelector('[data-order-timeline]') as HTMLElement).insertAdjacentElement('afterend', note);
       }
+    }
+
+    /**
+     * Proof / sample approval (spec 013 R-2). Shows while the latest proof is
+     * pending: file links, approve (binding reference) or reject with a
+     * reason (staff send a new version — no dead-end). Fully JS-rendered.
+     */
+    function mountProof(order: any) {
+      const block = document.querySelector('[data-proof-approval]') as HTMLElement;
+      const proofs: any[] = Array.isArray(order.proofs) ? order.proofs : [];
+      const latest = proofs[0];
+      if (!block || !latest || latest.status !== 'pending') return;
+
+      const P = {
+        ar: {
+          title: latest.type === 'sample' ? 'اعتماد العينة' : 'اعتماد البروفة',
+          body: 'راجع الملفات بعناية — اعتمادك يصبح المرجع الملزم للجودة عند التسليم.',
+          version: 'النسخة', approve: 'اعتماد', reject: 'طلب تعديل',
+          reasonLabel: 'ما الذي تريد تعديله؟', reasonPh: 'اكتب ملاحظاتك…',
+          approvedMsg: 'تم الاعتماد — سنبدأ التنفيذ.', rejectedMsg: 'أُرسلت ملاحظاتك — سنوافيك بنسخة معدّلة.',
+          err: 'تعذّر الإرسال. حاول مرة أخرى.',
+        },
+        en: {
+          title: latest.type === 'sample' ? 'Sample approval' : 'Proof approval',
+          body: 'Review the files carefully — your approval becomes the binding quality reference at delivery.',
+          version: 'Version', approve: 'Approve', reject: 'Request changes',
+          reasonLabel: 'What should we change?', reasonPh: 'Write your notes…',
+          approvedMsg: 'Approved — production starts.', rejectedMsg: 'Your notes were sent — a revised version will follow.',
+          err: 'Could not send. Please try again.',
+        },
+      }[locale];
+
+      const filesHtml = (latest.files || [])
+        .map((f: any) => `<a class="pk-btn pk-btn--outline" href="${esc(String(f.url || ''))}" target="_blank" rel="noopener">📄 ${esc(String(f.name || 'proof'))}</a>`)
+        .join(' ');
+      block.innerHTML = `
+        <h2 class="pk-h3" style="margin-bottom:var(--sp-2)">🖼 ${esc(P.title)} <span class="pk-muted pk-small">(${esc(P.version)} ${Number(latest.version) || 1})</span></h2>
+        <p class="pk-muted" style="margin-bottom:var(--sp-4)">${esc(P.body)}</p>
+        ${latest.note ? `<p class="pk-small" style="margin-bottom:var(--sp-3)">${esc(String(latest.note))}</p>` : ''}
+        <div style="display:flex;gap:var(--sp-2);flex-wrap:wrap;margin-bottom:var(--sp-4)">${filesHtml}</div>
+        <div data-proof-reason-wrap hidden style="margin-bottom:var(--sp-4)">
+          <label class="pk-small" style="font-weight:600;display:block;margin-bottom:var(--sp-2)">${esc(P.reasonLabel)}</label>
+          <textarea class="pk-input" data-proof-reason rows="2" placeholder="${esc(P.reasonPh)}"></textarea>
+        </div>
+        <div style="display:flex;gap:var(--sp-3);flex-wrap:wrap">
+          <button type="button" class="pk-btn pk-btn--lg" data-proof-approve>${esc(P.approve)}</button>
+          <button type="button" class="pk-btn pk-btn--outline pk-btn--lg" data-proof-reject>${esc(P.reject)}</button>
+        </div>
+        <p class="pk-form-alert pk-form-alert--error" data-proof-error hidden style="margin-top:var(--sp-3)"></p>
+        <p class="pk-form-alert pk-form-alert--success" data-proof-done hidden style="margin-top:var(--sp-3)"></p>`;
+      block.hidden = false;
+
+      const okBtn = block.querySelector('[data-proof-approve]') as HTMLButtonElement;
+      const noBtn = block.querySelector('[data-proof-reject]') as HTMLButtonElement;
+      const errEl = block.querySelector('[data-proof-error]') as HTMLElement;
+      const doneEl = block.querySelector('[data-proof-done]') as HTMLElement;
+      const reasonWrap = block.querySelector('[data-proof-reason-wrap]') as HTMLElement;
+      const reasonEl = block.querySelector('[data-proof-reason]') as HTMLTextAreaElement;
+      let rejectArmed = false;
+
+      async function respond(action: 'approve' | 'reject', reason = '') {
+        errEl.hidden = true;
+        okBtn.disabled = true;
+        noBtn.disabled = true;
+        try {
+          const res: any = await api.orderProofRespond(order.id, action, reason);
+          if (res && res.success) {
+            doneEl.textContent = action === 'approve' ? P.approvedMsg : P.rejectedMsg;
+            doneEl.hidden = false;
+            okBtn.hidden = true;
+            noBtn.hidden = true;
+            setTimeout(() => location.reload(), 1800);
+            return;
+          }
+          errEl.textContent = (res && res.message) || P.err;
+          errEl.hidden = false;
+        } catch {
+          errEl.textContent = P.err;
+          errEl.hidden = false;
+        }
+        okBtn.disabled = false;
+        noBtn.disabled = false;
+      }
+
+      okBtn.addEventListener('click', () => respond('approve'));
+      noBtn.addEventListener('click', () => {
+        // Two-step: first click reveals the reason box, second submits.
+        if (!rejectArmed) { rejectArmed = true; reasonWrap.hidden = false; reasonEl.focus(); return; }
+        respond('reject', reasonEl.value.trim());
+      });
     }
 
     /** Final-price approval block: old→new totals + approve/decline. */
@@ -407,9 +517,17 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
       // Optional vendor matrix — the client picks a supplier (their choice re-awards).
       renderMatrix(approval.matrix, block, finEl);
 
+      // Terms re-acceptance (R-8): reveal the consent row only when the CRM
+      // enforces it; require it before approve.
+      const termsRow = block.querySelector('[data-approval-terms]') as HTMLElement;
+      const termsBox = block.querySelector('[data-approval-terms-box]') as HTMLInputElement;
+      import('@lib/live-catalog').then(({ rawCatalog }) => rawCatalog()).then((raw: any) => {
+        if (raw?.store_config?.require_terms && termsRow) termsRow.hidden = false;
+      }).catch(() => {});
+
       let declineArmed = false;
 
-      async function respond(action: 'approve' | 'decline', extra: { choice?: number; reason?: string } = {}) {
+      async function respond(action: 'approve' | 'decline', extra: { choice?: number; reason?: string; terms?: boolean } = {}) {
         errEl.hidden = true;
         approveBtn.disabled = true;
         declineBtn.disabled = true;
@@ -434,8 +552,16 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
       }
 
       approveBtn.addEventListener('click', () => {
+        if (termsRow && !termsRow.hidden && termsBox && !termsBox.checked) {
+          errEl.textContent = locale === 'ar' ? 'فعّل خانة الموافقة على شروط البيع أولاً.' : 'Please accept the terms of sale first.';
+          errEl.hidden = false;
+          return;
+        }
         const picked = block.querySelector('input[name="pk-vendor-choice"]:checked') as HTMLInputElement | null;
-        respond('approve', picked ? { choice: Number(picked.value) } : {});
+        respond('approve', {
+          ...(picked ? { choice: Number(picked.value) } : {}),
+          ...(termsBox && termsBox.checked ? { terms: true } : {}),
+        });
       });
       declineBtn.addEventListener('click', () => {
         // Two-step: first click reveals the reason field, second submits it.

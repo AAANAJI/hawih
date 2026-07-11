@@ -10,8 +10,9 @@
  *   categoryLabel?: string
  *   locale: 'ar' | 'en'
  *   eager?: boolean
+ *   itemMode?: string  -> the item's resolved price_mode ('' inherits global)
  */
-import { formatCardPrice } from '@lib/format';
+import { formatCardPrice, itemPriceCfg } from '@lib/format';
 import { storeConfig } from '@lib/catalog';
 import { t } from '@lib/strings';
 import type { Locale } from '@lib/format';
@@ -24,10 +25,12 @@ interface Props {
   categoryLabel?: string;
   locale: Locale;
   eager?: boolean;
+  itemMode?: string;
 }
-const { href, title, image, rate, categoryLabel, locale, eager = false } = Astro.props;
-// Range mode: "starting from" + the low bound (rule mirrored in live-sync).
-const price = formatCardPrice(rate, storeConfig, locale);
+const { href, title, image, rate, categoryLabel, locale, eager = false, itemMode } = Astro.props;
+// Range mode (per item, spec 013 R-9): "starting from" + the low bound
+// (rule mirrored in live-sync).
+const price = formatCardPrice(rate, itemPriceCfg(storeConfig, itemMode), locale);
 ---
 <a class="pk-prodcard" href={href}>
   <div class="pk-prodcard__media">

@@ -38,6 +38,11 @@ export interface CatalogItem {
   unit_type_en?: string;
   min_qty?: number;
   requires_artwork: boolean;
+  /**
+   * Per-product price lane, resolved server-side ('exact' | 'range');
+   * '' / absent (older snapshots) inherits the store-wide price_mode.
+   */
+  price_mode?: string;
   images?: { hero: string; square: string };
   options: CatalogOption[];
 }

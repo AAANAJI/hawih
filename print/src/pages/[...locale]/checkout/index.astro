@@ -144,6 +144,15 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
         <p class="pk-small pk-muted">{t('cart.taxNote', locale)}</p>
         <p class="pk-small pk-muted" data-range-note hidden>{t('checkout.rangeNote', locale)}</p>
         <div class="pk-form-alert pk-form-alert--error" data-checkout-error hidden></div>
+        <!-- Explicit terms consent (spec 013 R-8) — revealed only when the
+             CRM enforces it (store_config.require_terms). -->
+        <label class="pk-small" data-terms-consent hidden style="display:flex;gap:8px;align-items:flex-start;margin-bottom:var(--sp-3)">
+          <input type="checkbox" data-terms-checkbox style="margin-top:2px" />
+          <span>
+            {locale === 'ar' ? 'أوافق على ' : 'I agree to the '}
+            <a href={href(locale, '/terms')} target="_blank">{locale === 'ar' ? 'شروط البيع' : 'terms of sale'}</a>
+          </span>
+        </label>
         <Button type="submit" size="lg" block data-checkout-submit>{t('checkout.submit', locale)}</Button>
         <p class="pk-summary__terms">
           <Fragment set:html={t('checkout.terms', locale)
@@ -175,9 +184,9 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
     import { getCart, subtotal } from '@lib/cart';
     import { isAuthed, api } from '@lib/api';
     import { submitCheckout } from '@lib/checkout';
-    import { formatPrice, type PriceModeConfig } from '@lib/format';
+    import { formatPrice, formatBand, itemPriceCfg, priceRangeBounds, type PriceModeConfig } from '@lib/format';
     import { storeConfig } from '@lib/catalog';
-    import { liveStoreConfig } from '@lib/live-catalog';
+    import { liveStoreConfig, rawCatalog } from '@lib/live-catalog';
     import { beginCheckout } from '@lib/gtm';
 
     const cfg = (window as any).__checkoutCfg;
@@ -199,19 +208,49 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
 
     const cart = getCart();
 
-    // Range mode (vendor-quote flow): all checkout prices render as estimate
-    // bands + the "final price after review" note. Baked config first,
-    // refreshed from the live catalog so a settings flip needs no redeploy.
+    // Range mode is PER LINE (spec 013 R-9): each line's price_mode (stamped
+    // at add-to-cart) overrides the store-wide mode; the estimate note + a
+    // banded subtotal appear when ANY line is an estimate. Baked config
+    // first, refreshed from the live catalog so a settings flip needs no
+    // redeploy.
     let priceCfg: PriceModeConfig = storeConfig;
+    const lineCfg = (line: { price_mode?: string }) => itemPriceCfg(priceCfg, line.price_mode);
+    const anyRange = () => cart.some((l) => lineCfg(l)?.price_mode === 'range');
+    // Honest subtotal: exact lines contribute their REAL price; only estimate
+    // lines widen the band (mirrors the cart page).
+    const cartBounds = () => {
+      let low = 0, high = 0;
+      cart.forEach((l) => {
+        const c = lineCfg(l);
+        const total = l.rate * l.qty;
+        if (c?.price_mode === 'range') {
+          const b = priceRangeBounds(total, c);
+          low += b.low; high += b.high;
+        } else { low += total; high += total; }
+      });
+      return { low: Math.round(low * 100) / 100, high: Math.round(high * 100) / 100 };
+    };
+    function refreshRangeNote() {
+      const note = document.querySelector<HTMLElement>('[data-range-note]');
+      if (note) note.hidden = !cart.length || !anyRange();
+    }
     liveStoreConfig().then((cfg) => {
       priceCfg = cfg;
-      const note = document.querySelector<HTMLElement>('[data-range-note]');
-      if (note) note.hidden = cfg.price_mode !== 'range';
-      if (cart.length && cfg.price_mode === 'range') {
-        // Re-render with range formatting (cheap: rebuild both line lists).
+      refreshRangeNote();
+      if (cart.length) {
+        // Re-render with the live config (cheap: rebuild both line lists).
         linesEl.innerHTML = '';
         sumLinesEl.innerHTML = '';
         try { renderLines(); } catch { /* rendered once already */ }
+      }
+    }).catch(() => {});
+
+    // Terms consent row (R-8): revealed only when the CRM enforces it —
+    // legal-gated, ships hidden.
+    rawCatalog().then((raw: any) => {
+      if (raw?.store_config?.require_terms) {
+        const row = document.querySelector<HTMLElement>('[data-terms-consent]');
+        if (row) row.hidden = false;
       }
     }).catch(() => {});
 
@@ -270,18 +309,22 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
           <div>
             <div class="pk-coline__title">${esc(line.title)}</div>
             ${Object.keys(line.options).length ? `<div class="pk-coline__opts">${esc(optSummary(line.options))}</div>` : ''}
-            <div class="pk-coline__qty">${esc(L.qty)}: ${line.qty} × <bdi>${esc(formatPrice(line.rate, priceCfg, locale))}</bdi></div>
+            <div class="pk-coline__qty">${esc(L.qty)}: ${line.qty} × <bdi>${esc(formatPrice(line.rate, lineCfg(line), locale))}</bdi></div>
           </div>
-          <div class="pk-coline__price pk-price"><bdi>${esc(formatPrice(line.rate * line.qty, priceCfg, locale))}</bdi></div>`;
+          <div class="pk-coline__price pk-price"><bdi>${esc(formatPrice(line.rate * line.qty, lineCfg(line), locale))}</bdi></div>`;
         linesEl.appendChild(row);
 
         // Summary line
         const sl = document.createElement('div');
         sl.className = 'pk-summary__line';
-        sl.innerHTML = `<span class="pk-summary__line-name">${esc(line.title)} ×${line.qty}</span><span class="pk-summary__line-price pk-price"><bdi>${esc(formatPrice(line.rate * line.qty, priceCfg, locale))}</bdi></span>`;
+        sl.innerHTML = `<span class="pk-summary__line-name">${esc(line.title)} ×${line.qty}</span><span class="pk-summary__line-price pk-price"><bdi>${esc(formatPrice(line.rate * line.qty, lineCfg(line), locale))}</bdi></span>`;
         sumLinesEl.appendChild(sl);
       });
-      subtotalEl.textContent = formatPrice(subtotal(cart), priceCfg, locale);
+      // Subtotal is a band only when an estimate line is present — and only
+      // the estimate lines widen it (exact lines stay at their real price).
+      const b = cartBounds();
+      subtotalEl.textContent = formatBand(b.low, b.high, locale);
+      refreshRangeNote();
     }
 
     // ---- Guest validation ----
@@ -325,12 +368,23 @@ const bankName = locale === 'ar' ? BANK_TRANSFER.bank_name_ar : BANK_TRANSFER.ba
         guest = g.data;
       }
 
+      // Terms consent (R-8): required only when the CRM enforces it (the
+      // consent row is revealed by the live store_config below).
+      const termsRow = document.querySelector<HTMLElement>('[data-terms-consent]');
+      const termsBox = document.querySelector<HTMLInputElement>('[data-terms-checkbox]');
+      if (termsRow && !termsRow.hidden && termsBox && !termsBox.checked) {
+        alertEl.textContent = locale === 'ar' ? 'فعّل خانة الموافقة على شروط البيع أولاً.' : 'Please accept the terms of sale first.';
+        alertEl.hidden = false;
+        return;
+      }
+
       submitBtn.disabled = true;
       submitBtn.textContent = L.submitting;
       try {
         const res = await submitCheckout({
           orderNote: noteEl.value.trim(),
           guest,
+          termsAccepted: !!(termsBox && termsBox.checked),
         });
         if (res && res.success) {
           location.href = cfg.thankyouHref;

@@ -26,7 +26,7 @@ import {
   storeConfig,
 } from '@lib/catalog';
 import { SITE_URL, HAWIH_ORG_ID } from '@lib/config';
-import { priceRangeBounds } from '@lib/format';
+import { priceRangeBounds, itemPriceCfg } from '@lib/format';
 import type { Locale } from '@lib/format';
 
 export function getStaticPaths() {
@@ -57,9 +57,11 @@ const crumbs = [
 
 const absImg = (p: string | undefined) => (!p ? '' : p.startsWith('http') ? p : SITE_URL + p);
 // Range mode (vendor-quote flow) → AggregateOffer with low/high bounds;
-// exact mode → the plain Offer as before.
-const rangeMode = storeConfig.price_mode === 'range';
-const bounds = priceRangeBounds(item.rate, storeConfig);
+// exact mode → the plain Offer as before. PER ITEM (spec 013 R-9): the item's
+// resolved price_mode wins over the store-wide mode.
+const priceCfg = itemPriceCfg(storeConfig, item.price_mode)!;
+const rangeMode = priceCfg.price_mode === 'range';
+const bounds = priceRangeBounds(item.rate, priceCfg);
 const productLd = {
   '@context': 'https://schema.org',
   '@type': 'Product',
@@ -140,10 +142,11 @@ const breadcrumbLd = {
         data-min-qty={item.min_qty ?? 1}
         data-locale={locale}
         data-requires-artwork={item.requires_artwork ? '1' : ''}
+        data-price-mode={item.price_mode ?? ''}
       >
         <span class="pk-prodcard__tag" style="align-self:flex-start" data-live-prod-tag>{catTitle}</span>
         <h1 class="pk-h1" style="margin-top:var(--sp-1)" data-live-prod-title>{title}</h1>
-        <PriceBox amount={item.rate} locale={locale} id="pdp-price" />
+        <PriceBox amount={item.rate} locale={locale} itemMode={item.price_mode} id="pdp-price" />
         <p class="pk-muted" data-live-prod-desc>{desc}</p>
 
         <OptionPicker options={item.options} locale={locale} />
@@ -200,6 +203,7 @@ const breadcrumbLd = {
               rate={r.rate}
               categoryLabel={catTitle}
               locale={locale}
+              itemMode={r.price_mode}
             />
           ))}
         </div>
@@ -210,7 +214,7 @@ const breadcrumbLd = {
   <script>
     import { addToCart } from '@lib/cart';
     import { addToCartEvent, viewItem } from '@lib/gtm';
-    import { formatPrice, type PriceModeConfig } from '@lib/format';
+    import { formatPrice, itemPriceCfg, type PriceModeConfig } from '@lib/format';
     import { storeConfig } from '@lib/catalog';
     import { liveStoreConfig } from '@lib/live-catalog';
     import { iconSvg } from '@lib/icons';
@@ -269,12 +273,15 @@ const breadcrumbLd = {
 
       // Price mode starts from the baked config and refreshes from the live
       // catalog, so flipping the CRM setting changes this page on next load.
+      // Per-item (spec 013 R-9): data-price-mode (kept fresh by catalog-sync)
+      // overrides the store-wide mode.
       let priceCfg: PriceModeConfig = storeConfig;
       liveStoreConfig().then((cfg) => { priceCfg = cfg; refreshPrice(); }).catch(() => {});
 
       function refreshPrice() {
         const { rate } = currentSelections();
-        if (priceEl) priceEl.textContent = formatPrice(rate, priceCfg, locale);
+        const cfg = itemPriceCfg(priceCfg, root!.dataset.priceMode);
+        if (priceEl) priceEl.textContent = formatPrice(rate, cfg, locale);
       }
 
       // Delegated so option groups rebuilt live by catalog-sync still reprice.
@@ -297,7 +304,7 @@ const breadcrumbLd = {
       addBtn?.addEventListener('click', () => {
         const { options, rate } = currentSelections();
         const qty = Math.max(Number(root!.dataset.minQty || '1'), Number(qtyInput?.value || '1'));
-        addToCart({ item_id: itemId, slug, title, qty, rate, options, image: currentImage() });
+        addToCart({ item_id: itemId, slug, title, qty, rate, options, image: currentImage(), price_mode: root!.dataset.priceMode || '' });
         addToCartEvent({ item_id: itemId, item_name: title, price: rate, quantity: qty, item_category: slug });
         const original = addBtn.innerHTML;
         addBtn.innerHTML = iconSvg('check') + '<span>' + t('product.added', locale) + '</span>';

@@ -98,6 +98,10 @@ export function transformCatalog(api) {
       unit_type: it.unit_type || '',
       unit_type_en: it.unit_type || '',
       requires_artwork: !!it.requires_artwork,
+      // Per-product lane, already resolved against the global setting by the
+      // API: 'range' renders an estimate band, 'exact' a fixed price. Missing
+      // (older snapshot/API) falls back to the store-wide mode at render time.
+      price_mode: it.price_mode === 'range' ? 'range' : it.price_mode === 'exact' ? 'exact' : '',
       images: hasImg
         ? { hero: it.image, square: it.image }
         : { hero: `/img/products/${it.slug}/hero.svg`, square: `/img/products/${it.slug}/square.svg` },
