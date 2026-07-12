@@ -12,11 +12,21 @@ Steps (in order):
   3. IMPORT the scraped HelloPrint catalog (categories + items, tagged 'helloprint').
   4. UPLOAD each product's image (real HelloPrint mockup webp shipped in the repo).
 
+IMAGE NOTE: the CRM's global `accepted_file_formats` setting usually omits webp,
+so the shared upload validator (is_valid_file_to_upload) rejects the .webp
+mockups with HTTP 415 "File type not allowed." Two ways around it:
+  - EITHER add 'webp' to Settings → File formats in the CRM, then this step works;
+  - OR run the companion uploader, which transcodes each webp to PNG on the way
+    out (PNG is always accepted) and needs no CRM setting change:
+        PRINT_IMPORT_TOKEN='...' node scripts/upload_images_png.mjs
+    In that case run the import with --no-images and do the images via node.
+
 Stdlib only (urllib) — no pip install. Needs the CRM `print_import_token`.
 
 Usage:
     export PRINT_IMPORT_TOKEN='<the print_import_token you set in the CRM>'
     python3 scripts/import_helloprint.py --purge            # wipe + clone + images
+    python3 scripts/import_helloprint.py --purge --no-images  # wipe + clone; images via node
     python3 scripts/import_helloprint.py                    # add clone (no wipe)
     python3 scripts/import_helloprint.py --dry-run          # show plan, send nothing
     python3 scripts/import_helloprint.py --no-images        # skip image upload
@@ -158,6 +168,7 @@ def main():
         return
     url = base + "/import_image"
     ok = miss = fail = 0
+    webp_rejected = False
     for item in items:
         rel = item.get("image_file")
         if not rel:
@@ -172,11 +183,18 @@ def main():
             fail += 0 if rr.get("success") else 1
         except urllib.error.HTTPError as e:
             fail += 1
+            body = e.read().decode("utf-8", "replace") if hasattr(e, "read") else ""
+            if e.code == 415 and "not allowed" in body.lower():
+                webp_rejected = True
             print("  ! image %s: HTTP %s" % (item["slug"], e.code))
         except urllib.error.URLError as e:
             fail += 1
             print("  ! image %s: %s" % (item["slug"], e))
     print("images: uploaded=%d missing=%d failed=%d" % (ok, miss, fail))
+    if webp_rejected:
+        print("HINT: the CRM rejected webp (File type not allowed). Either add 'webp' to "
+              "Settings -> File formats, or upload images as PNG instead:\n"
+              "      PRINT_IMPORT_TOKEN='...' node scripts/upload_images_png.mjs")
     print("Done. In the CRM, filter Items by print_import_tag = 'helloprint' to manage the set.")
 
 
