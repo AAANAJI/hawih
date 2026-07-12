@@ -21,6 +21,11 @@ interface OptValue {
   label_ar: string;
   label_en: string;
   price_delta: number;
+  /** Optional curated extras (CRM print_options JSON pass-through). */
+  recommended?: boolean;
+  sublabel_ar?: string;
+  sublabel_en?: string;
+  icon?: string;
 }
 export interface OptGroup {
   name_ar: string;
@@ -172,6 +177,16 @@ export function conditionalRefs(options: OptGroup[]): (CondRef | null)[] {
 export function optionValueText(v: OptValue, locale: Locale): string {
   const label = (locale === 'ar' ? v.label_ar || v.label_en : v.label_en || v.label_ar) || '';
   return v.price_delta > 0 ? `${label} (+${formatSAR(v.price_delta, locale)})` : label;
+}
+
+/** Label only (no delta suffix) — the card UI shows the delta as a chip. */
+export function optionValueLabel(v: OptValue, locale: Locale): string {
+  return (locale === 'ar' ? v.label_ar || v.label_en : v.label_en || v.label_ar) || '';
+}
+
+/** Optional curated sublabel for the card UI ('' when absent). */
+export function optionValueSub(v: OptValue, locale: Locale): string {
+  return (locale === 'ar' ? v.sublabel_ar || '' : v.sublabel_en || v.sublabel_ar || '') || '';
 }
 
 /** Localized group label. */

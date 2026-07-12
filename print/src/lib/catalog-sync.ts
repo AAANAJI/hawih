@@ -24,7 +24,8 @@ import { hydrateCardPrices } from './live-prices';
 // Plain .mjs module shared with the build script (same rule on both sides).
 import { categoryImage } from './catalog-transform.mjs';
 import { iconSvg } from './icons';
-import { conditionalRefs, optionValueText, optionGroupLabel } from './options';
+import { conditionalRefs, optionValueLabel, optionValueSub, optionGroupLabel } from './options';
+import { optionIcon, formatDelta } from './option-visuals';
 import type { Catalog, CatalogCategory, CatalogItem, StoreConfig } from './catalog';
 import { formatCardPrice, formatNumber, itemPriceCfg, type Locale } from './format';
 import { href } from './i18n';
@@ -56,10 +57,14 @@ function renderProductCard(
   categoryLabel: string,
   locale: Locale,
   cfg?: StoreConfig,
+  badge = '',
+  fastChip = false,
 ): HTMLAnchorElement {
+  // MUST mirror ProductCard.astro (badge on the media tile, big price, chip).
   const a = el('a', { class: 'pk-prodcard', href: href(locale, `/product/${item.slug}`) });
 
   const media = el('div', { class: 'pk-prodcard__media' });
+  if (badge) media.appendChild(el('span', { class: 'pk-prodcard__badge' }, badge));
   const img = el('img', {
     src: item.images?.square ?? '',
     alt: itemTitle(item, locale),
@@ -89,6 +94,13 @@ function renderProductCard(
   );
   body.appendChild(price);
 
+  if (fastChip) {
+    const chip = el('span', { class: 'pk-prodcard__fast' });
+    chip.innerHTML = '<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2 3 14h7l-1 8 10-12h-7z"/></svg>';
+    chip.append(t('badge.fast', locale));
+    body.appendChild(chip);
+  }
+
   a.append(media, body);
   return a;
 }
@@ -102,6 +114,7 @@ function renderCategoryTile(
   // MUST mirror CategoryTile.astro (imageSrc = shared categoryImage() rule).
   const title = catTitle(cat, locale);
   const a = el('a', { class: 'pk-cattile', href: href(locale, `/category/${cat.slug}`), 'aria-label': title });
+  a.appendChild(el('span', { class: 'pk-cattile__label' }, title));
   const img = el('img', {
     src: imageSrc,
     alt: title,
@@ -110,14 +123,15 @@ function renderCategoryTile(
     width: '1200',
     height: '900',
   });
-  // Failed image hides itself — the tile's CSS gradient + scrim + label keep
-  // it looking intentional (same behavior as the baked onerror handler).
+  // Failed image hides itself — the white card + label keep it intentional
+  // (same behavior as the baked onerror handler).
   img.addEventListener('error', () => {
     img.style.visibility = 'hidden';
   });
   a.appendChild(img);
-  a.appendChild(el('span', { class: 'pk-cattile__scrim', 'aria-hidden': 'true' }));
-  a.appendChild(el('span', { class: 'pk-cattile__label' }, title));
+  const arrow = el('span', { class: 'pk-cattile__arrow', 'aria-hidden': 'true' });
+  arrow.innerHTML = '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>';
+  a.appendChild(arrow);
   return a;
 }
 
@@ -142,16 +156,51 @@ function renderOptions(picker: Element, options: CatalogItem['options'], locale:
       const controller = options.find((c) => c.name_ar === ref.group);
       wrap.hidden = !controller || (controller.values[0]?.label_ar ?? '') !== ref.value;
     }
-    const lbl = el('label', { class: 'pk-optgroup__label', for: `opt-${gi}` },
-      optionGroupLabel(o, locale));
-    const sel = el('select', { class: 'pk-select', id: `opt-${gi}` });
+    // Visual configurator cards — MUST mirror OptionPicker.astro exactly
+    // (icons come from the SHARED option-visuals module, so they can't drift).
+    const legend = el('div', { class: 'pk-optgroup__legend' });
+    legend.append(optionGroupLabel(o, locale) + ': ');
+    legend.appendChild(
+      el('b', { 'data-opt-current': '' }, optionValueLabel(o.values[0] ?? { label_ar: '', label_en: '', price_delta: 0 }, locale)),
+    );
+    const cards = el('div', { class: 'pk-optcards', role: 'radiogroup', 'aria-label': optionGroupLabel(o, locale) });
     o.values.forEach((v, vi) => {
-      const opt = el('option', { value: v.label_ar, 'data-delta': String(v.price_delta) },
-        optionValueText(v, locale));
-      if (vi === 0) opt.setAttribute('selected', '');
-      sel.appendChild(opt);
+      const label = optionValueLabel(v, locale);
+      const sub = optionValueSub(v, locale);
+      const delta = formatDelta(v.price_delta, locale);
+      const card = el('label', { class: 'pk-optcard' });
+      const input = el('input', {
+        type: 'radio',
+        name: `opt-${gi}`,
+        value: v.label_ar,
+        'data-delta': String(v.price_delta),
+        'data-text': label,
+      });
+      if (vi === 0) input.setAttribute('checked', '');
+      card.appendChild(input);
+      if (v.image) {
+        // Real scraped tile image — mirror of OptionPicker.astro's image branch.
+        const icon = el('span', { class: 'pk-optcard__icon pk-optcard__icon--img' });
+        const img = el('img', { src: v.image, alt: '', loading: 'lazy', decoding: 'async' }) as HTMLImageElement;
+        img.onerror = () => icon.remove();
+        icon.appendChild(img);
+        card.appendChild(icon);
+      } else {
+        const icon = el('span', { class: 'pk-optcard__icon' });
+        icon.innerHTML = optionIcon(v.label_ar, v.label_en, v.icon ?? '');
+        card.appendChild(icon);
+      }
+      card.appendChild(el('span', { class: 'pk-optcard__label' }, label));
+      if (sub) card.appendChild(el('span', { class: 'pk-optcard__sub' }, sub));
+      if (delta) {
+        const chip = el('span', { class: 'pk-optcard__delta pk-price' });
+        chip.appendChild(el('bdi', {}, delta));
+        card.appendChild(chip);
+      }
+      if (v.recommended) card.appendChild(el('span', { class: 'pk-optcard__rec' }, t('pdp.recommended', locale)));
+      cards.appendChild(card);
     });
-    wrap.append(lbl, sel);
+    wrap.append(legend, cards);
     picker.appendChild(wrap);
   });
 }
@@ -164,7 +213,7 @@ function reconcileHome(cat: Catalog, locale: Locale): void {
     catsGrid.textContent = '';
     cat.categories.forEach((c, i) => {
       const wrap = el('div', { class: 'pk-reveal is-visible' });
-      wrap.appendChild(renderCategoryTile(c, locale, i < 4, categoryImage(cat.items, c.slug)));
+      wrap.appendChild(renderCategoryTile(c, locale, i < 4, c.image || categoryImage(cat.items, c.slug)));
       catsGrid.appendChild(wrap);
     });
   }
@@ -183,7 +232,7 @@ function reconcileHome(cat: Catalog, locale: Locale): void {
         'data-product-price': String(it.rate),
         'data-product-cat': it.category_slug,
       });
-      wrap.appendChild(renderProductCard(it, c ? catTitle(c, locale) : '', locale, cat.store_config));
+      wrap.appendChild(renderProductCard(it, c ? catTitle(c, locale) : '', locale, cat.store_config, '', true));
       featGrid.appendChild(wrap);
     });
   }
@@ -205,13 +254,15 @@ function reconcileCategory(cat: Catalog, locale: Locale, slug: string): void {
   if (products.length) {
     const grid = el('div', { class: 'pk-grid-products', 'data-cat-grid': '' });
     grid.style.marginBottom = 'var(--sp-10)';
-    products.forEach((p) => {
+    products.forEach((p, i) => {
       const wrap = el('div', {
         'data-product-id': String(p.id),
         'data-product-name': itemTitle(p, locale),
         'data-product-price': String(p.rate),
       });
-      wrap.appendChild(renderProductCard(p, label, locale, cat.store_config));
+      // Badge rule MUST match category/[slug].astro.
+      const badge = i < 2 ? t('badge.popular', locale) : p.requires_artwork ? t('badge.upload', locale) : '';
+      wrap.appendChild(renderProductCard(p, label, locale, cat.store_config, badge, true));
       grid.appendChild(wrap);
     });
     body.appendChild(grid);

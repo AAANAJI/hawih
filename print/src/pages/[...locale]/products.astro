@@ -19,7 +19,10 @@ import { localeStaticPaths, href } from '@lib/i18n';
 import { t } from '@lib/strings';
 import { formatNumber } from '@lib/format';
 import { normalizeText } from '@lib/search';
-import { categories, items, categoryTitle, itemTitle } from '@lib/catalog';
+// Real catalog only — the design-QA (HelloPrint) catalog is excluded from the
+// all-products listing; it is viewed via the ?qa=helloprint toggle on the
+// live-synced surfaces (home/category/product).
+import { displayCategories as categories, displayItems as items, categoryTitle, itemTitle } from '@lib/catalog';
 import { SITE_URL } from '@lib/config';
 import type { Locale } from '@lib/format';
 

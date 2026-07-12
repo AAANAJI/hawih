@@ -9,13 +9,16 @@
 import Base from '@layouts/Base.astro';
 import CategoryTile from '@components/CategoryTile.astro';
 import ProductCard from '@components/ProductCard.astro';
-import SearchBox from '@components/SearchBox.astro';
+import TrustBar from '@components/TrustBar.astro';
 import Icon from '@components/Icon.astro';
 import JsonLd from '@components/JsonLd.astro';
 import { localeStaticPaths } from '@lib/i18n';
 import { href } from '@lib/i18n';
 import { t } from '@lib/strings';
-import { categories, items, categoryTitle, itemTitle, getCategory } from '@lib/catalog';
+// Real catalog only for the baked listings — the design-QA (HelloPrint)
+// catalog is kept out of the default home page and surfaced solely through the
+// ?qa=helloprint toggle (live layer repaints these regions on demand).
+import { displayCategories as categories, displayItems as items, categoryTitle, itemTitle, getCategory } from '@lib/catalog';
 import { categoryImage } from '@lib/catalog-transform.mjs';
 import { HAWIH_ORG_ID, SITE_URL, whatsappUrl } from '@lib/config';
 import type { Locale } from '@lib/format';
@@ -28,20 +31,17 @@ const { locale } = Astro.props as Props;
 // Featured grid — slice size MUST match reconcileHome() in catalog-sync.ts.
 const featured = items.slice(0, 8);
 
-// Hero photo strip: first ~10 products with a real (CRM-hosted) photo.
-const stripItems = items
-  .filter((it) => /^https?:\/\//.test(it.images?.square ?? ''))
-  .slice(0, 10);
-
-const heroChips = categories.slice(0, 6);
-
-// Promo tiles — target the sticker / card categories when present.
-const stickersCat = categories.find((c) => c.slug.includes('sticker'));
-const cardsCat = categories.find((c) => c.slug.includes('card'));
-const promo1Href = href(locale, stickersCat ? `/category/${stickersCat.slug}` : '/products');
-const promo2Href = href(locale, cardsCat ? `/category/${cardsCat.slug}` : '/products');
-const promo1Img = stickersCat ? categoryImage(items, stickersCat.slug) : '';
-const promo2Img = cardsCat ? categoryImage(items, cardsCat.slug) : '';
+// Promo trio (HelloPrint-style photo cards): deals → all products,
+// events → signage/stands, gifts → boxes/occasions. Photos come from the
+// catalog's own product imagery.
+const eventsCat = categories.find((c) => /stand|sign|banner/.test(c.slug));
+const giftsCat = categories.find((c) => /box|occasion|gift/.test(c.slug));
+const heroImg = (slug?: string) => (slug ? categoryImage(items, slug) : '');
+const promos = [
+  { k: 'promo1', href: href(locale, '/products'), img: heroImg(categories[0]?.slug) },
+  { k: 'promo2', href: href(locale, eventsCat ? `/category/${eventsCat.slug}` : '/products'), img: heroImg(eventsCat?.slug) },
+  { k: 'promo3', href: href(locale, giftsCat ? `/category/${giftsCat.slug}` : '/products'), img: heroImg(giftsCat?.slug) },
+];
 
 const steps = [
   { n: '1', title: t('step.1.title', locale), body: t('step.1.body', locale) },
@@ -85,106 +85,43 @@ const websiteLd = {
     <JsonLd data={[orgLd, websiteLd]} />
   </Fragment>
 
-  <!-- Hero — search-first -->
+  <!-- Hero — welcome + guarantees (search lives in the header) -->
   <section class="pk-hero">
     <div class="pk-container">
-      <div class="pk-hero__center pk-reveal">
-        <span class="pk-eyebrow pk-eyebrow--chip">{t('hero.eyebrow', locale)}</span>
-        <h1 class="pk-display">{t('hero.title', locale)}</h1>
-        <p class="pk-hero__sub pk-muted">{t('hero.subtitle', locale)}</p>
-
-        <SearchBox locale={locale} />
-
-        <div class="pk-chips" aria-label={t('nav.products', locale)}>
-          <a class="pk-chip pk-chip--primary" href={href(locale, '/products')}>{t('nav.allProducts', locale)}</a>
-          {heroChips.map((c) => (
-            <a class="pk-chip" href={href(locale, `/category/${c.slug}`)}>{categoryTitle(c, locale)}</a>
-          ))}
-        </div>
-      </div>
-    </div>
-
-    {stripItems.length > 3 && (
-      <div class="pk-hero__strip">
-        <div class="pk-marquee">
-          {[false, true].map((dupe) => (
-            <div class="pk-marquee__seg" aria-hidden={dupe ? 'true' : undefined}>
-              {stripItems.map((it) => (
-                <a class="pk-hero__stripcard" href={href(locale, `/product/${it.slug}`)} title={itemTitle(it, locale)} tabindex={dupe ? -1 : undefined}>
-                  <img
-                    src={it.images?.square}
-                    alt={dupe ? '' : itemTitle(it, locale)}
-                    loading="lazy"
-                    decoding="async"
-                    width="320"
-                    height="320"
-                    data-live-image
-                    data-slug={it.slug}
-                    onerror="this.parentElement.style.display='none'"
-                  />
-                </a>
-              ))}
-            </div>
-          ))}
-        </div>
-      </div>
-    )}
-  </section>
-
-  <!-- Categories -->
-  <section class="pk-section" id="categories">
-    <div class="pk-container">
-      <div class="pk-section-head">
-        <div>
-          <h2 class="pk-h2">{t('home.categoriesTitle', locale)}</h2>
-          <p>{t('home.categoriesSub', locale)}</p>
-        </div>
-      </div>
-      <div class="pk-grid-cats">
-        {categories.map((c, i) => (
-          <div class="pk-reveal" style={`transition-delay:${Math.min(i, 8) * 60}ms`}>
-            <CategoryTile
-              title={categoryTitle(c, locale)}
-              href={href(locale, `/category/${c.slug}`)}
-              image={categoryImage(items, c.slug)}
-              eager={i < 4}
-            />
-          </div>
-        ))}
+      <div class="pk-reveal">
+        <h1 class="pk-display" style="max-width:16ch">{t('hero.title', locale)}</h1>
+        <TrustBar locale={locale} />
       </div>
     </div>
   </section>
 
-  <!-- Promo tiles -->
-  <section class="pk-section" style="padding-top:0">
-    <div class="pk-container pk-promos">
-      <a class="pk-promo pk-promo--cobalt pk-reveal" href={promo1Href}>
-        <div class="pk-promo__copy">
-          <span class="pk-promo__kicker">{t('promo1.kicker', locale)}</span>
-          <h3 class="pk-promo__title">{t('promo1.title', locale)}</h3>
-          <p class="pk-promo__body">{t('promo1.body', locale)}</p>
-          <span class="pk-btn pk-btn--light pk-btn--sm">{t('promo1.cta', locale)} <Icon name="arrow-end" size={14} class="pk-icon--flip" /></span>
-        </div>
-        {promo1Img && (
-          <div class="pk-promo__media">
-            <img src={promo1Img} alt="" loading="lazy" decoding="async" width="640" height="640" onerror="this.parentElement.style.display='none'" />
-          </div>
-        )}
-      </a>
-      <a class="pk-promo pk-promo--warm pk-reveal" style="transition-delay:90ms" href={promo2Href}>
-        <div class="pk-promo__copy">
-          <span class="pk-promo__kicker">{t('promo2.kicker', locale)}</span>
-          <h3 class="pk-promo__title">{t('promo2.title', locale)}</h3>
-          <p class="pk-promo__body">{t('promo2.body', locale)}</p>
-          <span class="pk-btn pk-btn--sm">{t('promo2.cta', locale)} <Icon name="arrow-end" size={14} class="pk-icon--flip" /></span>
-        </div>
-        {promo2Img && (
-          <div class="pk-promo__media">
-            <img src={promo2Img} alt="" loading="lazy" decoding="async" width="640" height="640" onerror="this.parentElement.style.display='none'" />
-          </div>
-        )}
-      </a>
-    </div>
+  <!-- Promo — two-up (experts + promises), HelloPrint style -->
+  <section class="pk-container pk-promo2" style="margin-bottom:var(--sp-10)">
+    <a class="pk-promo2__card pk-promo2__card--green pk-reveal" href={whatsappUrl()} target="_blank" rel="noopener">
+      <img class="pk-promo2__img" src="/img/hp/cat/hp-business-cards.png" alt="" loading="lazy" decoding="async" onerror="this.remove()" />
+      <div class="pk-promo2__body">
+        <h2 class="pk-promo2__title">{locale === 'en' ? 'A dedicated team of print experts' : 'فريق مختص من خبراء الطباعة'}</h2>
+        <p class="pk-promo2__text">{locale === 'en' ? 'Our print experts help with your most specialised, high-volume jobs — on time, on brand and on budget.' : 'خبراء الطباعة لدينا يساعدونك في أصعب الطلبات وأكبرها — في الوقت المحدد وبالجودة والميزانية المناسبة.'}</p>
+        <span class="pk-promo2__cta">{locale === 'en' ? 'Request a quote' : 'اطلب عرض سعر'} <Icon name="arrow-end" size={15} class="pk-icon--flip" /></span>
+      </div>
+    </a>
+    <a class="pk-promo2__card pk-promo2__card--ink pk-reveal" style="transition-delay:90ms" href={href(locale, '/about')}>
+      <img class="pk-promo2__img" src="/img/hp/cat/hp-cards-invitations.png" alt="" loading="lazy" decoding="async" onerror="this.remove()" />
+      <div class="pk-promo2__body">
+        <h2 class="pk-promo2__title">{locale === 'en' ? 'Our promises' : 'وعودنا'}</h2>
+        <p class="pk-promo2__text">{locale === 'en' ? 'We don’t just print — we promise the best price, 100% satisfaction, great design and a team beside you.' : 'نحن لا نطبع فقط — نعدك بأفضل سعر ورضا كامل وتصميم متميز وفريق بجانبك دائماً.'}</p>
+        <ul class="pk-promo2__checks">
+          {[
+            locale === 'en' ? 'Best price guarantee' : 'ضمان أفضل سعر',
+            locale === 'en' ? '100% satisfaction' : 'رضا ١٠٠٪',
+            locale === 'en' ? 'A dedicated team' : 'فريق مخصص لخدمتك',
+          ].map((c) => (
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>{c}</li>
+          ))}
+        </ul>
+        <span class="pk-promo2__cta">{locale === 'en' ? 'See more' : 'اعرف المزيد'} <Icon name="arrow-end" size={15} class="pk-icon--flip" /></span>
+      </div>
+    </a>
   </section>
 
   <!-- Featured products -->
@@ -213,10 +150,35 @@ const websiteLd = {
                 categoryLabel={cat ? categoryTitle(cat, locale) : undefined}
                 locale={locale}
                 itemMode={it.price_mode}
+                fastChip={true}
               />
             </div>
           );
         })}
+      </div>
+    </div>
+  </section>
+
+  <!-- Categories -->
+  <section class="pk-section" id="categories">
+    <div class="pk-container">
+      <div class="pk-section-head">
+        <div>
+          <h2 class="pk-h2">{t('home.categoriesTitle', locale)}</h2>
+          <p>{t('home.categoriesSub', locale)}</p>
+        </div>
+      </div>
+      <div class="pk-grid-cats">
+        {categories.map((c, i) => (
+          <div class="pk-reveal" style={`transition-delay:${Math.min(i, 8) * 60}ms`}>
+            <CategoryTile
+              title={categoryTitle(c, locale)}
+              href={href(locale, `/category/${c.slug}`)}
+              image={c.image || categoryImage(items, c.slug)}
+              eager={i < 4}
+            />
+          </div>
+        ))}
       </div>
     </div>
   </section>

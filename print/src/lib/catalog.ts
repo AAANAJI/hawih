@@ -10,6 +10,13 @@ export interface OptionValue {
   label_ar: string;
   label_en: string;
   price_delta: number;
+  /** Optional curated extras from the CRM print_options JSON. */
+  recommended?: boolean;
+  sublabel_ar?: string;
+  sublabel_en?: string;
+  icon?: string;
+  /** Real option tile image (scraped HelloPrint visual) — preferred over icon. */
+  image?: string;
 }
 export interface CatalogOption {
   name_ar: string;
@@ -23,6 +30,10 @@ export interface CatalogCategory {
   title: string;
   title_en: string;
   sort: number;
+  /** Provenance tag (e.g. 'helloprint' design-QA); absent for real categories. */
+  tag?: string;
+  /** Optional cut-out category image (transparent PNG) for the tile. */
+  image?: string;
 }
 export interface CatalogItem {
   id: number | string;
@@ -45,7 +56,15 @@ export interface CatalogItem {
   price_mode?: string;
   images?: { hero: string; square: string };
   options: CatalogOption[];
+  /**
+   * Provenance tag. 'helloprint' marks the design-QA catalog imported for
+   * head-to-head comparison — kept OUT of the real storefront listings and
+   * shown only under the ?qa=helloprint toggle. Absent for real products.
+   */
+  tag?: string;
 }
+/** The design-QA tag (see CatalogItem.tag). */
+export const QA_TAG = 'helloprint';
 /**
  * Store-wide config that rides the catalog payload (CRM settings-driven).
  * price_mode 'range' = vendor-quote mode: prices render as a low–high range
@@ -72,10 +91,24 @@ export const storeConfig: StoreConfig = catalog.store_config ?? {
   range_high_pct: 0,
 };
 
+// ALL baked categories/items — used for static path generation and lookups so
+// design-QA product/category pages exist and resolve (navigable behind the
+// ?qa toggle). Listings use displayCategories/displayItems below.
 export const categories: CatalogCategory[] = [...catalog.categories].sort(
   (a, b) => a.sort - b.sort,
 );
 export const items: CatalogItem[] = catalog.items;
+
+/** True for the design-QA (HelloPrint) catalog rows. */
+export const isQaItem = (i: CatalogItem): boolean => i.tag === QA_TAG;
+export const isQaCategory = (c: CatalogCategory): boolean => c.tag === QA_TAG;
+
+// Storefront listing view. During the design phase the HelloPrint clone IS the
+// catalog, so these show everything (the clone). To go back to a mixed catalog
+// where the tagged design set is hidden from the real store, restore the filter:
+//   .filter((c) => !isQaCategory(c)) / .filter((i) => !isQaItem(i))
+export const displayCategories: CatalogCategory[] = categories;
+export const displayItems: CatalogItem[] = items;
 
 export function getCategory(slug: string): CatalogCategory | undefined {
   return categories.find((c) => c.slug === slug);

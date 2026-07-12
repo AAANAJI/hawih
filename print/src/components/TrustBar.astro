@@ -1,0 +1,43 @@
+---
+/**
+ * TrustBar — HelloPrint-style reassurance strip: four honest guarantee
+ * bullets (check icons) + "need help? chat with us" with team avatars and
+ * the WhatsApp link. No invented review counts — guarantees only.
+ * Props: locale
+ */
+import Icon from '@components/Icon.astro';
+import { t } from '@lib/strings';
+import { whatsappUrl, WHATSAPP_MSG_AR, WHATSAPP_MSG_EN } from '@lib/config';
+import type { Locale } from '@lib/format';
+
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const waHref = whatsappUrl(locale === 'ar' ? WHATSAPP_MSG_AR : WHATSAPP_MSG_EN);
+
+const items = [
+  t('trustbar.g1', locale),
+  t('trustbar.g2', locale),
+  t('trustbar.g3', locale),
+  t('trustbar.g4', locale),
+];
+const avatars = ['هـ', 'و', 'ي'];
+---
+<div class="pk-trustbar pk-reveal">
+  <ul class="pk-trustbar__list">
+    {items.map((it) => (
+      <li class="pk-trustbar__item">
+        <span class="pk-trustbar__check" aria-hidden="true"><Icon name="check" size={13} /></span>
+        {it}
+      </li>
+    ))}
+  </ul>
+  <div class="pk-trustbar__help">
+    <span class="pk-trustbar__avatars" aria-hidden="true">
+      {avatars.map((a) => <span class="pk-trustbar__avatar">{a}</span>)}
+    </span>
+    <span class="pk-trustbar__helptext">
+      <b>{t('trustbar.help', locale)}</b>
+      <a href={waHref} target="_blank" rel="noopener">{t('trustbar.chat', locale)}</a>
+    </span>
+  </div>
+</div>

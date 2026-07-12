@@ -1,29 +1,33 @@
 ---
 /**
- * OptionPicker — renders every option group of a product as a labelled
- * <select> dropdown (the weej-style flow the owner asked for).
+ * OptionPicker — HelloPrint-style VISUAL configurator: every option value is
+ * a card (auto-derived icon + label + optional sublabel + "+N ر.س" delta chip
+ * + RECOMMENDED ribbon when flagged in the CRM print_options JSON). The
+ * selected card gets the accent border; the group legend echoes the current
+ * selection ("المقاس: 85×55" — kept live by the product-page script via
+ * [data-opt-current] + input[data-text]).
  *
- * Conditional groups (see src/lib/options.ts): a group whose name matches a
- * value of another group (e.g. quantity group "8" under selector value
- * "8 سم") carries data-cond-group / data-cond-value and starts hidden unless
- * the controller's default selects it. The product-page script toggles
- * visibility on change and only VISIBLE groups count toward the price and the
- * cart line.
+ * Conditional groups (see src/lib/options.ts): unchanged — a dependent group
+ * carries data-cond-group / data-cond-value and starts hidden unless the
+ * controller's default selects it. Only VISIBLE groups count toward price.
  *
- * Machine-readable contract (kept from the pill version): each group is
- * [data-option-name][data-option-name-ar][data-option-type] and each <option>
- * carries value=label_ar + data-delta. Canonical Arabic goes to the CRM.
+ * Machine-readable contract (SAME as the select version, radios instead):
+ * each group is [data-option-name][data-option-name-ar][data-option-type]
+ * (+ cond attrs) and each input[type=radio] carries value=label_ar +
+ * data-delta (+ data-text for the legend echo). Canonical Arabic → CRM.
  * NOTE: catalog-sync.ts renderOptions rebuilds this markup in JS — keep both
- * in lockstep.
+ * in lockstep (icons come from the SHARED @lib/option-visuals).
  *
  * Props:
  *   options: CatalogOption[]
  *   locale: 'ar' | 'en'
- *   name?: string   -> select id prefix (default 'opt')
+ *   name?: string   -> radio name prefix (default 'opt')
  */
 import type { CatalogOption } from '@lib/catalog';
 import type { Locale } from '@lib/format';
-import { conditionalRefs, optionValueText, optionGroupLabel } from '@lib/options';
+import { conditionalRefs, optionValueLabel, optionValueSub, optionGroupLabel } from '@lib/options';
+import { optionIcon, formatDelta } from '@lib/option-visuals';
+import { t } from '@lib/strings';
 
 interface Props { options: CatalogOption[]; locale: Locale; name?: string }
 const { options, locale, name = 'opt' } = Astro.props;
@@ -51,14 +55,37 @@ function initiallyHidden(gi: number): boolean {
         data-cond-value={ref ? ref.value : undefined}
         hidden={initiallyHidden(gi)}
       >
-        <label class="pk-optgroup__label" for={`${name}-${gi}`}>{optionGroupLabel(o, locale)}</label>
-        <select class="pk-select" id={`${name}-${gi}`}>
-          {o.values.map((v, vi) => (
-            <option value={v.label_ar} data-delta={v.price_delta} selected={vi === 0}>
-              {optionValueText(v, locale)}
-            </option>
-          ))}
-        </select>
+        <div class="pk-optgroup__legend">
+          {optionGroupLabel(o, locale)}: <b data-opt-current>{optionValueLabel(o.values[0] ?? { label_ar: '', label_en: '', price_delta: 0 }, locale)}</b>
+        </div>
+        <div class="pk-optcards" role="radiogroup" aria-label={optionGroupLabel(o, locale)}>
+          {o.values.map((v, vi) => {
+            const label = optionValueLabel(v, locale);
+            const sub = optionValueSub(v, locale);
+            const delta = formatDelta(v.price_delta, locale);
+            return (
+              <label class="pk-optcard">
+                <input
+                  type="radio"
+                  name={`${name}-${gi}`}
+                  value={v.label_ar}
+                  data-delta={v.price_delta}
+                  data-text={label}
+                  checked={vi === 0}
+                />
+                {v.image ? (
+                  <span class="pk-optcard__icon pk-optcard__icon--img"><img src={v.image} alt="" loading="lazy" decoding="async" onerror="this.parentElement.remove()" /></span>
+                ) : (
+                  <span class="pk-optcard__icon" set:html={optionIcon(v.label_ar, v.label_en, v.icon ?? '')} />
+                )}
+                <span class="pk-optcard__label">{label}</span>
+                {sub && <span class="pk-optcard__sub">{sub}</span>}
+                {delta && <span class="pk-optcard__delta pk-price"><bdi>{delta}</bdi></span>}
+                {v.recommended && <span class="pk-optcard__rec">{t('pdp.recommended', locale)}</span>}
+              </label>
+            );
+          })}
+        </div>
       </div>
     );
   })}

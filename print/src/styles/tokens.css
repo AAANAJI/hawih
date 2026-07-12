@@ -29,12 +29,21 @@
   --pk-line:          rgba(15, 18, 36, 0.08);    /* hairline border */
   --pk-line-strong:   rgba(15, 18, 36, 0.16);
 
+  /* Accent — Hawih brand blue. (HelloPrint's own accent is green; swap these to
+     #16A34A / rgba(22,163,74,…) for a green tone.) */
   --pk-accent:        var(--hawih-blue);
   --pk-accent-hover:  var(--hawih-blue-hover);
-  --pk-accent-soft:   rgba(31, 31, 254, 0.07);   /* hover washes (quiet on white) */
-  --pk-accent-tint:   rgba(31, 31, 254, 0.10);   /* chip/badge fills, step numbers */
+  --pk-accent-soft:   rgba(31, 31, 254, 0.07);    /* hover washes (quiet on white) */
+  --pk-accent-tint:   rgba(31, 31, 254, 0.10);    /* chip/badge fills, step numbers */
   --pk-accent-glow:   var(--hawih-blue-glow);
   --pk-on-accent:     #FFFFFF;
+
+  /* ---- Chrome (dark header + nav bar — HelloPrint-style shell) ---- */
+  --pk-chrome:        var(--hawih-ink);            /* header/nav surface */
+  --pk-chrome-2:      var(--hawih-ink-2);          /* hover rows on chrome */
+  --pk-chrome-ink:    #FFFFFF;                     /* text/icons on chrome */
+  --pk-chrome-muted:  rgba(255, 255, 255, 0.72);
+  --pk-chrome-line:   rgba(255, 255, 255, 0.12);
 
   /* ---- Warm secondary (small highlights ONLY: delta chips, featured/count
          chips, eyebrow accents — never large surfaces, buttons or links) ---- */

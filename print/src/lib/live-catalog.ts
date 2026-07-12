@@ -40,6 +40,33 @@ const TTL_MS = 90_000;
 
 let inflight: Promise<RawApi | null> | null = null;
 
+/* ------------------------------------------------------------ HelloPrint */
+/**
+ * Design phase: the HelloPrint clone IS the catalog. The live layer serves the
+ * baked clone (no CRM call) so the plain home/category/product pages show it
+ * and live-sync never reverts to the CRM. Set HELLOPRINT_MODE=false (and flip
+ * build-catalog CATALOG_SOURCE to 'crm') to restore the real CRM-driven store.
+ */
+const HELLOPRINT_MODE = true;
+let qaInflight: Promise<RawApi | null> | null = null;
+function qaActive(): boolean {
+  if (HELLOPRINT_MODE) return true;
+  try {
+    return typeof document !== 'undefined' && document.documentElement.dataset.qa === 'helloprint';
+  } catch {
+    return false;
+  }
+}
+function loadQaRaw(): Promise<RawApi | null> {
+  if (qaInflight) return qaInflight;
+  // Dynamic import → the ~QA dataset is a separate chunk, only fetched when the
+  // toggle is on, so it never weighs down the real store bundle.
+  qaInflight = import('../data/helloprint-catalog.raw.json')
+    .then((m) => (m.default ?? m) as RawApi)
+    .catch(() => null);
+  return qaInflight;
+}
+
 function fromCache(): RawApi | null {
   try {
     const raw = sessionStorage.getItem(SS_KEY);
@@ -55,6 +82,8 @@ function fromCache(): RawApi | null {
 
 /** Fetch (or reuse) the raw live catalog response. Never throws. */
 export function rawCatalog(): Promise<RawApi | null> {
+  // Design-QA: serve the HelloPrint comparison catalog and skip the CRM.
+  if (qaActive()) return loadQaRaw();
   if (inflight) return inflight;
   const cached = fromCache();
   if (cached) {

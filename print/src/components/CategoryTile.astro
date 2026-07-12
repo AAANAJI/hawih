@@ -1,19 +1,22 @@
 ---
 /**
- * CategoryTile — representative product photo + scrim + label, hover zoom.
+ * CategoryTile — HelloPrint-style white card: category name top-start,
+ * representative product photo filling the end side, arrow bottom-start
+ * (mirrored in RTL by .pk-icon--flip semantics via CSS).
  * Props:
  *   title: string
  *   href: string
  *   image: string     -> use categoryImage() from catalog-transform.mjs
  *   eager?: boolean   -> load image eagerly (above-the-fold)
  * NOTE: catalog-sync.ts renderCategoryTile rebuilds this markup in JS —
- * keep both in lockstep. A failed image hides itself; the tile's CSS
- * gradient + scrim + label keep it looking intentional.
+ * keep both in lockstep. A failed image hides itself; the card still reads
+ * as a labeled tile.
  */
 interface Props { title: string; href: string; image: string; eager?: boolean }
 const { title, href, image, eager = false } = Astro.props;
 ---
 <a class="pk-cattile" href={href} aria-label={title}>
+  <span class="pk-cattile__label">{title}</span>
   <img
     src={image}
     alt={title}
@@ -23,6 +26,7 @@ const { title, href, image, eager = false } = Astro.props;
     height="900"
     onerror="this.style.visibility='hidden'"
   />
-  <span class="pk-cattile__scrim" aria-hidden="true"></span>
-  <span class="pk-cattile__label">{title}</span>
+  <span class="pk-cattile__arrow" aria-hidden="true">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+  </span>
 </a>

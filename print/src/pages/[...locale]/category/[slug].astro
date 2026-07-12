@@ -7,13 +7,18 @@
 import Base from '@layouts/Base.astro';
 import Breadcrumbs from '@components/Breadcrumbs.astro';
 import ProductCard from '@components/ProductCard.astro';
+import CategoryTile from '@components/CategoryTile.astro';
+import TrustBar from '@components/TrustBar.astro';
 import EmptyState from '@components/EmptyState.astro';
 import Button from '@components/Button.astro';
 import JsonLd from '@components/JsonLd.astro';
 import { href } from '@lib/i18n';
 import { t } from '@lib/strings';
 import { formatNumber } from '@lib/format';
-import { categories, items, itemsInCategory, getCategory, categoryTitle, itemTitle } from '@lib/catalog';
+// `categories` (all) drives getStaticPaths so design-QA category pages still
+// build and resolve; `displayCategories` (real only) drives the visible chip
+// rail so the QA catalog never shows in the live nav.
+import { categories, displayCategories, items, itemsInCategory, getCategory, categoryTitle, itemTitle } from '@lib/catalog';
 import { categoryImage } from '@lib/catalog-transform.mjs';
 import { SITE_URL } from '@lib/config';
 import type { Locale } from '@lib/format';
@@ -34,6 +39,11 @@ const category = getCategory(slug!)!;
 const products = itemsInCategory(slug!);
 const title = categoryTitle(category, locale);
 const ogImage = categoryImage(items, slug!);
+// HelloPrint-style split hero: a big photo tile + a grid of up to 6 SIBLING
+// category tiles (other categories, this one excluded).
+const heroPhoto = products.find((p) => /^https?:\/\//.test(p.images?.hero ?? ''))?.images?.hero || ogImage;
+const siblings = categories.filter((c) => c.slug !== slug).slice(0, 6);
+const blurb = t('category.blurb', locale).replace('{cat}', title);
 
 const crumbs = [
   { label: t('nav.home', locale), href: href(locale, '/') },
@@ -84,25 +94,50 @@ const breadcrumbLd = {
     <Breadcrumbs items={crumbs} />
     <div class="pk-pagehead">
       <h1 class="pk-h1" data-live-cat-title>{title}</h1>
+      <p class="pk-muted" style="max-width:70ch">{blurb}</p>
       <p data-live-cat-count>{formatNumber(products.length, locale)} {t('category.productsCount', locale)}</p>
     </div>
+
+    <TrustBar locale={locale} />
 
     <!-- Lateral category navigation (baked; new categories appear after the
          daily rebuild — same policy as new URLs/sitemap). -->
     <div class="pk-chips pk-chips--scroll" aria-label={t('nav.products', locale)}>
       <a class="pk-chip" href={href(locale, '/products')}>{t('nav.allProducts', locale)}</a>
-      {categories.map((c) => (
+      {displayCategories.map((c) => (
         <a class={`pk-chip${c.slug === slug ? ' pk-chip--primary' : ''}`} href={href(locale, `/category/${c.slug}`)} aria-current={c.slug === slug ? 'page' : undefined}>
           {categoryTitle(c, locale)}
         </a>
       ))}
     </div>
 
+    <!-- Split hero: photo feature + sibling category tiles -->
+    <div class="pk-cathero pk-reveal">
+      <div class="pk-cathero__feature">
+        {heroPhoto && <img src={heroPhoto} alt="" loading="eager" decoding="async" width="1000" height="800" onerror="this.remove()" />}
+        <div>
+          <h2 class="pk-cathero__title">{t('category.heroTitle', locale).replace('{cat}', title)}</h2>
+          <p class="pk-cathero__body">{t('category.heroBody', locale)}</p>
+        </div>
+      </div>
+      <div class="pk-cathero__grid" aria-label={t('category.browse', locale)}>
+        {siblings.map((c) => (
+          <CategoryTile
+            title={categoryTitle(c, locale)}
+            href={href(locale, `/category/${c.slug}`)}
+            image={categoryImage(items, c.slug)}
+          />
+        ))}
+      </div>
+    </div>
+
+    <div class="pk-section-head"><div><h2 class="pk-h2">{t('category.popular', locale)}</h2></div></div>
+
     <!-- data-cat-body is the region catalog-sync re-renders live from the CRM -->
     <div data-cat-body>
       {products.length > 0 ? (
         <div class="pk-grid-products" data-cat-grid style="margin-bottom:var(--sp-10)">
-          {products.map((p) => (
+          {products.map((p, i) => (
             <div data-product-id={p.id} data-product-name={itemTitle(p, locale)} data-product-price={p.rate}>
               <ProductCard
                 href={href(locale, `/product/${p.slug}`)}
@@ -112,6 +147,8 @@ const breadcrumbLd = {
                 categoryLabel={title}
                 locale={locale}
                 itemMode={p.price_mode}
+                badge={i < 2 ? t('badge.popular', locale) : p.requires_artwork ? t('badge.upload', locale) : ''}
+                fastChip={true}
               />
             </div>
           ))}
