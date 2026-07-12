@@ -19,6 +19,7 @@
  * Run:  node scripts/scrape-helloprint.mjs
  */
 import { writeFile, mkdir, rm } from 'node:fs/promises';
+import { existsSync, readFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import https from 'node:https';
@@ -154,6 +155,24 @@ async function main() {
       description: cleanDesc(h.description), description_en: cleanDesc(h.description),
       rate: price, currency: 'SAR', unit_type: 'قطعة', requires_artwork: true, price_mode: 'exact',
       image: img ? localImg : '', tag: TAG, options: opts });
+  }
+
+  // Arabic overlay: HelloPrint's source is English-only, so title/description
+  // above hold English. If a translated map exists (slug → {name_ar,
+  // description_ar}), apply it so the Arabic display slots (title/description
+  // here → name_ar/description_ar in the payload) are real Arabic. English
+  // stays in title_en/description_en. See scripts/apply-ar-translations.mjs.
+  const arPath = resolve(ROOT, 'scripts/helloprint-ar.json');
+  if (existsSync(arPath)) {
+    const arMap = JSON.parse(readFileSync(arPath, 'utf8'));
+    let n = 0;
+    for (const it of items) {
+      const t = arMap[it.slug];
+      if (t && t.name_ar) { it.title = t.name_ar; if (t.description_ar) it.description = t.description_ar; n++; }
+    }
+    console.log(`[scrape] applied Arabic translations to ${n}/${items.length} items`);
+  } else {
+    console.log('[scrape] no scripts/helloprint-ar.json — titles/descriptions stay English (run apply-ar-translations.mjs)');
   }
 
   const raw = { success: true, store_config: { price_mode: 'exact', range_low_pct: 0, range_high_pct: 0 }, categories, items };
