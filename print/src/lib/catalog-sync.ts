@@ -204,7 +204,7 @@ function reconcileHome(cat: Catalog, locale: Locale): void {
     catsGrid.textContent = '';
     cat.categories.forEach((c, i) => {
       const wrap = el('div', { class: 'pk-reveal is-visible' });
-      wrap.appendChild(renderCategoryTile(c, locale, i < 4, categoryImage(cat.items, c.slug)));
+      wrap.appendChild(renderCategoryTile(c, locale, i < 4, c.image || categoryImage(cat.items, c.slug)));
       catsGrid.appendChild(wrap);
     });
   }

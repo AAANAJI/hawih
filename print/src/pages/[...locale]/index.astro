@@ -95,19 +95,33 @@ const websiteLd = {
     </div>
   </section>
 
-  <!-- Promo trio -->
-  <section class="pk-container pk-promos3" style="margin-bottom:var(--sp-10)">
-    {promos.map((pr, i) => (
-      <a class="pk-promo3 pk-reveal" style={`transition-delay:${i * 80}ms`} href={pr.href}>
-        {pr.img && <img class="pk-promo3__img" src={pr.img} alt="" loading={i === 0 ? 'eager' : 'lazy'} decoding="async" width="900" height="700" onerror="this.remove()" />}
-        <div>
-          <div class="pk-promo3__kicker">{t(`${pr.k}.kicker`, locale)}</div>
-          <h2 class="pk-promo3__title">{t(`${pr.k}.title`, locale)}</h2>
-          <p class="pk-promo3__body">{t(`${pr.k}.body`, locale)}</p>
-        </div>
-        <span class="pk-promo3__cta">{t(`${pr.k}.cta`, locale)} <Icon name="arrow-end" size={14} class="pk-icon--flip" /></span>
-      </a>
-    ))}
+  <!-- Promo — two-up (experts + promises), HelloPrint style -->
+  <section class="pk-container pk-promo2" style="margin-bottom:var(--sp-10)">
+    <a class="pk-promo2__card pk-promo2__card--green pk-reveal" href={whatsappUrl()} target="_blank" rel="noopener">
+      <img class="pk-promo2__img" src="/img/hp/cat/hp-business-cards.png" alt="" loading="lazy" decoding="async" onerror="this.remove()" />
+      <div class="pk-promo2__body">
+        <h2 class="pk-promo2__title">{locale === 'en' ? 'A dedicated team of print experts' : 'فريق مختص من خبراء الطباعة'}</h2>
+        <p class="pk-promo2__text">{locale === 'en' ? 'Our print experts help with your most specialised, high-volume jobs — on time, on brand and on budget.' : 'خبراء الطباعة لدينا يساعدونك في أصعب الطلبات وأكبرها — في الوقت المحدد وبالجودة والميزانية المناسبة.'}</p>
+        <span class="pk-promo2__cta">{locale === 'en' ? 'Request a quote' : 'اطلب عرض سعر'} <Icon name="arrow-end" size={15} class="pk-icon--flip" /></span>
+      </div>
+    </a>
+    <a class="pk-promo2__card pk-promo2__card--ink pk-reveal" style="transition-delay:90ms" href={href(locale, '/about')}>
+      <img class="pk-promo2__img" src="/img/hp/cat/hp-cards-invitations.png" alt="" loading="lazy" decoding="async" onerror="this.remove()" />
+      <div class="pk-promo2__body">
+        <h2 class="pk-promo2__title">{locale === 'en' ? 'Our promises' : 'وعودنا'}</h2>
+        <p class="pk-promo2__text">{locale === 'en' ? 'We don’t just print — we promise the best price, 100% satisfaction, great design and a team beside you.' : 'نحن لا نطبع فقط — نعدك بأفضل سعر ورضا كامل وتصميم متميز وفريق بجانبك دائماً.'}</p>
+        <ul class="pk-promo2__checks">
+          {[
+            locale === 'en' ? 'Best price guarantee' : 'ضمان أفضل سعر',
+            locale === 'en' ? '100% satisfaction' : 'رضا ١٠٠٪',
+            locale === 'en' ? 'A dedicated team' : 'فريق مخصص لخدمتك',
+          ].map((c) => (
+            <li><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6 9 17l-5-5"/></svg>{c}</li>
+          ))}
+        </ul>
+        <span class="pk-promo2__cta">{locale === 'en' ? 'See more' : 'اعرف المزيد'} <Icon name="arrow-end" size={15} class="pk-icon--flip" /></span>
+      </div>
+    </a>
   </section>
 
   <!-- Featured products -->
@@ -160,7 +174,7 @@ const websiteLd = {
             <CategoryTile
               title={categoryTitle(c, locale)}
               href={href(locale, `/category/${c.slug}`)}
-              image={categoryImage(items, c.slug)}
+              image={c.image || categoryImage(items, c.slug)}
               eager={i < 4}
             />
           </div>

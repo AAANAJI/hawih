@@ -91,6 +91,8 @@ export function transformCatalog(api) {
       // Optional provenance tag (e.g. 'helloprint' for the design-QA catalog),
       // so tagged categories can be filtered out of the real storefront.
       tag: c.tag ? String(c.tag) : '',
+      // Optional cut-out category image (transparent PNG) for the tile.
+      image: typeof c.image === 'string' ? c.image : '',
     });
   });
 
@@ -137,6 +139,7 @@ export function transformCatalog(api) {
       title_en: c.title_en,
       sort: c.sort,
       ...(c.tag ? { tag: c.tag } : {}),
+      ...(c.image ? { image: c.image } : {}),
     }));
 
   // Store-wide config from the CRM (settings-driven, no store deploy needed):

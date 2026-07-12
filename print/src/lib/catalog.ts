@@ -30,6 +30,8 @@ export interface CatalogCategory {
   sort: number;
   /** Provenance tag (e.g. 'helloprint' design-QA); absent for real categories. */
   tag?: string;
+  /** Optional cut-out category image (transparent PNG) for the tile. */
+  image?: string;
 }
 export interface CatalogItem {
   id: number | string;

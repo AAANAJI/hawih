@@ -12,7 +12,8 @@
       "title": "تغليف وشحن",
       "title_en": "Packaging & Shipping",
       "sort": 0,
-      "tag": "helloprint"
+      "tag": "helloprint",
+      "image": "/img/hp/cat/hp-packaging.png"
     },
     {
       "id": 9002,
@@ -20,7 +21,8 @@
       "title": "قوائم طعام",
       "title_en": "Menu Cards",
       "sort": 1,
-      "tag": "helloprint"
+      "tag": "helloprint",
+      "image": "/img/hp/cat/hp-menu-cards.png"
     },
     {
       "id": 9003,
@@ -28,7 +30,8 @@
       "title": "كتيبات وبروشورات",
       "title_en": "Booklets & Brochures",
       "sort": 2,
-      "tag": "helloprint"
+      "tag": "helloprint",
+      "image": "/img/hp/cat/hp-booklets.png"
     },
     {
       "id": 9004,
@@ -36,7 +39,8 @@
       "title": "لوحات ولافتات",
       "title_en": "Signs & Panels",
       "sort": 3,
-      "tag": "helloprint"
+      "tag": "helloprint",
+      "image": "/img/hp/cat/hp-signs.png"
     },
     {
       "id": 9005,
@@ -44,7 +48,8 @@
       "title": "أعلام",
       "title_en": "Flags",
       "sort": 4,
-      "tag": "helloprint"
+      "tag": "helloprint",
+      "image": "/img/hp/cat/hp-flags.png"
     },
     {
       "id": 9006,
@@ -52,7 +57,8 @@
       "title": "ملصقات وليبل",
       "title_en": "Stickers & Labels",
       "sort": 5,
-      "tag": "helloprint"
+      "tag": "helloprint",
+      "image": "/img/hp/cat/hp-stickers.png"
     },
     {
       "id": 9007,
@@ -60,7 +66,8 @@
       "title": "بطاقات ودعوات",
       "title_en": "Cards & Invitations",
       "sort": 6,
-      "tag": "helloprint"
+      "tag": "helloprint",
+      "image": "/img/hp/cat/hp-cards-invitations.png"
     },
     {
       "id": 9008,
@@ -68,7 +75,8 @@
       "title": "تقاويم",
       "title_en": "Calendars",
       "sort": 7,
-      "tag": "helloprint"
+      "tag": "helloprint",
+      "image": "/img/hp/cat/hp-calendars.png"
     },
     {
       "id": 9009,
@@ -76,7 +84,8 @@
       "title": "بنرات",
       "title_en": "Banners",
       "sort": 8,
-      "tag": "helloprint"
+      "tag": "helloprint",
+      "image": "/img/hp/cat/hp-banners.png"
     },
     {
       "id": 9010,
@@ -84,7 +93,8 @@
       "title": "أظرف",
       "title_en": "Envelopes",
       "sort": 9,
-      "tag": "helloprint"
+      "tag": "helloprint",
+      "image": "/img/hp/cat/hp-envelopes.png"
     },
     {
       "id": 9011,
@@ -92,7 +102,8 @@
       "title": "رول أب",
       "title_en": "Roller Banners",
       "sort": 10,
-      "tag": "helloprint"
+      "tag": "helloprint",
+      "image": "/img/hp/cat/hp-roller-banners.png"
     },
     {
       "id": 9012,
@@ -100,7 +111,8 @@
       "title": "معارض",
       "title_en": "Exhibition",
       "sort": 11,
-      "tag": "helloprint"
+      "tag": "helloprint",
+      "image": "/img/hp/cat/hp-exhibition.png"
     },
     {
       "id": 9013,
@@ -108,7 +120,8 @@
       "title": "دفاتر ملاحظات",
       "title_en": "Notepads",
       "sort": 12,
-      "tag": "helloprint"
+      "tag": "helloprint",
+      "image": "/img/hp/cat/hp-notepads.png"
     },
     {
       "id": 9014,
@@ -116,7 +129,8 @@
       "title": "بوسترات",
       "title_en": "Posters",
       "sort": 13,
-      "tag": "helloprint"
+      "tag": "helloprint",
+      "image": "/img/hp/cat/hp-posters.png"
     },
     {
       "id": 9015,
@@ -124,7 +138,8 @@
       "title": "مطويات",
       "title_en": "Folded Leaflets",
       "sort": 14,
-      "tag": "helloprint"
+      "tag": "helloprint",
+      "image": "/img/hp/cat/hp-folded-leaflets.png"
     },
     {
       "id": 9016,
@@ -132,7 +147,8 @@
       "title": "فلايرات",
       "title_en": "Flyers",
       "sort": 15,
-      "tag": "helloprint"
+      "tag": "helloprint",
+      "image": "/img/hp/cat/hp-flyers.png"
     },
     {
       "id": 9017,
@@ -140,7 +156,8 @@
       "title": "بادجات",
       "title_en": "Badges",
       "sort": 16,
-      "tag": "helloprint"
+      "tag": "helloprint",
+      "image": "/img/hp/cat/hp-badges.png"
     },
     {
       "id": 9018,
@@ -148,7 +165,8 @@
       "title": "بطاقات الأعمال",
       "title_en": "Business Cards",
       "sort": 17,
-      "tag": "helloprint"
+      "tag": "helloprint",
+      "image": "/img/hp/cat/hp-business-cards.png"
     },
     {
       "id": 9019,
@@ -156,7 +174,8 @@
       "title": "فواصل كتب",
       "title_en": "Bookmarks",
       "sort": 18,
-      "tag": "helloprint"
+      "tag": "helloprint",
+      "image": "/img/hp/cat/hp-bookmarks.png"
     }
   ],
   "items": [
