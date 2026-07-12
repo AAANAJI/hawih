@@ -1240,8 +1240,8 @@ a.pk-acct-row:hover { color: var(--pk-accent); }
   transition: box-shadow var(--t-base), transform var(--t-base);
 }
 .pk-promo2__card:hover { box-shadow: var(--sh-3); transform: translateY(-2px); }
-.pk-promo2__card--green { background: radial-gradient(120% 120% at 100% 0%, #1FB25A 0%, #16A34A 42%, #0C7A38 100%); }
-.pk-promo2__card--ink   { background: radial-gradient(120% 120% at 0% 0%, #1B7A42 0%, #14141C 62%); }
+.pk-promo2__card--green { background: radial-gradient(120% 120% at 100% 0%, #3E3EFF 0%, #1F1FFE 44%, #1414D6 100%); }
+.pk-promo2__card--ink   { background: radial-gradient(120% 120% at 0% 0%, #2A2AD6 0%, #14141C 64%); }
 .pk-promo2__img {
   position: absolute; inset-inline-end: -24px; bottom: -14px; z-index: -1;
   width: 46%; max-height: 92%; object-fit: contain; object-position: bottom right;
