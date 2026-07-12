@@ -52,11 +52,12 @@ export function normalizeOptions(opts) {
         price_delta: Number(v.price_delta) || 0,
       };
       // Optional curated extras (configurator cards): recommended ribbon,
-      // sublabel, explicit icon key. Only attached when present.
+      // sublabel, explicit icon key, real tile image. Only attached when present.
       if (v.recommended === true || v.recommended === 1 || v.recommended === '1') out.recommended = true;
       if (v.sublabel_ar) out.sublabel_ar = String(v.sublabel_ar);
       if (v.sublabel_en) out.sublabel_en = String(v.sublabel_en);
       if (v.icon) out.icon = String(v.icon);
+      if (v.image) out.image = String(v.image);
       return out;
     }),
   }));

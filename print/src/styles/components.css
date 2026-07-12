@@ -1342,6 +1342,13 @@ a.pk-acct-row:hover { color: var(--pk-accent); }
 }
 .pk-optcard__icon { color: var(--pk-ink); display: inline-flex; }
 .pk-optcard:has(input:checked) .pk-optcard__icon { color: var(--pk-accent); }
+/* Real scraped tile image (HelloPrint visual) — fixed square, contained. */
+.pk-optcard__icon--img img {
+  width: 56px;
+  height: 56px;
+  object-fit: contain;
+  display: block;
+}
 .pk-optcard__label { font-size: 0.9rem; font-weight: 700; line-height: 1.3; color: var(--pk-ink); }
 .pk-optcard__sub { font-size: 0.76rem; color: var(--pk-ink-muted); line-height: 1.3; }
 /* Quiet price delta (HelloPrint keeps the running total in the price box, not on

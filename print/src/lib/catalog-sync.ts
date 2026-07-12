@@ -178,9 +178,18 @@ function renderOptions(picker: Element, options: CatalogItem['options'], locale:
       });
       if (vi === 0) input.setAttribute('checked', '');
       card.appendChild(input);
-      const icon = el('span', { class: 'pk-optcard__icon' });
-      icon.innerHTML = optionIcon(v.label_ar, v.label_en, v.icon ?? '');
-      card.appendChild(icon);
+      if (v.image) {
+        // Real scraped tile image — mirror of OptionPicker.astro's image branch.
+        const icon = el('span', { class: 'pk-optcard__icon pk-optcard__icon--img' });
+        const img = el('img', { src: v.image, alt: '', loading: 'lazy', decoding: 'async' }) as HTMLImageElement;
+        img.onerror = () => icon.remove();
+        icon.appendChild(img);
+        card.appendChild(icon);
+      } else {
+        const icon = el('span', { class: 'pk-optcard__icon' });
+        icon.innerHTML = optionIcon(v.label_ar, v.label_en, v.icon ?? '');
+        card.appendChild(icon);
+      }
       card.appendChild(el('span', { class: 'pk-optcard__label' }, label));
       if (sub) card.appendChild(el('span', { class: 'pk-optcard__sub' }, sub));
       if (delta) {

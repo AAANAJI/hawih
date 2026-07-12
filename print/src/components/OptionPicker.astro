@@ -73,7 +73,11 @@ function initiallyHidden(gi: number): boolean {
                   data-text={label}
                   checked={vi === 0}
                 />
-                <span class="pk-optcard__icon" set:html={optionIcon(v.label_ar, v.label_en, v.icon ?? '')} />
+                {v.image ? (
+                  <span class="pk-optcard__icon pk-optcard__icon--img"><img src={v.image} alt="" loading="lazy" decoding="async" onerror="this.parentElement.remove()" /></span>
+                ) : (
+                  <span class="pk-optcard__icon" set:html={optionIcon(v.label_ar, v.label_en, v.icon ?? '')} />
+                )}
                 <span class="pk-optcard__label">{label}</span>
                 {sub && <span class="pk-optcard__sub">{sub}</span>}
                 {delta && <span class="pk-optcard__delta pk-price"><bdi>{delta}</bdi></span>}

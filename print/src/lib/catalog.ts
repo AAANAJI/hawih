@@ -15,6 +15,8 @@ export interface OptionValue {
   sublabel_ar?: string;
   sublabel_en?: string;
   icon?: string;
+  /** Real option tile image (scraped HelloPrint visual) — preferred over icon. */
+  image?: string;
 }
 export interface CatalogOption {
   name_ar: string;
