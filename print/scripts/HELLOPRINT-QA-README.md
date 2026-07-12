@@ -1,83 +1,75 @@
-# HelloPrint design-QA catalog
+# HelloPrint catalog clone (design/QA)
 
-A faithful, HelloPrint-modelled catalog — **18 categories, 65 products**, real
-option structures (size / paper / finishing / sides / corners / quantity tiers),
-realistic SAR prices, and clean generic tile images — imported **for design/QA
-comparison only**. Every row is tagged **`helloprint`** so the whole set is
-selectable and removable in one go, and is kept out of the real storefront.
+A **real** clone of HelloPrint's print catalog — **19 categories, ~159 products**
+scraped from helloprint.com's public product index: real product **names,
+descriptions, prices, quantity tiers, and mockup images**, paired with real
+HelloPrint-style option groups (size / paper / finishing / sides / corners).
+Every row is tagged **`helloprint`**. Brand references (HelloPrint / PrintPortal)
+are stripped from the copy; prices are converted GBP→SAR.
 
-> This exists so you can put the Hawih store head-to-head with helloprint.com on
-> the same catalog — product pages, spec icons, promo/section boxes, option
-> cards. It is **not** meant to go live; your real items are unaffected.
+> **For design/QA only.** This is scaffolding to nail the look, feel and catalog
+> skeleton against the real thing — replace the imagery and copy with your own
+> before launch. HelloPrint's images/descriptions are their property.
 
 ## View it in the store (nothing to install)
 
-The store already ships the catalog in a **baked snapshot**, gated behind a
-toggle. On any store URL (behind the usual preview key):
+Behind the usual preview key, append `?qa=helloprint`:
 
 ```
 https://print.hawih.com.sa/?preview=hawih-preview-7Qk2mZ&qa=helloprint
 ```
 
-- `?qa=helloprint` swaps the live catalog for the HelloPrint one (remembered in
-  `localStorage`, so it persists as you browse home → category → product).
-- A small **“وضع مقارنة التصميم · HelloPrint”** pill appears bottom-start with an
-  **Exit** link, or append `?qa=off` to any URL.
-- The real catalog (your 231 items) is the default and is **never** mixed with
-  these — they’re filtered out of every real listing by tag and only the `?qa`
-  toggle brings them in.
+- Swaps the live catalog for the HelloPrint clone (remembered in `localStorage`,
+  persists across home → category → product). Exit with `?qa=off`.
+- The **real** catalog (your items) is the default and is never mixed with these —
+  they're filtered out of every real listing by tag and only `?qa` brings them in.
 
-## How it’s wired (so it can never leak to launch)
-
-| Piece | File |
-|---|---|
-| Dataset (raw API shape, tagged) | `src/data/helloprint-catalog.raw.json` |
-| Generator (dataset + images + import payload) | `scripts/gen-helloprint-catalog.mjs` |
-| Generic tile images (per product) | `public/img/hp/prod/*.svg` |
-| Build merge (folds QA into `catalog.json`, slug-deduped, sorted last) | `scripts/build-catalog.mjs` |
-| Real-only listing exports (`displayItems` / `displayCategories`) | `src/lib/catalog.ts` |
-| Runtime toggle (`?qa` → serve QA catalog) | `src/layouts/Base.astro`, `src/lib/live-catalog.ts` |
-
-The QA product/category pages are built statically (so their option cards + spec
-icons are real pages), but they’re excluded from home, `/products`, the header
-nav and every category grid unless the toggle is on.
-
-## Regenerate the dataset
+## Re-scrape / rebuild
 
 ```
-node scripts/gen-helloprint-catalog.mjs   # rewrites raw.json, tile SVGs, import payload
-npm run build                             # folds it into catalog.json
+node scripts/scrape-helloprint.mjs   # rewrites raw.json + import payload + downloads images
+npm run build                         # folds the clone into catalog.json
 ```
 
-## Import into the CRM (optional — needs your token)
+`scrape-helloprint.mjs` pulls fresh data from HelloPrint's Algolia product index,
+filters to the print catalog (skips promo merch), and downloads product mockups
+to `public/img/hp/prod/*.webp`.
 
-Only if you want the items to live in the CRM Items admin (to manage/remove them
-there). The store QA view does **not** need this.
+## Load it into the CRM — optionally replacing your catalog
 
-1. In the CRM, set the setting **`print_import_token`** to any secret string
-   (this arms the token-gated import endpoints).
-2. Run:
+Needs your CRM `print_import_token` (set that setting to any secret first). The
+importer **backs up your current catalog first**, and any purge is a **reversible
+soft-delete** (nothing is hard-deleted).
 
-   ```
-   export PRINT_IMPORT_TOKEN='<that same secret>'
-   python3 scripts/import_helloprint.py                # categories + items + images
-   python3 scripts/import_helloprint.py --dry-run       # preview, sends nothing
-   ```
+```
+export PRINT_IMPORT_TOKEN='<that same secret>'
 
-   Stdlib-only Python 3 — no `pip install`. Images (SVG tiles) are converted to
-   PNG on the fly if `rsvg-convert` / `inkscape` / ImageMagick / `cairosvg` is
-   available; otherwise image upload is skipped (harmless — the store QA view
-   uses its own baked SVGs).
-3. In the CRM Items list, filter/sort by the **`print_import_tag`** column
-   (= `helloprint`) to see, select and manage the whole set.
+# Wipe the existing print catalog, then import the clone + images:
+python3 scripts/import_helloprint.py --purge
 
-Imported items carry `price_mode = exact` (fixed SAR prices) and stay tagged, so
-the store keeps filtering them out of the real listings automatically.
+# Or add the clone alongside your items (no wipe):
+python3 scripts/import_helloprint.py
 
-## Remove the whole set
+# Preview the plan without sending anything:
+python3 scripts/import_helloprint.py --dry-run
+```
 
-- **From the store:** delete `src/data/helloprint-catalog.raw.json` (and
-  optionally `public/img/hp/`), then `npm run build`. The merge is a no-op when
-  the file is absent — the real catalog is all that remains.
-- **From the CRM (if imported):** in the Items list, filter by
-  `print_import_tag = helloprint` and bulk-delete.
+- `--purge` soft-deletes **every** print item; `--purge-tag helloprint` removes
+  only a previous clone import (leaves your real catalog).
+- The current catalog is saved to `scripts/helloprint-backup-catalog.json` before
+  anything is deleted.
+- Images are the real webp mockups shipped in `public/img/hp/prod/` and uploaded
+  as-is (`import_image` accepts webp).
+- Stdlib-only Python 3 — no `pip install`.
+
+Once imported, the storefront picks the clone up on its next rebuild/live-sync,
+and you can manage the set in the CRM Items list by filtering the
+**`print_import_tag`** column (= `helloprint`).
+
+## Undo
+
+- **Store:** delete `src/data/helloprint-catalog.raw.json` (and `public/img/hp/`),
+  then `npm run build`. The merge is a no-op when the file is absent.
+- **CRM:** restore from `helloprint-backup-catalog.json`, or filter Items by
+  `print_import_tag = helloprint` and delete; purged items are soft-deleted
+  (`deleted=1`) and can be flipped back.

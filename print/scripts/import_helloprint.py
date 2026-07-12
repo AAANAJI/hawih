@@ -1,42 +1,38 @@
 #!/usr/bin/env python3
 """
-import_helloprint.py — load the HelloPrint DESIGN-QA catalog into the Hawih CRM.
+import_helloprint.py — replace the Hawih CRM print catalog with the HelloPrint
+clone (design/QA), or add it alongside.
 
-This pushes the tagged HelloPrint comparison catalog (categories, products,
-options, prices — every item tagged 'helloprint') into the CRM via the
-token-gated Print_api endpoints, so the whole set is selectable/manageable
-from the CRM Items admin (filter the `print_import_tag` column = 'helloprint').
+Steps (in order):
+  1. BACK UP the current CRM catalog to a JSON file (always, unless --no-backup).
+  2. Optionally PURGE the existing print catalog — reversible soft-delete:
+        --purge          erase EVERY print item (empties the storefront)
+        --purge-tag TAG  erase only items tagged TAG (e.g. a previous import)
+     (omit to keep the current catalog and just add the clone.)
+  3. IMPORT the scraped HelloPrint catalog (categories + items, tagged 'helloprint').
+  4. UPLOAD each product's image (real HelloPrint mockup webp shipped in the repo).
 
-You DO NOT need this to view the comparison in the store — the store already
-renders the catalog under `?qa=helloprint` from a baked snapshot. Run this only
-when you want the items to live in the CRM for management.
-
-Stdlib only (urllib) — no pip install required.
+Stdlib only (urllib) — no pip install. Needs the CRM `print_import_token`.
 
 Usage:
     export PRINT_IMPORT_TOKEN='<the print_import_token you set in the CRM>'
-    python3 scripts/import_helloprint.py                 # categories + items + images
-    python3 scripts/import_helloprint.py --no-images     # skip image upload
-    python3 scripts/import_helloprint.py --dry-run        # print, send nothing
-    python3 scripts/import_helloprint.py --crm https://crm.hawih.com.sa
+    python3 scripts/import_helloprint.py --purge            # wipe + clone + images
+    python3 scripts/import_helloprint.py                    # add clone (no wipe)
+    python3 scripts/import_helloprint.py --dry-run          # show plan, send nothing
+    python3 scripts/import_helloprint.py --no-images        # skip image upload
 
-Images: the generic tiles are SVG; import_image accepts raster only, so each
-tile is converted to PNG at run time using the first available of
-rsvg-convert / inkscape / ImageMagick (convert|magick) / cairosvg. If none is
-installed, image upload is skipped with a notice (the store QA view is
-unaffected — it uses the baked SVGs).
+To UNDO a purge later: the items are soft-deleted (deleted=1); restore from the
+backup JSON or flip them back in the DB. Nothing is hard-deleted.
 """
 import argparse
 import json
 import mimetypes
 import os
-import shutil
 import ssl
-import subprocess
 import sys
-import tempfile
 import urllib.request
 import urllib.error
+import urllib.parse
 import uuid
 
 HERE = os.path.dirname(os.path.abspath(__file__))
@@ -49,14 +45,25 @@ def die(msg, code=1):
     sys.exit(code)
 
 
+def _ctx(insecure):
+    return ssl._create_unverified_context() if insecure else None
+
+
+def get_json(url, token=None, insecure=False):
+    req = urllib.request.Request(url, method="GET")
+    if token:
+        req.add_header("Authorization", "Bearer " + token)
+    with urllib.request.urlopen(req, context=_ctx(insecure), timeout=120) as r:
+        return json.loads(r.read().decode("utf-8"))
+
+
 def post_json(url, token, body, insecure=False):
     data = json.dumps(body).encode("utf-8")
     req = urllib.request.Request(url, data=data, method="POST")
     req.add_header("Content-Type", "application/json")
     req.add_header("Authorization", "Bearer " + token)
-    ctx = ssl._create_unverified_context() if insecure else None
-    with urllib.request.urlopen(req, context=ctx, timeout=120) as resp:
-        return json.loads(resp.read().decode("utf-8"))
+    with urllib.request.urlopen(req, context=_ctx(insecure), timeout=180) as r:
+        return json.loads(r.read().decode("utf-8"))
 
 
 def post_multipart(url, token, fields, file_field, file_path, insecure=False):
@@ -64,156 +71,112 @@ def post_multipart(url, token, fields, file_field, file_path, insecure=False):
     ctype, _ = mimetypes.guess_type(file_path)
     ctype = ctype or "application/octet-stream"
     with open(file_path, "rb") as fh:
-        file_bytes = fh.read()
+        blob = fh.read()
     parts = []
-    for k, v in fields.items():
-        parts.append(("--" + boundary).encode())
-        parts.append(('Content-Disposition: form-data; name="%s"' % k).encode())
-        parts.append(b"")
-        parts.append(str(v).encode("utf-8"))
-    parts.append(("--" + boundary).encode())
-    parts.append(
-        ('Content-Disposition: form-data; name="%s"; filename="%s"'
-         % (file_field, os.path.basename(file_path))).encode()
-    )
-    parts.append(("Content-Type: " + ctype).encode())
-    parts.append(b"")
-    parts.append(file_bytes)
-    parts.append(("--" + boundary + "--").encode())
-    parts.append(b"")
+    for k, val in fields.items():
+        parts += [("--" + boundary).encode(),
+                  ('Content-Disposition: form-data; name="%s"' % k).encode(), b"", str(val).encode()]
+    parts += [("--" + boundary).encode(),
+              ('Content-Disposition: form-data; name="%s"; filename="%s"' % (file_field, os.path.basename(file_path))).encode(),
+              ("Content-Type: " + ctype).encode(), b"", blob, ("--" + boundary + "--").encode(), b""]
     body = b"\r\n".join(parts)
     req = urllib.request.Request(url, data=body, method="POST")
     req.add_header("Content-Type", "multipart/form-data; boundary=" + boundary)
     req.add_header("Authorization", "Bearer " + token)
-    ctx = ssl._create_unverified_context() if insecure else None
-    with urllib.request.urlopen(req, context=ctx, timeout=120) as resp:
-        return json.loads(resp.read().decode("utf-8"))
-
-
-# ---- SVG → PNG conversion (first available tool wins) ----------------------
-_CONVERTER = "unchecked"
-
-
-def _pick_converter():
-    if shutil.which("rsvg-convert"):
-        return ("rsvg-convert", lambda s, p: ["rsvg-convert", "-w", "800", "-h", "800", s, "-o", p])
-    if shutil.which("inkscape"):
-        return ("inkscape", lambda s, p: ["inkscape", s, "--export-type=png", "-w", "800", "-h", "800", "-o", p])
-    for magick in ("magick", "convert"):
-        if shutil.which(magick):
-            cmd = [magick] if magick == "convert" else [magick, "convert"]
-            return (magick, lambda s, p, _c=cmd: _c + ["-background", "white", "-density", "160", s, p])
-    try:
-        import cairosvg  # noqa: F401
-        return ("cairosvg", None)
-    except Exception:
-        return (None, None)
-
-
-def svg_to_png(svg_path, out_png):
-    global _CONVERTER
-    if _CONVERTER == "unchecked":
-        _CONVERTER = _pick_converter()
-    name, builder = _CONVERTER
-    if not name:
-        return False
-    try:
-        if name == "cairosvg":
-            import cairosvg
-            cairosvg.svg2png(url=svg_path, write_to=out_png, output_width=800, output_height=800, background_color="white")
-        else:
-            subprocess.run(builder(svg_path, out_png), check=True,
-                           stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-        return os.path.exists(out_png) and os.path.getsize(out_png) > 0
-    except Exception:
-        return False
+    with urllib.request.urlopen(req, context=_ctx(insecure), timeout=120) as r:
+        return json.loads(r.read().decode("utf-8"))
 
 
 def main():
-    ap = argparse.ArgumentParser(description="Import the HelloPrint design-QA catalog into the Hawih CRM.")
-    ap.add_argument("--crm", default="https://crm.hawih.com.sa", help="CRM base URL")
-    ap.add_argument("--token", default=os.environ.get("PRINT_IMPORT_TOKEN", ""), help="print_import_token (or env PRINT_IMPORT_TOKEN)")
-    ap.add_argument("--payload", default=DEFAULT_PAYLOAD, help="path to helloprint-import-payload.json")
-    ap.add_argument("--store-dir", default=STORE_ROOT, help="store repo root (resolves item image_file paths)")
-    ap.add_argument("--no-images", action="store_true", help="skip image upload")
-    ap.add_argument("--dry-run", action="store_true", help="print what would be sent; send nothing")
-    ap.add_argument("--insecure", action="store_true", help="skip TLS verification (debug only)")
+    ap = argparse.ArgumentParser(description="Replace/append the Hawih CRM print catalog with the HelloPrint clone.")
+    ap.add_argument("--crm", default="https://crm.hawih.com.sa")
+    ap.add_argument("--token", default=os.environ.get("PRINT_IMPORT_TOKEN", ""))
+    ap.add_argument("--payload", default=DEFAULT_PAYLOAD)
+    ap.add_argument("--store-dir", default=STORE_ROOT, help="store repo root (resolves image_file paths)")
+    ap.add_argument("--purge", action="store_true", help="wipe EVERY print item first (reversible soft-delete)")
+    ap.add_argument("--purge-tag", default="", help="wipe only items with this print_import_tag")
+    ap.add_argument("--no-backup", action="store_true")
+    ap.add_argument("--no-images", action="store_true")
+    ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--insecure", action="store_true")
     args = ap.parse_args()
+    base = args.crm.rstrip("/") + "/index.php/print_api"
 
     if not os.path.exists(args.payload):
-        die("payload not found: " + args.payload + " (run: node scripts/gen-helloprint-catalog.mjs)")
-    with open(args.payload, encoding="utf-8") as fh:
-        payload = json.load(fh)
+        die("payload not found: %s (run: node scripts/scrape-helloprint.mjs)" % args.payload)
+    payload = json.load(open(args.payload, encoding="utf-8"))
     cats, items = payload.get("categories", []), payload.get("items", [])
     print("Payload: %d categories, %d items (tag=%s)" % (len(cats), len(items), payload.get("tag")))
+    print("Target : %s" % base)
+    print("Plan   : %s backup -> %s -> import -> %s images"
+          % ("skip" if args.no_backup else "do",
+             ("PURGE ALL" if args.purge else ("purge tag=" + args.purge_tag) if args.purge_tag else "no purge"),
+             "skip" if args.no_images else "upload"))
 
     if args.dry_run:
-        print("[dry-run] POST %s/index.php/print_api/import  (categories+items)" % args.crm)
-        if not args.no_images:
-            print("[dry-run] then POST /print_api/import_image for each item (SVG→PNG)")
+        print("[dry-run] nothing sent.")
         return
-
     if not args.token:
-        die("no token. Set PRINT_IMPORT_TOKEN or pass --token. In the CRM set the "
-            "`print_import_token` setting to the same value first.")
+        die("no token. Set PRINT_IMPORT_TOKEN or pass --token, and set the same value "
+            "as the CRM `print_import_token` setting first.")
 
-    import_url = args.crm.rstrip("/") + "/index.php/print_api/import"
-    print("→ %s" % import_url)
+    # 1) backup
+    if not args.no_backup:
+        try:
+            snap = get_json(base + "/catalog", insecure=args.insecure)
+            path = os.path.join(HERE, "helloprint-backup-catalog.json")
+            json.dump(snap, open(path, "w", encoding="utf-8"), ensure_ascii=False, indent=2)
+            print("backup: saved current catalog (%d items) -> %s" % (len(snap.get("items", [])), path))
+        except Exception as e:
+            die("backup failed (%s). Refusing to continue; pass --no-backup to override." % e)
+
+    # 2) purge (reversible)
+    if args.purge or args.purge_tag:
+        url = base + "/purge" + ("?tag=" + urllib.parse.quote(args.purge_tag) if args.purge_tag else "")
+        try:
+            r = post_json(url, args.token, {}, args.insecure)
+            print("purge: soft-deleted %s items (scope=%s) — reversible" % (r.get("deleted"), r.get("scope")))
+        except urllib.error.HTTPError as e:
+            die("purge failed HTTP %s: %s" % (e.code, e.read().decode("utf-8", "replace")))
+
+    # 3) import
     try:
-        res = post_json(import_url, args.token, {"categories": cats, "items": items}, args.insecure)
+        r = post_json(base + "/import", args.token, {"categories": cats, "items": items}, args.insecure)
     except urllib.error.HTTPError as e:
         die("import failed HTTP %s: %s" % (e.code, e.read().decode("utf-8", "replace")))
-    except urllib.error.URLError as e:
-        die("import request failed: %s" % e)
-    if not res.get("success"):
-        die("import rejected: " + json.dumps(res, ensure_ascii=False))
-    ci, it = res.get("categories", {}), res.get("items", {})
-    print("  categories: created=%s existing=%s" % (ci.get("created"), ci.get("existing")))
-    print("  items: created=%s updated=%s failed=%s" % (it.get("created"), it.get("updated"), it.get("failed")))
-    for r in res.get("results", []):
-        if r.get("status") == "error":
-            print("  ! %s: %s" % (r.get("slug"), r.get("message")))
+    if not r.get("success"):
+        die("import rejected: " + json.dumps(r, ensure_ascii=False))
+    it = r.get("items", {})
+    print("import: created=%s updated=%s failed=%s" % (it.get("created"), it.get("updated"), it.get("failed")))
+    for x in r.get("results", []):
+        if x.get("status") == "error":
+            print("  ! %s: %s" % (x.get("slug"), x.get("message")))
 
+    # 4) images (real webp files shipped in the repo → uploaded as-is)
     if args.no_images:
         print("images: skipped (--no-images)")
         return
-
-    img_url = args.crm.rstrip("/") + "/index.php/print_api/import_image"
-    ok = skip = fail = 0
-    tmp = tempfile.mkdtemp(prefix="hp-png-")
-    try:
-        for item in items:
-            rel = item.get("image_file")
-            if not rel:
-                continue
-            svg = os.path.join(args.store_dir, rel)
-            if not os.path.exists(svg):
-                skip += 1
-                continue
-            png = os.path.join(tmp, item["slug"] + ".png")
-            if not svg_to_png(svg, png):
-                skip += 1
-                continue
-            try:
-                r = post_multipart(img_url, args.token, {"slug": item["slug"]}, "image", png, args.insecure)
-                if r.get("success"):
-                    ok += 1
-                else:
-                    fail += 1
-            except urllib.error.HTTPError as e:
-                fail += 1
-                print("  ! image %s: HTTP %s" % (item["slug"], e.code))
-            except urllib.error.URLError as e:
-                fail += 1
-                print("  ! image %s: %s" % (item["slug"], e))
-    finally:
-        shutil.rmtree(tmp, ignore_errors=True)
-
-    if _CONVERTER != "unchecked" and _CONVERTER[0] is None:
-        print("images: no SVG→PNG converter found (install librsvg / inkscape / imagemagick / cairosvg). "
-              "Skipped %d — the store QA view still shows the tiles from its baked SVGs." % skip)
-    else:
-        print("images: uploaded=%d skipped=%d failed=%d" % (ok, skip, fail))
+    url = base + "/import_image"
+    ok = miss = fail = 0
+    for item in items:
+        rel = item.get("image_file")
+        if not rel:
+            continue
+        fp = os.path.join(args.store_dir, rel)
+        if not os.path.exists(fp):
+            miss += 1
+            continue
+        try:
+            rr = post_multipart(url, args.token, {"slug": item["slug"]}, "image", fp, args.insecure)
+            ok += 1 if rr.get("success") else 0
+            fail += 0 if rr.get("success") else 1
+        except urllib.error.HTTPError as e:
+            fail += 1
+            print("  ! image %s: HTTP %s" % (item["slug"], e.code))
+        except urllib.error.URLError as e:
+            fail += 1
+            print("  ! image %s: %s" % (item["slug"], e))
+    print("images: uploaded=%d missing=%d failed=%d" % (ok, miss, fail))
     print("Done. In the CRM, filter Items by print_import_tag = 'helloprint' to manage the set.")
 
 
