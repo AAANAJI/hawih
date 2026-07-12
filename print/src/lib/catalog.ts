@@ -99,11 +99,12 @@ export const items: CatalogItem[] = catalog.items;
 export const isQaItem = (i: CatalogItem): boolean => i.tag === QA_TAG;
 export const isQaCategory = (c: CatalogCategory): boolean => c.tag === QA_TAG;
 
-// Real storefront view — design-QA rows removed. Every default listing (home,
-// category grid, /products, nav) reads THESE, so the live/launch store never
-// shows the comparison catalog. The ?qa toggle re-renders from the live layer.
-export const displayCategories: CatalogCategory[] = categories.filter((c) => !isQaCategory(c));
-export const displayItems: CatalogItem[] = items.filter((i) => !isQaItem(i));
+// Storefront listing view. During the design phase the HelloPrint clone IS the
+// catalog, so these show everything (the clone). To go back to a mixed catalog
+// where the tagged design set is hidden from the real store, restore the filter:
+//   .filter((c) => !isQaCategory(c)) / .filter((i) => !isQaItem(i))
+export const displayCategories: CatalogCategory[] = categories;
+export const displayItems: CatalogItem[] = items;
 
 export function getCategory(slug: string): CatalogCategory | undefined {
   return categories.find((c) => c.slug === slug);

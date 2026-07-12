@@ -40,16 +40,17 @@ const TTL_MS = 90_000;
 
 let inflight: Promise<RawApi | null> | null = null;
 
-/* --------------------------------------------------------------- design-QA */
+/* ------------------------------------------------------------ HelloPrint */
 /**
- * Design-QA mode (?qa=helloprint). When the flag is set, the live layer serves
- * the HelloPrint comparison catalog (tag 'helloprint') INSTEAD of the CRM, so
- * every reconciled surface (home, category, product) repaints with it for a
- * fair head-to-head — with no CRM call, offline-safe. The real/launch store
- * (flag off) is completely unaffected: this whole branch is skipped.
+ * Design phase: the HelloPrint clone IS the catalog. The live layer serves the
+ * baked clone (no CRM call) so the plain home/category/product pages show it
+ * and live-sync never reverts to the CRM. Set HELLOPRINT_MODE=false (and flip
+ * build-catalog CATALOG_SOURCE to 'crm') to restore the real CRM-driven store.
  */
+const HELLOPRINT_MODE = true;
 let qaInflight: Promise<RawApi | null> | null = null;
 function qaActive(): boolean {
+  if (HELLOPRINT_MODE) return true;
   try {
     return typeof document !== 'undefined' && document.documentElement.dataset.qa === 'helloprint';
   } catch {

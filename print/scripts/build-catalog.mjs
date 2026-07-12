@@ -31,6 +31,15 @@ const QA_RAW = resolve(__dirname, '../src/data/helloprint-catalog.raw.json');
 const API = 'https://crm.hawih.com.sa/index.php/print_api/catalog';
 const TIMEOUT_MS = 8000;
 
+/**
+ * CATALOG SOURCE (design phase).
+ *   'helloprint' → the scraped HelloPrint clone IS the store catalog (shown on
+ *                  the plain home/category/product pages; no CRM, no toggle).
+ *   'crm'        → normal: the real CRM catalog drives the store.
+ * Flip to 'crm' to restore the real, CRM-driven storefront.
+ */
+const CATALOG_SOURCE = 'helloprint';
+
 export { transformCatalog };
 
 /**
@@ -62,6 +71,19 @@ export async function mergeQaCatalog(api) {
 }
 
 async function main() {
+  // Design phase: bake the HelloPrint clone AS the catalog (no CRM fetch).
+  if (CATALOG_SOURCE === 'helloprint') {
+    try {
+      const qa = JSON.parse(await readFile(QA_RAW, 'utf8'));
+      const { catalog, itemCount } = transformCatalog(qa);
+      if (!itemCount) throw new Error('clone has zero items');
+      await writeFile(OUT, JSON.stringify(catalog, null, 2) + '\n', 'utf8');
+      console.log(`[build-catalog] Baked HelloPrint clone as the catalog (${itemCount} items, ${catalog.categories.length} categories).`);
+    } catch (err) {
+      console.warn(`[build-catalog] WARNING: could not bake clone (${err.message}). Keeping committed snapshot.`);
+    }
+    process.exit(0);
+  }
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), TIMEOUT_MS);
   try {
