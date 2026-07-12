@@ -41,7 +41,12 @@
   "Thickness": "السماكة",
   "Type": "النوع",
   "Window": "النافذة",
-  "printrun": "الكمية"
+  "printrun": "الكمية",
+  "Materialappearance": "مظهر الخامة",
+  "Pages": "عدد الصفحات",
+  "Printingoptions": "خيارات الطباعة",
+  "Boreholes": "الثقوب",
+  "Bundled": "التغليف بالحزم"
  },
  "labels": {
   "1 colour": "لون واحد",
@@ -476,6 +481,10 @@
   "With tunnel on both sides (5cm Diameter)": "جيب أنبوبي على الجانبين (قطر ٥ سم)",
   "Without Elastic Bands": "بدون أربطة مطاطية",
   "Woodfree Offset": "أوفست خالٍ من الخشب",
-  "X-Long 105 x 297 mm": "طويل جدًا ١٠٥ × ٢٩٧ مم"
+  "X-Long 105 x 297 mm": "طويل جدًا ١٠٥ × ٢٩٧ مم",
+  "DL (99x210 mm)": "DL (٩٩×٢١٠ مم)",
+  "100x1000": "١٠٠×١٠٠٠",
+  "150x1000": "١٥٠×١٠٠٠",
+  "200x1000": "٢٠٠×١٠٠٠"
  }
 }
