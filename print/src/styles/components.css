@@ -1318,38 +1318,39 @@ a.pk-acct-row:hover { color: var(--pk-accent); }
 .pk-optgroup__legend { display: flex; align-items: baseline; gap: 8px; font-size: 0.95rem; font-weight: 600; margin-bottom: var(--sp-3); }
 .pk-optgroup__legend b[data-opt-current] { color: var(--pk-accent); font-weight: 700; }
 .pk-optcards {
-  display: grid; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: var(--sp-3);
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(146px, 1fr)); gap: var(--sp-3) var(--sp-3);
 }
+/* HelloPrint configurator card: white, quiet border; SELECTED = green border on
+   white (no fill) + soft ring; RECOMMENDED = green pill at the card's bottom. */
 .pk-optcard {
-  position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px;
-  padding: var(--sp-4) var(--sp-3) var(--sp-3); text-align: center;
+  position: relative; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  gap: 8px; min-height: 104px;
+  padding: var(--sp-5) var(--sp-3) var(--sp-4); text-align: center;
   border: 1.5px solid var(--pk-line-strong); border-radius: var(--r-md);
   background: var(--pk-surface); cursor: pointer;
-  transition: border-color var(--t-base), box-shadow var(--t-base), background var(--t-base);
+  transition: border-color var(--t-base), box-shadow var(--t-base);
 }
 .pk-optcard:hover { border-color: var(--pk-accent); }
 .pk-optcard input { position: absolute; opacity: 0; pointer-events: none; }
 .pk-optcard:has(input:checked) {
-  border-color: var(--pk-accent);
-  background: var(--pk-accent-soft);
-  box-shadow: 0 0 0 1px var(--pk-accent);
+  border-color: var(--pk-accent); border-width: 2px;
+  box-shadow: 0 0 0 3px var(--pk-accent-soft);
 }
-.pk-optcard__icon { color: var(--pk-ink-muted); display: inline-flex; }
+.pk-optcard__icon { color: var(--pk-ink); display: inline-flex; }
 .pk-optcard:has(input:checked) .pk-optcard__icon { color: var(--pk-accent); }
-.pk-optcard__label { font-size: 0.88rem; font-weight: 700; line-height: 1.35; }
-.pk-optcard__sub { font-size: 0.76rem; color: var(--pk-ink-muted); line-height: 1.35; }
-.pk-optcard__delta {
-  font-size: 0.75rem; font-weight: 700; color: var(--pk-amber-ink);
-  background: var(--pk-amber-soft); border-radius: var(--r-pill); padding: 2px 8px;
-}
+.pk-optcard__label { font-size: 0.9rem; font-weight: 700; line-height: 1.3; color: var(--pk-ink); }
+.pk-optcard__sub { font-size: 0.76rem; color: var(--pk-ink-muted); line-height: 1.3; }
+/* Quiet price delta (HelloPrint keeps the running total in the price box, not on
+   the cards) — small muted text, not a loud chip. */
+.pk-optcard__delta { font-size: 0.76rem; font-weight: 600; color: var(--pk-ink-muted); }
 .pk-optcard__rec {
-  position: absolute; inset-inline: 0; bottom: 0; transform: translateY(50%);
-  margin-inline: auto; width: max-content; max-width: 92%;
+  position: absolute; inset-inline: 0; bottom: 0; transform: translateY(45%);
+  margin-inline: auto; width: max-content; max-width: 94%;
   background: var(--pk-accent); color: var(--pk-on-accent);
-  font-size: 0.68rem; font-weight: 800; letter-spacing: 0.02em;
+  font-size: 0.64rem; font-weight: 800; letter-spacing: 0.04em; text-transform: uppercase;
   padding: 3px 10px; border-radius: var(--r-sm);
 }
-.pk-optcard:has(.pk-optcard__rec) { margin-bottom: 10px; }
+.pk-optcard:has(.pk-optcard__rec) { margin-bottom: 12px; }
 
 /* Focus ring for keyboard users (inputs are visually hidden) */
 .pk-optcard:has(input:focus-visible) { outline: 2px solid var(--pk-accent); outline-offset: 2px; }

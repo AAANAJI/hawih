@@ -29,11 +29,13 @@
   --pk-line:          rgba(15, 18, 36, 0.08);    /* hairline border */
   --pk-line-strong:   rgba(15, 18, 36, 0.16);
 
-  --pk-accent:        var(--hawih-blue);
-  --pk-accent-hover:  var(--hawih-blue-hover);
-  --pk-accent-soft:   rgba(31, 31, 254, 0.07);   /* hover washes (quiet on white) */
-  --pk-accent-tint:   rgba(31, 31, 254, 0.10);   /* chip/badge fills, step numbers */
-  --pk-accent-glow:   var(--hawih-blue-glow);
+  /* Accent — HelloPrint-style green for the design clone. Revert to Hawih blue
+     by setting these back to var(--hawih-blue) / rgba(31,31,254,…). */
+  --pk-accent:        #16A34A;                    /* HelloPrint green */
+  --pk-accent-hover:  #128A3E;
+  --pk-accent-soft:   rgba(22, 163, 74, 0.08);    /* hover washes (quiet on white) */
+  --pk-accent-tint:   rgba(22, 163, 74, 0.12);    /* chip/badge fills, step numbers */
+  --pk-accent-glow:   rgba(22, 163, 74, 0.40);
   --pk-on-accent:     #FFFFFF;
 
   /* ---- Chrome (dark header + nav bar — HelloPrint-style shell) ---- */
