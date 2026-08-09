@@ -446,6 +446,170 @@ PAGES = [
         ],
         "work": [("jazl", "Jazl"), ("talga", "Talga"), ("bnoon", "Bnoon")],
     },
+    {
+        "slug": "social-media-management",
+        "pt": "social-media-management",
+        "title": "إدارة حسابات التواصل الاجتماعي في الرياض | هوية Hawih",
+        "description": "إدارة احترافية لحساباتك في السوشيال ميديا — خطة محتوى، "
+                       "تصاميم، كتابة، جدولة ونشر، وتقارير شهرية. استوديو هوية "
+                       "في الرياض. اطلب استشارة مجانية.",
+        "keywords": "إدارة حسابات التواصل الاجتماعي, إدارة سوشيال ميديا, "
+                    "إدارة حسابات انستقرام وسناب وتويتر, social media "
+                    "management riyadh, hawih",
+        "og_title": "إدارة حسابات التواصل الاجتماعي | هوية Hawih",
+        "og_desc": "نُدير حساباتك بمحتوى منتظم واحترافي — من استوديو هوية.",
+        "title_en": "Social Media Management in Riyadh | Hawih",
+        "description_en": "Professional social media management — content "
+                          "plan, designs, copywriting, scheduling, and monthly "
+                          "reports. Hawih studio, Riyadh. Request a free "
+                          "consultation.",
+        "og_title_en": "Social Media Management | Hawih",
+        "og_desc_en": "We run your social accounts with consistent, "
+                      "professional content — from Hawih studio.",
+        "eyebrow": ("إدارة السوشيال ميديا · الرياض", "Social media · Riyadh"),
+        "h1": ("إدارة حسابات التواصل الاجتماعي", "Social Media Management"),
+        "sub": ("انشغالك عن حساباتك يُضعف حضورك. نُدير لك السوشيال ميديا من "
+                "التخطيط إلى النشر — محتوى منتظم واحترافي ينمّي متابعينك "
+                "ويجذب عملاءك.",
+                "When you're too busy, your accounts go quiet. We run your "
+                "social media end to end — consistent, professional content "
+                "that grows your following and brings customers."),
+        "wa_msg": "مرحباً، أرغب بإدارة حسابات التواصل الاجتماعي لنشاطي.",
+        "form_head": ("اطلب استشارة مجانية", "Request a free consultation"),
+        "deliverables": [
+            ("خطة محتوى شهرية مدروسة", "A researched monthly content plan"),
+            ("تصاميم احترافية على هويتك", "On-brand professional designs"),
+            ("كتابة نصوص وتعليقات", "Copywriting & captions"),
+            ("جدولة ونشر منتظم", "Scheduling & consistent posting"),
+            ("إدارة التفاعل والردود", "Engagement & reply management"),
+            ("تقرير أداء شهري", "A monthly performance report"),
+        ],
+        "process": [
+            ("جلسة تعارف", "Kickoff",
+             "نفهم نشاطك وجمهورك ونتّفق على نبرة المحتوى وأهدافه.",
+             "We learn your business and audience and agree on the content "
+             "tone and goals."),
+            ("خطة ومحتوى", "Plan & produce",
+             "نُعدّ خطة الشهر وننتج التصاميم والنصوص جاهزة للنشر.",
+             "We build the monthly plan and produce designs and copy, ready "
+             "to publish."),
+            ("مراجعة واعتماد", "Review & approve",
+             "تراجع المحتوى وتعتمده قبل النشر.",
+             "You review and approve before anything goes live."),
+            ("نشر وتقارير", "Publish & report",
+             "ننشر على المواعيد المثلى ونرسل تقريراً شهرياً بالأداء.",
+             "We publish at the best times and send a monthly performance "
+             "report."),
+        ],
+        "faq": [
+            ("ما المنصات التي تديرونها؟",
+             "Which platforms do you manage?",
+             "إنستقرام، تويتر (X)، سناب شات، تيك توك، ولينكدإن — نختار معك "
+             "المنصات الأنسب لجمهورك.",
+             "Instagram, X (Twitter), Snapchat, TikTok, and LinkedIn — we "
+             "pick the platforms that best fit your audience."),
+            ("كم عدد المنشورات شهرياً؟",
+             "How many posts per month?",
+             "يعتمد على الباقة؛ نتّفق على العدد والتكرار في البداية بما يناسب "
+             "أهدافك وميزانيتك.",
+             "It depends on the package; we agree on volume and frequency up "
+             "front to fit your goals and budget."),
+            ("هل تكتبون المحتوى وتصمّمونه بالكامل؟",
+             "Do you write and design everything?",
+             "نعم — نتولّى التخطيط والكتابة والتصميم والنشر، وأنت تعتمد فقط.",
+             "Yes — we handle planning, copywriting, design, and publishing; "
+             "you just approve."),
+            ("هل ألتزم بعقد طويل؟",
+             "Am I locked into a long contract?",
+             "نعمل بشكل شهري مرن؛ تبدأ بشهر وتُكمل حسب النتائج.",
+             "We work month to month; start with one month and continue based "
+             "on results."),
+        ],
+        "work": [("jazl", "Jazl"), ("karmello", "Karmello"), ("toma", "Toma")],
+    },
+    {
+        "slug": "google-ads-management",
+        "pt": "google-ads-management",
+        "title": "إدارة حملات إعلانات جوجل في الرياض | هوية Hawih",
+        "description": "إدارة حملات جوجل تجيب لك عملاء فعليين — إعداد وإدارة "
+                       "وتحسين مستمر مع تتبّع تحويلات وتقارير واضحة. استوديو "
+                       "هوية. احصل على تحليل مجاني لحسابك.",
+        "keywords": "إدارة حملات جوجل, إدارة اعلانات جوجل, ادارة قوقل ادز, "
+                    "اعلانات جوجل السعودية, google ads management riyadh, hawih",
+        "og_title": "إدارة حملات إعلانات جوجل | هوية Hawih",
+        "og_desc": "حملات مدروسة تجيب عملاء فعليين بتقارير واضحة — من هوية.",
+        "title_en": "Google Ads Management in Riyadh | Hawih",
+        "description_en": "Google Ads management that brings real customers — "
+                          "setup, management, and continuous optimization with "
+                          "conversion tracking and clear reporting. Hawih "
+                          "studio. Get a free account audit.",
+        "og_title_en": "Google Ads Management | Hawih",
+        "og_desc_en": "Data-driven campaigns that bring qualified leads, with "
+                      "clear reporting — from Hawih.",
+        "eyebrow": ("إدارة حملات جوجل · الرياض", "Google Ads · Riyadh"),
+        "h1": ("إدارة حملات إعلانات جوجل", "Google Ads Management"),
+        "sub": ("ميزانية إعلانية تُصرف بلا نتائج؟ نُصلح الاستهداف والكلمات "
+                "والمزايدة، ونبني حملات تجيب لك عملاء فعليين — بتتبّع تحويلات "
+                "وتقارير واضحة.",
+                "Ad budget spent with no results? We fix targeting, keywords, "
+                "and bidding, and build campaigns that bring real customers — "
+                "with conversion tracking and clear reporting."),
+        "wa_msg": "مرحباً، أرغب بإدارة حملات إعلانات جوجل لنشاطي.",
+        "form_head": ("احصل على تحليل مجاني لحسابك", "Get a free account audit"),
+        "deliverables": [
+            ("تحليل الحساب أو السوق وإعداده", "Account/market audit & setup"),
+            ("بحث الكلمات والكلمات السلبية",
+             "Keyword & negative-keyword strategy"),
+            ("كتابة إعلانات فعّالة", "Effective ad copywriting"),
+            ("تحسين المزايدة والميزانية", "Bid & budget optimization"),
+            ("إعداد تتبّع التحويلات", "Conversion-tracking setup"),
+            ("تقارير شهرية واضحة", "Clear monthly reports"),
+        ],
+        "process": [
+            ("تحليل", "Audit",
+             "نراجع حسابك أو سوقك ونحدّد فرص النمو ومصادر الهدر.",
+             "We review your account or market and pinpoint growth "
+             "opportunities and wasted spend."),
+            ("إطلاق", "Launch",
+             "نبني الحملات والكلمات والإعلانات ونضبط تتبّع التحويلات.",
+             "We build campaigns, keywords, and ads, and set up conversion "
+             "tracking."),
+            ("تحسين", "Optimize",
+             "نراقب الأداء ونحسّن المزايدة والاستهداف باستمرار.",
+             "We monitor performance and continuously optimize bids and "
+             "targeting."),
+            ("تقارير", "Report",
+             "نرسل تقريراً شهرياً واضحاً بالنتائج والتكلفة لكل عميل.",
+             "We send a clear monthly report of results and cost per lead."),
+        ],
+        "faq": [
+            ("ما الحد الأدنى للميزانية الإعلانية؟",
+             "What's the minimum ad budget?",
+             "نعمل مع ميزانيات مختلفة؛ نساعدك على تحديد ميزانية واقعية تحقق "
+             "نتائج في سوقك.",
+             "We work with a range of budgets; we help you set a realistic "
+             "budget that gets results in your market."),
+            ("هل رسوم الإدارة منفصلة عن ميزانية الإعلان؟",
+             "Is the management fee separate from ad spend?",
+             "نعم — ميزانية الإعلان تذهب إلى جوجل مباشرة، ورسوم الإدارة مقابل "
+             "الإعداد والتحسين والتقارير.",
+             "Yes — ad spend goes directly to Google; our management fee "
+             "covers setup, optimization, and reporting."),
+            ("متى أرى نتائج؟",
+             "When will I see results?",
+             "غالباً تظهر المؤشرات الأولى خلال أسابيع، ويتحسّن الأداء مع كل "
+             "جولة تحسين.",
+             "Early signals usually show within weeks, and performance "
+             "improves with each optimization round."),
+            ("هل أملك الحساب والبيانات؟",
+             "Do I own the account and data?",
+             "نعم — الحساب باسمك، وتحتفظ بكامل البيانات والتحويلات حتى لو "
+             "توقّف التعاون.",
+             "Yes — the account is in your name, and you keep all data and "
+             "conversions even if we stop working together."),
+        ],
+        "work": [("nab", "NAB"), ("almasar", "Almasar"), ("riwaq", "Riwaq")],
+    },
 ]
 
 
@@ -552,9 +716,9 @@ def build_deliverables(page: dict) -> str:
     )
 
 
-def build_process() -> str:
+def build_process(page: dict) -> str:
     steps = []
-    for i, (t_ar, t_en, d_ar, d_en) in enumerate(PROCESS, start=1):
+    for i, (t_ar, t_en, d_ar, d_en) in enumerate(page.get("process") or PROCESS, start=1):
         steps.append(
             f'          <li class="lp-step"><span class="lp-step__n">'
             f'{i:02d}</span><div class="lp-step__body">'
@@ -1007,7 +1171,7 @@ def render(page: dict) -> str:
 
 {build_deliverables(page)}
 
-{build_process()}
+{build_process(page)}
 
 {build_work(page)}
 

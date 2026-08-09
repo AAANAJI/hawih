@@ -128,5 +128,57 @@
       "a_ar": "أرسل لنا نبذة عن نشاطك ونوع المحتوى المطلوب، ونرد عليك خلال يوم عمل بخطة واضحة.",
       "a_en": "Send us a note about your business and the content you need; we'll reply within one working day with a clear plan."
     }
+  ],
+  "social-media-management": [
+    {
+      "q_ar": "ما المنصات التي تديرونها؟",
+      "q_en": "Which platforms do you manage?",
+      "a_ar": "إنستقرام، تويتر (X)، سناب شات، تيك توك، ولينكدإن — نختار معك المنصات الأنسب لجمهورك.",
+      "a_en": "Instagram, X (Twitter), Snapchat, TikTok, and LinkedIn — we pick the platforms that best fit your audience."
+    },
+    {
+      "q_ar": "كم عدد المنشورات شهرياً؟",
+      "q_en": "How many posts per month?",
+      "a_ar": "يعتمد على الباقة؛ نتّفق على العدد والتكرار في البداية بما يناسب أهدافك وميزانيتك.",
+      "a_en": "It depends on the package; we agree on volume and frequency up front to fit your goals and budget."
+    },
+    {
+      "q_ar": "هل تكتبون المحتوى وتصمّمونه بالكامل؟",
+      "q_en": "Do you write and design everything?",
+      "a_ar": "نعم — نتولّى التخطيط والكتابة والتصميم والنشر، وأنت تعتمد فقط.",
+      "a_en": "Yes — we handle planning, copywriting, design, and publishing; you just approve."
+    },
+    {
+      "q_ar": "هل ألتزم بعقد طويل؟",
+      "q_en": "Am I locked into a long contract?",
+      "a_ar": "نعمل بشكل شهري مرن؛ تبدأ بشهر وتُكمل حسب النتائج.",
+      "a_en": "We work month to month; start with one month and continue based on results."
+    }
+  ],
+  "google-ads-management": [
+    {
+      "q_ar": "ما الحد الأدنى للميزانية الإعلانية؟",
+      "q_en": "What's the minimum ad budget?",
+      "a_ar": "نعمل مع ميزانيات مختلفة؛ نساعدك على تحديد ميزانية واقعية تحقق نتائج في سوقك.",
+      "a_en": "We work with a range of budgets; we help you set a realistic budget that gets results in your market."
+    },
+    {
+      "q_ar": "هل رسوم الإدارة منفصلة عن ميزانية الإعلان؟",
+      "q_en": "Is the management fee separate from ad spend?",
+      "a_ar": "نعم — ميزانية الإعلان تذهب إلى جوجل مباشرة، ورسوم الإدارة مقابل الإعداد والتحسين والتقارير.",
+      "a_en": "Yes — ad spend goes directly to Google; our management fee covers setup, optimization, and reporting."
+    },
+    {
+      "q_ar": "متى أرى نتائج؟",
+      "q_en": "When will I see results?",
+      "a_ar": "غالباً تظهر المؤشرات الأولى خلال أسابيع، ويتحسّن الأداء مع كل جولة تحسين.",
+      "a_en": "Early signals usually show within weeks, and performance improves with each optimization round."
+    },
+    {
+      "q_ar": "هل أملك الحساب والبيانات؟",
+      "q_en": "Do I own the account and data?",
+      "a_ar": "نعم — الحساب باسمك، وتحتفظ بكامل البيانات والتحويلات حتى لو توقّف التعاون.",
+      "a_en": "Yes — the account is in your name, and you keep all data and conversions even if we stop working together."
+    }
   ]
 }

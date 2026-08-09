@@ -127,6 +127,20 @@ LANDING_META: dict[str, dict[str, str]] = {
         "description": "Bilingual content writing — website copy, social "
                        "content, and marketing copy in your brand's voice.",
     },
+    "social-media-management": {
+        "name": "Social Media Management",
+        "name_ar": "إدارة حسابات التواصل الاجتماعي",
+        "description": "Full social media management — monthly content plan, "
+                       "on-brand designs, copywriting, scheduling, engagement, "
+                       "and monthly performance reports.",
+    },
+    "google-ads-management": {
+        "name": "Google Ads Management",
+        "name_ar": "إدارة حملات إعلانات جوجل",
+        "description": "Google Ads management — account audit and setup, "
+                       "keyword and negative strategy, ad copy, bid "
+                       "optimization, conversion tracking, and monthly reports.",
+    },
 }
 
 # Landing-page FAQ sidecar (written by build-landing-pages.py) → FAQPage.

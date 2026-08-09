@@ -254,6 +254,24 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/content-writing"/>
   </url>
   <url>
+    <loc>https://hawih.com.sa/google-ads-management</loc>
+    <lastmod>2026-08-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/google-ads-management"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://hawih.com.sa/en/google-ads-management"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/google-ads-management"/>
+  </url>
+  <url>
+    <loc>https://hawih.com.sa/en/google-ads-management</loc>
+    <lastmod>2026-08-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/google-ads-management"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://hawih.com.sa/en/google-ads-management"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/google-ads-management"/>
+  </url>
+  <url>
     <loc>https://hawih.com.sa/</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>weekly</changefreq>
@@ -488,6 +506,24 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/services"/>
   </url>
   <url>
+    <loc>https://hawih.com.sa/social-media-management</loc>
+    <lastmod>2026-08-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/social-media-management"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://hawih.com.sa/en/social-media-management"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/social-media-management"/>
+  </url>
+  <url>
+    <loc>https://hawih.com.sa/en/social-media-management</loc>
+    <lastmod>2026-08-09</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.5</priority>
+    <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/social-media-management"/>
+    <xhtml:link rel="alternate" hreflang="en" href="https://hawih.com.sa/en/social-media-management"/>
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://hawih.com.sa/social-media-management"/>
+  </url>
+  <url>
     <loc>https://hawih.com.sa/terms-conditions</loc>
     <lastmod>2026-06-29</lastmod>
     <changefreq>yearly</changefreq>
@@ -525,7 +561,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/work-12p</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-12p"/>
@@ -534,7 +570,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/en/work-12p</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-12p"/>
@@ -561,7 +597,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/work-al-sadu</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-al-sadu"/>
@@ -570,7 +606,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/en/work-al-sadu</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-al-sadu"/>
@@ -579,7 +615,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/work-almasar</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-almasar"/>
@@ -588,7 +624,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/en/work-almasar</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-almasar"/>
@@ -597,7 +633,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/work-almoel</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-almoel"/>
@@ -606,7 +642,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/en/work-almoel</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-almoel"/>
@@ -615,7 +651,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/work-aronati</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-aronati"/>
@@ -624,7 +660,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/en/work-aronati</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-aronati"/>
@@ -633,7 +669,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/work-athr</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-athr"/>
@@ -642,7 +678,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/en/work-athr</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-athr"/>
@@ -651,7 +687,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/work-blink</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-blink"/>
@@ -660,7 +696,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/en/work-blink</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-blink"/>
@@ -669,7 +705,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/work-bnoon</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-bnoon"/>
@@ -678,7 +714,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/en/work-bnoon</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-bnoon"/>
@@ -687,7 +723,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/work-casho</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-casho"/>
@@ -696,7 +732,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/en/work-casho</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-casho"/>
@@ -705,7 +741,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/work-caviole</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-caviole"/>
@@ -714,7 +750,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/en/work-caviole</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-caviole"/>
@@ -723,7 +759,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/work-direct</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-direct"/>
@@ -732,7 +768,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/en/work-direct</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-direct"/>
@@ -741,7 +777,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/work-dlvri</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-dlvri"/>
@@ -750,7 +786,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/en/work-dlvri</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-dlvri"/>
@@ -759,7 +795,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/work-jazl</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-jazl"/>
@@ -768,7 +804,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/en/work-jazl</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-jazl"/>
@@ -777,7 +813,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/work-karmello</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-karmello"/>
@@ -786,7 +822,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/en/work-karmello</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-karmello"/>
@@ -795,7 +831,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/work-leader</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-leader"/>
@@ -804,7 +840,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/en/work-leader</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-leader"/>
@@ -813,7 +849,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/work-nab</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-nab"/>
@@ -822,7 +858,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/en/work-nab</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-nab"/>
@@ -849,7 +885,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/work-riwaq</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-riwaq"/>
@@ -858,7 +894,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/en/work-riwaq</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-riwaq"/>
@@ -867,7 +903,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/work-tajseem</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-tajseem"/>
@@ -876,7 +912,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/en/work-tajseem</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-tajseem"/>
@@ -921,7 +957,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/work-unico</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-unico"/>
@@ -930,7 +966,7 @@
   </url>
   <url>
     <loc>https://hawih.com.sa/en/work-unico</loc>
-    <lastmod>2026-06-29</lastmod>
+    <lastmod>2026-07-05</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
     <xhtml:link rel="alternate" hreflang="ar-SA" href="https://hawih.com.sa/work-unico"/>
