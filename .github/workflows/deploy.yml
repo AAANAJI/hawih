@@ -156,9 +156,19 @@ jobs:
           chown -R www-data:www-data "$DOCROOT"
           find "$DOCROOT" -type f -exec chmod 644 {} \;
           find "$DOCROOT" -type d -exec chmod 755 {} \;
-          mkdir -p /var/log/hawih-leads
-          chown www-data:www-data /var/log/hawih-leads
-          chmod 750 /var/log/hawih-leads
+          # Log dirs for the api/ proxies (log-first discipline).
+          for d in /var/log/hawih-leads /var/log/hawih-bookings /var/log/hawih-careers; do
+            mkdir -p "\$d"; chown www-data:www-data "\$d"; chmod 750 "\$d"
+          done
+          # Allow 50MB CV uploads (/careers). client_max_body_size is valid in
+          # the http context, so a conf.d drop-in applies site-wide. Idempotent.
+          printf 'client_max_body_size 52m;\n' > /etc/nginx/conf.d/hawih-upload-size.conf
+          # PHP-FPM must also allow the 50MB upload, else it rejects before the
+          # proxy runs. Drop an ini into every installed FPM version, reload.
+          for cd in /etc/php/*/fpm/conf.d; do
+            [ -d "\$cd" ] && printf 'upload_max_filesize = 50M\npost_max_size = 52M\n' > "\$cd/zz-hawih-upload.ini"
+          done
+          systemctl reload 'php*-fpm' 2>/dev/null || systemctl reload php-fpm 2>/dev/null || true
           nginx -t && systemctl reload nginx
           EOF
 
