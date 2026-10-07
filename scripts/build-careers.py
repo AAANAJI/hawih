@@ -50,7 +50,7 @@ CR_STYLE = """    <!-- careers: scoped widget styles -->
     </style>"""
 
 
-def field(idn, name, label_ar, label_en, typ="text", extra="", ph="—", md=True):
+def field(idn, name, label_ar, label_en, typ="text", extra="", ph="", md=True):
     col = "col-12 col-md-6" if md else "col-12"
     return (
         f'<div class="{col} mxd-grid-item"><label class="uc-field-label" for="{idn}">{ls(label_ar, label_en)}</label>'
@@ -76,6 +76,7 @@ def build_body() -> str:
             ("10+", "أكثر من ١٠ · 10+ yrs")])
 
     form = (
+        '<div class="mxd-block__inner-form"><div class="form-container">'
         '<form id="careersForm" novalidate hidden>'
         '<input type="hidden" name="job_opening_id" value="0">'
         '<input type="hidden" name="position" value="">'
@@ -94,10 +95,10 @@ def build_body() -> str:
         + f'<div class="col-12 mxd-grid-item"><label class="uc-field-label" for="cr-cv">{ls("السيرة الذاتية (PDF / Word · حتى ٥٠ ميجابايت)", "CV (PDF / Word · up to 50MB)")}</label>'
         + '<input type="file" id="cr-cv" name="cv" class="cr-file" accept=".pdf,.doc,.docx,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document"></div>'
         + f'<div class="col-12 mxd-grid-item"><label class="uc-field-label" for="cr-notes">{ls("نبذة قصيرة (اختياري)", "A short note (optional)")}</label>'
-        + '<textarea id="cr-notes" name="notes" maxlength="4000" placeholder="—"></textarea></div>'
+        + '<textarea id="cr-notes" name="notes" maxlength="4000"></textarea></div>'
         + '<div class="col-12 mxd-grid-item uc-form-submit">'
         + f'<button class="btn btn-anim btn-default btn-large btn-opposite slide-right-up" type="submit">{ls("أرسل الطلب", "Submit application", "btn-caption")}<i class="ph-bold ph-arrow-up-right"></i></button></div>'
-        '</div></div></form>'
+        '</div></div></form></div></div>'
         '<div class="cr-done" hidden><div class="cr-done__icon"><i class="ph-fill ph-check-circle"></i></div>'
         f'<h2>{ls("تم استلام طلبك", "Application received")}</h2>'
         f'<p>{ls("شكراً لتقديمك. سيطّلع فريق التوظيف على طلبك ويتواصل معك إن كان مناسباً.", "Thanks for applying. Our recruiting team will review your application and reach out if there is a fit.")}</p></div>'
