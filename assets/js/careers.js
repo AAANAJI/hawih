@@ -45,9 +45,11 @@
 
   function posted(d) {
     if (!d) return '';
-    var t = Date.parse(d + 'T00:00:00');
+    var t = Date.parse(d + 'T00:00:00');   // local midnight of the post date
     if (isNaN(t)) return '';
-    var days = Math.round((Date.now() - t) / 86400000);
+    var now = new Date();
+    var today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime();
+    var days = Math.round((today - t) / 86400000);   // whole calendar days
     if (days < 0) days = 0;
     if (days > 45) {
       return L('نُشرت ', 'Posted ') + new Intl.DateTimeFormat(en ? 'en' : 'ar-SA', { day: 'numeric', month: 'long' }).format(t);
