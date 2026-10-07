@@ -86,8 +86,10 @@ if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
     out(405, ['success' => false, 'error' => 'method_not_allowed']);
 }
 
-/* Honeypot — accept-and-discard bots. */
-if (!empty($_POST['company_website'] ?? '')) {
+/* Honeypot — accept-and-discard bots. Named cr_hp_note (not a website/
+   company field) so browser autofill never fills it and silently drops a
+   real applicant. */
+if (!empty($_POST['cr_hp_note'] ?? '') || !empty($_POST['company_website'] ?? '')) {
     out(200, ['success' => true, 'discarded' => true]);
 }
 
