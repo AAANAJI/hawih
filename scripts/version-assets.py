@@ -41,6 +41,7 @@ VERSIONED_ASSETS = {
     "/assets/css/hawih.css": REPO_ROOT / "assets" / "css" / "hawih.css",
     "/assets/js/hawih.js": REPO_ROOT / "assets" / "js" / "hawih.js",
     "/assets/js/booking.js": REPO_ROOT / "assets" / "js" / "booking.js",
+    "/assets/js/careers.js": REPO_ROOT / "assets" / "js" / "careers.js",
     "/assets/css/font-display-fix.css": REPO_ROOT / "assets" / "css" / "font-display-fix.css",
     "/assets/css/tailwind-shim.css": REPO_ROOT / "assets" / "css" / "tailwind-shim.css",
 }
