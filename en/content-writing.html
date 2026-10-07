@@ -24,6 +24,7 @@
           var lang = (p === '/en' || p.indexOf('/en/') === 0) ? 'en' : 'ar';
           document.documentElement.lang = lang;
           document.documentElement.dir = lang === 'en' ? 'ltr' : 'rtl';
+          localStorage.setItem('lang', lang);
         } catch (e) {}
       })();
     </script>

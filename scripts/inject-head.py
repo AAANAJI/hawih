@@ -64,6 +64,10 @@ PERF_BLOCK = (
 # version with one that derives lang from the URL (/en/* = en; / = ar).
 # This is the only correct behaviour now that /en/ pages exist —
 # trusting localStorage alone would flash AR styling on EN URLs.
+# It also persists the URL language to localStorage so the legacy inline
+# sync scripts (uc-lang-default + the applyLang DOMContentLoaded sync,
+# which read localStorage 'lang') agree with the URL instead of forcing
+# Arabic on /en/* for visitors who never clicked the toggle.
 FOUC_GUARD_BLOCK = """    <!-- FOUC guard: pick lang before paint -->
     <script>
       (function () {
@@ -72,6 +76,7 @@ FOUC_GUARD_BLOCK = """    <!-- FOUC guard: pick lang before paint -->
           var lang = (p === '/en' || p.indexOf('/en/') === 0) ? 'en' : 'ar';
           document.documentElement.lang = lang;
           document.documentElement.dir = lang === 'en' ? 'ltr' : 'rtl';
+          localStorage.setItem('lang', lang);
         } catch (e) {}
       })();
     </script>"""
