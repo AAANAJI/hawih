@@ -160,9 +160,11 @@ jobs:
           for d in /var/log/hawih-leads /var/log/hawih-bookings /var/log/hawih-careers; do
             mkdir -p "\$d"; chown www-data:www-data "\$d"; chmod 750 "\$d"
           done
-          # Allow 50MB CV uploads (/careers). client_max_body_size is valid in
-          # the http context, so a conf.d drop-in applies site-wide. Idempotent.
-          printf 'client_max_body_size 52m;\n' > /etc/nginx/conf.d/hawih-upload-size.conf
+          # Allow 50MB CV uploads (/careers). Overwrite the EXISTING single
+          # size drop-in (a second file would be a duplicate directive and
+          # fail nginx -t). Remove the dup this step created on an earlier run.
+          rm -f /etc/nginx/conf.d/hawih-upload-size.conf
+          printf 'client_max_body_size 52m;\n' > /etc/nginx/conf.d/upload-size.conf
           # PHP-FPM must also allow the 50MB upload, else it rejects before the
           # proxy runs. Drop an ini into every installed FPM version, reload.
           for cd in /etc/php/*/fpm/conf.d; do
